@@ -2,9 +2,9 @@ import React from 'react';
 import { CgWorkAlt } from 'react-icons/cg';
 import { FaReact } from 'react-icons/fa';
 import { LuGraduationCap } from 'react-icons/lu';
-import corpcommentImg from '@/public/corpcomment.png';
-import rmtdevImg from '@/public/rmtdev.png';
-import wordanalyticsImg from '@/public/wordanalytics.png';
+// import corpcommentImg from '../@/public/corpcomment.png';
+// import rmtdevImg from '../@/public/rmtdev.png';
+// import wordanalyticsImg from '../@/public/wordanalytics.png';
 
 export const links = [
     {
@@ -68,21 +68,21 @@ export const projectsData = [
         description:
             'I worked as a full-stack developer for ICON. It is a web mini games platform. I developed the front-end and back-end. It has features like authentication, payment, and more.',
         tags: ['React', 'Next.js', 'MongoDB', 'Tailwind', 'Prisma'],
-        imageUrl: corpcommentImg,
+        // imageUrl: corpcommentImg,
     },
     {
         title: 'Player2 Helpdesk Application',
         description:
             'I worked as a frontend developer creating a Helpdesk application for Player2 app. It is a web app for users to submit tickets and get help from the Player2 team.',
         tags: ['React', 'TypeScript', 'Next.js', 'Tailwind', 'Redux'],
-        imageUrl: rmtdevImg,
+        // imageUrl: rmtdevImg,
     },
     {
         title: 'Photo Gallery',
         description:
             'I worked as a full-stack developer creating a Photo Gallery web app. It is a web app for users to upload and share photos.',
         tags: ['React', 'Next.js', 'SQL', 'Tailwind', 'Framer'],
-        imageUrl: wordanalyticsImg,
+        // imageUrl: wordanalyticsImg,
     },
 ] as const;
 
