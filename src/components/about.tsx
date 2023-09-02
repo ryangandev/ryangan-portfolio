@@ -77,8 +77,8 @@ export default function About() {
             </p>
 
             <p>
-                Away from the coding, I unwind with video games and spendingtime
-                with my cats.{' '}
+                Away from the coding, I unwind with video games and spending
+                time with my cats.{' '}
                 <span className="italic">
                     Everyday is an opportunity to learn
                 </span>
