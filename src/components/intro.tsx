@@ -6,7 +6,8 @@ import { motion } from 'framer-motion';
 import Link from 'next/link';
 import { BsArrowRight } from 'react-icons/bs';
 import { HiDownload } from 'react-icons/hi';
-import { LinkedInIcon, GitHubIcon, FacebookIcon } from '@/assets/icons/index';
+import { SocialMediaIcon } from '@/assets/icons/index';
+import { SocialMedia } from '@/models/icon';
 
 export default function Intro() {
     return (
@@ -95,7 +96,7 @@ export default function Intro() {
                     href="https://linkedin.com"
                     target="_blank"
                 >
-                    <LinkedInIcon />
+                    <SocialMediaIcon type={SocialMedia.LinkedIn} />
                 </a>
 
                 <a
@@ -103,7 +104,7 @@ export default function Intro() {
                     href="https://github.com"
                     target="_blank"
                 >
-                    <GitHubIcon />
+                    <SocialMediaIcon type={SocialMedia.GitHub} />
                 </a>
 
                 <a
@@ -111,7 +112,7 @@ export default function Intro() {
                     href="https://facebook.com"
                     target="_blank"
                 >
-                    <FacebookIcon />
+                    <SocialMediaIcon type={SocialMedia.Facebook} />
                 </a>
             </motion.div>
         </section>
