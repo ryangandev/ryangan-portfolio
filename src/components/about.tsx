@@ -88,17 +88,16 @@ export default function About() {
                 <span className="italic">
                     An interest in programming and a strong work ethic{' '}
                 </span>
-                was all it took to ignite my passion for full-stack development.
-                I am a recent graduate from Drexel University with a BS in
-                Computer Science.
+                ignited my passion for full-stack development. I am a recent
+                graduate from Drexel University with a BS in Computer Science.
             </p>
 
             <p className="mb-3">
                 <span className="italic">Software development is an art.</span>{' '}
-                It's about crafting intuitive solutions that are both functional
-                and provide a delightful user experience. Writing efficient,
-                clean code is a honed craft that benefits program performance
-                and comprehension.
+                It&apos;s about crafting intuitive solutions that are both
+                functional and provide a delightful user experience. Writing
+                efficient, clean code is a honed craft that benefits program
+                performance and comprehension.
             </p>
 
             <p>

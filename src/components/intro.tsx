@@ -61,7 +61,7 @@ export default function Intro() {
                 }}
             >
                 <p>
-                    <span className="font-bold">
+                    <span className="font-bold text-3xl sm:text-4xl">
                         Hello, I&apos;m Ryan Gan.{' '}
                     </span>
                 </p>
