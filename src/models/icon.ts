@@ -2,6 +2,7 @@ enum SocialMedia {
     LinkedIn = 'LinkedIn',
     GitHub = 'GitHub',
     Facebook = 'Facebook',
+    Email = 'Email',
 }
 
 enum TechStack {
