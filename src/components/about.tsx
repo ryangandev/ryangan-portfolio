@@ -14,7 +14,7 @@ export default function About() {
             id="about"
         >
             <SectionHeader>About me</SectionHeader>
-            <p className="mb-3">
+            {/* <p className="mb-3">
                 I am currently a senior at Drexel University, pursuing a{' '}
                 <span className="font-medium">Bachelor&apos;s degree</span> in{' '}
                 <span className="font-medium">Computer Science</span> with
@@ -83,6 +83,33 @@ export default function About() {
                     Everyday is an opportunity to learn
                 </span>
                 , and I&apos;m keen to seize it!
+            </p> */}
+            <p className="mb-3">
+                <span className="italic">
+                    An interest in programming and a strong work ethic{' '}
+                </span>
+                was all it took to ignite my passion for full-stack development.
+                I am a recent graduate from Drexel University with a BS in
+                Computer Science concentrating in Artificial Intelligence and
+                Game Development.
+            </p>
+
+            <p className="mb-3">
+                <span className="italic">Software development is an art.</span>{' '}
+                It's about crafting intuitive solutions that are both functional
+                and provide a delightful user experience. Writing efficient,
+                clean code is a honed craft that benefits program performance
+                and comprehension.
+            </p>
+
+            <p>
+                <span className="italic">
+                    Everyday is an opportunity to learn.
+                </span>{' '}
+                I carry with me not just my technical expertise, but also an
+                opportunistic mindset. I believe in the power of incremental
+                learning. Gaining new knowledge from overcoming technical
+                challenges makes me a better developer.
             </p>
         </motion.section>
     );
