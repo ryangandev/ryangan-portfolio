@@ -90,8 +90,7 @@ export default function About() {
                 </span>
                 was all it took to ignite my passion for full-stack development.
                 I am a recent graduate from Drexel University with a BS in
-                Computer Science concentrating in Artificial Intelligence and
-                Game Development.
+                Computer Science.
             </p>
 
             <p className="mb-3">
