@@ -1,4 +1,5 @@
 import { BsLinkedin, BsGithub, BsFacebook } from 'react-icons/bs';
+import { HiOutlineMail } from 'react-icons/hi';
 import { SocialMedia } from '@/models/icon';
 import Tooltip from '@/components/tooltip';
 
@@ -18,6 +19,10 @@ const ICON_CONFIG = {
     Facebook: {
         component: BsFacebook,
         color: '#4267B2',
+    },
+    Email: {
+        component: HiOutlineMail,
+        color: '#EA4335',
     },
 };
 
