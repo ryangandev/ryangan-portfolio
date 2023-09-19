@@ -5,9 +5,12 @@ const nextConfig = {
             {
                 protocol: 'https',
                 hostname: 'cdn.discordapp.com',
-            }
-        ]
-    }
-}
+            },
+        ],
+    },
+    experimental: {
+        serverActions: true,
+    },
+};
 
-module.exports = nextConfig
+module.exports = nextConfig;
