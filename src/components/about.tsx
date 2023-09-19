@@ -3,10 +3,14 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import SectionHeader from './section-header';
+import { useSectionInView } from '@/hooks/useSectionInView';
 
 export default function About() {
+    const { ref } = useSectionInView('About');
+
     return (
         <motion.section
+            ref={ref}
             className="max-w-[45rem] text-center leading-8 mb-28 scroll-mt-28"
             initial={{ opacity: 0, y: 100 }}
             animate={{ opacity: 1, y: 0 }}
