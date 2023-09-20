@@ -30,17 +30,12 @@ export default function NavBar() {
                         >
                             <Link
                                 className={clsx(
-                                    'flex w-full items-center justify-center px-3 py-3 hover:text-gray-950 transition dark:text-gray-500 dark:hover:text-gray-300',
+                                    'flex w-full items-center justify-center px-3 py-3 hover:text-gray-950 transition dark:hover:text-gray-300',
                                     {
                                         'text-gray-950 dark:text-gray-200':
                                             activeSection === link.name,
                                     },
                                 )}
-                                // className={`flex w-full items-center justify-center px-3 py-3 hover:text-gray-950 transition dark:text-gray-500 dark:hover:text-gray-300 ${
-                                //     activeSection === link.name
-                                //         ? 'text-gray-950 dark:text-gray-200'
-                                //         : ''
-                                // }`}
                                 href={link.hash}
                                 onClick={() => {
                                     setActiveSection(link.name);
