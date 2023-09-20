@@ -5,6 +5,8 @@ import SectionHeading from './section-header';
 import { motion } from 'framer-motion';
 import { useSectionInView } from '@/hooks/useSectionInView';
 import SubmitButton from './submit-btn';
+import { sendEmail } from '@/actions/sendEmail';
+import toast from 'react-hot-toast';
 
 export default function Contact() {
     const { ref } = useSectionInView('Contact');
@@ -37,7 +39,29 @@ export default function Contact() {
                 or through this form.
             </p>
 
-            <form className="mt-10 flex flex-col dark:text-black">
+            <form
+                className="mt-10 flex flex-col dark:text-black"
+                action={async (formData) => {
+                    const { data, error } = await sendEmail(formData);
+
+                    if (error) {
+                        toast.error(error);
+                        return;
+                    } else if (
+                        // The data response could be an error if the response contains a message property and a status code that's not 200
+                        data &&
+                        typeof data === 'object' &&
+                        'statusCode' in data &&
+                        data.statusCode !== 200 &&
+                        'message' in data
+                    ) {
+                        toast.error(String(data.message));
+                        return;
+                    }
+
+                    toast.success('Email sent successfully!');
+                }}
+            >
                 <input
                     className="h-14 px-4 rounded-lg borderBlack dark:bg-white dark:bg-opacity-80 dark:focus:bg-opacity-100 transition-all dark:outline-none"
                     name="senderEmail"
@@ -53,7 +77,9 @@ export default function Contact() {
                     required
                     maxLength={5000}
                 />
-                <SubmitButton />
+                <div className="flex justify-end">
+                    <SubmitButton />
+                </div>
             </form>
         </motion.section>
     );
