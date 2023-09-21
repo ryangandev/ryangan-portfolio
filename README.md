@@ -19,19 +19,45 @@ This is my personal portfolio and blog that showcases my work and projects, buil
 - **[React Email](https://react.email/)**: For creating custom email templates
 
 ## 🛠️ Setup and Installation
-1. Clone the repository: `git clone https://github.com/ryangan516/ryangan-portfolio.git`
-2. Navigate to the project directory: `cd ryangan-portfolio`
+1. Clone the repository: 
+
+    ```zsh
+    git clone https://github.com/ryangan516/ryangan-portfolio.git
+    ```
+
+2. Navigate to the project directory: 
+
+    ```zsh
+    cd ryangan-portfolio
+    ```
+
 3. Create a `.env.local` file the in root directory and get your Resend API key if you want to use the email service. Check out `.env.example` for the format.
 
     ```zsh
     RESEND_API_KEY=YOUR_REDEND_API_KEY
     ```
-4. Install the dependencies: `yarn install`
-5. Start the development server: `yarn dev`
-6. Build for production: `yarn build`
 
-## 🤝 Contribution
-Contributions, issues, and feature requests are welcome! For major changes, please open an issue first to discuss what you would like to change. Please make sure to update tests as appropriate.
+4. Install the dependencies: 
+
+    ```zsh
+    yarn install
+    ```
+
+5. Start the development server: 
+
+    ```zsh
+    yarn dev
+    ```
+
+6. Build for production:
+
+    ```zsh
+    yarn build
+    ```
+
+## 📢 Feedback
+While this personal portfolio is not open for contributions, I appreciate feedback and suggestions! Feel free to open an issue to share your thoughts or contact me directly at my [Email](mailto:ryangan0516@gmail.com).
+
 
 ## 📄 License
 This project is [MIT](./LICENSE) licensed.
