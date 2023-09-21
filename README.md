@@ -1,7 +1,7 @@
 <h1 align="center">Welcome to Ryan Gan's Portfolio 👋</h1>
 
 <p align="center">
-  <img src="https://github.com/ryangan516/ryangan-portfolio/blob/main/src/app/favicon.ico" alt="Logo of the Portfolio" width="300px">
+  <img src="https://github.com/ryangan516/ryangan-portfolio/blob/main/src/app/favicon.ico" alt="Logo of the Portfolio" width="200px">
 </p>
 
 ## 🚀 About
@@ -22,6 +22,7 @@ This is my personal portfolio and blog that showcases my work and projects, buil
 1. Clone the repository: `git clone https://github.com/ryangan516/ryangan-portfolio.git`
 2. Navigate to the project directory: `cd ryangan-portfolio`
 3. Create a `.env.local` file the in root directory and get your Resend API key if you want to use the email service. Check out `.env.example` for the format.
+
     ```zsh
     RESEND_API_KEY=YOUR_REDEND_API_KEY
     ```
