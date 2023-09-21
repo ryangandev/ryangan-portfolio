@@ -5,7 +5,7 @@
 </p>
 
 ## 🚀 About
-This is my personal portfolio and blog that showcases my work and projects, built with modern technologies and frameworks. 
+This is my personal portfolio and blog that showcases my work and projects, built with modern technologies and frameworks. Feel free to visit it [here](https://www.ryangan.dev/).
 
 ### ⚙️  Technology Stack
 - **[React](https://reactjs.org/)**: A JavaScript library for building user interfaces
