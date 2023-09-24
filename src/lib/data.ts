@@ -1,9 +1,7 @@
 import React from 'react';
-import { CgWorkAlt } from 'react-icons/cg';
 import { FaReact, FaUnity } from 'react-icons/fa';
 import { SiJavascript } from 'react-icons/si';
 import { LuGraduationCap } from 'react-icons/lu';
-import corpcommentImg from '../../public/corpcomment.png';
 import rmtdevImg from '../../public/rmtdev.png';
 import { TechStack, SkillsData } from '@/models/data';
 
@@ -89,7 +87,7 @@ export const projectsData = [
             'SocketIO',
             'Figma',
         ],
-        imageUrl: corpcommentImg,
+        // imageUrl: corpcommentImg,
     },
     {
         projectTitle: 'Player 2 Helpdesk',
@@ -105,7 +103,7 @@ export const projectsData = [
             'PostgreSQL',
             'Figma',
         ],
-        imageUrl: rmtdevImg,
+        // imageUrl: rmtdevImg,
     },
 ] as const;
 
