@@ -23,7 +23,7 @@ const fadeInAnimationVariants = {
 };
 
 export default function Skills() {
-    const { ref } = useSectionInView('Skills');
+    const { ref } = useSectionInView('Skills', 0.5);
 
     const renderTechStackIcon = (type: TechStack) => (
         <TechStackIcon type={type} />

@@ -16,7 +16,7 @@ interface ResizeableIconProps {
 }
 
 export default function Experience() {
-    const { ref } = useSectionInView('Experience');
+    const { ref } = useSectionInView('Experience', 0.4);
     const { theme } = useTheme();
 
     // Temporary solution to create a resizable icon to control the size of the Icon, inline style fontSize doesn't work.
