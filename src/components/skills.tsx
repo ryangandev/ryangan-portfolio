@@ -5,6 +5,8 @@ import SectionHeader from './section-header';
 import { skillsData } from '@/lib/data';
 import { useSectionInView } from '@/hooks/useSectionInView';
 import { motion } from 'framer-motion';
+import { TechStack } from '@/models/data';
+import { TechStackIcon } from '@/assets/icons';
 
 const fadeInAnimationVariants = {
     initial: {
@@ -23,6 +25,10 @@ const fadeInAnimationVariants = {
 export default function Skills() {
     const { ref } = useSectionInView('Skills');
 
+    const renderTechStackIcon = (type: TechStack) => (
+        <TechStackIcon type={type} />
+    );
+
     return (
         <section
             ref={ref}
@@ -34,7 +40,7 @@ export default function Skills() {
                 {skillsData.map((skill, index) => (
                     <motion.li
                         key={index}
-                        className="bg-white borderBlack rounded-xl px-5 py-3 dark:bg-white/10 dark:text-white/80"
+                        className="flex flex-row items-center justify-center gap-2 bg-white borderBlack rounded-xl px-4 py-2 dark:bg-white/10 dark:text-white/80"
                         variants={fadeInAnimationVariants}
                         initial={'initial'}
                         whileInView={'animate'}
@@ -43,7 +49,8 @@ export default function Skills() {
                         }}
                         custom={index}
                     >
-                        {skill}
+                        {renderTechStackIcon(skill.iconType as TechStack)}
+                        {skill.name}
                     </motion.li>
                 ))}
             </ul>
