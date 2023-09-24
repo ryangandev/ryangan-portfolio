@@ -1,6 +1,6 @@
 import { BsLinkedin, BsGithub, BsFacebook } from 'react-icons/bs';
 import { HiOutlineMail } from 'react-icons/hi';
-import { SocialMedia } from '@/models/icon';
+import { SocialMedia } from '@/models/data';
 import Tooltip from '@/components/tooltip';
 
 interface SocialMediaIconProps {
