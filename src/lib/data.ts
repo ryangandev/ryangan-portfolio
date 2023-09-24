@@ -64,9 +64,12 @@ export const experiencesData = [
 // TODO: modify these later
 export const projectsData = [
     {
-        title: 'ICON',
+        projectTitle: 'ICON - Multiplayer Gaming Platform',
+        role: 'Full-Stack Developer',
+        // description:
+        //     'I worked as a full-stack developer for ICON. It is a web mini games platform. I developed the front-end and back-end. It has features like authentication, payment, and more.',
         description:
-            'I worked as a full-stack developer for ICON. It is a web mini games platform. I developed the front-end and back-end. It has features like authentication, payment, and more.',
+            'A web-based multiplayer gaming platform that features a range of games, including Tic-Tac-Toe, Minesweeper, Draw and Guess. More are on the way!',
         tags: [
             'React',
             'TypeScript',
@@ -79,9 +82,10 @@ export const projectsData = [
         imageUrl: corpcommentImg,
     },
     {
-        title: 'Player 2 Helpdesk',
+        projectTitle: 'Player 2 Helpdesk',
+        role: 'Frontend Developer',
         description:
-            'I worked as a frontend developer creating a Helpdesk application for Player 2 users to submit tickets and get help from the Player 2 team.',
+            'A tailored application designed for the "Player 2" social networking platform. It allows users to submit tickets and receive assistance directly from the Player 2 team.',
         tags: [
             'React',
             'TypeScript',
@@ -92,13 +96,6 @@ export const projectsData = [
             'Figma',
         ],
         imageUrl: rmtdevImg,
-    },
-    {
-        title: 'Photo Gallery',
-        description:
-            'I worked as a full-stack developer creating a Photo Gallery web app. It is a web app for users to upload and share photos.',
-        tags: ['React', 'NextJS', 'PostgreSQL', 'TailwindCSS', 'TypeScript'],
-        imageUrl: wordanalyticsImg,
     },
 ] as const;
 
