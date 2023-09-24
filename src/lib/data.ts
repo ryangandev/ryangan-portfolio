@@ -1,6 +1,7 @@
 import React from 'react';
 import { CgWorkAlt } from 'react-icons/cg';
-import { FaReact } from 'react-icons/fa';
+import { FaReact, FaUnity } from 'react-icons/fa';
+import { SiJavascript } from 'react-icons/si';
 import { LuGraduationCap } from 'react-icons/lu';
 import corpcommentImg from '../../public/corpcomment.png';
 import rmtdevImg from '../../public/rmtdev.png';
@@ -33,41 +34,50 @@ export const links = [
     },
 ] as const;
 
-// TODO: modify these later
 export const experiencesData = [
     {
         title: 'Graphic Designer & Game Develeoper Co-Op',
+        company: 'Epistemitek',
         location: 'Philadelphia, PA',
         description:
-            'I worked as a graphic designer and game developer co-op for 1 year. I designed logos, business cards, flyers, and more. I also developed games in Unity.',
-        icon: React.createElement(LuGraduationCap),
-        date: '2019',
+            'Contributed to the development of an educational game in Unity to educate students about the human immune system. Designed new fonts for Pittman Shorthand and used Omnigraffle to structure plans and summaries for various experiments.',
+        icon: React.createElement(FaUnity),
+        date: 'March 2021 - September 2021',
     },
     {
         title: 'CMDB Enginner Co-Op',
+        company: 'Berkley Technology Services',
         location: 'Wilmington, DE',
         description:
-            'I worked as a CMDB engineer co-op for 1 year. I developed a CMDB web app in React and Node.js. I also worked on a data migration project in Python.',
-        icon: React.createElement(CgWorkAlt),
-        date: '2019 - 2021',
+            'Developed and optimized workflow scripts using JavaScript. Utilized SQL for database updates. Troubleshot and resolved configuration item issues. Assisted in the Probes to Pattern migration within ServiceNow.',
+        icon: React.createElement(SiJavascript),
+        date: 'March 2022 - March 2023',
+    },
+    {
+        title: 'Bachelor of Science in Computer Science',
+        company: 'Drexel University',
+        location: 'Philadelphia, PA',
+        description:
+            'On September 7, 2023, I completed my 5-Year Undergraduate Co-Op program, graduating with a Bachelor of Science in Computer Science as well as concentrations in Game Development and Artificial Intelligence.',
+        icon: React.createElement(LuGraduationCap),
+        date: 'September 2018 - September 2023',
     },
     {
         title: 'Frontend Developer',
+        company: 'Dynasty11 Studio',
         location: 'Philadelphia, PA',
         description:
-            'I worked for Dynasty11 Studio as a frontend developer for 1 year. I developed a web app in React and Next.js. I also worked on a data migration project in Python.',
+            'Implemented the store section of the "Player 2" app, focusing on UI, application flow, and the representation of cosmetic items. Integrated RevenueCat to manage in-app purchases, ensuring cross-platform compatibility. Troubleshot and resolved bugs of the app in production.',
         icon: React.createElement(FaReact),
-        date: '2021 - present',
+        date: 'September 2022 - present',
     },
 ] as const;
 
-// TODO: modify these later
+// TODO: modify more of these later
 export const projectsData = [
     {
         projectTitle: 'ICON - Multiplayer Gaming Platform',
         role: 'Full-Stack Developer',
-        // description:
-        //     'I worked as a full-stack developer for ICON. It is a web mini games platform. I developed the front-end and back-end. It has features like authentication, payment, and more.',
         description:
             'A web-based multiplayer gaming platform that features a range of games, including Tic-Tac-Toe, Minesweeper, Draw and Guess. More are on the way!',
         tags: [
@@ -99,7 +109,6 @@ export const projectsData = [
     },
 ] as const;
 
-// TODO: modify these later, use icons instead of text
 export const skillsData: SkillsData = [
     // Languages
     { name: 'Python', iconType: TechStack.Python },
