@@ -11,7 +11,8 @@ interface ProjectProps {
     role: string;
     description: string;
     tags: readonly string[];
-    imageUrl: StaticImageData;
+    // imageUrl: StaticImageData;
+    imageUrl: string; // temporary solution to fix the build error
 }
 
 export default function Project({

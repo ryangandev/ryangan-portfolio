@@ -87,7 +87,7 @@ export const projectsData = [
             'SocketIO',
             'Figma',
         ],
-        // imageUrl: corpcommentImg,
+        imageUrl: '',
     },
     {
         projectTitle: 'Player 2 Helpdesk',
@@ -103,7 +103,7 @@ export const projectsData = [
             'PostgreSQL',
             'Figma',
         ],
-        // imageUrl: rmtdevImg,
+        imageUrl: '',
     },
 ] as const;
 
