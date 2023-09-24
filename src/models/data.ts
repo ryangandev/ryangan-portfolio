@@ -18,16 +18,24 @@ enum TechStack {
     Expo = 'Expo',
     ReactNative = 'ReactNative',
     Swift = 'Swift',
-    Unity = 'Unity',
 
     // Backend
     NodeJS = 'NodeJS',
+    Express = 'Express',
     SpringBoot = 'SpringBoot',
     SocketIO = 'SocketIO',
+    Python = 'Python',
+    Java = 'Java',
+    CSharp = 'CSharp',
+    Racket = 'Racket',
 
     // Database
     SQLite = 'SQLite',
     PostgreSQL = 'PostgreSQL',
+    MySQL = 'MySQL',
+    SQLServer = 'SQLServer',
+    MongoDB = 'MongoDB',
+    Prisma = 'Prisma',
 
     // UI/UX
     Figma = 'Figma',
@@ -38,6 +46,21 @@ enum TechStack {
     AWS = 'AWS',
     Akamai = 'Akamai',
     Docker = 'Docker',
+
+    // Tools & Other
+    Unity = 'Unity',
+    Git = 'Git',
+    Postman = 'Postman',
+    OAuth = 'OAuth',
+    Firebase = 'Firebase',
 }
 
+interface Skill {
+    name: string;
+    iconType: TechStack;
+}
+
+type SkillsData = readonly Skill[];
+
 export { SocialMedia, TechStack };
+export type { Skill, SkillsData };

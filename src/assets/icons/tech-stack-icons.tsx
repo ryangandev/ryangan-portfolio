@@ -1,5 +1,5 @@
 import Tooltip from '@/components/tooltip';
-import { TechStack } from '@/models/icon';
+import { TechStack } from '@/models/data';
 import {
     FaReact,
     FaNodeJs,
@@ -9,6 +9,7 @@ import {
     FaUnity,
     FaAws,
     FaDocker,
+    FaJava,
 } from 'react-icons/fa';
 import {
     SiNextdotjs,
@@ -25,8 +26,19 @@ import {
     SiAdobephotoshop,
     SiVercel,
     SiAkamai,
+    SiPython,
+    SiCsharp,
+    SiRacket,
+    SiExpress,
+    SiGit,
+    SiMysql,
+    SiMicrosoftsqlserver,
+    SiMongodb,
+    SiPrisma,
+    SiPostman,
+    SiFirebase,
 } from 'react-icons/si';
-import { TbBrandReactNative } from 'react-icons/tb';
+import { TbBrandReactNative, TbBrandOauth } from 'react-icons/tb';
 
 interface TechStackIconProps {
     type: TechStack;
@@ -78,15 +90,15 @@ const ICON_CONFIG = {
         component: SiSwift,
         color: '#F05138',
     },
-    Unity: {
-        component: FaUnity,
-        color: '#000000',
-    },
 
     // Backend
     NodeJS: {
         component: FaNodeJs,
         color: '#339933',
+    },
+    Express: {
+        component: SiExpress,
+        color: '#000000',
     },
     SpringBoot: {
         component: SiSpringboot,
@@ -95,6 +107,22 @@ const ICON_CONFIG = {
     SocketIO: {
         component: SiSocketdotio,
         color: '#010101',
+    },
+    Python: {
+        component: SiPython,
+        color: '#3776AB',
+    },
+    Java: {
+        component: FaJava,
+        color: '#007396',
+    },
+    CSharp: {
+        component: SiCsharp,
+        color: '#99CC00',
+    },
+    Racket: {
+        component: SiRacket,
+        color: '#9F1D20',
     },
 
     // Database
@@ -105,6 +133,22 @@ const ICON_CONFIG = {
     PostgreSQL: {
         component: SiPostgresql,
         color: '#4169E1',
+    },
+    MySQL: {
+        component: SiMysql,
+        color: '#4479A1',
+    },
+    SQLServer: {
+        component: SiMicrosoftsqlserver,
+        color: '#CC2927',
+    },
+    MongoDB: {
+        component: SiMongodb,
+        color: '#47A248',
+    },
+    Prisma: {
+        component: SiPrisma,
+        color: '#1B222D',
     },
 
     // UI/UX
@@ -124,7 +168,7 @@ const ICON_CONFIG = {
     },
     AWS: {
         component: FaAws,
-        color: '#232F3E',
+        color: '#FF9900',
     },
     Akamai: {
         component: SiAkamai,
@@ -133,6 +177,28 @@ const ICON_CONFIG = {
     Docker: {
         component: FaDocker,
         color: '#2496ED',
+    },
+
+    // Tools
+    Unity: {
+        component: FaUnity,
+        color: '#000000',
+    },
+    Git: {
+        component: SiGit,
+        color: '#F05032',
+    },
+    Postman: {
+        component: SiPostman,
+        color: '#FF6C37',
+    },
+    OAuth: {
+        component: TbBrandOauth,
+        color: '#000000',
+    },
+    Firebase: {
+        component: SiFirebase,
+        color: '#FFCA28',
     },
 };
 
