@@ -7,7 +7,7 @@ import Link from 'next/link';
 import { BsArrowRight } from 'react-icons/bs';
 import { HiDownload } from 'react-icons/hi';
 import { SocialMediaIcon } from '@/assets/icons/index';
-import { SocialMedia } from '@/models/icon';
+import { SocialMedia } from '@/models/data';
 import { useSectionInView } from '@/hooks/useSectionInView';
 import { useActiveSection } from '@/hooks/useActiveSection';
 

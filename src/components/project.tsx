@@ -4,7 +4,7 @@ import { useRef } from 'react';
 import Image, { StaticImageData } from 'next/image';
 import { motion, useScroll, useTransform } from 'framer-motion';
 import { TechStackIcon } from '@/assets/icons';
-import { TechStack } from '@/models/icon';
+import { TechStack } from '@/models/data';
 
 interface ProjectProps {
     projectTitle: string;
