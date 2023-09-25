@@ -6,8 +6,8 @@ interface NextUIProviderProps {
     children: React.ReactNode;
 }
 
-const NextUiProviders = ({ children }: NextUIProviderProps) => {
+const NextUiProvider = ({ children }: NextUIProviderProps) => {
     return <NextUIProvider>{children}</NextUIProvider>;
 };
 
-export { NextUiProviders };
+export { NextUiProvider };
