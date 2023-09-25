@@ -66,7 +66,7 @@ export default function Contact() {
                     toast.success('Email sent successfully!');
                 }}
             >
-                <div className="flex flex-row gap-4">
+                <div className="flex flex-row gap-8">
                     <Input
                         className="transition-all"
                         name="senderName"
@@ -94,7 +94,7 @@ export default function Contact() {
                 </div>
 
                 <Textarea
-                    className="mt-4 mb-2 transition-all"
+                    className="mt-8 mb-4 transition-all"
                     name="message"
                     placeholder="Enter your message here..."
                     isRequired
