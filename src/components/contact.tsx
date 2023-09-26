@@ -66,7 +66,7 @@ export default function Contact() {
                     toast.success('Email sent successfully!');
                 }}
             >
-                <div className="flex flex-row gap-8">
+                <div className="flex flex-col sm:flex-row gap-8">
                     <Input
                         className="transition-all"
                         name="senderName"
