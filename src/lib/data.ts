@@ -81,6 +81,7 @@ export const projectsData = [
         tags: [
             'React',
             'TypeScript',
+            'Antdesign',
             'CSS3',
             'NodeJS',
             'SQLite',

@@ -38,6 +38,7 @@ import {
     SiPostman,
     SiFirebase,
     SiMui,
+    SiAntdesign,
 } from 'react-icons/si';
 import { TbBrandReactNative, TbBrandOauth } from 'react-icons/tb';
 
@@ -193,6 +194,11 @@ const ICON_CONFIG = {
         component: SiMui,
         color: '#0081CB',
         darkColor: '#0081CB',
+    },
+    Antdesign: {
+        component: SiAntdesign,
+        color: '#1890FF',
+        darkColor: '#1890FF',
     },
 
     // Deployment
