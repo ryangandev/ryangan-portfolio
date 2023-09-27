@@ -15,7 +15,7 @@ export default function NavBar() {
     return (
         <header
             className={clsx(`z-[999] relative transition-opacity`, {
-                'opacity-0': !navbarVisible,
+                'opacity-0 -translate-y-4': !navbarVisible,
             })}
         >
             <motion.div

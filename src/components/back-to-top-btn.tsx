@@ -20,7 +20,7 @@ export default function BackToTopButton() {
         <button
             className={clsx(
                 `fixed bottom-20 right-6 sm:bottom-24 sm:right-10 text-xl bg-white w-10 h-10 bg-opacity-80 backdrop-blur-[0.5rem] shadow-2xl outline outline-slate-300 rounded-full flex items-center justify-center hover:scale-[1.15] active:scale-105 transition-all dark:bg-gray-950 dark:outline-slate-500`,
-                { 'opacity-0': activeSection === 'Home' },
+                { 'opacity-0 -translate-y-4': activeSection === 'Home' },
             )}
             onClick={handleBackToTop}
         >
