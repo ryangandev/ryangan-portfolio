@@ -98,6 +98,7 @@ export const projectsData = [
             'React',
             'TypeScript',
             'TailwindCSS',
+            'MUI',
             'Redux',
             'SpringBoot',
             'PostgreSQL',

@@ -40,6 +40,7 @@ enum TechStack {
     // UI/UX
     Figma = 'Figma',
     AdobePs = 'AdobePs',
+    MUI = 'MUI',
 
     // Deployment
     Vercel = 'Vercel',

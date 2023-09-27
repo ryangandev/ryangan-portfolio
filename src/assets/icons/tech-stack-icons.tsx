@@ -37,6 +37,7 @@ import {
     SiPrisma,
     SiPostman,
     SiFirebase,
+    SiMui,
 } from 'react-icons/si';
 import { TbBrandReactNative, TbBrandOauth } from 'react-icons/tb';
 
@@ -187,6 +188,11 @@ const ICON_CONFIG = {
         component: SiAdobephotoshop,
         color: '#31A8FF',
         darkColor: '#31A8FF',
+    },
+    MUI: {
+        component: SiMui,
+        color: '#0081CB',
+        darkColor: '#0081CB',
     },
 
     // Deployment

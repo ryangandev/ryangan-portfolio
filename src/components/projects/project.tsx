@@ -58,7 +58,7 @@ export default function Project({
                     </p>
                     <ul className="flex flex-wrap mt-4 gap-4 sm:mt-auto">
                         {tags.map((tag, index) => (
-                            <li className="text-xl" key={index}>
+                            <li className="text-lg" key={index}>
                                 <TechStackIcon
                                     type={tag as TechStack}
                                     isDarkMode={theme === 'dark'}
