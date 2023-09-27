@@ -76,7 +76,12 @@ export default function Project({
                                 group-even:right-[initial] group-even:-left-40"
                 />
             </section>
-            <ProjectModal isOpen={isOpen} onOpenChange={onOpenChange} />
+            <ProjectModal
+                isOpen={isOpen}
+                onOpenChange={onOpenChange}
+                ProjectTitle={projectTitle}
+                ProjectContent={description}
+            />
         </motion.div>
     );
 }
