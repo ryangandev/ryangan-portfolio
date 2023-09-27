@@ -7,6 +7,7 @@ import { useSectionInView } from '@/hooks/useSectionInView';
 import { motion } from 'framer-motion';
 import { TechStack } from '@/models/data';
 import { TechStackIcon } from '@/assets/icons';
+import { useTheme } from '@/hooks/useTheme';
 
 const fadeInAnimationVariants = {
     initial: {
@@ -24,9 +25,10 @@ const fadeInAnimationVariants = {
 
 export default function Skills() {
     const { ref } = useSectionInView('Skills', 0.5);
+    const { theme } = useTheme();
 
     const renderTechStackIcon = (type: TechStack) => (
-        <TechStackIcon type={type} />
+        <TechStackIcon type={type} isDarkMode={theme === 'dark'} />
     );
 
     return (

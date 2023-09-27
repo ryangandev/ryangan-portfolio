@@ -174,7 +174,7 @@ const ICON_CONFIG = {
     Prisma: {
         component: SiPrisma,
         color: '#1B222D',
-        darkColor: '#1B222D',
+        darkColor: '#e4ddd2',
     },
 
     // UI/UX

@@ -8,6 +8,7 @@ import { TechStack } from '@/models/data';
 import { useDisclosure } from '@nextui-org/react';
 import ProjectModal from './project-modal';
 import { useNavbar } from '@/hooks/useNavbar';
+import { useTheme } from '@/hooks/useTheme';
 
 interface ProjectProps {
     projectTitle: string;
@@ -34,6 +35,7 @@ export default function Project({
     const opacityProgress = useTransform(scrollYProgress, [0, 1], [0.6, 1]);
     const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
     const { setNavbarVisible } = useNavbar();
+    const { theme } = useTheme();
 
     return (
         <motion.div
@@ -57,7 +59,10 @@ export default function Project({
                     <ul className="flex flex-wrap mt-4 gap-4 sm:mt-auto">
                         {tags.map((tag, index) => (
                             <li className="text-xl" key={index}>
-                                <TechStackIcon type={tag as TechStack} />
+                                <TechStackIcon
+                                    type={tag as TechStack}
+                                    isDarkMode={theme === 'dark'}
+                                />
                             </li>
                         ))}
                     </ul>
@@ -85,8 +90,9 @@ export default function Project({
                 isOpen={isOpen}
                 onOpenChange={onOpenChange}
                 onClose={onClose}
-                ProjectTitle={projectTitle}
-                ProjectContent={description}
+                projectTitle={projectTitle}
+                projectContent={description}
+                projectTags={tags}
             />
         </motion.div>
     );
