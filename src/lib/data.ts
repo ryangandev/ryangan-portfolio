@@ -3,7 +3,7 @@ import { FaReact, FaUnity } from 'react-icons/fa';
 import { SiJavascript } from 'react-icons/si';
 import { LuGraduationCap } from 'react-icons/lu';
 import rmtdevImg from '../../public/rmtdev.png';
-import { TechStack, IconsData, ProjectsData } from '@/models/data';
+import { TechStack, ProjectsData, SkillsData } from '@/models/data';
 
 export const links = [
     {
@@ -138,7 +138,7 @@ export const projectsData: ProjectsData = [
     },
 ] as const;
 
-export const skillsData: IconsData = [
+export const skillsData: SkillsData = [
     // Languages
     { name: 'Python', iconType: TechStack.Python },
     { name: 'Java', iconType: TechStack.Java },

@@ -78,6 +78,7 @@ type Project = {
 };
 
 type ProjectsData = readonly Project[];
+type SkillsData = IconsData;
 
 export { SocialMedia, TechStack };
-export type { Icon, IconsData, Project, ProjectsData };
+export type { Icon, IconsData, Project, ProjectsData, SkillsData };
