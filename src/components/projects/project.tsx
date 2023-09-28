@@ -13,18 +13,22 @@ import { useTheme } from '@/hooks/useTheme';
 interface ProjectProps {
     projectTitle: string;
     role: string;
+    context: string;
     description: string;
     tags: readonly string[];
-    // imageUrl: StaticImageData;
-    imageUrl: string; // temporary solution to fix the build error
+    // thumbnailUrl: StaticImageData;
+    thumbnailUrl: string; // temporary solution to fix the build error
+    screenshotUrls: readonly string[];
 }
 
 export default function Project({
     projectTitle,
     role,
+    context,
     description,
     tags,
-    imageUrl,
+    thumbnailUrl,
+    screenshotUrls,
 }: ProjectProps) {
     const ref = useRef<HTMLDivElement>(null);
     const { scrollYProgress } = useScroll({
@@ -69,7 +73,7 @@ export default function Project({
                 </div>
 
                 <Image
-                    src={imageUrl}
+                    src={thumbnailUrl}
                     alt={'Project I worked on'}
                     quality={95}
                     className="absolute hidden sm:block top-8 -right-40 w-[28.25rem] rounded-t-lg shadow-2xl
@@ -91,8 +95,11 @@ export default function Project({
                 onOpenChange={onOpenChange}
                 onClose={onClose}
                 projectTitle={projectTitle}
+                projectRole={role}
                 projectContent={description}
                 projectTags={tags}
+                projectContext={context}
+                projectScreenshotUrls={screenshotUrls}
             />
         </motion.div>
     );

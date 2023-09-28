@@ -76,6 +76,8 @@ export const projectsData = [
     {
         projectTitle: 'ICON - Multiplayer Gaming Platform',
         role: 'Full-Stack Developer',
+        context:
+            '🎮 This project was developed as a part of a Web Development Class. It is a web-based multiplayer gaming platform.',
         description:
             'A web-based multiplayer gaming platform that features a range of games, including Tic-Tac-Toe, Minesweeper, Draw and Guess. More are on the way!',
         tags: [
@@ -88,11 +90,14 @@ export const projectsData = [
             'SocketIO',
             'Figma',
         ],
-        imageUrl: '',
+        thumbnailUrl: '',
+        screenshotUrls: [],
     },
     {
         projectTitle: 'Player 2 Helpdesk',
         role: 'Frontend Developer',
+        context:
+            '💁 Developed for Dynasty11 Studio, this application serves as the official helpdesk for the "Player 2" -- a social networking platform',
         description:
             'A tailored application designed for the "Player 2" social networking platform. It allows users to submit tickets and receive assistance directly from the Player 2 team.',
         tags: [
@@ -105,7 +110,8 @@ export const projectsData = [
             'PostgreSQL',
             'Figma',
         ],
-        imageUrl: '',
+        thumbnailUrl: '',
+        screenshotUrls: [],
     },
 ] as const;
 
