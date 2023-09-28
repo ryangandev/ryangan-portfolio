@@ -64,5 +64,20 @@ interface Icon {
 
 type IconsData = readonly Icon[];
 
+type Project = {
+    projectTitle: string;
+    role: string;
+    techUsed: IconsData;
+    context: string;
+    overview: readonly string[];
+    features: readonly { title: string; detail: string }[];
+    responsibilities: readonly string[];
+    // thumbnailUrl: StaticImageData;
+    thumbnailUrl: string; // temporary solution to fix the build error
+    screenshotUrls: readonly string[];
+};
+
+type ProjectsData = readonly Project[];
+
 export { SocialMedia, TechStack };
-export type { Icon, IconsData };
+export type { Icon, IconsData, Project, ProjectsData };

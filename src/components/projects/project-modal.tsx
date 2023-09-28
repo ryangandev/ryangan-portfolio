@@ -9,23 +9,14 @@ import {
 } from '@nextui-org/react';
 import { useNavbar } from '@/hooks/useNavbar';
 import { TechStackIcon } from '@/assets/icons';
-import { IconsData, TechStack } from '@/models/data';
+import { Project, TechStack } from '@/models/data';
 import { useTheme } from '@/hooks/useTheme';
 import { parseResponsibilitiesData } from '@/lib/parseTextIntoComponent';
 
-interface ProjectModalProps {
+interface ProjectModalProps extends Project {
     isOpen: boolean;
     onOpenChange: () => void;
     onClose: () => void;
-    projectTitle: string;
-    role: string;
-    techUsed: IconsData;
-    context: string;
-    overview: readonly string[];
-    features: readonly { title: string; detail: string }[];
-    responsibilities: readonly string[];
-    thumbnailUrl: string;
-    screenshotUrls: readonly string[];
 }
 
 export default function ProjectModal(props: ProjectModalProps) {

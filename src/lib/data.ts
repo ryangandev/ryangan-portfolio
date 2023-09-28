@@ -3,7 +3,7 @@ import { FaReact, FaUnity } from 'react-icons/fa';
 import { SiJavascript } from 'react-icons/si';
 import { LuGraduationCap } from 'react-icons/lu';
 import rmtdevImg from '../../public/rmtdev.png';
-import { TechStack, IconsData } from '@/models/data';
+import { TechStack, IconsData, ProjectsData } from '@/models/data';
 
 export const links = [
     {
@@ -71,7 +71,7 @@ export const experiencesData = [
     },
 ] as const;
 
-export const projectsData = [
+export const projectsData: ProjectsData = [
     {
         projectTitle: 'Player 2 Helpdesk',
         role: 'Frontend Developer',

@@ -4,26 +4,13 @@ import { useRef } from 'react';
 import Image, { StaticImageData } from 'next/image';
 import { motion, useScroll, useTransform } from 'framer-motion';
 import { TechStackIcon } from '@/assets/icons';
-import { IconsData, TechStack } from '@/models/data';
+import { TechStack, Project } from '@/models/data';
 import { useDisclosure } from '@nextui-org/react';
 import ProjectModal from './project-modal';
 import { useNavbar } from '@/hooks/useNavbar';
 import { useTheme } from '@/hooks/useTheme';
 
-interface ProjectProps {
-    projectTitle: string;
-    role: string;
-    techUsed: IconsData;
-    context: string;
-    overview: readonly string[];
-    features: readonly { title: string; detail: string }[];
-    responsibilities: readonly string[];
-    // thumbnailUrl: StaticImageData;
-    thumbnailUrl: string; // temporary solution to fix the build error
-    screenshotUrls: readonly string[];
-}
-
-export default function Project(props: ProjectProps) {
+export default function Project(props: Project) {
     const { projectTitle, techUsed, context, thumbnailUrl } = props;
     const ref = useRef<HTMLDivElement>(null);
     const { scrollYProgress } = useScroll({
