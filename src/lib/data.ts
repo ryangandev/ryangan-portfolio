@@ -3,7 +3,7 @@ import { FaReact, FaUnity } from 'react-icons/fa';
 import { SiJavascript } from 'react-icons/si';
 import { LuGraduationCap } from 'react-icons/lu';
 import rmtdevImg from '../../public/rmtdev.png';
-import { TechStack, SkillsData } from '@/models/data';
+import { TechStack, ProjectsData, SkillsData } from '@/models/data';
 
 export const links = [
     {
@@ -71,39 +71,70 @@ export const experiencesData = [
     },
 ] as const;
 
-// TODO: modify more of these later
-export const projectsData = [
-    {
-        projectTitle: 'ICON - Multiplayer Gaming Platform',
-        role: 'Full-Stack Developer',
-        description:
-            'A web-based multiplayer gaming platform that features a range of games, including Tic-Tac-Toe, Minesweeper, Draw and Guess. More are on the way!',
-        tags: [
-            'React',
-            'TypeScript',
-            'CSS3',
-            'NodeJS',
-            'SQLite',
-            'SocketIO',
-            'Figma',
-        ],
-        imageUrl: '',
-    },
+export const projectsData: ProjectsData = [
     {
         projectTitle: 'Player 2 Helpdesk',
         role: 'Frontend Developer',
-        description:
-            'A tailored application designed for the "Player 2" social networking platform. It allows users to submit tickets and receive assistance directly from the Player 2 team.',
-        tags: [
-            'React',
-            'TypeScript',
-            'TailwindCSS',
-            'Redux',
-            'SpringBoot',
-            'PostgreSQL',
-            'Figma',
+        techUsed: [
+            { name: 'REACT', iconType: TechStack.React },
+            { name: 'TYPESCRIPT', iconType: TechStack.TypeScript },
+            { name: 'TAILWINDCSS', iconType: TechStack.TailwindCSS },
+            { name: 'MUI', iconType: TechStack.MUI },
+            { name: 'REDUX', iconType: TechStack.Redux },
+            { name: 'SPRINGBOOT', iconType: TechStack.SpringBoot },
+            { name: 'POSTGRESQL', iconType: TechStack.PostgreSQL },
+            { name: 'FIGMA', iconType: TechStack.Figma },
         ],
-        imageUrl: '',
+        context:
+            '💁 Developed for Dynasty11 Studio, the "Player 2 Helpdesk" application serves as the primary support channel for users of the "Player 2" social networking platform',
+        overview: [
+            'Player 2 Helpdesk is a custom web application tailored to support the "Player 2" social networking community. It facilitates efficient communication between the Player 2 app users and the support staff.',
+            'By bridging the gap between users and support staff, it ensures efficient communication through a user-friendly dashboard, in-depth reporting, and real-time communication tools.',
+        ],
+        features: [
+            {
+                title: 'Comprehensive Dashboard',
+                detail: 'Empowers the Player 2 support team with advanced filtering and sorting capabilities for efficient ticket management',
+            },
+            {
+                title: 'Dynamic Reporting System',
+                detail: 'Provides in-depth insights into helpdesk performance using a range of data visualizations',
+            },
+            {
+                title: 'Real-time Communication',
+                detail: 'Facilitates seamless chats and notifications, enabling instant interactions between users and support',
+            },
+        ],
+        responsibilities: [
+            'Led the frontend team from conceptualizing the UI in **Figma** to translating the design into a fully functional implementation using **React** and **TypeScript**',
+            'Designed a user-friendly **dashboard** component with advanced filtering and sorting capabilities, ensuring efficient ticket management for the support team',
+            'Developed a dynamic **reporting system** that supports diverse date range and filter selections, utilizing **Rechart**, to offer insights into helpdesk performance',
+            'Collaborated closely with the backend team to harness **server-sent events**, enabling real-time chat and notification features',
+            'Configured and managed application state using **Redux** to ensure state consistency across various functionalities',
+        ],
+        thumbnailUrl: '',
+        screenshotUrls: [],
+    },
+    {
+        projectTitle: 'ICON',
+        role: 'Full-Stack Developer',
+        techUsed: [
+            { name: 'REACT', iconType: TechStack.React },
+            { name: 'TYPESCRIPT', iconType: TechStack.TypeScript },
+            { name: 'ANTDESIGN', iconType: TechStack.Antdesign },
+            { name: 'CSS3', iconType: TechStack.CSS3 },
+            { name: 'NODE.JS', iconType: TechStack.NodeJS },
+            { name: 'SQLITE', iconType: TechStack.SQLite },
+            { name: 'SOCKET.IO', iconType: TechStack.SocketIO },
+            { name: 'FIGMA', iconType: TechStack.Figma },
+        ],
+        context:
+            '🎮 This project was developed as a part of a Web Development Class. It is a web-based multiplayer gaming platform.',
+        overview: [],
+        features: [],
+        responsibilities: [],
+        thumbnailUrl: '',
+        screenshotUrls: [],
     },
 ] as const;
 

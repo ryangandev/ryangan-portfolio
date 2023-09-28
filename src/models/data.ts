@@ -40,6 +40,8 @@ enum TechStack {
     // UI/UX
     Figma = 'Figma',
     AdobePs = 'AdobePs',
+    MUI = 'MUI',
+    Antdesign = 'Antdesign',
 
     // Deployment
     Vercel = 'Vercel',
@@ -55,12 +57,28 @@ enum TechStack {
     Firebase = 'Firebase',
 }
 
-interface Skill {
+interface Icon {
     name: string;
     iconType: TechStack;
 }
 
-type SkillsData = readonly Skill[];
+type IconsData = readonly Icon[];
+
+type Project = {
+    projectTitle: string;
+    role: string;
+    techUsed: IconsData;
+    context: string;
+    overview: readonly string[];
+    features: readonly { title: string; detail: string }[];
+    responsibilities: readonly string[];
+    // thumbnailUrl: StaticImageData;
+    thumbnailUrl: string; // temporary solution to fix the build error
+    screenshotUrls: readonly string[];
+};
+
+type ProjectsData = readonly Project[];
+type SkillsData = IconsData;
 
 export { SocialMedia, TechStack };
-export type { Skill, SkillsData };
+export type { Icon, IconsData, Project, ProjectsData, SkillsData };

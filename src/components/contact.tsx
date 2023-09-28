@@ -7,6 +7,7 @@ import { useSectionInView } from '@/hooks/useSectionInView';
 import SubmitButton from './submit-btn';
 import { sendEmail } from '@/actions/sendEmail';
 import toast from 'react-hot-toast';
+import { Input, Textarea } from '@nextui-org/input';
 
 export default function Contact() {
     const { ref } = useSectionInView('Contact');
@@ -15,7 +16,7 @@ export default function Contact() {
         <motion.section
             id="contact"
             ref={ref}
-            className="mb-20 sm:mb-28 w-[min(100%,38rem)] text-center"
+            className="mb-20 sm:mb-28 w-[min(100%,38rem)]"
             initial={{
                 opacity: 0,
             }}
@@ -31,15 +32,19 @@ export default function Contact() {
         >
             <SectionHeading>Contact me</SectionHeading>
 
-            <p className="text-gray-700 -mt-6 dark:text-white/80">
+            <p className="text-gray-700 -mt-4 dark:text-white/80 text-center">
                 Please contact me through this form or directly at{' '}
-                <a className="underline" href="mailto:example@gmail.com">
+                <a
+                    className="underline"
+                    href="mailto:ryangan.dev@gmail.com"
+                    target="_blank"
+                >
                     ryangan.dev@gmail.com
                 </a>{' '}
             </p>
 
             <form
-                className="mt-6 flex flex-col dark:text-black"
+                className="mt-8 flex flex-col"
                 action={async (formData) => {
                     const { data, error } = await sendEmail(formData);
 
@@ -61,20 +66,44 @@ export default function Contact() {
                     toast.success('Email sent successfully!');
                 }}
             >
-                <input
-                    className="h-14 px-4 rounded-lg borderBlack dark:bg-white dark:bg-opacity-80 dark:focus:bg-opacity-100 transition-all dark:outline-none"
-                    name="senderEmail"
-                    type="email"
-                    required
-                    maxLength={500}
-                    placeholder="Your email"
-                />
-                <textarea
-                    className="h-52 my-3 rounded-lg borderBlack p-4 dark:bg-white dark:bg-opacity-80 dark:focus:bg-opacity-100 transition-all dark:outline-none"
+                <div className="flex flex-col sm:flex-row gap-8">
+                    <Input
+                        className="transition-all"
+                        name="senderName"
+                        type="text"
+                        isRequired
+                        maxLength={500}
+                        placeholder="Your name"
+                        label="Name"
+                        labelPlacement="outside"
+                        variant="bordered"
+                        size="lg"
+                    />
+                    <Input
+                        className="transition-all"
+                        name="senderEmail"
+                        type="email"
+                        isRequired
+                        maxLength={500}
+                        placeholder="Your email"
+                        label="Email"
+                        labelPlacement="outside"
+                        variant="bordered"
+                        size="lg"
+                    />
+                </div>
+
+                <Textarea
+                    className="mt-8 mb-4 transition-all"
                     name="message"
-                    placeholder="Your message"
-                    required
+                    placeholder="Enter your message here..."
+                    isRequired
                     maxLength={5000}
+                    maxRows={5}
+                    label="Message"
+                    labelPlacement="outside"
+                    variant="bordered"
+                    size="lg"
                 />
                 <div className="flex justify-end">
                     <SubmitButton />

@@ -5,13 +5,19 @@ import { links } from '@/lib/data';
 import Link from 'next/link';
 import clsx from 'clsx';
 import { useActiveSection } from '@/hooks/useActiveSection';
+import { useNavbar } from '@/hooks/useNavbar';
 
 export default function NavBar() {
     const { activeSection, setActiveSection, setTimeOfLastClick } =
         useActiveSection();
+    const { navbarVisible } = useNavbar();
 
     return (
-        <header className="z-[999] relative">
+        <header
+            className={clsx(`z-[999] relative transition-opacity`, {
+                'opacity-0 -translate-y-4': !navbarVisible,
+            })}
+        >
             <motion.div
                 className="fixed top-0 left-1/2 h-[4.5rem] w-full rounded-none border border-white border-opacity-40 bg-white bg-opacity-80 shadow-lg shadow-black/[0.03] backdrop-blur-[0.5rem] sm:top-6 sm:h-[3.25rem] sm:w-[36rem] sm:rounded-full dark:bg-gray-950 dark:border-black/40 dark:bg-opacity-75"
                 initial={{ y: -100, x: '-50%', opacity: 0 }}

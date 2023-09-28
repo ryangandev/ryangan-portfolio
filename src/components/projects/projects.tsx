@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import SectionHeader from './section-header';
+import SectionHeader from '../section-header';
 import { projectsData } from '@/lib/data';
 import Project from './project';
 import { useSectionInView } from '@/hooks/useSectionInView';

@@ -65,7 +65,7 @@ export default function Experience() {
                                 |<span className="ml-2">{item.location}</span>
                             </div>
 
-                            <p className="!mt-2 !font-normal text-gray-700 dark:text-white/75">
+                            <p className="!mt-2 !font-normal descriptionFontColor">
                                 {item.description}
                             </p>
                         </VerticalTimelineElement>

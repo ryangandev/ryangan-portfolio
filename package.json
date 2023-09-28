@@ -12,6 +12,7 @@
         "@emotion/react": "^11.11.1",
         "@emotion/styled": "^11.11.0",
         "@mui/material": "^5.14.10",
+        "@nextui-org/react": "^2.1.13",
         "@react-email/components": "^0.0.7",
         "@react-email/tailwind": "^0.0.8",
         "@types/node": "20.6.2",
