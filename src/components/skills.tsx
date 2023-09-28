@@ -38,11 +38,11 @@ export default function Skills() {
             id={'skills'}
         >
             <SectionHeader>Skills</SectionHeader>
-            <ul className="flex flex-wrap justify-center gap-2 text-lg text-gray-800">
+            <ul className="flex flex-wrap justify-center gap-2 sm:gap-4 text-lg text-gray-800">
                 {skillsData.map((skill, index) => (
                     <motion.li
                         key={index}
-                        className="flex flex-row items-center justify-center gap-2 bg-white borderBlack rounded-xl px-4 py-2 dark:bg-white/10 dark:text-white/80"
+                        className="flex flex-row items-center justify-center gap-2 bg-white borderBlack rounded-xl shadow-md px-3 py-1.5 dark:bg-white/10 dark:text-white/80"
                         variants={fadeInAnimationVariants}
                         initial={'initial'}
                         whileInView={'animate'}
