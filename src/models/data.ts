@@ -57,12 +57,12 @@ enum TechStack {
     Firebase = 'Firebase',
 }
 
-interface Skill {
+interface Icon {
     name: string;
     iconType: TechStack;
 }
 
-type SkillsData = readonly Skill[];
+type IconsData = readonly Icon[];
 
 export { SocialMedia, TechStack };
-export type { Skill, SkillsData };
+export type { Icon, IconsData };
