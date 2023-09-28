@@ -12,3 +12,15 @@ html.dark {
 .borderBlack {
     @apply border border-black/10;
 }
+
+.modalListContent {
+    @apply pl-8 flex flex-col gap-3 list-disc list-outside;
+}
+
+.highlightedFontColor {
+    @apply text-black dark:text-white;
+}
+
+.descriptionFontColor {
+    @apply text-gray-700 dark:text-white/75;
+}
