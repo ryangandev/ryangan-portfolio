@@ -9,19 +9,23 @@ import {
 } from '@nextui-org/react';
 import { useNavbar } from '@/hooks/useNavbar';
 import { TechStackIcon } from '@/assets/icons';
-import { TechStack } from '@/models/data';
+import { IconsData, TechStack } from '@/models/data';
 import { useTheme } from '@/hooks/useTheme';
+import { parseResponsibilitiesData } from '@/lib/parseTextIntoComponent';
 
 interface ProjectModalProps {
     isOpen: boolean;
     onOpenChange: () => void;
     onClose: () => void;
     projectTitle: string;
-    projectRole: string;
-    projectContent: string;
-    projectTags: readonly string[];
-    projectContext: string;
-    projectScreenshotUrls: readonly string[];
+    role: string;
+    techUsed: IconsData;
+    context: string;
+    overview: readonly string[];
+    features: readonly { title: string; detail: string }[];
+    responsibilities: readonly string[];
+    thumbnailUrl: string;
+    screenshotUrls: readonly string[];
 }
 
 export default function ProjectModal(props: ProjectModalProps) {
@@ -30,11 +34,13 @@ export default function ProjectModal(props: ProjectModalProps) {
         onOpenChange,
         onClose,
         projectTitle,
-        projectRole,
-        projectContent,
-        projectTags,
-        projectContext,
-        projectScreenshotUrls,
+        role,
+        techUsed,
+        context,
+        overview,
+        features,
+        responsibilities,
+        screenshotUrls,
     } = props;
     const { setNavbarVisible } = useNavbar();
     const { theme } = useTheme();
@@ -78,30 +84,92 @@ export default function ProjectModal(props: ProjectModalProps) {
                 {(onModalClose) => (
                     <>
                         <ModalHeader className="flex flex-col gap-1">
-                            <h1 className="text-3xl">{projectTitle}</h1>
-                            <h3 className="text-lg font-medium leading-6">
-                                {projectRole}
+                            <h1 className="text-3xl highlightedFontColor">
+                                {projectTitle}
+                            </h1>
+                            <h3 className="text-lg font-medium leading-6 highlightedFontColor">
+                                {role}
                             </h3>
                         </ModalHeader>
                         <ModalBody className="gap-8">
+                            {/* Tech Used */}
                             <ul className="flex flex-wrap gap-4 sm:mt-auto">
-                                {projectTags.map((tag, index) => (
+                                {techUsed.map((tech, index) => (
                                     <li
-                                        className="flex text-base gap-2 justify-center items-center"
+                                        className="flex text-base highlightedFontColor gap-2 justify-center items-center"
                                         key={index}
                                     >
                                         <TechStackIcon
-                                            type={tag as TechStack}
+                                            type={tech.iconType as TechStack}
                                             isDarkMode={theme === 'dark'}
                                         />
-                                        <span className="text-sm">{tag}</span>
+                                        <span className="text-xs font-medium">
+                                            {tech.name}
+                                        </span>
                                     </li>
                                 ))}
                             </ul>
+
+                            {/* Context */}
                             <p className="font-semibold text-base text-center italic px-4">
-                                {projectContext}
+                                {context}
                             </p>
-                            <p>{projectContent}</p>
+
+                            {/* Overview */}
+                            <div className="flex flex-col gap-4">
+                                <h2 className="text-2xl font-semibold highlightedFontColor">
+                                    Overview
+                                </h2>
+                                {overview.map((paragraph, index) => (
+                                    <p
+                                        key={index}
+                                        className="text-base highlightedFontColor"
+                                    >
+                                        {paragraph}
+                                    </p>
+                                ))}
+                            </div>
+
+                            {/* Features */}
+                            <div className="flex flex-col gap-4">
+                                <h2 className="text-2xl font-semibold highlightedFontColor">
+                                    Features
+                                </h2>
+                                <ul className="modalListContent">
+                                    {features.map((feature, index) => (
+                                        <li
+                                            className="text-base descriptionFontColor"
+                                            key={index}
+                                        >
+                                            <span className="font-bold highlightedFontColor">
+                                                {feature.title}
+                                            </span>{' '}
+                                            - {feature.detail}
+                                        </li>
+                                    ))}
+                                </ul>
+                            </div>
+
+                            {/* Responsibilities */}
+                            <div className="flex flex-col gap-4">
+                                <h2 className="text-2xl font-semibold highlightedFontColor">
+                                    Responsibilities
+                                </h2>
+                                <ul className="modalListContent">
+                                    {responsibilities.map(
+                                        (responsibility, index) => (
+                                            <li
+                                                className="text-base descriptionFontColor"
+                                                key={index}
+                                            >
+                                                {parseResponsibilitiesData(
+                                                    responsibility,
+                                                )}
+                                            </li>
+                                        ),
+                                    )}
+                                </ul>
+                            </div>
                         </ModalBody>
                         <ModalFooter>
                             <Button
