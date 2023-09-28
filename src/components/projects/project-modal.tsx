@@ -81,10 +81,9 @@ export default function ProjectModal(props: ProjectModalProps) {
                             <h3 className="text-lg font-medium leading-6 highlightedFontColor">
                                 {role}
                             </h3>
-                        </ModalHeader>
-                        <ModalBody className="gap-8">
+
                             {/* Tech Used */}
-                            <ul className="flex flex-wrap gap-4 sm:mt-auto">
+                            <ul className="flex flex-wrap gap-4 mt-4">
                                 {techUsed.map((tech, index) => (
                                     <li
                                         className="flex text-base highlightedFontColor gap-2 justify-center items-center"
@@ -100,7 +99,8 @@ export default function ProjectModal(props: ProjectModalProps) {
                                     </li>
                                 ))}
                             </ul>
-
+                        </ModalHeader>
+                        <ModalBody className="pt-6 gap-8">
                             {/* Context */}
                             <p className="font-semibold text-base text-center italic px-4">
                                 {context}
