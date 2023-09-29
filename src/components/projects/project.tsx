@@ -1,7 +1,7 @@
 'use client';
 
 import { useRef } from 'react';
-import Image, { StaticImageData } from 'next/image';
+import Image from 'next/image';
 import { motion, useScroll, useTransform } from 'framer-motion';
 import { TechStackIcon } from '@/assets/icons';
 import { TechStack, Project } from '@/models/data';

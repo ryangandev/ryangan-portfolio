@@ -12,6 +12,7 @@ import { TechStackIcon } from '@/assets/icons';
 import { Project, TechStack } from '@/models/data';
 import { useTheme } from '@/hooks/useTheme';
 import { parseResponsibilitiesData } from '@/lib/parseTextIntoComponent';
+import Image from 'next/image';
 
 interface ProjectModalProps extends Project {
     isOpen: boolean;
@@ -31,6 +32,7 @@ export default function ProjectModal(props: ProjectModalProps) {
         overview,
         features,
         responsibilities,
+        thumbnailUrl,
         screenshotUrls,
     } = props;
     const { setNavbarVisible } = useNavbar();
@@ -75,12 +77,14 @@ export default function ProjectModal(props: ProjectModalProps) {
                 {(onModalClose) => (
                     <>
                         <ModalHeader className="flex flex-col gap-1">
-                            <h1 className="text-3xl highlightedFontColor">
-                                {projectTitle}
-                            </h1>
-                            <h3 className="text-lg font-medium leading-6 highlightedFontColor">
-                                {role}
-                            </h3>
+                            <div className="flex items-end justify-between">
+                                <h1 className="text-3xl highlightedFontColor">
+                                    {projectTitle}
+                                </h1>
+                                <h3 className="text-lg font-medium highlightedFontColor">
+                                    {role}
+                                </h3>
+                            </div>
 
                             {/* Tech Used */}
                             <ul className="flex flex-wrap gap-4 mt-4">
@@ -100,11 +104,18 @@ export default function ProjectModal(props: ProjectModalProps) {
                                 ))}
                             </ul>
                         </ModalHeader>
-                        <ModalBody className="pt-6 gap-8">
+                        <ModalBody className="pt-4 gap-8 flex flex-col items-center">
                             {/* Context */}
-                            <p className="font-semibold text-base text-center italic px-4">
+                            <p className="font-semibold text-base text-center italic px-8">
                                 {context}
                             </p>
+
+                            <Image
+                                src={thumbnailUrl}
+                                alt={'Project I worked on'}
+                                quality={95}
+                                className="rounded-lg shadow-2xl"
+                            />
 
                             {/* Overview */}
                             <div className="flex flex-col gap-4">
@@ -160,6 +171,26 @@ export default function ProjectModal(props: ProjectModalProps) {
                                         ),
                                     )}
                                 </ul>
+                            </div>
+
+                            {/* Screenshots */}
+                            <div className="flex flex-col gap-4">
+                                <h2 className="text-2xl font-semibold highlightedFontColor">
+                                    Screenshots
+                                </h2>
+                                <div className="flex flex-wrap gap-8">
+                                    {screenshotUrls.map(
+                                        (screenshotUrl, index) => (
+                                            <Image
+                                                key={index}
+                                                src={screenshotUrl}
+                                                alt={'Project Screenshot'}
+                                                quality={95}
+                                                className="rounded-lg shadow-2xl"
+                                            />
+                                        ),
+                                    )}
+                                </div>
                             </div>
                         </ModalBody>
                         <ModalFooter>

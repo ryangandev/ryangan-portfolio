@@ -1,3 +1,5 @@
+import { StaticImageData } from 'next/image';
+
 enum SocialMedia {
     LinkedIn = 'LinkedIn',
     GitHub = 'GitHub',
@@ -72,9 +74,8 @@ type Project = {
     overview: readonly string[];
     features: readonly { title: string; detail: string }[];
     responsibilities: readonly string[];
-    // thumbnailUrl: StaticImageData;
-    thumbnailUrl: string; // temporary solution to fix the build error
-    screenshotUrls: readonly string[];
+    thumbnailUrl: StaticImageData;
+    screenshotUrls: readonly StaticImageData[];
 };
 
 type ProjectsData = readonly Project[];
