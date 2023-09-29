@@ -2,7 +2,7 @@
 
 import React from 'react';
 import SectionHeader from './section-header';
-import { skillsData } from '@/lib/data';
+import { skillsData } from '@/data/skills';
 import { useSectionInView } from '@/hooks/useSectionInView';
 import { motion } from 'framer-motion';
 import { TechStack } from '@/models/data';

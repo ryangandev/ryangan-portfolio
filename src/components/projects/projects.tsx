@@ -2,7 +2,7 @@
 
 import React from 'react';
 import SectionHeader from '../section-header';
-import { projectsData } from '@/lib/data';
+import { projectsData } from '@/data/projects';
 import Project from './project';
 import { useSectionInView } from '@/hooks/useSectionInView';
 

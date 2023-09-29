@@ -8,7 +8,7 @@ import {
     VerticalTimelineElement,
 } from 'react-vertical-timeline-component';
 import 'react-vertical-timeline-component/style.min.css';
-import { experiencesData } from '@/lib/data';
+import { experiencesData } from '@/data/experience';
 import { useTheme } from '@/hooks/useTheme';
 
 interface ResizeableIconProps {
