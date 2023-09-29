@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
     Modal,
     ModalContent,
@@ -13,6 +13,7 @@ import { Project, TechStack } from '@/models/data';
 import { useTheme } from '@/hooks/useTheme';
 import { parseResponsibilitiesData } from '@/lib/parseTextIntoComponent';
 import Image from 'next/image';
+import { Skeleton } from '@nextui-org/skeleton';
 
 interface ProjectModalProps extends Project {
     isOpen: boolean;
@@ -37,10 +38,23 @@ export default function ProjectModal(props: ProjectModalProps) {
     } = props;
     const { setNavbarVisible } = useNavbar();
     const { theme } = useTheme();
+    const [isImageLoaded, setIsImageLoaded] = useState(
+        screenshotUrls.reduce<{ [key: number]: boolean }>((acc, _, index) => {
+            acc[index] = false;
+            return acc;
+        }, {}),
+    );
 
     const onModalClose = () => {
         onClose();
         setNavbarVisible(true);
+    };
+
+    const handleOnLoadingComplete = (index: number) => {
+        setIsImageLoaded((prevState) => ({
+            ...prevState,
+            [index]: true,
+        }));
     };
 
     return (
@@ -114,6 +128,7 @@ export default function ProjectModal(props: ProjectModalProps) {
                                 src={thumbnailUrl}
                                 alt={'Project I worked on'}
                                 quality={95}
+                                loading="lazy"
                                 className="rounded-lg shadow-2xl"
                             />
 
@@ -181,13 +196,22 @@ export default function ProjectModal(props: ProjectModalProps) {
                                 <div className="flex flex-wrap gap-8">
                                     {screenshotUrls.map(
                                         (screenshotUrl, index) => (
-                                            <Image
+                                            <Skeleton
                                                 key={index}
-                                                src={screenshotUrl}
-                                                alt={'Project Screenshot'}
-                                                quality={95}
-                                                className="rounded-lg shadow-2xl"
-                                            />
+                                                isLoaded={isImageLoaded[index]}
+                                            >
+                                                <Image
+                                                    src={screenshotUrl}
+                                                    alt={'Project Screenshot'}
+                                                    quality={95}
+                                                    onLoadingComplete={() =>
+                                                        handleOnLoadingComplete(
+                                                            index,
+                                                        )
+                                                    }
+                                                    className="rounded-lg shadow-2xl"
+                                                />
+                                            </Skeleton>
                                         ),
                                     )}
                                 </div>
