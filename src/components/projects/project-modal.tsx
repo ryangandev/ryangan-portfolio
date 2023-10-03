@@ -11,7 +11,7 @@ import { useNavbar } from '@/hooks/useNavbar';
 import { TechStackIcon } from '@/assets/icons';
 import { Project, TechStack } from '@/models/data';
 import { useTheme } from '@/hooks/useTheme';
-import { parseResponsibilitiesData } from '@/lib/parseTextIntoComponent';
+import { parseResponsibilitiesData } from '@/lib/parse-text-into-component';
 import Image from 'next/image';
 import { Skeleton } from '@nextui-org/skeleton';
 
