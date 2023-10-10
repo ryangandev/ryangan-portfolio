@@ -64,8 +64,11 @@ export const projectsData: ProjectsData = [
     //         { name: 'FIGMA', iconType: TechStack.Figma },
     //     ],
     //     context:
-    //         'This project was developed as a part of a Web Development Class. It is a web-based multiplayer gaming platform.',
-    //     overview: [],
+    //         'This project was developed as a part of a Web Development course, offering a relaxed space to enjoy time with friends.',
+    //     overview: [
+    //         'Icon.io is a web-based, online multiplayer gaming platform developed using React and Node.js, utilizing TypeScript on both ends.',
+    //         'It currently features Draw & Guess, a fun game to enjoy with your friends or even with strangers, and plans are underway to add more interactive games soon!',
+    //     ],
     //     features: [],
     //     responsibilities: [],
     //     thumbnailUrl: p2Thumbnail,
