@@ -3,8 +3,6 @@
 import React from 'react';
 import Image from 'next/image';
 import { motion } from 'framer-motion';
-import Link from 'next/link';
-import { BsArrowRight } from 'react-icons/bs';
 import { AiOutlineDoubleRight } from 'react-icons/ai';
 import { SocialMediaIcon } from '@/assets/icons/index';
 import { SocialMedia } from '@/models/data';
@@ -88,7 +86,7 @@ export default function Intro() {
             </motion.h1>
 
             <motion.div
-                className="flex flex-col items-center justify-center gap-4 px-4 text-lg font-medium"
+                className="flex flex-col items-center justify-center gap-4 px-4 text-lg font-medium sm:flex-row"
                 initial={{ opacity: 0, y: 100 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{
@@ -96,23 +94,13 @@ export default function Intro() {
                 }}
             >
                 <div className="flex flex-row gap-4">
-                    {/* <Link
+                    <a
+                        className="bg-white p-3 flex items-center text-[1.35rem] rounded-full focus:scale-[1.15] hover:scale-[1.15] active:scale-105 transition cursor-pointer borderBlack dark:bg-white/10"
                         href="#contact"
-                        className="group bg-gray-900 text-white px-7 py-3 flex items-center gap-2 rounded-full outline-none focus:scale-110 hover:scale-110 hover:bg-gray-950 active:scale-105 transition"
                         onClick={() => {
                             setActiveSection('Contact');
                             setTimeOfLastClick(Date.now());
                         }}
-                    >
-                        Contact me
-                        <BsArrowRight className="opacity-70 group-hover:translate-x-1 transition" />
-                    </Link> */}
-                </div>
-
-                <div className="flex flex-row gap-4">
-                    <a
-                        className="bg-white p-3 flex items-center text-[1.35rem] rounded-full focus:scale-[1.15] hover:scale-[1.15] active:scale-105 transition cursor-pointer borderBlack dark:bg-white/10"
-                        href="#contact"
                     >
                         <SocialMediaIcon type={SocialMedia.Email} />
                     </a>
@@ -133,15 +121,15 @@ export default function Intro() {
                     >
                         <SocialMediaIcon type={SocialMedia.LinkedIn} />
                     </a>
-                    <a
-                        className="group bg-white text-base px-4 py-2 flex items-center gap-1 rounded-full outline-none focus:scale-110 hover:scale-110 active:scale-105 transition cursor-pointer borderBlack dark:bg-white/10"
-                        href="/Rg_resume_v2.0.3.pdf"
-                        target="_blank"
-                    >
-                        View Resume
-                        <AiOutlineDoubleRight className="opacity-60 group-hover:translate-x-1.5 transition" />
-                    </a>
                 </div>
+                <a
+                    className="group bg-white text-base px-4 py-2 flex items-center gap-1 rounded-full outline-none focus:scale-110 hover:scale-110 active:scale-105 transition cursor-pointer borderBlack dark:bg-white/10"
+                    href="/Rg_resume_v2.0.3.pdf"
+                    target="_blank"
+                >
+                    View Resume
+                    <AiOutlineDoubleRight className="opacity-60 group-hover:translate-x-1.5 transition" />
+                </a>
             </motion.div>
         </section>
     );
