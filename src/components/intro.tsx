@@ -9,6 +9,7 @@ import { SocialMedia } from '@/models/data';
 import { useSectionInView } from '@/hooks/useSectionInView';
 import { useActiveSection } from '@/hooks/useActiveSection';
 import { useTheme } from '@/hooks/useTheme';
+import Typewriter from './typewriter';
 
 export default function Intro() {
     const { ref } = useSectionInView('Home', 0.5);
@@ -70,14 +71,15 @@ export default function Intro() {
                     delay: 1,
                 }}
             >
-                <p>
-                    <span className="font-bold text-3xl sm:text-4xl">
-                        Hello, I&apos;m Ryan Gan.{' '}
-                    </span>
-                </p>
+                <Typewriter
+                    text="Hello, I'm Ryan Gan."
+                    delay={100}
+                    startDelay={1500}
+                    showCursor={true}
+                />
                 <p>
                     I&apos;m a
-                    <span className="font-bold"> full-stack developer</span>.
+                    <span className="font-bold"> software enginner</span>.
                 </p>
                 <p>
                     I enjoy building
