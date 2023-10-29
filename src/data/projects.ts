@@ -6,6 +6,15 @@ import p2Register from '../../public/player2-register.png';
 import p2Dashboard from '../../public/player2-dashboard.png';
 import p2Report from '../../public/player2-report.png';
 
+// Icon.io screenshots
+import iconLanding from '../../public/icon.io-screenshots/icon.io-landing.png';
+import iconGamehub from '../../public/icon.io-screenshots/icon.io-gamehub.png';
+import iconLobby from '../../public/icon.io-screenshots/icon.io-draw-and-guess-lobby.png';
+import iconWordSelect from '../../public/icon.io-screenshots/icon.io-draw-and-guess-word-select.png';
+import iconDraw from '../../public/icon.io-screenshots/icon.io-draw-and-guess-draw.png';
+import iconGuessed from '../../public/icon.io-screenshots/icon.io-draw-and-guess-guessed.png';
+import iconReview from '../../public/icon.io-screenshots/icon.io-draw-and-guess-review.png';
+
 export const projectsData: ProjectsData = [
     {
         projectTitle: 'Player 2 Helpdesk',
@@ -50,28 +59,59 @@ export const projectsData: ProjectsData = [
         thumbnailUrl: p2Thumbnail,
         screenshotUrls: [p2Register, p2Dashboard, p2Report],
     },
-    // {
-    //     projectTitle: 'ICON',
-    //     role: 'Full-Stack Developer',
-    //     techUsed: [
-    //         { name: 'REACT', iconType: TechStack.React },
-    //         { name: 'TYPESCRIPT', iconType: TechStack.TypeScript },
-    //         { name: 'ANTDESIGN', iconType: TechStack.Antdesign },
-    //         { name: 'CSS3', iconType: TechStack.CSS3 },
-    //         { name: 'NODE.JS', iconType: TechStack.NodeJS },
-    //         { name: 'SQLITE', iconType: TechStack.SQLite },
-    //         { name: 'SOCKET.IO', iconType: TechStack.SocketIO },
-    //         { name: 'FIGMA', iconType: TechStack.Figma },
-    //     ],
-    //     context:
-    //         'This project was developed as a part of a Web Development course, offering a relaxed space to enjoy time with friends.',
-    //     overview: [
-    //         'Icon.io is a web-based, online multiplayer gaming platform developed using React and Node.js, utilizing TypeScript on both ends.',
-    //         'It currently features Draw & Guess, a fun game to enjoy with your friends or even with strangers, and plans are underway to add more interactive games soon!',
-    //     ],
-    //     features: [],
-    //     responsibilities: [],
-    //     thumbnailUrl: p2Thumbnail,
-    //     screenshotUrls: [],
-    // },
+    {
+        projectTitle: 'Icon.io',
+        role: 'Full-Stack Developer',
+        techUsed: [
+            { name: 'REACT', iconType: TechStack.React },
+            { name: 'NODE.JS', iconType: TechStack.NodeJS },
+            { name: 'SOCKET.IO', iconType: TechStack.SocketIO },
+            { name: 'TYPESCRIPT', iconType: TechStack.TypeScript },
+            { name: 'AWS', iconType: TechStack.AWS },
+            { name: 'ANTDESIGN', iconType: TechStack.Antdesign },
+            { name: 'CSS3', iconType: TechStack.CSS3 },
+            { name: 'FIGMA', iconType: TechStack.Figma },
+        ],
+        context:
+            'Developed as part of a Web Development course, "Icon.io" is a dynamic online multiplayer platform aiming to deliver a fun and interactive gaming experience for you and your friends!',
+        overview: [
+            'Icon.io is a dynamic web-based, online multiplayer gaming platform developed using React, Node.js TypeScript and it utilizes Socket.IO to provide real-time user interactivity.',
+            'It currently hosts the multiplayer game Draw & Guess, providing a canvas for you and your friends to showcase creativity and artistic skills while enjoying a fun gaming experience.',
+            'Plans are underway to introduce more games soon, such as the classic Tic-Tac-Toe and multiplayer Minesweeper.',
+        ],
+        features: [
+            {
+                title: 'Comprehensive Room Management',
+                detail: 'Offers a robust room management system, enabling users to create, join, and leave rooms with ease, while also supporting public and private room configurations',
+            },
+            {
+                title: 'Real-Time Interactivity',
+                detail: 'Facilitates real-time chat and lobby updates, dynamically reflecting player activity and room information',
+            },
+            {
+                title: 'Mature Gameplay Mechanism',
+                detail: 'Ensures a well-structured game loop for seamless turn-taking logic and a scoring mechanism based on correct guesses in every Draw and Guess game session',
+            },
+            {
+                title: 'Synchronized Canvas Broadcasting',
+                detail: 'Provides a dynamic whiteboard component with various colors and brush sizes, while broadcasting the drawing in real-time to all players in the room',
+            },
+        ],
+        responsibilities: [
+            'Designed an intuitive and user-friendly UI/UX for the application using **Figma**, and translated the design into a functional frontend using **React** and **TypeScript** with **Ant Design** components',
+            'Engineered the backend using **Node.js**, with robust **socket event emitters and listeners** to support **room management**, as well as the **gameplay logic** and architecture',
+            'Implemented the **whiteboard** component using the **Canvas API** and **Socket.IO** to ensure synchronized broadcasting of drawings in real-time',
+            'Configured and deployed the application on **AWS EC2** and utilized the process manager **PM2** to ensure continuous uptime and availability',
+        ],
+        thumbnailUrl: p2Thumbnail,
+        screenshotUrls: [
+            iconLanding,
+            iconGamehub,
+            iconLobby,
+            iconWordSelect,
+            iconDraw,
+            iconGuessed,
+            iconReview,
+        ],
+    },
 ] as const;
