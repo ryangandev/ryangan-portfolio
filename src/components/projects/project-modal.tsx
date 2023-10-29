@@ -97,14 +97,14 @@ export default function ProjectModal(props: ProjectModalProps) {
                                 <h1 className="text-3xl highlightedFontColor">
                                     {projectTitle}
                                 </h1>
-                                <div className="flex flex-row gap-4">
+                                <div className="flex flex-row gap-2 sm:gap-4 mb-1">
                                     {sources.map((source, index) => (
                                         <a
                                             key={index}
                                             href={source.url}
                                             target="_blank"
                                             rel="noopener noreferrer"
-                                            className="flex flex-row text-xl font-medium gap-2 justify-center items-center"
+                                            className="flex flex-row text-md sm:text-xl font-medium gap-1 sm:gap-2 justify-center items-center"
                                         >
                                             <SocialMediaIcon
                                                 type={
@@ -112,7 +112,7 @@ export default function ProjectModal(props: ProjectModalProps) {
                                                 }
                                                 isDarkMode={theme === 'dark'}
                                             />
-                                            <span className="text-base font-semibold text-blue-700 dark:text-blue-300">
+                                            <span className="text-xs sm:text-base font-semibold text-blue-700 dark:text-blue-300">
                                                 {source.name}
                                             </span>
                                         </a>
