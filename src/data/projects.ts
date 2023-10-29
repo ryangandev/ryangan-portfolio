@@ -7,6 +7,7 @@ import p2Dashboard from '../../public/player2-dashboard.png';
 import p2Report from '../../public/player2-report.png';
 
 // Icon.io screenshots
+import iconThumbnail from '../../public/icon.io-screenshots/icon.io-thumbnail.png';
 import iconLanding from '../../public/icon.io-screenshots/icon.io-landing.png';
 import iconGamehub from '../../public/icon.io-screenshots/icon.io-gamehub.png';
 import iconLobby from '../../public/icon.io-screenshots/icon.io-draw-and-guess-lobby.png';
@@ -103,7 +104,7 @@ export const projectsData: ProjectsData = [
             'Implemented the **whiteboard** component using the **Canvas API** and **Socket.IO** to ensure synchronized broadcasting of drawings in real-time',
             'Configured and deployed the application on **AWS EC2** and utilized the process manager **PM2** to ensure continuous uptime and availability',
         ],
-        thumbnailUrl: p2Thumbnail,
+        thumbnailUrl: iconThumbnail,
         screenshotUrls: [
             iconLanding,
             iconGamehub,
