@@ -9,7 +9,6 @@ import p2Report from '../../public/player2-report.png';
 // Icon.io screenshots
 import iconThumbnail from '../../public/icon.io-screenshots/icon.io-thumbnail.png';
 import iconLanding from '../../public/icon.io-screenshots/icon.io-landing.png';
-import iconGamehub from '../../public/icon.io-screenshots/icon.io-gamehub.png';
 import iconLobby from '../../public/icon.io-screenshots/icon.io-draw-and-guess-lobby.png';
 import iconWordSelect from '../../public/icon.io-screenshots/icon.io-draw-and-guess-word-select.png';
 import iconDraw from '../../public/icon.io-screenshots/icon.io-draw-and-guess-draw.png';
@@ -107,7 +106,6 @@ export const projectsData: ProjectsData = [
         thumbnailUrl: iconThumbnail,
         screenshotUrls: [
             iconLanding,
-            iconGamehub,
             iconLobby,
             iconWordSelect,
             iconDraw,
