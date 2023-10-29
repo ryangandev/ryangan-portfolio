@@ -5,6 +5,7 @@ enum SocialMedia {
     GitHub = 'GitHub',
     Facebook = 'Facebook',
     Email = 'Email',
+    LiveDemo = 'LiveDemo',
 }
 
 enum TechStack {
@@ -59,16 +60,24 @@ enum TechStack {
     Firebase = 'Firebase',
 }
 
-interface Icon {
+type Icon = TechStack | SocialMedia;
+
+interface IconData {
     name: string;
-    iconType: TechStack;
+    icon: Icon;
 }
 
-type IconsData = readonly Icon[];
+type projectLinkType = 'View on Github' | 'Live Demo';
+type IconsData = readonly IconData[];
 
 type Project = {
     projectTitle: string;
     role: string;
+    sources: readonly {
+        name: projectLinkType;
+        icon: Icon;
+        url: string;
+    }[];
     techUsed: IconsData;
     context: string;
     overview: readonly string[];
@@ -82,4 +91,4 @@ type ProjectsData = readonly Project[];
 type SkillsData = IconsData;
 
 export { SocialMedia, TechStack };
-export type { Icon, IconsData, Project, ProjectsData, SkillsData };
+export type { Icon, IconData, IconsData, Project, ProjectsData, SkillsData };

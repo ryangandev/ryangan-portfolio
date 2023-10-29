@@ -1,4 +1,4 @@
-import { ProjectsData, TechStack } from '@/models/data';
+import { ProjectsData, SocialMedia, TechStack } from '@/models/data';
 
 // Player 2 Helpdesk screenshots
 import p2Thumbnail from '../../public/player2-thumbnail.png';
@@ -19,15 +19,16 @@ export const projectsData: ProjectsData = [
     {
         projectTitle: 'Player 2 Helpdesk',
         role: 'Frontend Developer',
+        sources: [],
         techUsed: [
-            { name: 'REACT', iconType: TechStack.React },
-            { name: 'TYPESCRIPT', iconType: TechStack.TypeScript },
-            { name: 'TAILWINDCSS', iconType: TechStack.TailwindCSS },
-            { name: 'MUI', iconType: TechStack.MUI },
-            { name: 'REDUX', iconType: TechStack.Redux },
-            { name: 'SPRINGBOOT', iconType: TechStack.SpringBoot },
-            { name: 'POSTGRESQL', iconType: TechStack.PostgreSQL },
-            { name: 'FIGMA', iconType: TechStack.Figma },
+            { name: 'REACT', icon: TechStack.React },
+            { name: 'TYPESCRIPT', icon: TechStack.TypeScript },
+            { name: 'TAILWINDCSS', icon: TechStack.TailwindCSS },
+            { name: 'MUI', icon: TechStack.MUI },
+            { name: 'REDUX', icon: TechStack.Redux },
+            { name: 'SPRINGBOOT', icon: TechStack.SpringBoot },
+            { name: 'POSTGRESQL', icon: TechStack.PostgreSQL },
+            { name: 'FIGMA', icon: TechStack.Figma },
         ],
         context:
             'Developed for Dynasty11 Studio, the "Player 2 Helpdesk" application serves as the primary support channel for users of the "Player 2" social networking platform',
@@ -62,15 +63,27 @@ export const projectsData: ProjectsData = [
     {
         projectTitle: 'Icon.io',
         role: 'Full-Stack Developer',
+        sources: [
+            {
+                name: 'View on Github',
+                icon: SocialMedia.GitHub,
+                url: 'https://github.com/ryangandev/icon.io',
+            },
+            {
+                name: 'Live Demo',
+                icon: SocialMedia.LiveDemo,
+                url: 'https://icon.ryiscrispy.com/',
+            },
+        ],
         techUsed: [
-            { name: 'REACT', iconType: TechStack.React },
-            { name: 'NODE.JS', iconType: TechStack.NodeJS },
-            { name: 'SOCKET.IO', iconType: TechStack.SocketIO },
-            { name: 'TYPESCRIPT', iconType: TechStack.TypeScript },
-            { name: 'AWS', iconType: TechStack.AWS },
-            { name: 'ANTDESIGN', iconType: TechStack.Antdesign },
-            { name: 'CSS3', iconType: TechStack.CSS3 },
-            { name: 'FIGMA', iconType: TechStack.Figma },
+            { name: 'REACT', icon: TechStack.React },
+            { name: 'NODE.JS', icon: TechStack.NodeJS },
+            { name: 'SOCKET.IO', icon: TechStack.SocketIO },
+            { name: 'TYPESCRIPT', icon: TechStack.TypeScript },
+            { name: 'AWS', icon: TechStack.AWS },
+            { name: 'ANTDESIGN', icon: TechStack.Antdesign },
+            { name: 'CSS3', icon: TechStack.CSS3 },
+            { name: 'FIGMA', icon: TechStack.Figma },
         ],
         context:
             'Developed as part of a Web Development course, "Icon.io" is a dynamic online multiplayer platform aiming to deliver a fun and interactive gaming experience for you and your friends!',

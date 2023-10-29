@@ -1,4 +1,4 @@
-import { BsLinkedin, BsGithub, BsFacebook } from 'react-icons/bs';
+import { BsLinkedin, BsGithub, BsFacebook, BsGlobe } from 'react-icons/bs';
 import { HiOutlineMail } from 'react-icons/hi';
 import { SocialMedia } from '@/models/data';
 import Tooltip from '@/components/tooltip';
@@ -28,6 +28,11 @@ const ICON_CONFIG = {
         component: HiOutlineMail,
         color: '#EA4335',
         darkColor: '#EA4335',
+    },
+    LiveDemo: {
+        component: BsGlobe,
+        color: '#000000',
+        darkColor: '#ffffff',
     },
 };
 

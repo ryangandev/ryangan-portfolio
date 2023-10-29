@@ -9,7 +9,8 @@ import {
 } from '@nextui-org/react';
 import { useNavbar } from '@/hooks/useNavbar';
 import { TechStackIcon } from '@/assets/icons';
-import { Project, TechStack } from '@/models/data';
+import { SocialMediaIcon } from '@/assets/icons/social-media-icons';
+import { Project, SocialMedia, TechStack } from '@/models/data';
 import { useTheme } from '@/hooks/useTheme';
 import { parseResponsibilitiesData } from '@/lib/parse-text-into-component';
 import Image from 'next/image';
@@ -28,6 +29,7 @@ export default function ProjectModal(props: ProjectModalProps) {
         onClose,
         projectTitle,
         role,
+        sources,
         techUsed,
         context,
         overview,
@@ -95,9 +97,27 @@ export default function ProjectModal(props: ProjectModalProps) {
                                 <h1 className="text-3xl highlightedFontColor">
                                     {projectTitle}
                                 </h1>
-                                <h3 className="text-lg font-medium highlightedFontColor">
-                                    {role}
-                                </h3>
+                                <div className="flex flex-row gap-4">
+                                    {sources.map((source, index) => (
+                                        <a
+                                            key={index}
+                                            href={source.url}
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            className="flex flex-row text-xl font-medium gap-2 justify-center items-center"
+                                        >
+                                            <SocialMediaIcon
+                                                type={
+                                                    source.icon as SocialMedia
+                                                }
+                                                isDarkMode={theme === 'dark'}
+                                            />
+                                            <span className="text-base font-semibold text-blue-700 dark:text-blue-300">
+                                                {source.name}
+                                            </span>
+                                        </a>
+                                    ))}
+                                </div>
                             </div>
 
                             {/* Tech Used */}
@@ -108,7 +128,7 @@ export default function ProjectModal(props: ProjectModalProps) {
                                         key={index}
                                     >
                                         <TechStackIcon
-                                            type={tech.iconType as TechStack}
+                                            type={tech.icon as TechStack}
                                             isDarkMode={theme === 'dark'}
                                         />
                                         <span className="text-xs font-medium">
@@ -170,7 +190,7 @@ export default function ProjectModal(props: ProjectModalProps) {
                             {/* Responsibilities */}
                             <div className="flex flex-col gap-4">
                                 <h2 className="text-2xl font-semibold highlightedFontColor">
-                                    Responsibilities
+                                    Responsibilities ({role})
                                 </h2>
                                 <ul className="modalListContent">
                                     {responsibilities.map(
