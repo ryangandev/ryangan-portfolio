@@ -46,7 +46,7 @@ export default function Project(props: Project) {
                         {techUsed.map((tech, index) => (
                             <li className="text-lg" key={index}>
                                 <TechStackIcon
-                                    type={tech.iconType as TechStack}
+                                    type={tech.icon as TechStack}
                                     isDarkMode={theme === 'dark'}
                                 />
                             </li>

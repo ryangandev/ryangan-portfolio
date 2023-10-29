@@ -51,7 +51,7 @@ export default function Skills() {
                         }}
                         custom={index}
                     >
-                        {renderTechStackIcon(skill.iconType as TechStack)}
+                        {renderTechStackIcon(skill.icon as TechStack)}
                         {skill.name}
                     </motion.li>
                 ))}
