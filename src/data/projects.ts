@@ -29,6 +29,7 @@ export const projectsData: ProjectsData = [
             { name: 'SPRINGBOOT', icon: TechStack.SpringBoot },
             { name: 'POSTGRESQL', icon: TechStack.PostgreSQL },
             { name: 'FIGMA', icon: TechStack.Figma },
+            { name: 'AWS', icon: TechStack.AWS },
         ],
         context:
             'Developed for Dynasty11 Studio, the "Player 2 Helpdesk" application serves as the primary support channel for users of the "Player 2" social networking platform',
@@ -65,7 +66,7 @@ export const projectsData: ProjectsData = [
         role: 'Full-Stack Developer',
         sources: [
             {
-                name: 'View on Github',
+                name: 'View Code',
                 icon: SocialMedia.GitHub,
                 url: 'https://github.com/ryangandev/icon.io',
             },
@@ -84,9 +85,10 @@ export const projectsData: ProjectsData = [
             { name: 'ANTDESIGN', icon: TechStack.Antdesign },
             { name: 'CSS3', icon: TechStack.CSS3 },
             { name: 'FIGMA', icon: TechStack.Figma },
+            { name: 'PM2', icon: TechStack.Pm2 },
         ],
         context:
-            'Developed as part of a Web Development course, "Icon.io" is a dynamic online multiplayer platform aiming to deliver a fun and interactive gaming experience for you and your friends!',
+            'Icon.io is a dynamic online multiplayer platform aiming to deliver a fun and interactive gaming experience for you and your friends!',
         overview: [
             'Icon.io is a dynamic web-based, online multiplayer gaming platform developed using React, Node.js TypeScript and it utilizes Socket.IO to provide real-time user interactivity.',
             'It currently hosts the multiplayer game Draw & Guess, providing a canvas for you and your friends to showcase creativity and artistic skills while enjoying a fun gaming experience.',

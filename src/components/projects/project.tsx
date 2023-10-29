@@ -42,7 +42,7 @@ export default function Project(props: Project) {
                     <p className="mt-2 leading-relaxed text-gray-700 dark:text-white/70">
                         {context}
                     </p>
-                    <ul className="flex flex-wrap mt-4 gap-4 sm:mt-auto">
+                    <ul className="flex flex-wrap mt-4 gap-3 sm:mt-auto">
                         {techUsed.map((tech, index) => (
                             <li className="text-lg" key={index}>
                                 <TechStackIcon

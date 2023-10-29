@@ -39,6 +39,7 @@ import {
     SiFirebase,
     SiMui,
     SiAntdesign,
+    SiPm2,
 } from 'react-icons/si';
 import { TbBrandReactNative, TbBrandOauth } from 'react-icons/tb';
 
@@ -221,6 +222,11 @@ const ICON_CONFIG = {
         component: FaDocker,
         color: '#2496ED',
         darkColor: '#2496ED',
+    },
+    Pm2: {
+        component: SiPm2,
+        color: '#2B037A',
+        darkColor: '#6B43BA',
     },
 
     // Tools

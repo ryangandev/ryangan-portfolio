@@ -51,6 +51,7 @@ enum TechStack {
     AWS = 'AWS',
     Akamai = 'Akamai',
     Docker = 'Docker',
+    Pm2 = 'Pm2',
 
     // Tools & Other
     Unity = 'Unity',
@@ -67,7 +68,7 @@ interface IconData {
     icon: Icon;
 }
 
-type projectLinkType = 'View on Github' | 'Live Demo';
+type projectLinkType = 'View Code' | 'Live Demo';
 type IconsData = readonly IconData[];
 
 type Project = {
