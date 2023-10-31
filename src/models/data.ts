@@ -43,6 +43,7 @@ enum TechStack {
     // UI/UX
     Figma = 'Figma',
     AdobePs = 'AdobePs',
+    AdobeAi = 'AdobeAi',
     MUI = 'MUI',
     Antdesign = 'Antdesign',
 
@@ -59,6 +60,7 @@ enum TechStack {
     Postman = 'Postman',
     OAuth = 'OAuth',
     Firebase = 'Firebase',
+    Trello = 'Trello',
 }
 
 type Icon = TechStack | SocialMedia;

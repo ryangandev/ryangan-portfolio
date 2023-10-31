@@ -40,6 +40,8 @@ import {
     SiMui,
     SiAntdesign,
     SiPm2,
+    SiTrello,
+    SiAdobeillustrator,
 } from 'react-icons/si';
 import { TbBrandReactNative, TbBrandOauth } from 'react-icons/tb';
 
@@ -191,6 +193,11 @@ const ICON_CONFIG = {
         color: '#31A8FF',
         darkColor: '#31A8FF',
     },
+    AdobeAi: {
+        component: SiAdobeillustrator,
+        color: '#FF9A00',
+        darkColor: '#FF9A00',
+    },
     MUI: {
         component: SiMui,
         color: '#0081CB',
@@ -254,6 +261,11 @@ const ICON_CONFIG = {
         component: SiFirebase,
         color: '#FFCA28',
         darkColor: '#FFCA28',
+    },
+    Trello: {
+        component: SiTrello,
+        color: '#0052CC',
+        darkColor: '#0079BF',
     },
 };
 
