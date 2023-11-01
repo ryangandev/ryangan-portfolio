@@ -15,6 +15,9 @@ import iconDraw from '../../public/icon.io-screenshots/icon.io-draw-and-guess-dr
 import iconGuessed from '../../public/icon.io-screenshots/icon.io-draw-and-guess-guessed.png';
 import iconReview from '../../public/icon.io-screenshots/icon.io-draw-and-guess-review.png';
 
+// Grapple Grub screenshots
+import ggThumbnail from '../../public/grapplegrub-screenshots/grapplegrub-thumbnail.png';
+
 export const projectsData: ProjectsData = [
     {
         projectTitle: 'Player 2 Helpdesk',
@@ -60,6 +63,45 @@ export const projectsData: ProjectsData = [
         ],
         thumbnailUrl: p2Thumbnail,
         screenshotUrls: [p2Register, p2Dashboard, p2Report],
+    },
+    {
+        projectTitle: 'Grapple Grub',
+        role: 'Game Developer',
+        sources: [
+            {
+                name: 'Live Demo',
+                icon: SocialMedia.LiveDemo,
+                url: 'https://sites.google.com/view/hpfishingco',
+            },
+        ],
+        techUsed: [
+            {
+                name: 'UNITY',
+                icon: TechStack.Unity,
+            },
+            {
+                name: 'C#',
+                icon: TechStack.CSharp,
+            },
+            {
+                name: 'ADOBE PS',
+                icon: TechStack.AdobePs,
+            },
+            {
+                name: 'ADOBE AI',
+                icon: TechStack.AdobeAi,
+            },
+            {
+                name: 'TRELLO',
+                icon: TechStack.Trello,
+            },
+        ],
+        context: 'Swinging and slinging grub, all across the city!',
+        overview: [],
+        features: [],
+        responsibilities: [],
+        thumbnailUrl: ggThumbnail,
+        screenshotUrls: [],
     },
     {
         projectTitle: 'Icon.io',
