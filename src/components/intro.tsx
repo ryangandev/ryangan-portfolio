@@ -126,7 +126,7 @@ export default function Intro() {
                 </div>
                 <a
                     className="group bg-white text-base px-4 py-2 flex items-center gap-1 rounded-full outline-none focus:scale-110 hover:scale-110 active:scale-105 transition cursor-pointer borderBlack dark:bg-white/10"
-                    href="/Rg_resume_v2.0.4.pdf"
+                    href="/Rg_resume_v2.0.5.pdf"
                     target="_blank"
                 >
                     View Résumé
