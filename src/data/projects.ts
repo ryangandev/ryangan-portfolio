@@ -64,45 +64,45 @@ export const projectsData: ProjectsData = [
         thumbnailUrl: p2Thumbnail,
         screenshotUrls: [p2Register, p2Dashboard, p2Report],
     },
-    {
-        projectTitle: 'Grapple Grub',
-        role: 'Game Developer',
-        sources: [
-            {
-                name: 'Live Demo',
-                icon: SocialMedia.LiveDemo,
-                url: 'https://sites.google.com/view/hpfishingco',
-            },
-        ],
-        techUsed: [
-            {
-                name: 'UNITY',
-                icon: TechStack.Unity,
-            },
-            {
-                name: 'C#',
-                icon: TechStack.CSharp,
-            },
-            {
-                name: 'ADOBE PS',
-                icon: TechStack.AdobePs,
-            },
-            {
-                name: 'ADOBE AI',
-                icon: TechStack.AdobeAi,
-            },
-            {
-                name: 'TRELLO',
-                icon: TechStack.Trello,
-            },
-        ],
-        context: 'Swinging and slinging grub, all across the city!',
-        overview: [],
-        features: [],
-        responsibilities: [],
-        thumbnailUrl: ggThumbnail,
-        screenshotUrls: [],
-    },
+    // {
+    //     projectTitle: 'Grapple Grub',
+    //     role: 'Game Developer',
+    //     sources: [
+    //         {
+    //             name: 'Live Demo',
+    //             icon: SocialMedia.LiveDemo,
+    //             url: 'https://sites.google.com/view/hpfishingco',
+    //         },
+    //     ],
+    //     techUsed: [
+    //         {
+    //             name: 'UNITY',
+    //             icon: TechStack.Unity,
+    //         },
+    //         {
+    //             name: 'C#',
+    //             icon: TechStack.CSharp,
+    //         },
+    //         {
+    //             name: 'ADOBE PS',
+    //             icon: TechStack.AdobePs,
+    //         },
+    //         {
+    //             name: 'ADOBE AI',
+    //             icon: TechStack.AdobeAi,
+    //         },
+    //         {
+    //             name: 'TRELLO',
+    //             icon: TechStack.Trello,
+    //         },
+    //     ],
+    //     context: 'Swinging and slinging grub, all across the city!',
+    //     overview: [],
+    //     features: [],
+    //     responsibilities: [],
+    //     thumbnailUrl: ggThumbnail,
+    //     screenshotUrls: [],
+    // },
     {
         projectTitle: 'Icon.io',
         role: 'Full-Stack Developer',
