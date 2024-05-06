@@ -34,7 +34,7 @@ export default function Intro() {
                         }}
                     >
                         <Image
-                            src="https://cdn.discordapp.com/attachments/1095855762103865454/1095855782551105556/IMG_4427.JPG"
+                            src="https://cdn.discordapp.com/attachments/883897355445895188/1236868626120966144/IMG_4427.JPG?ex=6639932c&is=663841ac&hm=d66c03017d23116b480141e1193fcae6db8d353b6b3a139d97edb65c8a13e439&"
                             alt="Ryan Gan"
                             width={200}
                             height={200}

@@ -4,13 +4,13 @@ import { useRef } from 'react';
 import Image from 'next/image';
 import { motion, useScroll, useTransform } from 'framer-motion';
 import { TechStackIcon } from '@/assets/icons';
-import { TechStack, Project } from '@/models/data';
+import { TechStack, Project as ProjectProps } from '@/models/data';
 import { useDisclosure } from '@nextui-org/react';
 import ProjectModal from './project-modal';
 import { useNavbar } from '@/hooks/useNavbar';
 import { useTheme } from '@/hooks/useTheme';
 
-export default function Project(props: Project) {
+export default function Project(props: ProjectProps) {
     const { projectTitle, techUsed, context, thumbnailUrl } = props;
     const ref = useRef<HTMLDivElement>(null);
     const { scrollYProgress } = useScroll({
