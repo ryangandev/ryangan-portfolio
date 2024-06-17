@@ -4,19 +4,22 @@ import React, { ReactElement } from 'react';
 import SectionHeader from './section-header';
 import { useSectionInView } from '@/hooks/useSectionInView';
 import {
-    VerticalTimeline,
-    VerticalTimelineElement,
+    VerticalTimeline as OriginalVerticalTimeline,
+    VerticalTimelineElement as OriginalVerticalTimelineElement,
 } from 'react-vertical-timeline-component';
 import 'react-vertical-timeline-component/style.min.css';
 import { experiencesData } from '@/data/experience';
 import { useTheme } from '@/hooks/useTheme';
+
+const VerticalTimeline: any = OriginalVerticalTimeline;
+const VerticalTimelineElement: any = OriginalVerticalTimelineElement;
 
 interface ResizeableIconProps {
     IconComponent: ReactElement;
 }
 
 export default function Experience() {
-    const { ref } = useSectionInView('Experience', 0.4);
+    const { ref, inView } = useSectionInView('Experience', 0.4);
     const { theme } = useTheme();
 
     // Temporary solution to create a resizable icon to control the size of the Icon, inline style fontSize doesn't work.
@@ -31,6 +34,7 @@ export default function Experience() {
                 {experiencesData.map((item, index) => (
                     <React.Fragment key={index}>
                         <VerticalTimelineElement
+                            visible={inView}
                             contentStyle={{
                                 background:
                                     theme === 'light'
