@@ -6,7 +6,12 @@ import { ThemeProvider } from './theme-provider';
 
 export function AppProviders({ children }: { children: React.ReactNode }) {
   return (
-    <ThemeProvider>
+    <ThemeProvider
+      attribute="class"
+      defaultTheme="system"
+      enableSystem
+      disableTransitionOnChange
+    >
       <ActiveSectionContextProvider>
         <NavbarContextProvider>{children}</NavbarContextProvider>
       </ActiveSectionContextProvider>
