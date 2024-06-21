@@ -4,8 +4,8 @@ import React from 'react';
 
 export default function Page() {
   return (
-    <div>
+    <main className="contentContainerPadding flex h-full items-center justify-center">
       <Contact />
-    </div>
+    </main>
   );
 }

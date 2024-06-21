@@ -1,3 +1,3 @@
-import { links } from '@/data/links';
+import { homeMenuLinks } from '@/data/links';
 
-export type SectionName = (typeof links)[number]['name'];
+export type SectionName = (typeof homeMenuLinks)[number]['name'];
