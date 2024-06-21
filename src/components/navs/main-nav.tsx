@@ -25,7 +25,7 @@ export default function MainNav({ className }: { className?: string }) {
               {link.name}
               {pathname === link.href && (
                 <motion.span
-                  className="absolute inset-0 -z-10 rounded-md bg-accent"
+                  className="absolute inset-0 -z-10 rounded-md bg-gray-200 dark:bg-gray-700"
                   layoutId="activeSection" // when multiple components witht the same 'layoutId', framer motion will animation between them when their position or size changes
                   transition={{
                     type: 'spring',

@@ -33,6 +33,9 @@
     --ring: 222.2 84% 4.9%;
 
     --radius: 0.5rem;
+
+    /* Light Theme Font Shadow */
+    --font-shadow: 1px -1px #fff, -1px 1px #999, -3px 3px 3px #80808080;
   }
 
   .dark {
@@ -63,6 +66,9 @@
     --border: 217.2 32.6% 17.5%;
     --input: 217.2 32.6% 17.5%;
     --ring: 212.7 26.8% 83.9%;
+
+    /* Dark Theme Font Shadow */
+    --font-shadow: 1px -1px #333, -1px 1px #666, -3px 3px 3px #ffffff80;
   }
 }
 
@@ -99,4 +105,11 @@
   text-shadow: 3px 0 7px blue; /* offset-x | offset-y | blur-radius | color */
   position: relative;
   z-index: var(--i);
+}
+
+/* Font Shadow */
+.shadow-font {
+  line-height: 1;
+  letter-spacing: 2px;
+  text-shadow: var(--font-shadow);
 }

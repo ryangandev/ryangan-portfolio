@@ -22,7 +22,7 @@ export default function Experience() {
 
   return (
     <section ref={ref} className="mb-28 scroll-mt-28" id="experience">
-      <SectionHeader>Experience</SectionHeader>
+      <SectionHeader section="Experience" />
 
       {experiencesData.map((item, index) => (
         <React.Fragment key={index}></React.Fragment>

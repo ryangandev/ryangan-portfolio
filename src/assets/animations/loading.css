@@ -1,0 +1,60 @@
+/** CSS Loaders from: https://css-loaders.com/classic/"
+
+/* Hovering String Animation */
+.string-loader {
+  font-weight: bold;
+  font-family: monospace;
+  font-size: 30px;
+  display: inline-grid;
+}
+.string-loader:before,
+.string-loader:after {
+  content: '.....'; /* String Content */
+  grid-area: 1/1;
+  mask: linear-gradient(90deg, #000 50%, transparent 0) 0 50%/2ch 100%;
+  -webkit-mask: linear-gradient(90deg, #000 50%, #0000 0) 0 50%/2ch 100%;
+  animation: hovering 1s infinite cubic-bezier(0.5, 220, 0.5, -220);
+}
+.string-loader:after {
+  mask-position: 1ch 50%;
+  -webkit-mask-position: 1ch 50%;
+  --s: -1;
+}
+@keyframes hovering {
+  100% {
+    transform: translateY(calc(var(--s, 1) * 0.1%));
+  }
+}
+
+/* Square Animation */
+.square-loader {
+  display: inline-flex;
+  gap: 5px;
+}
+.square-loader:before,
+.square-loader:after {
+  content: '';
+  width: 25px;
+  aspect-ratio: 1;
+  box-shadow: 0 0 0 3px inset #058db6;
+  animation: square-animation 1.5s infinite;
+}
+.square-loader:after {
+  --s: -1;
+  animation-delay: 0.75s;
+}
+@keyframes square-animation {
+  0% {
+    transform: scaleX(var(--s, 1)) translate(0) rotate(0);
+  }
+  16.67% {
+    transform: scaleX(var(--s, 1)) translate(-50%) rotate(0);
+  }
+  33.33% {
+    transform: scaleX(var(--s, 1)) translate(-50%) rotate(90deg);
+  }
+  50%,
+  100% {
+    transform: scaleX(var(--s, 1)) translate(0) rotate(90deg);
+  }
+}

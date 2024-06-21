@@ -37,7 +37,7 @@ export default function Skills() {
       className="mb-28 max-w-[53rem] scroll-mt-28 text-center"
       id={'skills'}
     >
-      <SectionHeader>Skills</SectionHeader>
+      <SectionHeader section="Skills" />
       <ul className="flex flex-wrap justify-center gap-2 text-lg text-gray-800 sm:gap-4">
         {skillsData.map((skill, index) => (
           <motion.li

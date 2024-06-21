@@ -1,13 +1,21 @@
-import React from 'react';
+import { cn } from '@/lib/utils';
 
-interface SectionHeaderProps {
-  children: React.ReactNode;
-}
-
-export default function SectionHeader({ children }: SectionHeaderProps) {
+export default function SectionHeader({
+  section,
+  classname,
+}: {
+  section: string;
+  classname?: string;
+}) {
   return (
-    <h2 className="mb-8 text-center text-3xl font-medium capitalize">
-      {children}
+    <h2
+      className={cn(
+        'mb-8 text-3xl font-bold capitalize',
+        'shadow-font',
+        classname,
+      )}
+    >
+      {section}
     </h2>
   );
 }

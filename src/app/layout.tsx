@@ -1,10 +1,10 @@
 import type { Metadata } from 'next';
-import { Toaster } from 'react-hot-toast';
 
 import { inter } from '@/assets/fonts';
 import BackToTopButton from '@/components/back-to-top-btn';
 import Footer from '@/components/footer';
 import Header from '@/components/header';
+import { Toaster } from '@/components/ui/toaster';
 import { AppProviders } from '@/providers/app-providers';
 import './globals.css';
 
@@ -34,7 +34,7 @@ export default function RootLayout({
             {children}
           </main>
           <Footer />
-          <Toaster position="bottom-right" />
+          <Toaster />
           <BackToTopButton />
         </AppProviders>
       </body>
