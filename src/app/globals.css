@@ -75,13 +75,6 @@
   }
 }
 
-html {
-  --line-color: #e5e7eb;
-}
-html.dark {
-  --line-color: #000;
-}
-
 .borderBlack {
   @apply border border-black/10;
 }
@@ -96,4 +89,14 @@ html.dark {
 
 .descriptionFontColor {
   @apply text-gray-700 dark:text-white/75;
+}
+
+.contentContainerPadding {
+  @apply px-4 py-10;
+}
+
+.overlap-child {
+  text-shadow: 3px 0 7px blue; /* offset-x | offset-y | blur-radius | color */
+  position: relative;
+  z-index: var(--i);
 }

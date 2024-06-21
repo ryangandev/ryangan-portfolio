@@ -1,4 +1,27 @@
-export const links = [
+export const navLinks = [
+  {
+    name: 'Home',
+    href: '/',
+  },
+  {
+    name: 'Portfolio',
+    href: '/portfolio',
+  },
+  {
+    name: 'Blog',
+    href: '/blog',
+  },
+  {
+    name: 'Contact',
+    href: '/contact',
+  },
+  {
+    name: 'Guest Book',
+    href: '/guest-book',
+  },
+] as const;
+
+export const homeMenuLinks = [
   {
     name: 'Home',
     hash: '#home',

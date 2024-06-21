@@ -1,12 +1,12 @@
-import NavBar from '@/components/navbar';
-import './globals.css';
 import type { Metadata } from 'next';
-import { inter } from '@/assets/fonts';
-
-import Footer from '@/components/footer';
 import { Toaster } from 'react-hot-toast';
+
+import { inter } from '@/assets/fonts';
 import BackToTopButton from '@/components/back-to-top-btn';
+import Footer from '@/components/footer';
+import Header from '@/components/header';
 import { AppProviders } from '@/providers/app-providers';
+import './globals.css';
 
 export const metadata: Metadata = {
   title: 'Ryan Gan | Software Engineer',
@@ -15,20 +15,20 @@ export const metadata: Metadata = {
 
 export default function RootLayout({
   children,
-}: {
-  children: Readonly<React.ReactNode>;
-}) {
+}: Readonly<{
+  children: React.ReactNode;
+}>) {
   return (
     <html lang="en" className="scroll-smooth" suppressHydrationWarning>
       <body
-        className={`${inter.className} relative text-gray-950 dark:text-gray-50 dark:text-opacity-90`}
+        className={`${inter.className} relative text-gray-950 antialiased dark:text-gray-50 dark:text-opacity-90`}
       >
         <AppProviders>
-          <NavBar />
+          <Header />
           <main
             className="pt-16"
             style={{
-              minHeight: 'calc(100vh - 130px)',
+              minHeight: 'calc(100vh - 81px)',
             }}
           >
             {children}

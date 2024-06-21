@@ -10,6 +10,7 @@ import { useSectionInView } from '@/hooks/useSectionInView';
 import { useActiveSection } from '@/hooks/useActiveSection';
 import { useTheme } from 'next-themes';
 import Typewriter from './typewriter';
+import NameLogo from './name-logo';
 
 export default function Intro() {
   const { ref } = useSectionInView('Home', 0.5);
@@ -33,7 +34,7 @@ export default function Intro() {
               delay: 0.5,
             }}
           >
-            <Image
+            {/* <Image
               src="https://cdn.discordapp.com/attachments/883897355445895188/1236868626120966144/IMG_4427.JPG?ex=66719aec&is=6670496c&hm=9d2f0b83ffd185346fcdc17f6854eb1d3f2b063f1cb9f1cd2217e8e2e5382d21&"
               alt="Ryan Gan"
               width={200}
@@ -41,10 +42,10 @@ export default function Intro() {
               quality={95}
               priority={true}
               className="h-28 w-28 rounded-full border-[0.25rem] border-white object-cover shadow-xl"
-            />
+            /> */}
           </motion.div>
 
-          <motion.span
+          {/* <motion.span
             // TODO: Later add hand wave animation when clicked
             className="absolute bottom-0 right-0 cursor-pointer text-4xl"
             initial={{ opacity: 0, scale: 0 }}
@@ -57,7 +58,7 @@ export default function Intro() {
             }}
           >
             👋
-          </motion.span>
+          </motion.span> */}
         </div>
       </div>
 

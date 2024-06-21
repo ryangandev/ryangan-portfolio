@@ -8,8 +8,9 @@ export function AppProviders({ children }: { children: React.ReactNode }) {
   return (
     <ThemeProvider
       attribute="class"
-      defaultTheme="system"
-      enableSystem
+      defaultTheme="light"
+      enableSystem={false}
+      storageKey="rg-theme"
       disableTransitionOnChange
     >
       <ActiveSectionContextProvider>
