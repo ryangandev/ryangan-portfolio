@@ -81,6 +81,10 @@
   }
 }
 
+h3 {
+  @apply text-2xl font-semibold tracking-wide;
+}
+
 .borderBlack {
   @apply border border-black/10;
 }

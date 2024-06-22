@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
 
-import { inter } from '@/assets/fonts';
+import { poppins } from '@/assets/fonts';
 import BackToTopButton from '@/components/back-to-top-btn';
 import Footer from '@/components/footer';
 import Header from '@/components/header';
@@ -21,7 +21,7 @@ export default function RootLayout({
   return (
     <html lang="en" className="scroll-smooth" suppressHydrationWarning>
       <body
-        className={`${inter.className} relative text-gray-950 antialiased dark:text-gray-50 dark:text-opacity-90`}
+        className={`${poppins.className} relative text-gray-950 antialiased dark:text-gray-50 dark:text-opacity-90`}
       >
         <AppProviders>
           <Header />
