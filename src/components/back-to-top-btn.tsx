@@ -4,12 +4,6 @@ import { useActiveSection } from '@/hooks/useActiveSection';
 import clsx from 'clsx';
 import React from 'react';
 import { AiOutlineArrowUp } from 'react-icons/ai';
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from './ui/tooltip';
 
 export default function BackToTopButton() {
   const { activeSection } = useActiveSection();
@@ -29,18 +23,9 @@ export default function BackToTopButton() {
       )}
       onClick={handleBackToTop}
     >
-      <TooltipProvider>
-        <Tooltip>
-          <TooltipTrigger asChild>
-            <span>
-              <AiOutlineArrowUp />
-            </span>
-          </TooltipTrigger>
-          <TooltipContent>
-            <p>Back to top</p>
-          </TooltipContent>
-        </Tooltip>
-      </TooltipProvider>
+      <span>
+        <AiOutlineArrowUp />
+      </span>
     </button>
   );
 }

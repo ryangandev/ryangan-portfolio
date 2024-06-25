@@ -1,6 +1,12 @@
-import Contact from '@/components/contact-form';
+import { Metadata } from 'next';
+
+import Contact from '@/components/contact';
 import PageSummary from '@/components/page-summary';
 import SectionHeader from '@/components/section-header';
+
+export const metadata: Metadata = {
+  title: 'Contact - Ryan Gan',
+};
 
 export default function Page() {
   return (

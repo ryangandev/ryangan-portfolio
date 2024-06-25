@@ -1,9 +1,3 @@
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from '@/components/ui/tooltip';
 import { TechStack } from '@/models/data';
 import {
   FaReact,
@@ -281,18 +275,9 @@ const TechStackIcon = ({ type, isDarkMode = false }: TechStackIconProps) => {
     : ICON_CONFIG[type].color;
 
   return (
-    <TooltipProvider>
-      <Tooltip>
-        <TooltipTrigger asChild>
-          <span>
-            <IconComponent style={{ color }} />
-          </span>
-        </TooltipTrigger>
-        <TooltipContent>
-          <p>{type}</p>
-        </TooltipContent>
-      </Tooltip>
-    </TooltipProvider>
+    <span>
+      <IconComponent style={{ color }} />
+    </span>
   );
 };
 

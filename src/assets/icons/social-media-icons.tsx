@@ -1,12 +1,6 @@
 import { BsLinkedin, BsGithub, BsFacebook, BsGlobe } from 'react-icons/bs';
 import { HiOutlineMail } from 'react-icons/hi';
 import { SocialMedia } from '@/models/data';
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from '@/components/ui/tooltip';
 
 interface SocialMediaIconProps {
   type: SocialMedia;
@@ -51,18 +45,9 @@ const SocialMediaIcon = ({
     : ICON_CONFIG[type].color;
 
   return (
-    <TooltipProvider>
-      <Tooltip>
-        <TooltipTrigger asChild>
-          <span>
-            <IconComponent style={{ color }} />
-          </span>
-        </TooltipTrigger>
-        <TooltipContent>
-          <p>{type}</p>
-        </TooltipContent>
-      </Tooltip>
-    </TooltipProvider>
+    <span>
+      <IconComponent style={{ color }} />
+    </span>
   );
 };
 
