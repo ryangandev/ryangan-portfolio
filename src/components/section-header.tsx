@@ -1,4 +1,4 @@
-import { cn } from '@/lib/utils';
+import { cn } from '@/libs/utils';
 
 export default function SectionHeader({
   section,
@@ -10,7 +10,7 @@ export default function SectionHeader({
   return (
     <h2
       className={cn(
-        'mb-8 text-3xl font-bold capitalize',
+        'mb-8 text-nowrap text-3xl font-bold capitalize',
         'shadow-font',
         classname,
       )}

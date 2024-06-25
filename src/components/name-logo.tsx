@@ -1,7 +1,7 @@
 import Link from 'next/link';
 
 import { luckiestGuy } from '@/assets/fonts';
-import { cn } from '@/lib/utils';
+import { cn } from '@/libs/utils';
 
 export default function NameLogo({
   content,

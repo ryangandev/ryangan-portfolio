@@ -1,17 +1,19 @@
+import {
+  GithubSigninButton,
+  SignOutButton,
+} from '@/components/auth-components';
 import SectionHeader from '@/components/section-header';
-import { Button } from '@/components/ui/button';
-import React from 'react';
-import { FaGithub } from 'react-icons/fa';
+import { auth } from '@/libs/auth';
 
-export default function Page() {
+export default async function Page() {
+  const session = await auth();
+
   return (
     <main className="contentContainerPadding">
       <div className="mx-auto w-full max-w-2xl">
         <SectionHeader section="Sign My Guestbook" />
-        <Button size="sm" className="space-x-2" variant="default">
-          <FaGithub size={18} />
-          <span>Sign in with GitHub</span>
-        </Button>
+        {session?.user ? <SignOutButton /> : <GithubSigninButton />}
+        {session?.user && <p>Welcome {session.user.name}!</p>}
       </div>
     </main>
   );

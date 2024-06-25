@@ -12,7 +12,7 @@ import { TechStackIcon } from '@/assets/icons';
 import { SocialMediaIcon } from '@/assets/icons/social-media-icons';
 import { Project, SocialMedia, TechStack } from '@/models/data';
 import { useTheme } from '@/hooks/useTheme';
-import { parseResponsibilitiesData } from '@/lib/parse-text-into-component';
+import { parseResponsibilitiesData } from '@/libs/parse-text-into-component';
 import Image from 'next/image';
 import { Skeleton } from '@nextui-org/skeleton';
 

@@ -5,7 +5,7 @@ import { usePathname } from 'next/navigation';
 import Link from 'next/link';
 
 import { navLinks } from '@/data/links';
-import { cn } from '@/lib/utils';
+import { cn } from '@/libs/utils';
 
 export default function MainNav({ className }: { className?: string }) {
   const pathname = usePathname();

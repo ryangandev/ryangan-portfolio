@@ -2,7 +2,7 @@ import NameLogo from '@/components/name-logo';
 import MainNav from '@/components/navs/main-nav';
 import MobileMainNav from '@/components/navs/mobile-main-nav';
 import { ThemeToggle } from '@/components/theme-toggle';
-import { cn } from '@/lib/utils';
+import { cn } from '@/libs/utils';
 
 export default function Header() {
   return (
