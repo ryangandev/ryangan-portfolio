@@ -5,7 +5,7 @@ import { poppins } from '@/assets/fonts';
 import BackToTopButton from '@/components/back-to-top-btn';
 import Footer from '@/components/footer';
 import Header from '@/components/header';
-import { Toaster } from '@/components/ui/toaster';
+import { Toaster } from '@/components/ui/sonner';
 import { auth } from '@/libs/auth';
 import { AppProviders } from '@/providers/app-providers';
 import './globals.css';
@@ -15,11 +15,11 @@ export const metadata: Metadata = {
   description: 'My name is Ryan Gan and I am a Software Engineer.',
 };
 
-export default async function RootLayout({
+const RootLayout = async ({
   children,
 }: Readonly<{
   children: React.ReactNode;
-}>) {
+}>) => {
   const session = await auth();
 
   return (
@@ -40,11 +40,13 @@ export default async function RootLayout({
               {children}
             </main>
             <Footer />
-            <Toaster />
+            <Toaster richColors />
             <BackToTopButton />
           </AppProviders>
         </SessionProvider>
       </body>
     </html>
   );
-}
+};
+
+export default RootLayout;

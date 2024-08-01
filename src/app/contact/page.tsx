@@ -1,6 +1,6 @@
 import { Metadata } from 'next';
 
-import Contact from '@/components/contact';
+import Contact from '@/components/contact/contact';
 import PageSummary from '@/components/page-summary';
 import SectionHeader from '@/components/section-header';
 
@@ -8,7 +8,7 @@ export const metadata: Metadata = {
   title: 'Contact - Ryan Gan',
 };
 
-export default function Page() {
+const Page = () => {
   return (
     <main className="contentContainerPadding">
       <div className="mx-auto w-full max-w-3xl border-border">
@@ -23,4 +23,6 @@ export default function Page() {
       </div>
     </main>
   );
-}
+};
+
+export default Page;

@@ -20,7 +20,7 @@ export default function MobileMainNav({ className }: { className?: string }) {
           <HamburgerMenuIcon />
         </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent align="start" className="z-[1000]">
+      <DropdownMenuContent align="start" className="z-[1000] sm:hidden">
         {navLinks.map((link) => (
           <Link key={link.href} href={link.href}>
             <DropdownMenuItem className="cursor-pointer">
