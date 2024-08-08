@@ -3,10 +3,7 @@
 import Link from 'next/link';
 import { toast } from 'sonner';
 
-import { AiFillGithub } from 'react-icons/ai';
-import { BiLogoLinkedin } from 'react-icons/bi';
-import { FaDiscord, FaMedium } from 'react-icons/fa6';
-import { MdLocationPin, MdOutlineEmail } from 'react-icons/md';
+import SocialIcon from '../social-icon';
 
 const ContactInfo = () => {
   const handleDiscordIdCopy = () => {
@@ -26,7 +23,7 @@ const ContactInfo = () => {
         <div className="space-y-2">
           <h3 className="flex items-center space-x-2">
             <span>Contact</span>
-            <MdOutlineEmail />
+            <SocialIcon name="email" size={20} />
           </h3>
           <p className="font-light text-foreground/60">ryangan.dev@gmail.com</p>
         </div>
@@ -34,7 +31,7 @@ const ContactInfo = () => {
         <div className="space-y-2">
           <h3 className="flex items-center space-x-2">
             <span>Location</span>
-            <MdLocationPin />
+            <SocialIcon name="location" size={20} />
           </h3>
           <p className="font-light text-foreground/60">Philadelphia, PA </p>
         </div>
@@ -46,28 +43,28 @@ const ContactInfo = () => {
           href={'https://github.com/ryangandev'}
           target="_blank"
         >
-          <AiFillGithub size={24} />
+          <SocialIcon name="github" size={24} />
         </Link>
         <Link
           aria-label="Link to linkedin"
           href={'https://www.linkedin.com/in/ryangan1/'}
           target="_blank"
         >
-          <BiLogoLinkedin size={24} />
+          <SocialIcon name="linkedin" size={24} />
         </Link>
         <Link
           aria-label="Link to medium"
           href={'https://medium.com/@ryangan.dev'}
           target="_blank"
         >
-          <FaMedium size={24} />
+          <SocialIcon name="medium" size={24} />
         </Link>
         <span
           aria-label="Copy discord id to clipboard"
           onClick={handleDiscordIdCopy}
           className="cursor-pointer"
         >
-          <FaDiscord size={24} />
+          <SocialIcon name="discord" size={24} />
         </span>
       </div>
     </div>

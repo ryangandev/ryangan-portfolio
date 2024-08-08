@@ -2,21 +2,24 @@ import { Metadata } from 'next';
 
 import SectionHeader from '@/components/section-header';
 import PageSummary from '@/components/page-summary';
-import PortfolioList from '@/components/portfolio/portfolio-list';
+import ProjectList from '@/components/portfolio/project-list';
+import { getSortedProjectsData } from '@/libs/content';
 
 export const metadata: Metadata = {
   title: 'Portfolio - Ryan Gan',
 };
 
-const Page = () => {
+const Page = async () => {
+  const projects = await getSortedProjectsData();
+
   return (
     <main className="contentContainerPadding">
-      <div className="mx-auto w-full max-w-3xl">
+      <div className="mx-auto w-full max-w-2xl">
         <SectionHeader section="Portfolio" />
         <PageSummary
           content={["Here are some of the projects I've worked on."]}
         />
-        <PortfolioList />
+        <ProjectList projects={projects} />
       </div>
     </main>
   );

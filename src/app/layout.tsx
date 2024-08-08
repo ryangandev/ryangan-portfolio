@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 import { SessionProvider } from 'next-auth/react';
 
-import { poppins } from '@/assets/fonts';
+import { inter } from '@/assets/fonts';
 import BackToTopButton from '@/components/back-to-top-btn';
 import Footer from '@/components/footer';
 import Header from '@/components/header';
@@ -25,7 +25,7 @@ const RootLayout = async ({
   return (
     <html lang="en" className="scroll-smooth" suppressHydrationWarning>
       <body
-        className={`${poppins.className} relative text-gray-950 antialiased dark:text-gray-50 dark:text-opacity-90`}
+        className={`${inter.className} relative text-gray-950 antialiased dark:text-gray-50 dark:text-opacity-90`}
       >
         {/* for client side useSession */}
         <SessionProvider session={session}>

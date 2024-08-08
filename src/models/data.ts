@@ -70,28 +70,72 @@ interface IconData {
   icon: Icon;
 }
 
-type projectLinkType = 'View Code' | 'Live Demo';
 type IconsData = readonly IconData[];
 
-type Project = {
-  projectTitle: string;
-  role: string;
-  sources: readonly {
-    name: projectLinkType;
-    icon: Icon;
-    url: string;
-  }[];
-  techUsed: IconsData;
-  context: string;
-  overview: readonly string[];
-  features: readonly { title: string; detail: string }[];
-  responsibilities: readonly string[];
-  thumbnailUrl: StaticImageData;
-  screenshotUrls: readonly StaticImageData[];
-};
-
-type ProjectsData = readonly Project[];
 type SkillsData = IconsData;
 
 export { SocialMedia, TechStack };
-export type { Icon, IconData, IconsData, Project, ProjectsData, SkillsData };
+export type { Icon, IconData, IconsData, SkillsData };
+
+export type SocialIconName =
+  | 'linkedin'
+  | 'github'
+  | 'discord'
+  | 'medium'
+  | 'email'
+  | 'location'
+  | 'website';
+
+export type TechStackIconName =
+  // Frontend
+  | 'react'
+  | 'typescript'
+  | 'javascript'
+  | 'html5'
+  | 'css3'
+  | 'nextjs'
+  | 'redux'
+  | 'tailwindcss'
+  | 'expo'
+  | 'reactnative'
+  | 'swift'
+
+  // Backend
+  | 'nodejs'
+  | 'express'
+  | 'springboot'
+  | 'socketio'
+  | 'python'
+  | 'java'
+  | 'csharp'
+  | 'racket'
+
+  // Database
+  | 'sqlite'
+  | 'postgresql'
+  | 'mysql'
+  | 'sqlserver'
+  | 'mongodb'
+  | 'prisma'
+
+  // UI/UX
+  | 'figma'
+  | 'adobeps'
+  | 'adobeai'
+  | 'mui'
+  | 'antdesign'
+
+  // Deployment
+  | 'vercel'
+  | 'aws'
+  | 'akamai'
+  | 'docker'
+  | 'pm2'
+
+  // Tools & Other
+  | 'unity'
+  | 'git'
+  | 'postman'
+  | 'oauth'
+  | 'firebase'
+  | 'trello';
