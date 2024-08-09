@@ -1,14 +1,16 @@
 import type { Metadata } from 'next';
+
 import { SessionProvider } from 'next-auth/react';
 
-import { inter } from '@/assets/fonts';
+import { fontSans } from '@/assets/fonts';
 import BackToTopButton from '@/components/back-to-top-btn';
 import Footer from '@/components/footer';
 import Header from '@/components/header';
 import { Toaster } from '@/components/ui/sonner';
 import { auth } from '@/libs/auth';
+import { cn } from '@/libs/utils';
 import { AppProviders } from '@/providers/app-providers';
-import './globals.css';
+import '@/app/globals.css';
 
 export const metadata: Metadata = {
   title: 'Ryan Gan | Software Engineer',
@@ -25,21 +27,16 @@ const RootLayout = async ({
   return (
     <html lang="en" className="scroll-smooth" suppressHydrationWarning>
       <body
-        className={`${inter.className} relative text-gray-950 antialiased dark:text-gray-50 dark:text-opacity-90`}
+        className={cn('bg-background font-sans antialiased', fontSans.variable)}
       >
         {/* for client side useSession */}
         <SessionProvider session={session}>
           <AppProviders>
-            <Header />
-            <main
-              className="pt-16"
-              style={{
-                minHeight: 'calc(100vh - 81px)',
-              }}
-            >
-              {children}
-            </main>
-            <Footer />
+            <div className="flex min-h-screen flex-col">
+              <Header />
+              <main className="flex-grow pt-16">{children}</main>
+              <Footer />
+            </div>
             <Toaster richColors />
             <BackToTopButton />
           </AppProviders>

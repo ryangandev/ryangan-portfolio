@@ -11,12 +11,12 @@ export const metadata: Metadata = {
 const Page = () => {
   return (
     <main className="contentContainerPadding">
-      <div className="mx-auto w-full max-w-3xl">
+      <div className="mx-auto w-full max-w-2xl">
         <SectionHeader section="My Blog" />
         <PageSummary
-          content={[
-            'Here I share insights and lessons from my journey in software development and beyong.',
-          ]}
+          content={
+            'Here I share insights and lessons from my journey in software development and beyong.'
+          }
         />
         <BlogList />
       </div>

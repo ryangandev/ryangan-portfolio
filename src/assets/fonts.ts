@@ -1,6 +1,9 @@
-import { Inter, Luckiest_Guy, Poppins, Quicksand } from 'next/font/google';
+import { Inter as FontSans, Luckiest_Guy, Poppins } from 'next/font/google';
 
-export const inter = Inter({ subsets: ['latin'] });
+export const fontSans = FontSans({
+  subsets: ['latin'],
+  variable: '--font-sans',
+});
 
 export const luckiestGuy = Luckiest_Guy({ subsets: ['latin'], weight: '400' });
 
