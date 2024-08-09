@@ -1,5 +1,6 @@
 'use client';
 
+import { useState, useEffect } from 'react';
 import { useTheme } from 'next-themes';
 import { MoonIcon, SunIcon } from '@radix-ui/react-icons';
 
@@ -7,14 +8,23 @@ import { Button } from '@/components/ui/button';
 
 export function ThemeToggle() {
   const { theme, setTheme } = useTheme();
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   const handleToggle = () => {
     setTheme(theme === 'dark' ? 'light' : 'dark');
   };
 
+  if (!mounted) {
+    return null;
+  }
+
   return (
     <Button
-      aria-label={`Switch to ${theme === 'dark' ? 'light' : 'dark'} mode`} // Server and client render mismatch, fix this by adding mounted state later after completing a icon button skeleton
+      aria-label={`Switch to ${theme === 'dark' ? 'light' : 'dark'} mode`}
       variant="ghost"
       size="icon-sm"
       onClick={handleToggle}
