@@ -1,4 +1,3 @@
-import NameLogo from '@/components/name-logo';
 import MainNav from '@/components/navs/main-nav';
 import MobileMainNav from '@/components/navs/mobile-main-nav';
 import { ThemeToggle } from '@/components/theme-toggle';
@@ -12,8 +11,7 @@ export default function Header() {
         'border-b border-border/80 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60',
       )}
     >
-      <div className="mx-auto flex max-w-3xl items-center justify-between">
-        <NameLogo className="hidden lg:block" content="Rg" />
+      <div className="mx-auto flex max-w-2xl items-center justify-between">
         <MainNav className="hidden sm:block" />
         <MobileMainNav className="sm:hidden" />
         <ThemeToggle />

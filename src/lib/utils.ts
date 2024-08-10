@@ -1,9 +1,9 @@
 import { type ClassValue, clsx } from 'clsx';
 import { twMerge } from 'tailwind-merge';
 
-export function cn(...inputs: ClassValue[]) {
+export const cn = (...inputs: ClassValue[]) => {
   return twMerge(clsx(inputs));
-}
+};
 
 export const validateString = (
   value: unknown,
@@ -30,4 +30,22 @@ export const getErrorMessage = (error: unknown): string => {
   }
 
   return message;
+};
+
+/**
+ * Checks if pathname is active
+ * @param href nav link
+ * @param pathname current pathname
+ * @returns true if pathname is active
+ */
+export const checkPathnameActive = (
+  href: string,
+  pathname: string,
+): boolean => {
+  // Special case for homepage
+  if (pathname !== '/' && href === '/') {
+    return false;
+  }
+
+  return pathname === href || pathname.startsWith(href);
 };
