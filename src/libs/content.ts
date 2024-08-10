@@ -4,6 +4,7 @@ import matter from 'gray-matter';
 
 import { PostData, PostMetadata } from '@/models/post';
 import { ProjectData, ProjectMetadata } from '@/models/project';
+import { compileMDX } from 'next-mdx-remote/rsc';
 
 const postsDirectory = path.join(process.cwd(), 'src', 'content', 'posts');
 const projectsDirectory = path.join(
@@ -60,7 +61,9 @@ export async function getSortedProjectsData(): Promise<ProjectMetadata[]> {
     }),
   );
 
-  return allProjectsData.sort((a, b) => (a.title < b.title ? -1 : 1));
+  return allProjectsData.sort((a, b) =>
+    new Date(a.date) > new Date(b.date) ? -1 : 1,
+  );
 }
 
 export async function getProjectData(slug: string): Promise<ProjectData> {

@@ -2,10 +2,10 @@ import React from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 
+import TechStackIcon from '@/components/tech-stack-icon';
 import { cn } from '@/libs/utils';
-import { ProjectMetadata } from '@/models/project';
-import TechStackIcon from '../tech-stack-icon';
 import { TechStackIconName } from '@/models/data';
+import { ProjectMetadata } from '@/models/project';
 
 type ProjectPreviewProps = {
   project: ProjectMetadata;
@@ -18,7 +18,7 @@ const ProjectPreview: React.FC<ProjectPreviewProps> = ({ project }) => {
         href={'/portfolio/' + project.slug}
         className={cn('rounded-lg border border-border/80')}
       >
-        <figure className="relative h-44 object-cover">
+        <figure className="relative h-48 object-cover">
           <Image
             src={project.thumbnailUrl}
             alt={project.title}

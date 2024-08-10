@@ -1,6 +1,7 @@
-import { getProjectData, getSortedProjectsData } from '@/libs/content';
 import React from 'react';
 import { MDXRemote } from 'next-mdx-remote/rsc';
+
+import { getProjectData, getSortedProjectsData } from '@/libs/content';
 
 export const generateStaticParams = async () => {
   const projects = await getSortedProjectsData();
@@ -28,7 +29,7 @@ const Page = async ({ params }: { params: { slug: string } }) => {
 
   return (
     <main className="contentContainerPadding">
-      <article className="mx-auto w-full max-w-3xl">
+      <article className="prose dark:prose-invert mx-auto w-full max-w-2xl">
         <h1>{project.title}</h1>
         <MDXRemote source={project.content} />
       </article>

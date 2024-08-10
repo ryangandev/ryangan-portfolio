@@ -1,8 +1,8 @@
-import { Metadata } from 'next';
+import type { Metadata } from 'next';
 
-import SectionHeader from '@/components/section-header';
 import PageSummary from '@/components/page-summary';
 import ProjectList from '@/components/portfolio/project-list';
+import SectionHeader from '@/components/section-header';
 import { getSortedProjectsData } from '@/libs/content';
 
 export const metadata: Metadata = {

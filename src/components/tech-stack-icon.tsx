@@ -1,5 +1,3 @@
-import { cn } from '@/libs/utils';
-import { TechStackIconName } from '@/models/data';
 import React from 'react';
 import {
   FaReact,
@@ -46,6 +44,9 @@ import {
   SiCodesandbox,
 } from 'react-icons/si';
 import { TbBrandReactNative, TbBrandOauth } from 'react-icons/tb';
+
+import { cn } from '@/libs/utils';
+import { TechStackIconName } from '@/models/data';
 
 type TechStackIconProps = {
   name: TechStackIconName;
