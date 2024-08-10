@@ -45,7 +45,7 @@ import {
 } from 'react-icons/si';
 import { TbBrandReactNative, TbBrandOauth } from 'react-icons/tb';
 
-import { cn } from '@/libs/utils';
+import { cn } from '@/lib/utils';
 import { TechStackIconName } from '@/models/data';
 
 type TechStackIconProps = {

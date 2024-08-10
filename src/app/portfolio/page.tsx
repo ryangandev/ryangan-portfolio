@@ -3,7 +3,7 @@ import type { Metadata } from 'next';
 import PageSummary from '@/components/page-summary';
 import ProjectList from '@/components/portfolio/project-list';
 import SectionHeader from '@/components/section-header';
-import { getSortedProjectsData } from '@/libs/content';
+import { getSortedProjectsData } from '@/lib/content';
 
 export const metadata: Metadata = {
   title: 'Portfolio - Ryan Gan',

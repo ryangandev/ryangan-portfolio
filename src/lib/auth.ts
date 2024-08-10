@@ -3,8 +3,8 @@ import { PrismaAdapter } from '@auth/prisma-adapter';
 import { UserRole } from '@prisma/client';
 
 import { getUserById } from '@/data/user';
-import authConfig from '@/libs/auth.config';
-import { db } from '@/libs/db';
+import authConfig from '@/lib/auth.config';
+import { db } from '@/lib/db';
 
 // To Assign new fields to the session object, we need to use the callbacks object
 // Assign the new field to the token object in the jwt callback first

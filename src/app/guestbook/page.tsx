@@ -4,7 +4,7 @@ import {
 } from '@/components/auth-components';
 import PageSummary from '@/components/page-summary';
 import SectionHeader from '@/components/section-header';
-import { auth } from '@/libs/auth';
+import { auth } from '@/lib/auth';
 
 const Page = async () => {
   const session = await auth();

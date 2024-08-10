@@ -1,6 +1,6 @@
 import NextAuth from 'next-auth';
 
-import authConfig from '@/libs/auth.config';
+import authConfig from '@/lib/auth.config';
 
 // Note (why we can't implement RBAC in middleware):
 // This middleware implements on the authConfig object instead of auth

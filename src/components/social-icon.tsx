@@ -6,7 +6,7 @@ import { FaDiscord, FaMedium } from 'react-icons/fa6';
 import { MdLocationPin, MdOutlineEmail } from 'react-icons/md';
 import { SiCodesandbox } from 'react-icons/si';
 
-import { cn } from '@/libs/utils';
+import { cn } from '@/lib/utils';
 import { SocialIconName } from '@/models/data';
 
 type SocialIconProps = {

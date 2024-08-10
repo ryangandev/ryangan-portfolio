@@ -7,8 +7,8 @@ import BackToTopButton from '@/components/back-to-top-btn';
 import Footer from '@/components/footer';
 import Header from '@/components/header';
 import { Toaster } from '@/components/ui/sonner';
-import { auth } from '@/libs/auth';
-import { cn } from '@/libs/utils';
+import { auth } from '@/lib/auth';
+import { cn } from '@/lib/utils';
 import { AppProviders } from '@/providers/app-providers';
 import '@/app/globals.css';
 
