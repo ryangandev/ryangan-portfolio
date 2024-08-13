@@ -31,10 +31,10 @@ const ProjectPreview: React.FC<ProjectPreviewProps> = ({ project }) => {
       </Link>
       <h3 className="mt-3">{project.title}</h3>
       <div className="mb-3 mt-2 flex flex-shrink space-x-2.5">
-        {project.stack.map((stack) => (
+        {project.techStack.map((tech) => (
           <TechStackIcon
-            key={stack}
-            name={stack as TechStackIconName}
+            key={tech}
+            name={tech as TechStackIconName}
             size={16}
           />
         ))}

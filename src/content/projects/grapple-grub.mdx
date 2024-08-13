@@ -5,7 +5,7 @@ featured: true
 role: 'Gameplay Developer'
 summary: 'Swinging and slinging grub, all across the city!'
 thumbnailUrl: 'https://ik.imagekit.io/ryangan/Project%20Screenshots/grapple-grub/grapplegrub-thumbnail.png?updatedAt=1723239351853'
-stack: ['unity', 'csharp', 'adobeps', 'adobeai', 'trello']
+techStack: ['unity', 'csharp', 'adobeps', 'adobeai', 'trello']
 link:
   {
     github: 'https://github.com/ryangandev/icon.io',
@@ -31,6 +31,17 @@ Plans are underway to introduce more games soon, such as the classic Tic-Tac-Toe
 
 - Configured and deployed the application on **AWS EC2** and utilized the process manager **PM2** to ensure continuous uptime and availability
 
-```tsx
+```js showLineNumbers
 const spinner = new Spinner();
+spinner.spin();
+
+const options = {
+  name: 'grapple-grub',
+  script: 'index.js',
+  env: {
+    NODE_ENV: 'production',
+  },
+  instances: 1,
+  exec_mode: 'cluster',
+};
 ```

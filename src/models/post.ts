@@ -1,15 +1,15 @@
 export type PostMetadata = {
   slug: string;
   title: string;
-  date: string;
+  author: string;
+  publishedDate: string;
   featured: boolean;
-  role: string;
   summary: string;
-  thumbnailUrl: string;
-  stack: string[];
-  link: Record<string, string>;
+  topics: string[];
 };
 
 export type PostData = PostMetadata & {
   content: string;
+  views?: number;
+  est_read_time?: string;
 };

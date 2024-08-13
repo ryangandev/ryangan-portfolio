@@ -1,13 +1,13 @@
 import React from 'react';
-import { MDXRemote } from 'next-mdx-remote/rsc';
 
-import { getProjectData, getSortedProjectsData } from '@/lib/content';
+import Mdx from '@/components/mdx-components';
+import { getAllProjectSlugs, getProjectBySlug } from '@/lib/content';
 
 export const generateStaticParams = async () => {
-  const projects = await getSortedProjectsData();
+  const slugs = await getAllProjectSlugs();
 
-  return projects.map((project) => ({
-    slug: project.slug,
+  return slugs.map((slug) => ({
+    slug,
   }));
 };
 
@@ -17,7 +17,8 @@ export const generateMetadata = async ({
   params: { slug: string };
 }) => {
   const { slug } = params;
-  const project = await getProjectData(slug);
+  const project = await getProjectBySlug(slug);
+
   return {
     title: project.title + ' - Portfolio',
   };
@@ -25,13 +26,13 @@ export const generateMetadata = async ({
 
 const Page = async ({ params }: { params: { slug: string } }) => {
   const { slug } = params;
-  const project = await getProjectData(slug);
+  const project = await getProjectBySlug(slug);
 
   return (
     <main className="contentContainerPadding">
       <article className="prose mx-auto w-full max-w-2xl dark:prose-invert">
         <h1>{project.title}</h1>
-        <MDXRemote source={project.content} />
+        <Mdx source={project.content} />
       </article>
     </main>
   );

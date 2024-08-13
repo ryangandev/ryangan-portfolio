@@ -3,14 +3,14 @@ import type { Metadata } from 'next';
 import PageSummary from '@/components/page-summary';
 import ProjectList from '@/components/portfolio/project-list';
 import SectionHeader from '@/components/section-header';
-import { getSortedProjectsData } from '@/lib/content';
+import { getSortedProjects } from '@/lib/content';
 
 export const metadata: Metadata = {
   title: 'Portfolio - Ryan Gan',
 };
 
 const Page = async () => {
-  const projects = await getSortedProjectsData();
+  const projects = await getSortedProjects();
 
   return (
     <main className="contentContainerPadding">

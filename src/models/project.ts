@@ -6,7 +6,7 @@ export type ProjectMetadata = {
   role: string;
   summary: string;
   thumbnailUrl: string;
-  stack: string[];
+  techStack: string[];
   link: {
     github: string;
     live: string;
