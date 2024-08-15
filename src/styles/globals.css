@@ -105,18 +105,6 @@ h5 {
   @apply border border-black/10;
 }
 
-.modalListContent {
-  @apply flex list-outside list-disc flex-col gap-3 pl-8;
-}
-
-.highlightedFontColor {
-  @apply text-black dark:text-white;
-}
-
-.descriptionFontColor {
-  @apply text-gray-700 dark:text-white/75;
-}
-
 .contentContainerPadding {
   @apply px-4 py-10;
 }

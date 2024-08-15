@@ -3,7 +3,7 @@ import MobileMainNav from '@/components/navs/mobile-main-nav';
 import { ThemeToggle } from '@/components/theme-toggle';
 import { cn } from '@/lib/utils';
 
-export default function Header() {
+const SiteHeader = () => {
   return (
     <header
       className={cn(
@@ -18,4 +18,6 @@ export default function Header() {
       </div>
     </header>
   );
-}
+};
+
+export default SiteHeader;

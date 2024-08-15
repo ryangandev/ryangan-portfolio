@@ -4,13 +4,13 @@ import { SessionProvider } from 'next-auth/react';
 
 import { fontSans } from '@/assets/fonts';
 import BackToTopButton from '@/components/back-to-top-btn';
-import Footer from '@/components/footer';
-import Header from '@/components/header';
+import SiteFooter from '@/components/site-footer';
+import SiteHeader from '@/components/site-header';
 import { Toaster } from '@/components/ui/sonner';
 import { auth } from '@/lib/auth';
 import { cn } from '@/lib/utils';
 import { AppProviders } from '@/providers/app-providers';
-import '@/app/globals.css';
+import '@/styles/globals.css';
 
 export const metadata: Metadata = {
   title: 'Ryan Gan | Software Engineer',
@@ -33,9 +33,9 @@ const RootLayout = async ({
         <SessionProvider session={session}>
           <AppProviders>
             <div className="flex min-h-screen flex-col">
-              <Header />
+              <SiteHeader />
               <main className="flex-grow pt-16">{children}</main>
-              <Footer />
+              <SiteFooter />
             </div>
             <Toaster richColors />
             <BackToTopButton />
