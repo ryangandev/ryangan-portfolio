@@ -25,7 +25,7 @@ const ContactInfo = () => {
             <span>Contact</span>
             <SocialIcon name="email" size={20} />
           </h3>
-          <p className="font-light text-foreground/60">ryangan.dev@gmail.com</p>
+          <p className="text-foreground/60">ryangan.dev@gmail.com</p>
         </div>
 
         <div className="space-y-2">
@@ -33,7 +33,7 @@ const ContactInfo = () => {
             <span>Location</span>
             <SocialIcon name="location" size={20} />
           </h3>
-          <p className="font-light text-foreground/60">Philadelphia, PA </p>
+          <p className="text-foreground/60">Philadelphia, PA </p>
         </div>
       </div>
 

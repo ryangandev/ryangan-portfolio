@@ -90,11 +90,11 @@ h2 {
 }
 
 h3 {
-  @apply text-lg font-bold md:text-xl;
+  @apply text-xl font-bold md:text-2xl;
 }
 
 h4 {
-  @apply font-bold md:text-lg;
+  @apply font-bold md:text-xl;
 }
 
 h5 {
