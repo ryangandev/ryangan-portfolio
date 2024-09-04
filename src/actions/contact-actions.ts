@@ -37,7 +37,7 @@ export const sendEmailAction = async (data: z.infer<typeof ContactSchema>) => {
       from: 'Portfolio Contact Form <onboarding@resend.dev>',
       to: 'ryangan.dev@gmail.com',
       subject: senderName + ' left a message',
-      reply_to: senderEmail,
+      replyTo: senderEmail,
       react: React.createElement(ContactFormEmail, {
         message: message,
         senderName: senderName,
