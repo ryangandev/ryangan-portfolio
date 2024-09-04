@@ -1,8 +1,8 @@
 'use client';
 
-import { ActiveSectionContextProvider } from './active-section-context';
-import { NavbarContextProvider } from './navbar-provider';
-import { ThemeProvider } from './theme-provider';
+import { ActiveSectionContextProvider } from '@/providers/active-section-context';
+import { NavbarContextProvider } from '@/providers/navbar-provider';
+import { ThemeProvider } from '@/providers/theme-provider';
 
 export function AppProviders({ children }: { children: React.ReactNode }) {
   return (

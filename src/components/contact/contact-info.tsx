@@ -3,7 +3,7 @@
 import Link from 'next/link';
 import { toast } from 'sonner';
 
-import SocialIcon from '../social-icon';
+import SocialIcon from '@/components/social-icon';
 
 const ContactInfo = () => {
   const handleDiscordIdCopy = () => {

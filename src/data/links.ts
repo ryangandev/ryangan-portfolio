@@ -12,10 +12,6 @@ export const navLinks = [
     href: '/blog',
   },
   {
-    name: 'Guestbook',
-    href: '/guestbook',
-  },
-  {
     name: 'Contact',
     href: '/contact',
   },
