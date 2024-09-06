@@ -54,6 +54,12 @@ type TechStackIconProps = {
   className?: string;
 };
 
+/**
+ *
+ * @param name - the name of the tech stack icon
+ * @param size - (optional) the default size is 24
+ * @param className - (optional) the icon style
+ */
 const TechStackIcon: React.FC<TechStackIconProps> = ({
   name,
   size = 24,

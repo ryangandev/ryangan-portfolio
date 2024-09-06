@@ -4,17 +4,15 @@ import React from 'react';
 import Image from 'next/image';
 import { motion } from 'framer-motion';
 import { AiOutlineDoubleRight } from 'react-icons/ai';
-import { SocialMediaIcon } from '@/assets/icons/index';
-import { SocialMedia } from '@/models/data';
+
+import SocialIcon from '@/components/social-icon';
 import { useSectionInView } from '@/hooks/useSectionInView';
 import { useActiveSection } from '@/hooks/useActiveSection';
-import { useTheme } from 'next-themes';
 import Typewriter from './typewriter';
 
 export default function Intro() {
   const { ref } = useSectionInView('Home', 0.5);
   const { setActiveSection, setTimeOfLastClick } = useActiveSection();
-  const { theme } = useTheme();
 
   return (
     <section
@@ -103,24 +101,21 @@ export default function Intro() {
               setTimeOfLastClick(Date.now());
             }}
           >
-            <SocialMediaIcon type={SocialMedia.Email} />
+            <SocialIcon name="email" />
           </a>
           <a
             className="borderBlack flex cursor-pointer items-center rounded-full bg-white p-3 text-[1.35rem] transition hover:scale-[1.15] focus:scale-[1.15] active:scale-105 dark:bg-white/10"
             href="https://github.com/ryangandev"
             target="_blank"
           >
-            <SocialMediaIcon
-              type={SocialMedia.GitHub}
-              isDarkMode={theme === 'dark'}
-            />
+            <SocialIcon name="github" />
           </a>
           <a
             className="borderBlack flex cursor-pointer items-center rounded-full bg-white p-3 text-[1.35rem] transition hover:scale-[1.15] focus:scale-[1.15] active:scale-105 dark:bg-white/10"
             href="https://www.linkedin.com/in/ryangan1/"
             target="_blank"
           >
-            <SocialMediaIcon type={SocialMedia.LinkedIn} />
+            <SocialIcon name="linkedin" />
           </a>
         </div>
         <a

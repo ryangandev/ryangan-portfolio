@@ -2,11 +2,11 @@
 
 import React from 'react';
 import SectionHeader from './section-header';
+import TechStackIcon from '@/components/tech-stack-icon';
 import { skillsData } from '@/data/skills';
 import { useSectionInView } from '@/hooks/useSectionInView';
 import { motion } from 'framer-motion';
-import { TechStack } from '@/models/data';
-import { TechStackIcon } from '@/assets/icons';
+import { TechStackIconName } from '@/models/data';
 import { useTheme } from 'next-themes';
 
 const fadeInAnimationVariants = {
@@ -27,8 +27,8 @@ export default function Skills() {
   const { ref } = useSectionInView('Skills', 0.5);
   const { theme } = useTheme();
 
-  const renderTechStackIcon = (type: TechStack) => (
-    <TechStackIcon type={type} isDarkMode={theme === 'dark'} />
+  const renderTechStackIcon = (name: TechStackIconName) => (
+    <TechStackIcon name={name} />
   );
 
   return (
@@ -42,7 +42,7 @@ export default function Skills() {
         {skillsData.map((skill, index) => (
           <motion.li
             key={index}
-            className="borderBlack flex flex-row items-center justify-center gap-2 rounded-xl bg-white px-3 py-1.5 shadow-md dark:bg-white/10 dark:text-white/80"
+            className="borderBlack flex flex-row items-center justify-center gap-2 rounded-xl bg-white px-3 py-1.5 capitalize shadow-md dark:bg-white/10 dark:text-white/80"
             variants={fadeInAnimationVariants}
             initial={'initial'}
             whileInView={'animate'}
@@ -51,7 +51,7 @@ export default function Skills() {
             }}
             custom={index}
           >
-            {renderTechStackIcon(skill.icon as TechStack)}
+            {renderTechStackIcon(skill.iconName as TechStackIconName)}
             {skill.name}
           </motion.li>
         ))}

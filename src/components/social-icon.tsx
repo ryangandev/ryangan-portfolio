@@ -15,7 +15,16 @@ type SocialIconProps = {
   className?: string;
 };
 
-const SocialIcon: React.FC<SocialIconProps> = ({ name, size, className }) => {
+/**
+ * @param name - the name of the social icon
+ * @param size - (optional) the default size is 24
+ * @param className - (optional) the icon style
+ */
+const SocialIcon: React.FC<SocialIconProps> = ({
+  name,
+  size = 24,
+  className,
+}) => {
   switch (name) {
     case 'linkedin':
       return <BiLogoLinkedin size={size} className={cn(className)} />;

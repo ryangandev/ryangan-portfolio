@@ -43,28 +43,28 @@ const ContactInfo = () => {
           href={'https://github.com/ryangandev'}
           target="_blank"
         >
-          <SocialIcon name="github" size={24} />
+          <SocialIcon name="github" />
         </Link>
         <Link
           aria-label="Link to linkedin"
           href={'https://www.linkedin.com/in/ryangan1/'}
           target="_blank"
         >
-          <SocialIcon name="linkedin" size={24} />
+          <SocialIcon name="linkedin" />
         </Link>
         <Link
           aria-label="Link to medium"
           href={'https://medium.com/@ryangan.dev'}
           target="_blank"
         >
-          <SocialIcon name="medium" size={24} />
+          <SocialIcon name="medium" />
         </Link>
         <span
           aria-label="Copy discord id to clipboard"
           onClick={handleDiscordIdCopy}
           className="cursor-pointer"
         >
-          <SocialIcon name="discord" size={24} />
+          <SocialIcon name="discord" />
         </span>
       </div>
     </div>

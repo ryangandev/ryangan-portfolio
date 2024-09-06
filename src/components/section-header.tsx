@@ -10,7 +10,7 @@ export default function SectionHeader({
   return (
     <h2
       className={cn(
-        'mb-8 text-nowrap text-3xl font-bold capitalize',
+        'mb-8 text-nowrap text-3xl font-bold capitalize md:text-4xl',
         'shadow-font',
         classname,
       )}
