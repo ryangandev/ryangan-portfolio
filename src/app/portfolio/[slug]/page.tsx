@@ -45,10 +45,12 @@ const Page = async ({ params }: { params: { slug: string } }) => {
             <Image
               src="https://ik.imagekit.io/ryangan/profile-icon.jpeg?updatedAt=1718985313938"
               alt="Ryan Gan"
-              width={40}
-              height={40}
+              width={0}
+              height={0}
+              sizes="100vw"
+              className="h-auto w-10 rounded-full"
               quality={95}
-              className="rounded-full"
+              priority
             />
             <div className="flex flex-col">
               <span className="font-medium">Ryan Gan</span>
@@ -108,11 +110,12 @@ const Page = async ({ params }: { params: { slug: string } }) => {
         <Image
           src={project.thumbnailUrl}
           alt={project.title}
-          width={672}
-          height={468}
-          quality={95}
-          className="rounded-lg"
+          width={0}
+          height={0}
           sizes="(max-width: 672px) 100%"
+          className="h-auto w-full rounded-lg"
+          quality={95}
+          priority
         />
 
         <section className="prose max-w-none dark:prose-invert">
