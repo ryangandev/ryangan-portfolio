@@ -1,7 +1,7 @@
 import React from 'react';
 import { AiFillGithub } from 'react-icons/ai';
 import { BiLogoLinkedin } from 'react-icons/bi';
-import { BsGlobe } from 'react-icons/bs';
+import { CiGlobe } from 'react-icons/ci';
 import { FaDiscord, FaMedium } from 'react-icons/fa6';
 import { MdLocationPin, MdOutlineEmail } from 'react-icons/md';
 import { SiCodesandbox } from 'react-icons/si';
@@ -39,7 +39,7 @@ const SocialIcon: React.FC<SocialIconProps> = ({
     case 'location':
       return <MdLocationPin size={size} className={cn(className)} />;
     case 'website':
-      return <BsGlobe size={size} className={cn(className)} />;
+      return <CiGlobe size={size} className={cn(className)} />;
     default:
       return (
         <SiCodesandbox

@@ -1,6 +1,7 @@
 import React from 'react';
-import Image from 'next/image';
 import { MDXRemote, MDXRemoteProps } from 'next-mdx-remote/rsc';
+
+import CustomImage from '@/components/mdx/custom-image';
 import { options } from '@/data/mdx-options';
 
 type MdxProps = {
@@ -8,7 +9,7 @@ type MdxProps = {
 };
 
 const components = {
-  Image,
+  img: CustomImage,
 } as MDXRemoteProps['components'];
 
 const Mdx: React.FC<MdxProps> = ({ source, ...props }) => {

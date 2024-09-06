@@ -28,7 +28,7 @@ export default function Skills() {
   const { theme } = useTheme();
 
   const renderTechStackIcon = (name: TechStackIconName) => (
-    <TechStackIcon name={name} />
+    <TechStackIcon name={name} size={18} />
   );
 
   return (
