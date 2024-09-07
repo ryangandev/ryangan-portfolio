@@ -38,6 +38,7 @@ import {
   SiFirebase,
   SiMui,
   SiAntdesign,
+  SiAutodeskmaya,
   SiPm2,
   SiTrello,
   SiAdobeillustrator,
@@ -98,7 +99,10 @@ const TechStackIcon: React.FC<TechStackIconProps> = ({
       );
     case 'redux':
       return (
-        <SiRedux size={size} className={cn('text-[#764ABC]', className)} />
+        <SiRedux
+          size={size}
+          className={cn('text-[#764ABC] dark:text-[#9E7BFF]', className)}
+        />
       );
     case 'tailwindcss':
       return (
@@ -152,7 +156,12 @@ const TechStackIcon: React.FC<TechStackIconProps> = ({
         <SiPython size={size} className={cn('text-[#3776AB]', className)} />
       );
     case 'java':
-      return <FaJava size={size} className={cn('text-[#007396]', className)} />;
+      return (
+        <FaJava
+          size={size}
+          className={cn('text-[#007396] dark:text-[#87bEEB]', className)}
+        />
+      );
     case 'csharp':
       return (
         <SiCsharp size={size} className={cn('text-[#239120]', className)} />
@@ -163,7 +172,10 @@ const TechStackIcon: React.FC<TechStackIconProps> = ({
       );
     case 'sqlite':
       return (
-        <SiSqlite size={size} className={cn('text-[#003B57]', className)} />
+        <SiSqlite
+          size={size}
+          className={cn('text-[#003B57] dark:text-[#1791C0]', className)}
+        />
       );
     case 'postgresql':
       return (
@@ -199,14 +211,14 @@ const TechStackIcon: React.FC<TechStackIconProps> = ({
       return (
         <SiAdobephotoshop
           size={size}
-          className={cn('text-[#FF0000]', className)}
+          className={cn('text-blue-600 dark:text-blue-500', className)}
         />
       );
     case 'adobeai':
       return (
         <SiAdobeillustrator
           size={size}
-          className={cn('text-[#FF9A00]', className)}
+          className={cn('text-[#E65100] dark:text-[#FF9A00]', className)}
         />
       );
     case 'mui':
@@ -214,6 +226,13 @@ const TechStackIcon: React.FC<TechStackIconProps> = ({
     case 'antdesign':
       return (
         <SiAntdesign size={size} className={cn('text-[#1890FF]', className)} />
+      );
+    case 'maya':
+      return (
+        <SiAutodeskmaya
+          size={size}
+          className={cn('text-teal-600', className)}
+        />
       );
     case 'vercel':
       return (
@@ -233,7 +252,12 @@ const TechStackIcon: React.FC<TechStackIconProps> = ({
         <FaDocker size={size} className={cn('text-[#2496ED]', className)} />
       );
     case 'pm2':
-      return <SiPm2 size={size} className={cn('text-[#2B037A]', className)} />;
+      return (
+        <SiPm2
+          size={size}
+          className={cn('text-[#2B037A] dark:text-[#8E79F1]', className)}
+        />
+      );
     case 'unity':
       return (
         <FaUnity

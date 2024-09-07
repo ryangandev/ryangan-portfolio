@@ -4,7 +4,7 @@ import React from 'react';
 import { motion } from 'framer-motion';
 
 import Heading from '@/components/heading';
-import TechStackIcon from '@/components/tech-stack-icon';
+import TechStackIcon from '@/components/icons/tech-stack-icon';
 import { skillsData } from '@/data/skills';
 import { useSectionInView } from '@/hooks/useSectionInView';
 import { TechStackIconName } from '@/models/data';

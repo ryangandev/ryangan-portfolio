@@ -3,7 +3,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 
 import HighlightedText from '@/components/highlighted-text';
-import TechStackIcon from '@/components/tech-stack-icon';
+import TechStackIcon from '@/components/icons/tech-stack-icon';
 import { cn } from '@/lib/utils';
 import { TechStackIconName } from '@/models/data';
 import { ProjectMetadata } from '@/models/project';

@@ -45,6 +45,7 @@ export type TechStackIconName =
   | 'adobeai'
   | 'mui'
   | 'antdesign'
+  | 'maya'
 
   // Deployment
   | 'vercel'

@@ -5,9 +5,9 @@ import Image from 'next/image';
 import { motion } from 'framer-motion';
 import { AiOutlineDoubleRight } from 'react-icons/ai';
 
-import SocialIcon from '@/components/social-icon';
-import { useSectionInView } from '@/hooks/useSectionInView';
+import SocialIcon from '@/components/icons/social-icon';
 import { useActiveSection } from '@/hooks/useActiveSection';
+import { useSectionInView } from '@/hooks/useSectionInView';
 import Typewriter from './typewriter';
 
 export default function Intro() {

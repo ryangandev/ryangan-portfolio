@@ -55,7 +55,6 @@ const NavLink: React.FC<NavLinkProps> = ({ href, name, isActive }) => {
           transition: 'width 300ms ease',
         }}
         role="none"
-        aria-hidden
       />
     </Link>
   );

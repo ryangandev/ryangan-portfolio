@@ -20,6 +20,7 @@ export const skillsData: SkillsData = [
   { name: 'Tailwind CSS', iconName: 'tailwindcss' },
   { name: 'Redux', iconName: 'redux' },
   { name: 'Figma', iconName: 'figma' },
+  { name: 'Maya', iconName: 'maya' },
 
   // Backend & Database
   { name: 'Node.js', iconName: 'nodejs' },

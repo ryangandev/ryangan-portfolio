@@ -5,9 +5,9 @@ import Link from 'next/link';
 
 import Callout from '@/components/callout';
 import Heading from '@/components/heading';
+import SocialIcon from '@/components/icons/social-icon';
+import TechStackIcon from '@/components/icons/tech-stack-icon';
 import Mdx from '@/components/mdx/mdx-components';
-import SocialIcon from '@/components/social-icon';
-import TechStackIcon from '@/components/tech-stack-icon';
 import { getAllProjectSlugs, getProjectBySlug } from '@/lib/content';
 import { TechStackIconName } from '@/models/data';
 
