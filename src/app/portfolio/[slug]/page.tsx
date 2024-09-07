@@ -4,6 +4,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 
 import Callout from '@/components/callout';
+import Heading from '@/components/heading';
 import Mdx from '@/components/mdx/mdx-components';
 import SocialIcon from '@/components/social-icon';
 import TechStackIcon from '@/components/tech-stack-icon';
@@ -38,7 +39,9 @@ const Page = async ({ params }: { params: { slug: string } }) => {
   return (
     <main className="contentContainerPadding">
       <article className="mx-auto max-w-2xl space-y-8">
-        <h1 className="text-4xl md:text-5xl">{project.title}</h1>
+        <Heading size="lg" hasMarginBottom={false}>
+          {project.title}
+        </Heading>
 
         <section className="space-y-3 md:flex md:justify-between">
           <div className="flex items-center space-x-2 text-sm">
@@ -61,7 +64,7 @@ const Page = async ({ params }: { params: { slug: string } }) => {
             </div>
           </div>
 
-          <div className="flex items-end space-x-4 font-semibold">
+          <div className="ml-2.5 flex items-end space-x-4 font-semibold md:ml-0">
             {project.link.github && (
               <Link
                 href={project.link.github}

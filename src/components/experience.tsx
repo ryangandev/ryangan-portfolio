@@ -1,11 +1,10 @@
 'use client';
 
 import React, { ReactElement } from 'react';
-import SectionHeader from './section-header';
-import { useSectionInView } from '@/hooks/useSectionInView';
 
+import Heading from '@/components/heading';
 import { experiencesData } from '@/data/experience';
-import { useTheme } from 'next-themes';
+import { useSectionInView } from '@/hooks/useSectionInView';
 
 interface ResizeableIconProps {
   IconComponent: ReactElement;
@@ -13,7 +12,6 @@ interface ResizeableIconProps {
 
 export default function Experience() {
   const { ref, inView } = useSectionInView('Experience', 0.4);
-  const { theme } = useTheme();
 
   // Temporary solution to create a resizable icon to control the size of the Icon, inline style fontSize doesn't work.
   const ResizableIcon = ({ IconComponent }: ResizeableIconProps) => {
@@ -22,7 +20,9 @@ export default function Experience() {
 
   return (
     <section ref={ref} className="mb-28 scroll-mt-28" id="experience">
-      <SectionHeader section="Experience" />
+      <Heading size="sm" shadowed>
+        Experience
+      </Heading>
 
       {experiencesData.map((item, index) => (
         <React.Fragment key={index}></React.Fragment>

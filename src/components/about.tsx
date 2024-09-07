@@ -2,7 +2,8 @@
 
 import React from 'react';
 import { motion } from 'framer-motion';
-import SectionHeader from './section-header';
+
+import Heading from '@/components/heading';
 import { useSectionInView } from '@/hooks/useSectionInView';
 
 export default function About() {
@@ -17,7 +18,9 @@ export default function About() {
       transition={{ delay: 0.175 }}
       id="about"
     >
-      <SectionHeader section="About me" />
+      <Heading size="sm" shadowed>
+        About Me
+      </Heading>
 
       <p className="mb-3">
         <span className="italic">

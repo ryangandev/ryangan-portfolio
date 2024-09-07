@@ -1,5 +1,14 @@
 import React from 'react';
 
-export default function PageSummary({ content }: { content: string }) {
-  return <p className="mb-8 leading-7 sm:mb-12">{content}</p>;
-}
+import { cn } from '@/lib/utils';
+
+type PageSummaryProps = {
+  children: React.ReactNode;
+  className?: string;
+};
+
+const PageSummary: React.FC<PageSummaryProps> = ({ children, className }) => {
+  return <p className={cn('mb-8 leading-7 md:mb-12', className)}>{children}</p>;
+};
+
+export default PageSummary;
