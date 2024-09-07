@@ -17,8 +17,8 @@ const Page = async () => {
       <div className="mx-auto w-full max-w-2xl">
         <Heading shadowed>Portfolio</Heading>
         <PageSummary>
-          Here is a seletion of the projects I've worked on. I'm always open to
-          feedback and opportunities to collaborate!
+          Here is a seletion of the projects I&apos;ve worked on. I&apos;m
+          always open to feedback and opportunities to collaborate!
         </PageSummary>
         <ProjectList projects={projects} />
       </div>

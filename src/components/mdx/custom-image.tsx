@@ -5,6 +5,7 @@ const CustomImage: React.FC<ImageProps> = ({ ...props }) => {
   return (
     <Image
       {...props}
+      alt={props.alt || ''}
       width={0}
       height={0}
       sizes="(max-width: 672px) 100%"
