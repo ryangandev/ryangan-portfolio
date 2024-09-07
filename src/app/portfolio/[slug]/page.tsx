@@ -119,6 +119,8 @@ const Page = async ({ params }: { params: { slug: string } }) => {
           className="h-auto w-full rounded-lg"
           quality={95}
           priority
+          placeholder="blur"
+          blurDataURL="/blur.svg"
         />
 
         <section className="prose max-w-none dark:prose-invert">

@@ -26,14 +26,17 @@ const ProjectPreview: React.FC<ProjectPreviewProps> = ({
           'transition-transform hover:scale-[1.025]',
         )}
       >
-        <figure className="relative h-48 object-cover">
+        <figure className="relative h-[197.5px]">
           <Image
             src={project.thumbnailUrl}
             alt={project.title}
-            quality={95}
-            className="rounded-lg"
-            sizes="(max-width: 768px) 100%"
             fill
+            sizes="(max-width: 672px) 100%"
+            className="rounded-lg object-cover"
+            quality={95}
+            priority
+            placeholder="blur"
+            blurDataURL="/blur.svg"
           />
         </figure>
       </Link>
@@ -53,7 +56,7 @@ const ProjectPreview: React.FC<ProjectPreviewProps> = ({
           />
         </Link>
       </h4>
-      <div className="mt-2 flex space-x-2.5">
+      <div className="mt-2 flex flex-wrap gap-2.5">
         {project.techStack.map((tech) => (
           <TechStackIcon
             key={tech}

@@ -10,6 +10,8 @@ const CustomImage: React.FC<ImageProps> = ({ ...props }) => {
       sizes="(max-width: 672px) 100%"
       className="h-auto w-full rounded-lg"
       quality={95}
+      placeholder="blur"
+      blurDataURL="/blur.svg"
     />
   );
 };

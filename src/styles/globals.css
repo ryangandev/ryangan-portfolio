@@ -82,7 +82,7 @@
 }
 
 h1 {
-  @apply text-3xl font-bold md:text-4xl;
+  @apply text-3xl font-bold capitalize md:text-4xl;
 }
 
 h2 {
@@ -94,11 +94,11 @@ h3 {
 }
 
 h4 {
-  @apply font-bold md:text-xl;
+  @apply text-xl font-bold;
 }
 
 h5 {
-  @apply font-bold md:text-lg;
+  @apply text-lg font-semibold;
 }
 
 .borderBlack {
@@ -106,7 +106,7 @@ h5 {
 }
 
 .contentContainerPadding {
-  @apply px-4 py-10;
+  @apply px-6 py-6 md:py-10;
 }
 
 .overlap-child {
