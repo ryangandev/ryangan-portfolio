@@ -43,6 +43,7 @@ import {
   SiTrello,
   SiAdobeillustrator,
   SiCodesandbox,
+  SiPhoton,
 } from 'react-icons/si';
 import { TbBrandReactNative, TbBrandOauth } from 'react-icons/tb';
 
@@ -263,6 +264,13 @@ const TechStackIcon: React.FC<TechStackIconProps> = ({
         <FaUnity
           size={size}
           className={cn('text-[#000000] dark:text-[#ffffff]', className)}
+        />
+      );
+    case 'photon':
+      return (
+        <SiPhoton
+          size={size}
+          className={cn('text-[#00B4D8] dark:text-[#90E0Ef]', className)}
         />
       );
     case 'git':

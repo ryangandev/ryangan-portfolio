@@ -1,8 +1,8 @@
 'use client';
 
 import React from 'react';
-import Image from 'next/image';
 import { motion } from 'framer-motion';
+import Image from 'next/image';
 import { AiOutlineDoubleRight } from 'react-icons/ai';
 
 import SocialIcon from '@/components/icons/social-icon';
@@ -96,6 +96,7 @@ export default function Intro() {
           <a
             className="borderBlack flex cursor-pointer items-center rounded-full bg-white p-3 text-[1.35rem] transition hover:scale-[1.15] focus:scale-[1.15] active:scale-105 dark:bg-white/10"
             href="#contact"
+            aria-label="Contact me via email"
             onClick={() => {
               setActiveSection('Contact');
               setTimeOfLastClick(Date.now());
@@ -106,6 +107,7 @@ export default function Intro() {
           <a
             className="borderBlack flex cursor-pointer items-center rounded-full bg-white p-3 text-[1.35rem] transition hover:scale-[1.15] focus:scale-[1.15] active:scale-105 dark:bg-white/10"
             href="https://github.com/ryangandev"
+            aria-label="View my GitHub profile"
             target="_blank"
           >
             <SocialIcon name="github" />
@@ -113,6 +115,7 @@ export default function Intro() {
           <a
             className="borderBlack flex cursor-pointer items-center rounded-full bg-white p-3 text-[1.35rem] transition hover:scale-[1.15] focus:scale-[1.15] active:scale-105 dark:bg-white/10"
             href="https://www.linkedin.com/in/ryangan1/"
+            aria-label="View my LinkedIn profile"
             target="_blank"
           >
             <SocialIcon name="linkedin" />

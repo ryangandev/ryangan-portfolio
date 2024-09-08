@@ -56,6 +56,7 @@ export type TechStackIconName =
 
   // Tools & Other
   | 'unity'
+  | 'photon'
   | 'git'
   | 'postman'
   | 'oauth'
