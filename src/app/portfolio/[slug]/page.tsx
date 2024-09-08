@@ -2,6 +2,7 @@ import React from 'react';
 import { format } from 'date-fns';
 import Image from 'next/image';
 import Link from 'next/link';
+import { notFound } from 'next/navigation';
 
 import Callout from '@/components/callout';
 import Heading from '@/components/heading';
@@ -10,6 +11,25 @@ import TechStackIcon from '@/components/icons/tech-stack-icon';
 import Mdx from '@/components/mdx/mdx-components';
 import { getAllProjectSlugs, getProjectBySlug } from '@/lib/content';
 import { TechStackIconName } from '@/models/data';
+import { ProjectData } from '@/models/project';
+
+/**
+ * Get project data by slug or null if project is not found
+ */
+const getProjectData = async (slug: string): Promise<ProjectData | null> => {
+  const allSlugs = await getAllProjectSlugs();
+  if (!allSlugs.includes(slug)) {
+    return null;
+  }
+
+  try {
+    const project = await getProjectBySlug(slug);
+    return project;
+  } catch (error) {
+    console.error(`Error fetching project data for slug ${slug}:`, error);
+    return null;
+  }
+};
 
 export const generateStaticParams = async () => {
   const slugs = await getAllProjectSlugs();
@@ -25,7 +45,13 @@ export const generateMetadata = async ({
   params: { slug: string };
 }) => {
   const { slug } = params;
-  const project = await getProjectBySlug(slug);
+  const project = await getProjectData(slug);
+
+  if (!project) {
+    return {
+      title: '404 Project Not Found - Portfolio',
+    };
+  }
 
   return {
     title: project.title + ' - Portfolio',
@@ -34,7 +60,11 @@ export const generateMetadata = async ({
 
 const Page = async ({ params }: { params: { slug: string } }) => {
   const { slug } = params;
-  const project = await getProjectBySlug(slug);
+  const project = await getProjectData(slug);
+
+  if (!project) {
+    notFound();
+  }
 
   return (
     <main className="contentContainerPadding">
