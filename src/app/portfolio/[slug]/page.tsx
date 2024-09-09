@@ -146,7 +146,7 @@ const Page = async ({ params }: { params: { slug: string } }) => {
           width={0}
           height={0}
           sizes="(max-width: 672px) 100%"
-          className="h-auto w-full rounded-lg"
+          className="h-auto w-full rounded-lg shadow-md"
           quality={95}
           priority
           placeholder="blur"
