@@ -1,13 +1,16 @@
 import React from 'react';
+import dynamic from 'next/dynamic';
 import { MDXRemote, MDXRemoteProps } from 'next-mdx-remote/rsc';
 
 import CustomImage from '@/components/mdx/custom-image';
 import CustomLink from '@/components/mdx/custom-link';
-// import CustomPre from '@/components/mdx/custom-pre';
 import { options } from '@/data/mdx-options';
 import '@/styles/mdx.css';
-import dynamic from 'next/dynamic';
 
+// Needs to be imported dynamically because it's a client component
+const CustomCode = dynamic(() => import('@/components/mdx/custom-code'), {
+  ssr: false,
+});
 const CustomPre = dynamic(() => import('@/components/mdx/custom-pre'), {
   ssr: false,
 });
@@ -18,6 +21,7 @@ type MdxProps = {
 
 const components = {
   a: CustomLink,
+  code: CustomCode,
   img: CustomImage,
   pre: CustomPre,
 } as MDXRemoteProps['components'];
