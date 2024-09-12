@@ -34,7 +34,7 @@ export default function Intro() {
                         }}
                     >
                         <Image
-                            src="https://cdn.discordapp.com/attachments/883897355445895188/1236868626120966144/IMG_4427.JPG?ex=66719aec&is=6670496c&hm=9d2f0b83ffd185346fcdc17f6854eb1d3f2b063f1cb9f1cd2217e8e2e5382d21&"
+                            src="https://ik.imagekit.io/ryangan/profile-icon.jpeg?updatedAt=1718985313938"
                             alt="Ryan Gan"
                             width={200}
                             height={200}
@@ -126,7 +126,7 @@ export default function Intro() {
                 </div>
                 <a
                     className="group bg-white text-base px-4 py-2 flex items-center gap-1 rounded-full outline-none focus:scale-110 hover:scale-110 active:scale-105 transition cursor-pointer borderBlack dark:bg-white/10"
-                    href="/Rg_resume_v3.0.2.pdf"
+                    href="/RyanG_resume.pdf"
                     target="_blank"
                 >
                     View Résumé
