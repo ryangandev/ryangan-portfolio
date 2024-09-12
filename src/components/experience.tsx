@@ -20,9 +20,7 @@ export default function Experience() {
 
   return (
     <section ref={ref} className="mb-28 scroll-mt-28" id="experience">
-      <Heading size="sm" shadowed>
-        Experience
-      </Heading>
+      <Heading size="sm">Experience</Heading>
 
       {experiencesData.map((item, index) => (
         <React.Fragment key={index}></React.Fragment>

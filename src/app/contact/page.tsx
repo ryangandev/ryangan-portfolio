@@ -12,7 +12,7 @@ const Page = () => {
   return (
     <main className="contentContainerPadding">
       <div className="mx-auto w-full max-w-2xl border-border">
-        <Heading shadowed>Get in touch</Heading>
+        <Heading>Get in touch</Heading>
         <PageSummary>
           I&apos;d love to hear from you! Whether you have a question, a project
           idea, or just want to say hello, feel free to get in touch.

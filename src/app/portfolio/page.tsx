@@ -15,7 +15,7 @@ const Page = async () => {
   return (
     <main className="contentContainerPadding">
       <div className="mx-auto w-full max-w-2xl">
-        <Heading shadowed>Portfolio</Heading>
+        <Heading>Portfolio</Heading>
         <PageSummary>
           Here is a seletion of the projects I&apos;ve worked on. I&apos;m
           always open to feedback and opportunities to collaborate!

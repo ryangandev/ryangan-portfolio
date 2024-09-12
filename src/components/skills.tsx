@@ -36,9 +36,7 @@ export default function Skills() {
       className="mb-28 max-w-[53rem] scroll-mt-28 text-center"
       id={'skills'}
     >
-      <Heading size="sm" shadowed>
-        Skills
-      </Heading>
+      <Heading size="sm">Skills</Heading>
       <ul className="flex flex-wrap justify-center gap-2 text-lg text-gray-800 sm:gap-4">
         {skillsData.map((skill, index) => (
           <motion.li

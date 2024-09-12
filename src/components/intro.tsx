@@ -41,21 +41,6 @@ export default function Intro() {
               className="h-28 w-28 rounded-full border-[0.25rem] border-white object-cover shadow-xl"
             />
           </motion.div>
-
-          <motion.span
-            // TODO: Later add hand wave animation when clicked
-            className="absolute bottom-0 right-0 cursor-pointer text-4xl"
-            initial={{ opacity: 0, scale: 0 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{
-              type: 'spring',
-              stiffness: 125,
-              delay: 0.75,
-              duration: 0.7,
-            }}
-          >
-            👋
-          </motion.span>
         </div>
       </div>
 
@@ -75,13 +60,6 @@ export default function Intro() {
           startDelay={1500}
           showCursor={true}
         />
-        <p>
-          I&apos;m a<span className="font-bold"> software enginner</span>.
-        </p>
-        <p>
-          I enjoy building
-          <span className="italic"> web & mobile applications</span>.
-        </p>
       </motion.h1>
 
       <motion.div
