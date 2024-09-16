@@ -101,10 +101,6 @@ h5 {
   @apply text-lg font-semibold;
 }
 
-.borderBlack {
-  @apply border border-black/10;
-}
-
 .contentContainerPadding {
   @apply px-6 py-6 md:py-10;
 }
@@ -120,34 +116,4 @@ h5 {
   line-height: 1;
   letter-spacing: 2px;
   text-shadow: var(--font-shadow);
-}
-
-.prose .subheading-anchor {
-  @apply invisible absolute no-underline;
-  margin-left: -1em;
-  padding-right: 0.5em;
-  width: 100%;
-  max-width: 700px;
-  cursor: pointer;
-}
-
-.subheading-anchor:hover {
-  @apply visible;
-}
-
-.prose .subheading-anchor:after {
-  @apply text-slate-400 dark:text-slate-200;
-  content: '#';
-}
-
-.prose *:hover > .subheading-anchor {
-  @apply visible;
-}
-
-.prose h2,
-.prose h3,
-.prose h4,
-.prose h5,
-.prose h6 {
-  @apply scroll-mt-20;
 }

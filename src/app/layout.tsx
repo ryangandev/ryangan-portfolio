@@ -1,5 +1,7 @@
 import type { Metadata } from 'next';
 
+import { Analytics } from '@vercel/analytics/react';
+
 import { fontSans } from '@/assets/fonts';
 import BackToTopButton from '@/components/back-to-top-btn';
 import SiteFooter from '@/components/site-footer';
@@ -30,6 +32,7 @@ const RootLayout = async ({
             <main className="flex-grow pt-16">{children}</main>
             <SiteFooter />
           </div>
+          <Analytics />
           <Toaster richColors />
           <BackToTopButton />
         </AppProviders>

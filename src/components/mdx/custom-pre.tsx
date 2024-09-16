@@ -42,10 +42,10 @@ const CustomPre: React.FC<CustomPreProps> = ({
 
   return (
     <div className="relative">
-      <div className="absolute top-0 flex w-full items-center justify-between space-x-2 rounded-t-md py-2 pl-6 pr-4">
+      <div className="absolute top-0 flex w-full items-center justify-between space-x-2 rounded-t-md border-b px-4 py-2">
         <span
           className={cn(
-            'flex items-center text-[13px] font-semibold uppercase text-gray-200',
+            'flex items-center text-[13px] font-semibold uppercase',
             GeistSans.className,
           )}
         >
@@ -59,10 +59,10 @@ const CustomPre: React.FC<CustomPreProps> = ({
 
         <button
           onClick={handleCopyToClipboard}
-          className="rounded-md p-1.5 text-gray-200 transition-colors hover:bg-gray-700"
+          className="rounded-md p-1.5 transition-colors hover:bg-gray-200 dark:hover:bg-gray-700"
         >
           {isCopied ? (
-            <GoCheck size={20} className="text-green-400" />
+            <GoCheck size={20} className="text-green-700 dark:text-green-300" />
           ) : (
             <GoCopy size={20} />
           )}
@@ -70,7 +70,7 @@ const CustomPre: React.FC<CustomPreProps> = ({
       </div>
       <pre
         ref={preRef}
-        className={cn('mt-2 pt-12', className)}
+        className={cn('mt-2 rounded-md border px-5 pb-5 pt-[68px]', className)}
         data-language={language}
         {...props}
       >
