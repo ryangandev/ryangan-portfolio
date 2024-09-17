@@ -6,7 +6,6 @@ type HeadingProps = {
   children: React.ReactNode;
   size?: 'sm' | 'md' | 'lg';
   hasMarginBottom?: boolean;
-  shadowed?: boolean;
   className?: string;
 };
 
@@ -16,7 +15,6 @@ type HeadingProps = {
 const Heading: React.FC<HeadingProps> = ({
   children,
   size = 'md',
-  shadowed = false,
   hasMarginBottom = true,
   className,
 }) => {
@@ -29,7 +27,6 @@ const Heading: React.FC<HeadingProps> = ({
           'text-4xl md:text-5xl': size === 'lg',
         },
         hasMarginBottom && 'mb-5',
-        shadowed && 'shadow-font',
         className,
       )}
     >

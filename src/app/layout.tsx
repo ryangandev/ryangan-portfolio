@@ -25,13 +25,13 @@ export default function RootLayout({
     <html lang="en" className="scroll-smooth" suppressHydrationWarning>
       <body
         className={cn(
-          'flex min-h-screen flex-col antialiased selection:bg-zinc-300 selection:text-zinc-950 dark:selection:bg-zinc-700 dark:selection:text-zinc-50',
+          'color-level-1 flex min-h-screen flex-col antialiased selection:bg-zinc-300 selection:text-zinc-950 dark:selection:bg-zinc-700 dark:selection:text-zinc-50',
           geistSans.className,
         )}
       >
         <AppProviders>
           <SiteHeader />
-          <div className="color-level-1 relative mx-auto flex max-w-[692px] flex-grow px-6 py-16 md:py-32">
+          <div className="relative mx-auto flex max-w-[692px] flex-grow px-6 py-16 md:pt-32">
             {children}
           </div>
           <SiteFooter />

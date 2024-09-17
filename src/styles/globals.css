@@ -29,9 +29,6 @@
     --chart-3: 197 37% 24%;
     --chart-4: 43 74% 66%;
     --chart-5: 27 87% 67%;
-
-    /* Light Theme Font Shadow */
-    --font-shadow: 1px -1px #fff, -1px 1px #999, -3px 3px 3px #80808080;
   }
 
   .dark {
@@ -59,9 +56,6 @@
     --chart-3: 30 80% 55%;
     --chart-4: 280 65% 60%;
     --chart-5: 340 75% 55%;
-
-    /* Dark Theme Font Shadow */
-    --font-shadow: 1px -1px #333, -1px 1px #666, -3px 3px 3px #ffffff80;
   }
 }
 
@@ -94,39 +88,34 @@ h5 {
   @apply text-lg font-semibold;
 }
 
-.overlap-child {
-  text-shadow: 3px 0 7px blue; /* offset-x | offset-y | blur-radius | color */
-  position: relative;
-  z-index: var(--i);
-}
-
-/* Font Shadow */
-.shadow-font {
-  line-height: 1;
-  letter-spacing: 2px;
-  text-shadow: var(--font-shadow);
-}
-
 .color-level-1 {
-  @apply text-neutral-900 dark:text-neutral-100;
+  @apply text-neutral-950 dark:text-neutral-50;
 }
 
 .color-level-2 {
-  @apply text-neutral-700 dark:text-neutral-300;
+  @apply text-neutral-800 dark:text-neutral-200;
 }
 
 .color-level-3 {
-  @apply text-neutral-600 dark:text-neutral-400;
+  @apply text-neutral-700 dark:text-neutral-300;
 }
 
 .color-level-4 {
-  @apply text-neutral-400 dark:text-neutral-500;
+  @apply text-neutral-600 dark:text-neutral-400;
+}
+
+.color-level-5 {
+  @apply text-neutral-500;
+}
+
+.color-level-6 {
+  @apply text-neutral-400 dark:text-neutral-600;
 }
 
 .block-heading {
   @apply mb-7;
 }
 
-.block-description {
+.block-paragraph {
   @apply mb-12 md:mb-16;
 }
