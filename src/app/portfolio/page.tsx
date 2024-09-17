@@ -9,12 +9,12 @@ export const metadata: Metadata = {
   title: 'Portfolio - Ryan Gan',
 };
 
-const Page = async () => {
+export default async function Page() {
   const projects = await getSortedProjects();
 
   return (
-    <main className="contentContainerPadding">
-      <div className="mx-auto w-full max-w-2xl">
+    <main className="">
+      <div className="">
         <Heading>Portfolio</Heading>
         <PageSummary>
           Here is a seletion of the projects I&apos;ve worked on. I&apos;m
@@ -24,6 +24,4 @@ const Page = async () => {
       </div>
     </main>
   );
-};
-
-export default Page;
+}

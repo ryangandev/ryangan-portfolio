@@ -1,10 +1,12 @@
-import { Inter as FontSans, Luckiest_Guy, Poppins } from 'next/font/google';
+import { GeistMono } from 'geist/font/mono';
+import { GeistSans } from 'geist/font/sans';
+import { Inter, Luckiest_Guy } from 'next/font/google';
 
-export const fontSans = FontSans({
+export const inter = Inter({
   subsets: ['latin'],
-  variable: '--font-sans',
 });
 
-export const luckiestGuy = Luckiest_Guy({ subsets: ['latin'], weight: '400' });
+export const geistMono = GeistMono;
+export const geistSans = GeistSans;
 
-export const poppins = Poppins({ subsets: ['latin'], weight: '400' });
+export const luckiestGuy = Luckiest_Guy({ subsets: ['latin'], weight: '400' });

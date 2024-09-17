@@ -58,7 +58,7 @@ export const generateMetadata = async ({
   };
 };
 
-const Page = async ({ params }: { params: { slug: string } }) => {
+export default async function Page({ params }: { params: { slug: string } }) {
   const { slug } = params;
   const project = await getProjectData(slug);
 
@@ -67,8 +67,8 @@ const Page = async ({ params }: { params: { slug: string } }) => {
   }
 
   return (
-    <main className="contentContainerPadding">
-      <article className="mx-auto max-w-2xl space-y-8">
+    <main className="">
+      <article className="space-y-8">
         <Heading size="lg" hasMarginBottom={false}>
           {project.title}
         </Heading>
@@ -159,6 +159,4 @@ const Page = async ({ params }: { params: { slug: string } }) => {
       </article>
     </main>
   );
-};
-
-export default Page;
+}

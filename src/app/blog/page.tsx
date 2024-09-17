@@ -8,19 +8,15 @@ export const metadata: Metadata = {
   title: 'Blog - Ryan Gan',
 };
 
-const Page = () => {
+export default function Page() {
   return (
-    <main className="contentContainerPadding">
-      <div className="mx-auto w-full max-w-2xl">
-        <Heading>Blog</Heading>
-        <PageSummary>
-          Welcome to my blog! I share insights and lessons from my journey in
-          software development and beyond.
-        </PageSummary>
-        <BlogList />
-      </div>
+    <main className="">
+      <Heading>Blog</Heading>
+      <PageSummary>
+        Welcome to my blog! I share insights and lessons from my journey in
+        software development and beyond.
+      </PageSummary>
+      <BlogList />
     </main>
   );
-};
-
-export default Page;
+}

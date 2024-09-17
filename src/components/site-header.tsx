@@ -3,7 +3,7 @@ import MobileMainNav from '@/components/navs/mobile-main-nav';
 import { ThemeToggle } from '@/components/theme-toggle';
 import { cn } from '@/lib/utils';
 
-const SiteHeader = () => {
+export default function SiteHeader() {
   return (
     <header
       className={cn(
@@ -11,13 +11,11 @@ const SiteHeader = () => {
         'border-b border-border/80 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60',
       )}
     >
-      <div className="mx-auto flex max-w-2xl items-center justify-between">
+      <div className="mx-auto flex max-w-[644px] items-center justify-between">
         <MainNav className="hidden sm:block" />
         <MobileMainNav className="sm:hidden" />
         <ThemeToggle />
       </div>
     </header>
   );
-};
-
-export default SiteHeader;
+}
