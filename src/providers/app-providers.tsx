@@ -1,18 +1,21 @@
 'use client';
 
-import { ThemeContextProvider } from './theme-provider';
-import { ActiveSectionContextProvider } from './active-section-context';
-import { NextUiProvider } from './nextui-provider';
-import { NavbarContextProvider } from './navbar-provider';
+import { ActiveSectionContextProvider } from '@/providers/active-section-context';
+import { NavbarContextProvider } from '@/providers/navbar-provider';
+import { ThemeProvider } from '@/providers/theme-provider';
 
 export function AppProviders({ children }: { children: React.ReactNode }) {
-    return (
-        <ThemeContextProvider>
-            <NextUiProvider>
-                <ActiveSectionContextProvider>
-                    <NavbarContextProvider>{children}</NavbarContextProvider>
-                </ActiveSectionContextProvider>
-            </NextUiProvider>
-        </ThemeContextProvider>
-    );
+  return (
+    <ThemeProvider
+      attribute="class"
+      defaultTheme="light"
+      enableSystem={false}
+      storageKey="rg-theme"
+      disableTransitionOnChange
+    >
+      <ActiveSectionContextProvider>
+        <NavbarContextProvider>{children}</NavbarContextProvider>
+      </ActiveSectionContextProvider>
+    </ThemeProvider>
+  );
 }
