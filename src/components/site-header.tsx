@@ -1,5 +1,5 @@
-import MainNav from '@/components/navs/main-nav';
-import MobileMainNav from '@/components/navs/mobile-main-nav';
+import MainNav from '@/components/navigation/main-nav';
+import MobileMainNav from '@/components/navigation/mobile-main-nav';
 import { ThemeToggle } from '@/components/theme-toggle';
 import { cn } from '@/lib/utils';
 
@@ -7,7 +7,7 @@ export default function SiteHeader() {
   return (
     <header
       className={cn(
-        'fixed z-[999] h-16 w-full bg-background px-4 py-3 shadow-sm',
+        'sticky top-0 z-[999] h-16 w-full bg-background px-4 py-3 shadow-sm',
         'border-b border-border/80 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60',
       )}
     >

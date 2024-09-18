@@ -5,7 +5,6 @@ import Link from 'next/link';
 import { notFound } from 'next/navigation';
 
 import Callout from '@/components/callout';
-import Heading from '@/components/heading';
 import SocialIcon from '@/components/icons/social-icon';
 import TechStackIcon from '@/components/icons/tech-stack-icon';
 import Mdx from '@/components/mdx/mdx-components';
@@ -69,9 +68,6 @@ export default async function Page({ params }: { params: { slug: string } }) {
   return (
     <main className="">
       <article className="space-y-8">
-        <Heading size="lg" hasMarginBottom={false}>
-          {project.title}
-        </Heading>
 
         <section className="space-y-3 md:flex md:justify-between">
           <div className="flex items-center space-x-2 text-sm">

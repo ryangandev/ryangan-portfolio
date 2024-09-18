@@ -1,6 +1,5 @@
 import type { Metadata } from 'next';
 
-import Heading from '@/components/heading';
 import PageSummary from '@/components/page-summary';
 import ProjectList from '@/components/portfolio/project-list';
 import { getSortedProjects } from '@/lib/content';
@@ -15,7 +14,6 @@ export default async function Page() {
   return (
     <main className="">
       <div className="">
-        <Heading>Portfolio</Heading>
         <PageSummary>
           Here is a seletion of the projects I&apos;ve worked on. I&apos;m
           always open to feedback and opportunities to collaborate!

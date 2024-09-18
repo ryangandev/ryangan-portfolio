@@ -2,7 +2,6 @@
 
 import React, { ReactElement } from 'react';
 
-import Heading from '@/components/heading';
 import { experiencesData } from '@/data/experience';
 import { useSectionInView } from '@/hooks/useSectionInView';
 
@@ -20,7 +19,7 @@ export default function Experience() {
 
   return (
     <section ref={ref} className="mb-28 scroll-mt-28" id="experience">
-      <Heading size="sm">Experience</Heading>
+      <h1>Experience</h1>
 
       {experiencesData.map((item, index) => (
         <React.Fragment key={index}></React.Fragment>

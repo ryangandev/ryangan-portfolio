@@ -3,9 +3,7 @@ import type { Metadata } from 'next';
 import { Analytics } from '@vercel/analytics/react';
 
 import { geistSans } from '@/assets/fonts';
-import BackToTopButton from '@/components/back-to-top-btn';
 import SiteFooter from '@/components/site-footer';
-import SiteHeader from '@/components/site-header';
 import { Toaster } from '@/components/ui/sonner';
 import { cn } from '@/lib/utils';
 import { AppProviders } from '@/providers/app-providers';
@@ -30,14 +28,12 @@ export default function RootLayout({
         )}
       >
         <AppProviders>
-          <SiteHeader />
           <div className="relative mx-auto flex max-w-[692px] flex-grow px-6 py-16 md:pt-32">
             {children}
           </div>
           <SiteFooter />
           <Analytics />
           <Toaster richColors />
-          <BackToTopButton />
         </AppProviders>
       </body>
     </html>

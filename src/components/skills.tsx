@@ -3,7 +3,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 
-import Heading from '@/components/heading';
 import TechStackIcon from '@/components/icons/tech-stack-icon';
 import { skillsData } from '@/data/skills';
 import { useSectionInView } from '@/hooks/useSectionInView';
@@ -32,7 +31,7 @@ export default function Skills() {
 
   return (
     <section ref={ref} className="scroll-mt-28 text-center" id={'skills'}>
-      <Heading size="sm">Skills</Heading>
+      <h2 >Skills</h2>
       <ul className="flex flex-wrap justify-center gap-2 text-lg text-gray-800 sm:gap-4">
         {skillsData.map((skill, index) => (
           <motion.li
