@@ -8,6 +8,7 @@ import Callout from '@/components/callout';
 import SocialIcon from '@/components/icons/social-icon';
 import TechStackIcon from '@/components/icons/tech-stack-icon';
 import Mdx from '@/components/mdx/mdx-components';
+import BackButton from '@/components/navigation/back-button';
 import { getAllProjectSlugs, getProjectBySlug } from '@/lib/content';
 import { TechStackIconName } from '@/models/data';
 import { ProjectData } from '@/models/project';
@@ -66,8 +67,11 @@ export default async function Page({ params }: { params: { slug: string } }) {
   }
 
   return (
-    <main className="">
+    <main className="relative">
+      <BackButton name="Portfolio" href="/portfolio" />
+
       <article className="space-y-8">
+        <h1 className="text-3xl font-bold md:text-4xl">{project.title}</h1>
 
         <section className="space-y-3 md:flex md:justify-between">
           <div className="flex items-center space-x-2 text-sm">
