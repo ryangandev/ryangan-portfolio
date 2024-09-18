@@ -141,7 +141,7 @@ export default async function Page({ params }: { params: { slug: string } }) {
           alt={project.title}
           width={0}
           height={0}
-          sizes="(max-width: 672px) 100%"
+          sizes="(max-width: 644px) 100%"
           className="h-auto w-full rounded-lg shadow-md"
           quality={95}
           priority
@@ -149,7 +149,7 @@ export default async function Page({ params }: { params: { slug: string } }) {
           blurDataURL="/blur.svg"
         />
 
-        <section className="prose max-w-none dark:prose-invert">
+        <section className="prose max-w-[644px] dark:prose-invert">
           <Mdx source={project.content} />
         </section>
       </article>

@@ -28,7 +28,7 @@ const CustomCode: React.FC<CustomCodeProps> = ({
           GeistMono.className,
           'relative text-[13px]',
           {
-            'max-h-[1115px] overflow-y-hidden': !expanded,
+            'max-h-[1132px] overflow-y-hidden': !expanded,
             'max-h-full overflow-y-auto': expanded,
           },
           className,
