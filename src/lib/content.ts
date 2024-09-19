@@ -43,7 +43,6 @@ export const getProjectBySlug = async (slug: string): Promise<ProjectData> => {
 };
 
 /**
- * Get all project metadata
  * @returns Array of project metadata for each project that are sorted by date from newest to oldest
  */
 export const getSortedProjects = async (): Promise<ProjectMetadata[]> => {
@@ -64,6 +63,29 @@ export const getSortedProjects = async (): Promise<ProjectMetadata[]> => {
   return projects.sort((a, b) =>
     new Date(a.date) > new Date(b.date) ? -1 : 1,
   );
+};
+
+/**
+ * @returns Array of project metadata  for each project that are sorted by date from newest to oldest
+ */
+export const getFeaturedProjects = async (): Promise<ProjectMetadata[]> => {
+  const slug = await getAllProjectSlugs();
+  const projects = await Promise.all(
+    slug.map(async (slug) => {
+      const fullPath = path.join(projectsDirectory, slug + '.mdx');
+      const fileContents = await fs.promises.readFile(fullPath, 'utf8');
+      const { data } = matter(fileContents);
+
+      return {
+        slug,
+        ...(data as Omit<ProjectMetadata, 'slug'>),
+      };
+    }),
+  );
+
+  return projects
+    .filter((project) => project.featured)
+    .sort((a, b) => (new Date(b.date) > new Date(a.date) ? -1 : 1));
 };
 
 /**

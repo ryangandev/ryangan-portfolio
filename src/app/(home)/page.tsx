@@ -1,22 +1,27 @@
+import { format } from 'date-fns';
+import Link from 'next/link';
+
 import { newsreader } from '@/assets/fonts';
 import AnimatedLink from '@/components/animated-link';
+import { getFeaturedProjects } from '@/lib/content';
 import { cn } from '@/lib/utils';
 
-export default function Home() {
+export default async function Home() {
+  const featuredProjects = await getFeaturedProjects();
+
   return (
     <main>
       <h1>Ryan (Zhiheng) Gan</h1>
 
-      <h2>Greeting</h2>
-      <p
-        className={cn(newsreader.className, 'text-[17.5px] font-medium italic')}
-      >
+      <h3 className={cn(newsreader.className, 'mb-7 text-[17.5px] italic')}>
         I am a user before a developer.
-      </p>
+      </h3>
       <p>
         I like to craft polished, user-centric software that brings satisfaction
         through every little detail.
       </p>
+
+      <h2>About Me</h2>
       <p className="mb-4">
         As a software engineer specializing in full-stack development with 2
         years of experience, my tech stack includes:
@@ -40,10 +45,28 @@ export default function Home() {
         Currently, I&apos;m exploring GraphQL.
       </p>
 
-      <h2>My Work</h2>
-      <p>
-        View all my projects <AnimatedLink href="/portfolio">here</AnimatedLink>
-        .
+      <h2>Featured Portfolio</h2>
+      <ul className="group mb-7 text-[15px]">
+        {featuredProjects.map((project) => (
+          <li
+            key={project.slug}
+            className="px-4 py-2 transition-opacity hover:!opacity-100 group-hover:opacity-60"
+          >
+            <Link
+              href={`/portfolio/${project.slug}`}
+              className="flex space-x-2.5"
+            >
+              <span className="color-level-2 font-medium">{project.title}</span>
+              <span className="color-level-4">{project.summary}</span>
+              <div className="my-auto h-px flex-1 bg-border/80"></div>
+              <span>{format(new Date(project.date), 'yyyy')}</span>
+            </Link>
+          </li>
+        ))}
+      </ul>
+      <p className="color-level-4">
+        These are some of my featured projects. View all my projects{' '}
+        <AnimatedLink href="/portfolio">here</AnimatedLink>.
       </p>
 
       <h2>Connect</h2>
@@ -70,16 +93,6 @@ export default function Home() {
           craft collection
         </AnimatedLink>
         .
-      </p>
-
-      <p className="color-level-5 mt-16">
-        Site rework is still under development. I am actively trying to fill it
-        out with more content. In the meantime, you can check out my previous
-        site{' '}
-        <AnimatedLink href="https://old.ryangan.me" isExternal>
-          here
-        </AnimatedLink>{' '}
-        if you&apos;d like.
       </p>
     </main>
   );
