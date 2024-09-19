@@ -26,12 +26,12 @@ const ProjectPreview: React.FC<ProjectPreviewProps> = ({
           'transition-transform hover:scale-[1.025]',
         )}
       >
-        <figure className="relative h-[197.5px]">
+        <figure className="relative h-[189.1px]">
           <Image
             src={project.thumbnailUrl}
             alt={project.title}
             fill
-            sizes="(max-width: 672px) 100%"
+            sizes="(max-width: 644px) 100%"
             className="rounded-lg object-cover"
             quality={95}
             priority
@@ -40,7 +40,7 @@ const ProjectPreview: React.FC<ProjectPreviewProps> = ({
           />
         </figure>
       </Link>
-      <h4 className="mt-3">
+      <h3 className="color-level-1 mt-1">
         <Link
           href={'/portfolio/' + project.slug}
           className={cn(
@@ -55,7 +55,7 @@ const ProjectPreview: React.FC<ProjectPreviewProps> = ({
             highlightedString={searchTerm}
           />
         </Link>
-      </h4>
+      </h3>
       <div className="mt-2 flex flex-wrap gap-2.5">
         {project.techStack.map((tech) => (
           <TechStackIcon
@@ -66,7 +66,7 @@ const ProjectPreview: React.FC<ProjectPreviewProps> = ({
           />
         ))}
       </div>
-      <p className="mt-3 text-gray-600 dark:text-gray-400">
+      <p className="color-level-4 mb-0 mt-3">
         <HighlightedText
           text={project.summary}
           highlightedString={searchTerm}

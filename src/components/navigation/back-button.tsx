@@ -14,7 +14,7 @@ export default function BackButton({ className, name, href }: BackButtonProps) {
     <Link
       href={href}
       className={cn(
-        'mb-10 flex items-center text-lg font-medium italic md:absolute md:-left-48',
+        'mb-8 flex items-center text-lg font-medium italic lg:absolute lg:-left-48',
         className,
       )}
     >

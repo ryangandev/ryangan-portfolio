@@ -63,59 +63,65 @@
   * {
     @apply border-border;
   }
+
+  html {
+    /* Scrollbar layout shift solution: https://stackoverflow.com/a/39289453 */
+    overflow-x: hidden;
+    margin-right: calc(-1 * (100vw - 100%));
+  }
+
   body {
     @apply bg-background leading-7 text-foreground;
   }
+
+  h1 {
+    @apply color-level-0 mb-7 whitespace-nowrap font-medium;
+  }
+
+  h2 {
+    @apply color-level-1 mb-7 mt-14 whitespace-nowrap font-medium;
+  }
+
+  h3 {
+    @apply color-level-2 whitespace-nowrap font-medium;
+  }
+
+  p {
+    @apply mb-7; /* Equal to line-height */
+  }
 }
 
-h1 {
-  @apply text-3xl font-bold capitalize md:text-4xl;
-}
-
-h2 {
-  @apply text-2xl font-bold md:text-3xl;
-}
-
-h3 {
-  @apply text-xl font-bold md:text-2xl;
-}
-
-h4 {
-  @apply text-xl font-bold;
-}
-
-h5 {
-  @apply text-lg font-semibold;
-}
-
-.color-level-1 {
+/* Page Heading */
+.color-level-0 {
   @apply text-neutral-950 dark:text-neutral-50;
 }
 
+/* Section Heading */
+.color-level-1 {
+  @apply text-neutral-900 dark:text-neutral-100;
+}
+
+/* Subsection Heading */
 .color-level-2 {
   @apply text-neutral-800 dark:text-neutral-200;
 }
 
+/* Basic Text */
 .color-level-3 {
   @apply text-neutral-700 dark:text-neutral-300;
 }
 
+/* Label Text */
 .color-level-4 {
   @apply text-neutral-600 dark:text-neutral-400;
 }
 
+/* Notice Text, Credits, Author, Copyright, Date */
 .color-level-5 {
-  @apply text-neutral-500;
+  @apply text-neutral-500 dark:text-neutral-500;
 }
 
+/* Disabled Text, unimportant text */
 .color-level-6 {
   @apply text-neutral-400 dark:text-neutral-600;
-}
-
-.block-heading {
-  @apply mb-7;
-}
-
-.block-paragraph {
-  @apply mb-12 md:mb-16;
 }

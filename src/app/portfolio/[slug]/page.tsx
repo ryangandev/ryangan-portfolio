@@ -137,7 +137,7 @@ export default async function Page({ params }: { params: { slug: string } }) {
         </section>
 
         <Callout>
-          <p className="font-medium italic">{project.summary}</p>
+          <p className="mb-0 font-medium italic">{project.summary}</p>
         </Callout>
 
         <Image
