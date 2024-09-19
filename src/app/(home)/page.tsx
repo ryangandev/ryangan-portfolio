@@ -32,7 +32,7 @@ export default function Home() {
         </li>
         <li>
           <span className="color-level-2 font-medium">Tools & Others</span>:
-          Git, Docker, Unity, Agile, AWS, Vercel
+          Git, Docker, Postman, Agile, AWS, Vercel
         </li>
       </ul>
       <p>
@@ -46,9 +46,9 @@ export default function Home() {
         .
       </p>
 
-      <h2>Let&apos;s Connect</h2>
+      <h2>Connect</h2>
       <p>
-        Reach me via email at{' '}
+        Reach me at{' '}
         <AnimatedLink href="mailto:ryangan.dev@gmail.com" isExternal>
           ryangan.dev@gmail.com
         </AnimatedLink>
