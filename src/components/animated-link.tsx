@@ -23,7 +23,7 @@ export default function AnimatedLink({
       {...props}
       target={isExternal ? '_blank' : '_self'}
       className={cn(
-        'group underline decoration-gray-400 underline-offset-4 transition-colors hover:decoration-gray-700 dark:decoration-gray-600 dark:hover:decoration-gray-300',
+        'group inline-block underline decoration-gray-400 underline-offset-4 transition-colors hover:decoration-gray-700 dark:decoration-gray-600 dark:hover:decoration-gray-300',
         // 'group no-underline',
         className,
       )}
