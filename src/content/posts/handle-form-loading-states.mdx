@@ -1,0 +1,361 @@
+---
+title: 'Handling Form Loading States in Next.js/React (2024)'
+author: 'Ryan Gan'
+publishedDate: '2024-06-23'
+featured: false
+summary: '5 Ways to Handle Form Loading States in Your Next.js/React App: From Basic to Advanced'
+topics: ['Forms', 'Hooks', 'Nextjs', 'React Hook Form', 'Form Submit']
+---
+
+When building forms in modern web applications, handling loading states effectively is crucial for providing a smooth user experience.
+
+In this article, I will cover five different methods to manage form loading states in a Next.js/React application and discuss their use cases and benefits with examples.
+
+This includes leveraging hooks like `useTransition`, `useFormStatus`, and `useActionState` to enhance your forms for better performance and user experience.
+
+## Method 1: Local Component State
+
+The first method is using local component state with `useState`. It is straightforward and works well for simple forms to provide immediate feedback.
+
+### Pros:
+
+- Easy to implement
+- No additional dependencies
+
+### Cons:
+
+- Extra `loading` and `setLoading` variables can lead to repetitive code
+- Difficult to manage with multiple forms in larger application
+
+### Use cases:
+
+- Ideal for applications with limited number of simple forms
+
+### Example:
+
+```tsx
+import { useState } from 'react';
+
+export default function MyForm() {
+  const [name, setName] = useState<string>('');
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+
+  const onSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    setIsLoading(true); // Loading state starts
+
+    try {
+      // Your Api call or server action here, simulating a server request below
+      await new Promise((resolve) => setTimeout(resolve, 2000));
+    } catch (error: any) {
+      // Your error handling logic here
+    } finally {
+      setIsLoading(false); // Loading state ends
+    }
+  };
+
+  return (
+    <form onSubmit={onSubmit}>
+      <input
+        type="text"
+        value={name}
+        onChange={(event) => setName(event.target.value)}
+        disabled={isLoading}
+      />
+      <button type="submit" disabled={isLoading}>
+        {isLoading ? 'Loading...' : 'Submit'}{' '}
+        {/*Could replace string with a spinner */}
+      </button>
+    </form>
+  );
+}
+```
+
+## Method 2: formState data in React Hook Form
+
+The second method is only available if you’re using [React Hook Form](https://react-hook-form.com/) for handling forms. I highly recommend using it for dealing with forms in React applications. It abstracts away the process of manually handling the state of each field, removes the unnecessary re-renders when there are changes in form values, and provides a comprehensive form state management solution out of the box.
+
+### Pros:
+
+- Reduces boilerplate code, simplifies state magamenet
+- Form state management out of the box, including `isSubmitting`, `isDirty`, `isValid`
+- Optimizes performance using uncontrolled components to reduce unnecessary re-renders
+
+### Cons:
+
+-May be challenging when integrating with some advanced React hooks like `useActionState` and `useFormStatus` as they require using form submission through `action` attribute instead of the `onSubmit` handler
+
+- Not the best solution for controlled components like Formik (This isn’t a con regarding form state handling, just React Hook Form as a form solution in general)
+
+### Use cases:
+
+- Suitable for almost any size of applications with any number of forms
+
+### Example:
+
+```tsx
+import { SubmitHandler, useForm } from 'react-hook-form';
+
+type Inputs = {
+  name: string;
+};
+
+export default function MyForm() {
+  const {
+    register,
+    handleSubmit,
+    formState: { isSubmitting, isDirty, isValid },
+  } = useForm<Inputs>();
+
+  const onSubmit: SubmitHandler<Inputs> = async (values: Inputs) => {
+    try {
+      // Your Api call or server action here, simulating a server request below
+      await new Promise((resolve) => setTimeout(resolve, 2000));
+    } catch (error) {
+      // Your error handling logic here
+    }
+  };
+
+  return (
+    <form onSubmit={handleSubmit(onSubmit)}>
+      <input type="text" {...register('name')} disabled={isSubmitting} />
+      <button type="submit" disabled={isSubmitting || !isDirty || !isValid}>
+        {isLoading ? 'Loading...' : 'Submit'}{' '}
+        {/*Could replace string with a spinner */}
+      </button>
+    </form>
+  );
+}
+```
+
+## Method 3: useTransition Hook
+
+The [`useTransition`](https://react.dev/reference/react/useTransition) hook is not specifically designed for handling form loading state, but it could be a great alternative when the form submission take longer. It ensures the UI remains responsive during these operations by allowing lower-priority updates to be deferred until high-priority tasks are completed.
+
+The `useTransition` hook does not take any parameters and returns an array containing an `isPending` flag and a `startTransition` function. The `isPending` flag indicates whether the transition is in progress, while the `startTransition` function allows you to mark a state update as a low-priority operation.
+
+### Pros:
+
+- Prevents UI blocking during longer form submission
+
+### Cons:
+
+- Overkill for simple forms and adds a layer of complexity
+
+### Use cases:
+
+- Ideal for forms where the submission might take a long time, such as file uploading, allowing users to interact with the UI while waiting
+
+### Example:
+
+In the example, we wrap the API call within the `startTransition` function. This ensures that the submission state is captured by the `isPending` flag. Additionally, a `console.log("Test log 2")` statement is added after the `startTransition` function call. This line will execute first because the operations inside `startTransition` are marked as lower priority, allowing higher priority updates to complete first.
+
+```tsx
+import { useState, useTransition } from 'react';
+
+export default function MyForm() {
+  const [name, setName] = useState<string>('');
+  const [isPending, startTransition] = useTransition();
+
+  const onSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+
+    try {
+      startTransition(async () => {
+        // Your Api call or server action here, simulating a server request below
+        await new Promise((resolve) => setTimeout(resolve, 2000)).then(() => {
+          console.log('Test log 1'); // This will be logged when the promise resolves
+        });
+      });
+      console.log('Test log 2'); // This will be logged first
+    } catch (error: any) {
+      // Your error handling logic here
+    }
+  };
+
+  return (
+    <form onSubmit={onSubmit}>
+      <input
+        type="text"
+        value={name}
+        onChange={(event) => setName(event.target.value)}
+        disabled={isPending}
+      />
+      <button type="submit" disabled={isPending}>
+        {isPending ? 'Loading...' : 'Submit'}{' '}
+        {/*Could replace string with a spinner */}
+      </button>
+    </form>
+  );
+}
+```
+
+<Callout>
+  Note: The hooks introduced in the following section are available only in
+  Next.js and the experimental version of React. The examples provided will be
+  part of a Next.js app.
+</Callout>
+
+## Method 4: useFormStatus Hook
+
+The [`useFormStatus`](https://react.dev/reference/react-dom/hooks/useFormStatus) hook is designed to provide status information about the last form submission. It can be used to display the submission state of the form, the data being submitted, the HTTP method, and the action function. These details are returned in a status object by the `useFormStatus` hook, as shown in the example below:
+
+```tsx
+const status = useFormStatus();
+const {
+  pending, // Form  submission state
+  data, // Form data being submitted
+  method, // HTTP method, defaults to 'GET' if using server action
+  action, // Action function being called
+} = status;
+```
+
+One important thing to note is that the `useFormStatus` hook must be defined within a child component of the `<form>` element. This child component can be nested within any form.
+
+### Pros:
+
+- Promotes reusability of form’s child components
+
+### Cons:
+
+- Limited scope as components that need to be at the same level as the parent `<form>` component won't have access to the state information
+
+### Use cases:
+
+- Ideal for applications with multiple forms sharing the same components where only the pending states are of interest
+
+### Example:
+
+```tsx
+'use client';
+
+import { useFormStatus } from 'react-dom';
+import { myFormAction } from '../actions/my-form-action';
+
+export default function MyApp() {
+  return (
+    <form action={myFormAction}>
+      <input type="text" name="title" />{' '}
+      {/*This input does not have access to pending state*/}
+      <MyFormElements />
+    </form>
+  );
+}
+
+function MyFormElements() {
+  const { pending } = useFormStatus();
+
+  return (
+    <div>
+      <input type="text" name="name" disabled={pending} />
+      <button type="submit" disabled={pending}>
+        {pending ? 'Loading...' : 'Submit'}{' '}
+        {/*Could replace string with a spinner */}
+      </button>
+    </div>
+  );
+}
+```
+
+## Method 5: useActionState Hook
+
+The [`useActionState`](https://react.dev/reference/react/useActionState) hook could be the most powerful tool for handling form submissions in a Next.js app. It allows you to attach state to an action, send it to the server, and receive a state with the action's response while having insight into the action's state.
+
+The hook takes two parameters: a server action and the initial state of that action. It returns an array of three values: the state received from the action’s response, the action function to be used in the form’s `action` attribute, and an `isPending` flag that captures the form's submission state. To complete the setup, the server action needs to accept `prevState` as the first parameter and include the state in its return value. Below is an example setup.
+
+```tsx
+// In form component
+export default function MyForm() {
+  const initialState: State = { message: '' };
+  const [state, formAction, isPending] = useActionState(
+    myFormAction,
+    initialState,
+  );
+  return; // Your form component here
+}
+
+// In server action
+export async function myFormAction(prevState: State, formData: FormData) {
+  // Server side logic
+  return {
+    // return the response's state
+  };
+}
+```
+
+### Pros:
+
+- Allows attaching state to an action
+- Keeps states at the top level, making them accessible by all components
+- Progressively enhanced, meaning form submission works even if JavaScript is disabled
+
+### Cons:
+
+- Might be harder to understand at initially
+- Potential redundant setup, useActionState enforces a initialState parameter in the initiation and a prevState parameter in the server action function that might not be used
+
+### Use cases:
+
+- Suitable for almost all scenarios if additional setup is not an issue.
+
+### Example:
+
+In this example, we attach an initial state object containing an empty message value and send it with the action. The `isPending` state is used to track the form submission status. When the server action is completed, it returns a state with the response containing a success message.
+
+```tsx
+'use client';
+
+import { useActionState } from 'react';
+import { myFormAction } from '../actions/my-form-action';
+
+type State = {
+  message: string;
+};
+
+export default function MyForm() {
+  const initialState: State = { message: '' };
+  const [state, formAction, isPending] = useActionState(
+    myFormAction,
+    initialState,
+  );
+
+  return (
+    <form action={formAction}>
+      <input type="text" name="name" disabled={isPending} />
+      <button type="submit" disabled={isPending}>
+        {isPending ? 'Loading...' : 'Submit'}{' '}
+        {/*Could replace string with a spinner */}
+      </button>
+
+      {/* Displaying the message from the action */}
+      <p>{state.message}</p>
+    </form>
+  );
+}
+```
+
+The server action looks like:
+
+```tsx
+'use server';
+
+type State = {
+  message: string;
+};
+
+// The parameter 'prevState' needs to be added
+export async function myFormAction(prevState: State, formData: FormData) {
+  // Simulating a server request
+  await new Promise((resolve) => setTimeout(resolve, 2000));
+
+  return {
+    message: 'Success!',
+  };
+}
+```
+
+## Lastly
+
+I hope this article helps you better understand form submission in Next.js/React applications. These insights are based on my previous experience working with forms. If you have any questions or notice any inaccuracies, please feel free to leave a comment!
+
+**Thanks for Reading and Happy Coding!**

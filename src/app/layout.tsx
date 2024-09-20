@@ -8,6 +8,7 @@ import { Toaster } from '@/components/ui/sonner';
 import { cn } from '@/lib/utils';
 import { AppProviders } from '@/providers/app-providers';
 import '@/styles/globals.css';
+import '@/assets/animations/loading.css';
 
 export const metadata: Metadata = {
   title: 'Ryan Gan | Software Engineer',
@@ -28,7 +29,7 @@ export default function RootLayout({
         )}
       >
         <AppProviders>
-          <div className="relative mx-auto flex max-w-[692px] flex-grow px-6 py-16 md:pt-32">
+          <div className="relative mx-auto w-full max-w-[692px] flex-grow px-6 py-16 md:pt-32">
             {children}
           </div>
           <SiteFooter />

@@ -118,10 +118,13 @@ export const getPostBySlug = async (slug: string): Promise<PostData> => {
 };
 
 /**
- * Get all post metadata
- * @returns Array of post metadata for each post that are sorted by date from newest to oldest
+ * Get all post metadata and unique sorted years
+ * @returns An object with an array of sorted posts metadata and an array of unique sorted years
  */
-export const getSortedPosts = async (): Promise<PostMetadata[]> => {
+export const getSortedPosts = async (): Promise<{
+  posts: PostMetadata[];
+  years: number[];
+}> => {
   const slugs = await getAllPostSlugs();
   const posts = await Promise.all(
     slugs.map(async (slug) => {
@@ -136,7 +139,14 @@ export const getSortedPosts = async (): Promise<PostMetadata[]> => {
     }),
   );
 
-  return posts.sort((a, b) =>
-    new Date(a.publishedDate) > new Date(b.publishedDate) ? -1 : 1,
+  const yearsSet: Set<number> = new Set(
+    posts.map((post) => new Date(post.publishedDate).getFullYear()),
   );
+
+  return {
+    posts: posts.sort((a, b) =>
+      new Date(a.publishedDate) > new Date(b.publishedDate) ? -1 : 1,
+    ),
+    years: Array.from(yearsSet).sort((a, b) => b - a),
+  };
 };
