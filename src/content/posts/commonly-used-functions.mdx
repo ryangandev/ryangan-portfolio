@@ -1,0 +1,107 @@
+---
+title: 'Commonly Used JavaScript Utility Functions'
+author: 'Ryan Gan'
+publishedDate: '2024-09-20'
+featured: false
+summary: 'In this post, I will introduce 9 JavaScript utility functions that are commonly used in modern JavaScript applications.'
+topics: ['JavaScript', 'Utility Functions']
+---
+
+## 1. Copy Text to Clipboard
+
+```javascript
+const copyToClipboard = (text) => navigator.clipboard.writeText(text);
+
+// example usage
+copyToClipboard('Hello, World!');
+```
+
+## 2. Get nth Day of the Year
+
+```javascript
+const getDayOfYear = (date) =>
+  Math.floor((date - new Date(date.getFullYear(), 0, 0)) / 1000 / 60 / 60 / 24);
+
+// example usage
+getDayOfYear(new Date(2024, 9, 20)); // 274
+```
+
+## 3. Remove Duplicates from an Array
+
+```javascript
+const removeDuplicates = (arr) =>
+  arr.filter((item, index) => arr.indexOf(item) === index);
+
+// example usage
+removeDuplicates([1, 2, 2, 3, 4, 4, 5]); // [1, 2, 3, 4, 5]
+```
+
+## 4. Select a Random Item from an Array
+
+```javascript
+const selectRandomItem = (arr) => arr[Math.floor(Math.random() * arr.length)];
+
+// example usage
+selectRandomItem([1, 2, 3, 4, 5]); // A random number between 1 and 5
+```
+
+## 5. Grayscale a RGB Color Value (Based on the luminance of the color)
+
+```javascript
+const grayScale = (r, g, b) => 0.2126 * r + 0.7152 * g + 0.0722 * b;
+
+// example usage
+grayScale(255, 255, 255);
+```
+
+## 6. Parse Query Parameters from a URL
+
+```javascript
+const parseQuery = (url) => {
+  q = {};
+
+  url.replace(/([^?&=]+)=([^&]*)/g, (_, key, value) => (
+    q[key] = value;
+  ));
+
+  return q;
+}
+
+// example usage
+parseQuery('https://example.com?foo=bar&baz=qux');
+// {foo: 'bar', baz: 'qux'}
+```
+
+## 7. Pick Keys from an Object
+
+```javascript
+const pick = (obj, ...keys) =>
+  Object.fromEntries(Object.entries(obj).filter(([key]) => keys.includes(key)));
+
+// example usage
+pick({ a: 1, b: 2, c: 3 }, 'a', 'c'); // {a: 1, c: 3}
+```
+
+## 8. Get a Random Hex Color
+
+```javascript
+const getRandomHexColor = () =>
+  '#' + Math.floor(Math.random() * * 0xffffff).toString(16).padEnd(6, '0');
+
+// example usage
+getRandomHexColor();
+```
+
+## 9. Remove Tag from HTML
+
+```javascript
+const removeTag = (fragment) =>
+  new DOMParser().parseFromString(fragment, 'text/html').body.textContent || '';
+
+// example usage
+removeTag('<p>Hello, World!</p>'); // 'Hello, World!'
+```
+
+Thank you for reading! I hope you found this helpful!
+
+**Happy coding!**
