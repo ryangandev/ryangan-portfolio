@@ -101,7 +101,11 @@ export default async function Page({ params }: { params: { slug: string } }) {
                 target="_blank"
                 className="flex items-center"
               >
-                <SocialIcon name="github" size={20} className="mr-1" />
+                <SocialIcon
+                  name="github"
+                  size={20}
+                  className="mr-1 flex-shrink-0"
+                />
                 <span className="text-blue-700 hover:underline dark:text-blue-400">
                   Repository
                 </span>
@@ -113,8 +117,12 @@ export default async function Page({ params }: { params: { slug: string } }) {
                 target="_blank"
                 className="flex items-center"
               >
-                <SocialIcon name="website" size={20} className="mr-1" />
-                <span className="text-blue-700 hover:underline dark:text-blue-400">
+                <SocialIcon
+                  name="website"
+                  size={20}
+                  className="mr-1 flex-shrink-0"
+                />
+                <span className="whitespace-nowrap text-blue-700 hover:underline dark:text-blue-400">
                   Live Demo
                 </span>
               </Link>

@@ -90,10 +90,11 @@ export default async function Page({ params }: { params: { slug: string } }) {
             </div>
           </div>
         </section>
-
-        <Callout>
-          <p className="mb-0 font-medium italic">{post.summary}</p>
-        </Callout>
+        {post.summary && (
+          <Callout>
+            <p className="mb-0 font-medium italic">{post.summary}</p>
+          </Callout>
+        )}
 
         <section className="prose max-w-[644px] dark:prose-invert">
           <Mdx source={post.content} />

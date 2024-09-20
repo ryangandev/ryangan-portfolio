@@ -33,7 +33,7 @@ The first method is using local component state with `useState`. It is straightf
 
 ### Example:
 
-```tsx
+```typescript
 import { useState } from 'react';
 
 export default function MyForm() {
@@ -93,7 +93,7 @@ The second method is only available if you’re using [React Hook Form](https://
 
 ### Example:
 
-```tsx
+```typescript
 import { SubmitHandler, useForm } from 'react-hook-form';
 
 type Inputs = {
@@ -150,7 +150,7 @@ The `useTransition` hook does not take any parameters and returns an array conta
 
 In the example, we wrap the API call within the `startTransition` function. This ensures that the submission state is captured by the `isPending` flag. Additionally, a `console.log("Test log 2")` statement is added after the `startTransition` function call. This line will execute first because the operations inside `startTransition` are marked as lower priority, allowing higher priority updates to complete first.
 
-```tsx
+```typescript
 import { useState, useTransition } from 'react';
 
 export default function MyForm() {
@@ -200,7 +200,7 @@ export default function MyForm() {
 
 The [`useFormStatus`](https://react.dev/reference/react-dom/hooks/useFormStatus) hook is designed to provide status information about the last form submission. It can be used to display the submission state of the form, the data being submitted, the HTTP method, and the action function. These details are returned in a status object by the `useFormStatus` hook, as shown in the example below:
 
-```tsx
+```typescript
 const status = useFormStatus();
 const {
   pending, // Form  submission state
@@ -226,7 +226,7 @@ One important thing to note is that the `useFormStatus` hook must be defined wit
 
 ### Example:
 
-```tsx
+```typescript
 'use client';
 
 import { useFormStatus } from 'react-dom';
@@ -263,7 +263,7 @@ The [`useActionState`](https://react.dev/reference/react/useActionState) hook co
 
 The hook takes two parameters: a server action and the initial state of that action. It returns an array of three values: the state received from the action’s response, the action function to be used in the form’s `action` attribute, and an `isPending` flag that captures the form's submission state. To complete the setup, the server action needs to accept `prevState` as the first parameter and include the state in its return value. Below is an example setup.
 
-```tsx
+```typescript
 // In form component
 export default function MyForm() {
   const initialState: State = { message: '' };
@@ -302,7 +302,7 @@ export async function myFormAction(prevState: State, formData: FormData) {
 
 In this example, we attach an initial state object containing an empty message value and send it with the action. The `isPending` state is used to track the form submission status. When the server action is completed, it returns a state with the response containing a success message.
 
-```tsx
+```typescript
 'use client';
 
 import { useActionState } from 'react';
@@ -336,7 +336,7 @@ export default function MyForm() {
 
 The server action looks like:
 
-```tsx
+```typescript
 'use server';
 
 type State = {

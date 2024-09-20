@@ -68,8 +68,8 @@ export default async function Home() {
           </li>
         ))}
       </ul>
-      <p className="color-level-4">
-        These are some of my featured projects. View all my projects{' '}
+      <p>
+        Above are some of my featured projects. View all my projects{' '}
         <AnimatedLink href="/portfolio">here</AnimatedLink>.
       </p>
 
