@@ -75,15 +75,15 @@
   }
 
   h1 {
-    @apply color-level-0 mb-7 whitespace-nowrap font-medium;
+    @apply color-level-0 mb-7 font-medium;
   }
 
   h2 {
-    @apply color-level-1 mb-7 mt-14 whitespace-nowrap font-medium;
+    @apply color-level-1 mb-7 mt-14 font-medium;
   }
 
   h3 {
-    @apply color-level-2 whitespace-nowrap font-medium;
+    @apply color-level-2 font-medium;
   }
 
   p {

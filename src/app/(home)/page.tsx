@@ -50,16 +50,20 @@ export default async function Home() {
         {featuredProjects.map((project) => (
           <li
             key={project.slug}
-            className="px-4 py-2 transition-opacity hover:!opacity-100 group-hover:opacity-60"
+            className="py-2 transition-opacity hover:!opacity-100 group-hover:opacity-60"
           >
             <Link
               href={`/portfolio/${project.slug}`}
               className="flex space-x-2.5"
             >
               <span className="color-level-2 font-medium">{project.title}</span>
-              <span className="color-level-4">{project.summary}</span>
+              <span className="color-level-4 hidden md:block">
+                {project.summary}
+              </span>
               <div className="my-auto h-px flex-1 bg-border/80"></div>
-              <span>{format(new Date(project.date), 'yyyy')}</span>
+              <span className="color-level-5">
+                {format(new Date(project.date), 'yyyy')}
+              </span>
             </Link>
           </li>
         ))}
@@ -69,22 +73,14 @@ export default async function Home() {
         <AnimatedLink href="/portfolio">here</AnimatedLink>.
       </p>
 
-      <h2>Connect</h2>
-      <p>
-        Reach me at{' '}
-        <AnimatedLink href="mailto:ryangan.dev@gmail.com" isExternal>
-          ryangan.dev@gmail.com
-        </AnimatedLink>
-        , or my contact form <AnimatedLink href="/contact">here</AnimatedLink>.
-      </p>
-
       <h2>More</h2>
       <p>
         You can view my{' '}
         <AnimatedLink href="/RyanG_resume.pdf" isExternal>
           resume
         </AnimatedLink>
-        , explore my source code on{' '}
+        , read my <AnimatedLink href="/blog">blogs</AnimatedLink>, explore my
+        source code on{' '}
         <AnimatedLink href="https://github.com/ryangandev" isExternal>
           GitHub
         </AnimatedLink>
@@ -93,6 +89,15 @@ export default async function Home() {
           craft collection
         </AnimatedLink>
         .
+      </p>
+
+      <h2>Connect</h2>
+      <p>
+        Reach me at{' '}
+        <AnimatedLink href="mailto:ryangan.dev@gmail.com" isExternal>
+          ryangan.dev@gmail.com
+        </AnimatedLink>
+        , or my contact form <AnimatedLink href="/contact">here</AnimatedLink>.
       </p>
     </main>
   );
