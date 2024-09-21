@@ -1,5 +1,6 @@
 import React from 'react';
-import Link, { LinkProps } from 'next/link';
+import { LinkProps } from 'next/link';
+import { Link } from 'next-view-transitions';
 import { LuArrowUpRight } from 'react-icons/lu';
 
 import { cn } from '@/lib/utils';

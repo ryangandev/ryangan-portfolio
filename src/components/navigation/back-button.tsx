@@ -1,4 +1,4 @@
-import Link from 'next/link';
+import { Link } from 'next-view-transitions';
 import { GoArrowUpLeft } from 'react-icons/go';
 
 import { cn } from '@/lib/utils';

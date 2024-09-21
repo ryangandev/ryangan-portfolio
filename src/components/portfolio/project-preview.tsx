@@ -1,6 +1,6 @@
 import React from 'react';
 import Image from 'next/image';
-import Link from 'next/link';
+import { Link } from 'next-view-transitions';
 
 import HighlightedText from '@/components/highlighted-text';
 import TechStackIcon from '@/components/icons/tech-stack-icon';

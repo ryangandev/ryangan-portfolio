@@ -1,6 +1,6 @@
 import { format } from 'date-fns';
 import { Metadata } from 'next';
-import Link from 'next/link';
+import { Link } from 'next-view-transitions';
 
 import PageSummary from '@/components/page-summary';
 import BackButton from '@/components/navigation/back-button';
