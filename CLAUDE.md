@@ -70,12 +70,26 @@ Uses Prisma v6 with PostgreSQL for:
 
 ### Migration Notes
 
-The project was recently migrated from Next.js 14 to 15 with the following key changes:
+The project was successfully migrated from Next.js 14 to 15 (August 2025) with the following key changes:
+
+#### Major Version Upgrades
+- **Next.js**: `14.2.13` → `15.5.0`
+- **React**: `18.3.1` → `19.1.1` 
+- **Prisma**: `5.19.1` → `6.0.1` (major version upgrade)
+- **ESLint**: `8.57.0` → `9.34.0` (major version upgrade)
+
+#### Breaking Changes & Code Updates
 - **Dynamic Route Params**: Now async in Next.js 15 - use `const { slug } = await params;`
 - **MDX Components**: Direct imports instead of `next/dynamic` with `ssr: false` in Server Components
-- **Dependencies**: All packages updated to latest compatible versions
 - **next-themes**: Import types directly from main package instead of `/dist/types`
 - **React Icons**: Some icons may need fallbacks if removed from newer versions
+- **ESLint Config**: Updated to use flat config format compatible with ESLint 9.x
+
+#### Dependencies Updated
+All packages updated to latest compatible versions including:
+- UI libraries (@radix-ui, framer-motion, react-hook-form)
+- Development tools (TypeScript, Prettier, Tailwind CSS)
+- Utility libraries (date-fns, zod, clsx)
 
 ### Styling
 
