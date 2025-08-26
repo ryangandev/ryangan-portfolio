@@ -42,9 +42,9 @@ export const generateStaticParams = async () => {
 export const generateMetadata = async ({
   params,
 }: {
-  params: { slug: string };
+  params: Promise<{ slug: string }>;
 }) => {
-  const { slug } = params;
+  const { slug } = await params;
   const project = await getProjectData(slug);
 
   if (!project) {
@@ -58,8 +58,8 @@ export const generateMetadata = async ({
   };
 };
 
-export default async function Page({ params }: { params: { slug: string } }) {
-  const { slug } = params;
+export default async function Page({ params }: { params: Promise<{ slug: string }> }) {
+  const { slug } = await params;
   const project = await getProjectData(slug);
 
   if (!project) {

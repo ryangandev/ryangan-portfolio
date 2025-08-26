@@ -26,12 +26,10 @@ import {
   SiVercel,
   SiAkamai,
   SiPython,
-  SiCsharp,
   SiRacket,
   SiExpress,
   SiGit,
   SiMysql,
-  SiMicrosoftsqlserver,
   SiMongodb,
   SiPrisma,
   SiPostman,
@@ -164,8 +162,15 @@ const TechStackIcon: React.FC<TechStackIconProps> = ({
         />
       );
     case 'csharp':
+      // Note: SiCsharp icon may not be available in current react-icons version
+      // Using generic code icon as fallback
       return (
-        <SiCsharp size={size} className={cn('text-[#239120]', className)} />
+        <span 
+          className={cn('font-bold text-[#239120] flex items-center justify-center', className)}
+          style={{ fontSize: size * 0.6, width: size, height: size }}
+        >
+          C#
+        </span>
       );
     case 'racket':
       return (
@@ -187,11 +192,15 @@ const TechStackIcon: React.FC<TechStackIconProps> = ({
         <SiMysql size={size} className={cn('text-[#4479A1]', className)} />
       );
     case 'sqlserver':
+      // Note: SiMicrosoftsqlserver icon may not be available in current react-icons version
+      // Using generic database icon as fallback
       return (
-        <SiMicrosoftsqlserver
-          size={size}
-          className={cn('text-[#CC2927]', className)}
-        />
+        <span 
+          className={cn('font-bold text-[#CC2927] flex items-center justify-center', className)}
+          style={{ fontSize: size * 0.4, width: size, height: size }}
+        >
+          SQL
+        </span>
       );
     case 'mongodb':
       return (
