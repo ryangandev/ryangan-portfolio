@@ -11,7 +11,7 @@ export default async function Home() {
 
   return (
     <main>
-      <h1>Ryan (Zhiheng) Gan</h1>
+      <h1>Zhiheng(Ryan) Gan</h1>
 
       <h3 className={cn(newsreader.className, 'mb-7 text-[17.5px] italic')}>
         I am a user before a developer.
@@ -23,13 +23,13 @@ export default async function Home() {
 
       <h2>About Me</h2>
       <p className="mb-4">
-        As a software engineer specializing in full-stack development with 2
+        As a software engineer specializing in full-stack development with 3
         years of experience, my tech stack includes:
       </p>
       <ul className="mb-7 list-inside list-disc space-y-2">
         <li>
           <span className="color-level-2 font-medium">Frontend</span>: React,
-          Next.js, TypeScript, Figma
+          Next.js, TypeScript, Redux
         </li>
         <li>
           <span className="color-level-2 font-medium">Backend</span>: Node.js,
@@ -37,7 +37,7 @@ export default async function Home() {
         </li>
         <li>
           <span className="color-level-2 font-medium">Tools & Others</span>:
-          Git, Docker, Postman, Agile, AWS, Vercel
+          CI/CD, Git, Docker, Postman, Agile, AWS, Vercel
         </li>
       </ul>
       <p>
@@ -76,7 +76,7 @@ export default async function Home() {
       <h2>More</h2>
       <p>
         You can view my{' '}
-        <AnimatedLink href="/RyanG_resume.pdf" isExternal>
+        <AnimatedLink href="/RyanGan_Resume.pdf" isExternal>
           resume
         </AnimatedLink>
         , read my <AnimatedLink href="/blog">blogs</AnimatedLink>, explore my
