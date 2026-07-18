@@ -10,7 +10,6 @@ import CustomCode from '@/components/mdx/custom-code';
 import CustomImage from '@/components/mdx/custom-image';
 import CustomLink from '@/components/mdx/custom-link';
 import CustomPre from '@/components/mdx/custom-pre';
-import '@/styles/mdx.css';
 
 type MdxProps = {
   source: MDXRemoteProps['source'];

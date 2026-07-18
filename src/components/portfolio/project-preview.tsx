@@ -40,7 +40,7 @@ const ProjectPreview: React.FC<ProjectPreviewProps> = ({
           />
         </figure>
       </Link>
-      <h3 className="color-level-1 mt-1">
+      <h3 className="mt-1 color-level-1">
         <Link
           href={'/portfolio/' + project.slug}
           className={cn(
@@ -62,11 +62,11 @@ const ProjectPreview: React.FC<ProjectPreviewProps> = ({
             key={tech}
             name={tech as TechStackIconName}
             size={16}
-            className="flex flex-shrink-0"
+            className="flex shrink-0"
           />
         ))}
       </div>
-      <p className="color-level-4 mb-0 mt-3">
+      <p className="mt-3 mb-0 color-level-4">
         <HighlightedText
           text={project.summary}
           highlightedString={searchTerm}

@@ -19,7 +19,7 @@ export const sendEmailAction = async (data: z.infer<typeof ContactSchema>) => {
     let errorMessages = '';
 
     validatedData.error.issues.forEach((issue) => {
-      errorMessages += issue.path[0] + ': ' + issue.message + '.\n';
+      errorMessages += String(issue.path[0]) + ': ' + issue.message + '.\n';
     });
 
     return {

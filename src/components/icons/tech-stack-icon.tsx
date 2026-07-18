@@ -22,7 +22,6 @@ import {
   SiSwift,
   SiRedux,
   SiSpringboot,
-  SiAdobephotoshop,
   SiVercel,
   SiAkamai,
   SiPython,
@@ -39,11 +38,15 @@ import {
   SiAutodeskmaya,
   SiPm2,
   SiTrello,
-  SiAdobeillustrator,
   SiCodesandbox,
   SiPhoton,
 } from 'react-icons/si';
-import { TbBrandReactNative, TbBrandOauth } from 'react-icons/tb';
+import {
+  TbBrandReactNative,
+  TbBrandOauth,
+  TbBrandAdobePhotoshop,
+  TbBrandAdobeIllustrator,
+} from 'react-icons/tb';
 
 import { cn } from '@/lib/utils';
 import { TechStackIconName } from '@/models/data';
@@ -165,8 +168,11 @@ const TechStackIcon: React.FC<TechStackIconProps> = ({
       // Note: SiCsharp icon may not be available in current react-icons version
       // Using generic code icon as fallback
       return (
-        <span 
-          className={cn('font-bold text-[#239120] flex items-center justify-center', className)}
+        <span
+          className={cn(
+            'flex items-center justify-center font-bold text-[#239120]',
+            className,
+          )}
           style={{ fontSize: size * 0.6, width: size, height: size }}
         >
           C#
@@ -195,8 +201,11 @@ const TechStackIcon: React.FC<TechStackIconProps> = ({
       // Note: SiMicrosoftsqlserver icon may not be available in current react-icons version
       // Using generic database icon as fallback
       return (
-        <span 
-          className={cn('font-bold text-[#CC2927] flex items-center justify-center', className)}
+        <span
+          className={cn(
+            'flex items-center justify-center font-bold text-[#CC2927]',
+            className,
+          )}
           style={{ fontSize: size * 0.4, width: size, height: size }}
         >
           SQL
@@ -219,14 +228,14 @@ const TechStackIcon: React.FC<TechStackIconProps> = ({
       );
     case 'adobeps':
       return (
-        <SiAdobephotoshop
+        <TbBrandAdobePhotoshop
           size={size}
           className={cn('text-blue-600 dark:text-blue-500', className)}
         />
       );
     case 'adobeai':
       return (
-        <SiAdobeillustrator
+        <TbBrandAdobeIllustrator
           size={size}
           className={cn('text-[#E65100] dark:text-[#FF9A00]', className)}
         />

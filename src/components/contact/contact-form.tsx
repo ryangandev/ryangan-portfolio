@@ -40,7 +40,7 @@ const ContactForm = () => {
       let errorMessages = '';
 
       validatedData.error.issues.forEach((issue) => {
-        errorMessages += issue.path[0] + ': ' + issue.message + '.\n';
+        errorMessages += String(issue.path[0]) + ': ' + issue.message + '.\n';
       });
 
       toast.error('Invalid Fields', {
@@ -70,7 +70,7 @@ const ContactForm = () => {
 
       // Reset form
       form.reset();
-    } catch (error) {
+    } catch {
       toast.error(serverError.message, {
         description: serverError.error,
       });

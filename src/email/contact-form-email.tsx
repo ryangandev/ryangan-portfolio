@@ -9,8 +9,9 @@ import {
   Preview,
   Section,
   Text,
-} from '@react-email/components';
-import { Tailwind } from '@react-email/tailwind';
+  Tailwind,
+  pixelBasedPreset,
+} from 'react-email';
 
 type ContactFormEmailProps = {
   message: string;
@@ -29,7 +30,12 @@ export default function ContactFormEmail({
       <Preview>
         A new message left by {senderName} from your portfolio site
       </Preview>
-      <Tailwind>
+      {/*
+        react-email bundles Tailwind v4, which emits `rem` units that most email
+        clients (notably Outlook) ignore. The pixel-based preset forces 16px
+        output so spacing survives the trip.
+      */}
+      <Tailwind config={{ presets: [pixelBasedPreset] }}>
         <Body className="bg-gray-100 text-black">
           <Container>
             <Section className="borderBlack my-10 rounded-md bg-white px-10 py-4">

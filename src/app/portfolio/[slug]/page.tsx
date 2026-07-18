@@ -58,7 +58,11 @@ export const generateMetadata = async ({
   };
 };
 
-export default async function Page({ params }: { params: Promise<{ slug: string }> }) {
+export default async function Page({
+  params,
+}: {
+  params: Promise<{ slug: string }>;
+}) {
   const { slug } = await params;
   const project = await getProjectData(slug);
 
@@ -101,11 +105,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
                 target="_blank"
                 className="flex items-center"
               >
-                <SocialIcon
-                  name="github"
-                  size={20}
-                  className="mr-1 flex-shrink-0"
-                />
+                <SocialIcon name="github" size={20} className="mr-1 shrink-0" />
                 <span className="text-blue-700 hover:underline dark:text-blue-400">
                   Repository
                 </span>
@@ -120,7 +120,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
                 <SocialIcon
                   name="website"
                   size={20}
-                  className="mr-1 flex-shrink-0"
+                  className="mr-1 shrink-0"
                 />
                 <span className="whitespace-nowrap text-blue-700 hover:underline dark:text-blue-400">
                   Live Demo
@@ -137,7 +137,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
               className="flex cursor-default items-center space-x-2"
             >
               <TechStackIcon name={tech as TechStackIconName} size={16} />
-              <span className="text-xs font-medium uppercase text-black dark:text-white">
+              <span className="text-xs font-medium text-black uppercase dark:text-white">
                 {tech}
               </span>
             </span>

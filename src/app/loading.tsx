@@ -1,5 +1,3 @@
-import '@/assets/animations/loading.css';
-
 export default function Loading() {
   return (
     <main className="flex flex-col items-center justify-center space-y-4">
