@@ -113,6 +113,50 @@ Migrated from Next.js 15 to 16 and Tailwind CSS 3 to 4 (July 2026).
   built. Prisma 7 also rejects `url` inside the datasource block. The schema is preserved in git
   history (see `prisma/schema.prisma` at commit `26c2405`) if the guestbook is revived.
 
+#### Post-migration verification (July 2026)
+
+The migrated build was diffed against a `650aaab` baseline (Next 15 / Tailwind 3)
+running side by side:
+
+- **Home page is pixel-identical** - same `scrollHeight` (4917), same box metrics,
+  and colors resolve to the same sRGB bytes. Tailwind v4 emits `lab()`/`oklab()`
+  notation instead of `rgb()`, which is a notation change only.
+- **Contact page differs by 8px total height.** Form controls are identical
+  (radius, border, shadow, height, colors). `space-y-4` is spacing-neutral: v3 put
+  `margin-top` on `* + *`, v4 puts `margin-bottom` on `:not(:last-child)`, and both
+  yield 3 x 16px gaps. The 8px comes from form `<label>` elements (inline boxes)
+  rendering 18px tall instead of 16px. Cosmetically invisible.
+- **Utility renames confirmed equivalent** by computed style: `shadow-xs` gives
+  `rgba(0,0,0,0.05) 0 1px 2px` (v3's `shadow-sm`), `backdrop-blur-sm` gives
+  `blur(8px)` (v3's `backdrop-blur`), and `bg-opacity-80`/`border-opacity-40`
+  convert to alpha 0.8/0.4 under slash syntax.
+- **`rounded-sm` was deliberately NOT renamed to `rounded-xs`.** The theme overrides
+  `--radius-sm` to `calc(var(--radius) - 4px)` = 4px; the v4 rename would have
+  silently produced the 2px default instead.
+- **The contact form's Resend path** was dry-run with the network stubbed: validation
+  short-circuits before any request, and a valid submission POSTs to
+  `api.resend.com/emails` with `replyTo` correctly serialized to `reply_to` and a
+  fully rendered HTML body. Actual delivery is untested - it needs a live API key.
+
+#### Known remaining advisories
+
+`pnpm audit` reports 16 transitive advisories (6 high / 8 moderate / 2 low), down
+from 66 pre-migration. **All are dev- or build-time only; none reach the browser
+bundle.** `minimatch` + `brace-expansion` and `flatted` come in via
+`eslint-config-next`'s plugins and ESLint's cache; `postcss@8.4.31` is vendored
+inside `next` itself. The only one touching real code is `js-yaml@3.x` via
+`gray-matter`, which parses this repo's own MDX frontmatter, not user input.
+They cannot be overridden safely - `gray-matter` needs js-yaml 3.x, and the ESLint
+plugins pin `minimatch@^3`. Revisit when those publish updates.
+
+#### Dead code
+
+`site-header.tsx`, `menubar.tsx`, `navigation/main-nav.tsx`,
+`navigation/mobile-main-nav.tsx` and `ui/dropdown-menu.tsx` are not reachable from
+any route - nothing renders `SiteHeader`. They were migrated to v4 and verified
+through a temporary harness, but consider deleting them if the header is not coming
+back.
+
 ### Styling
 
 - **Tailwind CSS v4** configured entirely in CSS via `@theme inline` — there is no `tailwind.config.ts`
