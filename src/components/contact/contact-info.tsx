@@ -59,13 +59,14 @@ const ContactInfo = () => {
         >
           <SocialIcon name="medium" />
         </Link>
-        <span
+        <button
+          type="button"
           aria-label="Copy discord id to clipboard"
           onClick={handleDiscordIdCopy}
-          className="cursor-pointer"
+          className="cursor-pointer rounded-sm focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-hidden"
         >
           <SocialIcon name="discord" />
-        </span>
+        </button>
       </div>
     </div>
   );
