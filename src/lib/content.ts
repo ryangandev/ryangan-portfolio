@@ -2,6 +2,7 @@ import fs from 'fs';
 import path from 'path';
 import matter from 'gray-matter';
 
+import { parseContentDate } from '@/lib/date';
 import { getReadingTime } from '@/lib/reading-time';
 import { PostData, PostMetadata } from '@/models/post';
 import { ProjectData, ProjectMetadata } from '@/models/project';
@@ -61,8 +62,9 @@ export const getSortedProjects = async (): Promise<ProjectMetadata[]> => {
     }),
   );
 
-  return projects.sort((a, b) =>
-    new Date(a.date) > new Date(b.date) ? -1 : 1,
+  return projects.sort(
+    (a, b) =>
+      parseContentDate(b.date).getTime() - parseContentDate(a.date).getTime(),
   );
 };
 
@@ -142,12 +144,14 @@ export const getSortedPosts = async (): Promise<{
   );
 
   const yearsSet: Set<number> = new Set(
-    posts.map((post) => new Date(post.publishedDate).getFullYear()),
+    posts.map((post) => parseContentDate(post.publishedDate).getFullYear()),
   );
 
   return {
-    posts: posts.sort((a, b) =>
-      new Date(a.publishedDate) > new Date(b.publishedDate) ? -1 : 1,
+    posts: posts.sort(
+      (a, b) =>
+        parseContentDate(b.publishedDate).getTime() -
+        parseContentDate(a.publishedDate).getTime(),
     ),
     years: Array.from(yearsSet).sort((a, b) => b - a),
   };

@@ -10,6 +10,7 @@ import TechStackIcon from '@/components/icons/tech-stack-icon';
 import Mdx from '@/components/mdx/mdx-components';
 import BackButton from '@/components/navigation/back-button';
 import { getAllProjectSlugs, getProjectBySlug } from '@/lib/content';
+import { parseContentDate } from '@/lib/date';
 import { TechStackIconName } from '@/models/data';
 import { ProjectData } from '@/models/project';
 
@@ -93,7 +94,7 @@ export default async function Page({
               <span className="font-medium">Ryan Gan</span>
               <span className="text-muted-foreground">
                 {project.role} /{' '}
-                {format(new Date(project.date), 'MMM dd, yyyy')}
+                {format(parseContentDate(project.date), 'MMM dd, yyyy')}
               </span>
             </div>
           </div>

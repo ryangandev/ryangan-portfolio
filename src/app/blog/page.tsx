@@ -5,6 +5,7 @@ import { Link } from 'next-view-transitions';
 import PageSummary from '@/components/page-summary';
 import BackButton from '@/components/navigation/back-button';
 import { getSortedPosts } from '@/lib/content';
+import { parseContentDate } from '@/lib/date';
 import { cn } from '@/lib/utils';
 
 export const metadata: Metadata = {
@@ -27,7 +28,8 @@ export default async function Page() {
           <ul key={year} className="group/section border-t">
             {posts
               .filter(
-                (post) => new Date(post.publishedDate).getFullYear() === year,
+                (post) =>
+                  parseContentDate(post.publishedDate).getFullYear() === year,
               )
               .map((post, index) => (
                 <li key={post.title}>
@@ -55,7 +57,7 @@ export default async function Page() {
                     >
                       <span className="color-level-1">{post.title}</span>
                       <span className="color-level-5 mx-2 text-sm">
-                        {format(post.publishedDate, 'MM/dd')}
+                        {format(parseContentDate(post.publishedDate), 'MM/dd')}
                       </span>
                     </div>
                   </Link>
