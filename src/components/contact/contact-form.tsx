@@ -28,6 +28,7 @@ const ContactForm = () => {
       senderName: '',
       senderEmail: '',
       message: '',
+      website: '',
     },
   });
 
@@ -124,6 +125,23 @@ const ContactForm = () => {
             </FormItem>
           )}
         />
+
+        {/*
+          Honeypot. Hidden with a wrapper rather than `type="hidden"` so a bot
+          reading the DOM still sees a fillable text input, and kept out of the
+          tab order and the accessibility tree so nobody using the form can
+          reach it by accident.
+        */}
+        <div className="hidden" aria-hidden="true">
+          <label htmlFor="website">Website</label>
+          <input
+            id="website"
+            type="text"
+            tabIndex={-1}
+            autoComplete="off"
+            {...form.register('website')}
+          />
+        </div>
 
         <Button
           type="submit"
