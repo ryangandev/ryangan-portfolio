@@ -114,7 +114,6 @@ export default async function Page({
               sizes="100vw"
               className="h-auto w-10 rounded-full"
               quality={95}
-              priority
             />
             <div className="flex flex-col">
               <span className="font-medium">Ryan Gan</span>

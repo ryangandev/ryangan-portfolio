@@ -26,11 +26,12 @@ const ProjectList: React.FC<ProjectListProps> = ({ projects }) => {
               project.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
               project.summary.toLowerCase().includes(searchTerm.toLowerCase()),
           )
-          .map((project) => (
+          .map((project, index) => (
             <ProjectPreview
               key={project.slug}
               project={project}
               searchTerm={searchTerm}
+              index={index}
             />
           ))}
       </div>

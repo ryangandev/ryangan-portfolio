@@ -11,12 +11,26 @@ import { ProjectMetadata } from '@/models/project';
 type ProjectPreviewProps = {
   project: ProjectMetadata;
   searchTerm?: string;
+  /** Position in the grid, used to decide whether the thumbnail is eager */
+  index?: number;
 };
+
+/**
+ * The grid is two columns, so only the first two cards can be above the fold on
+ * any realistic viewport. Marking every thumbnail `priority` — which is what
+ * this did — opts all of them out of lazy loading and emits a high-priority
+ * preload each, so the images nobody has scrolled to yet compete with the one
+ * that decides LCP.
+ */
+const EAGER_CARDS = 2;
 
 const ProjectPreview: React.FC<ProjectPreviewProps> = ({
   project,
   searchTerm = '',
+  index = 0,
 }) => {
+  const isAboveFold = index < EAGER_CARDS;
+
   return (
     <div className="group flex flex-col">
       <Link
@@ -34,7 +48,8 @@ const ProjectPreview: React.FC<ProjectPreviewProps> = ({
             sizes="(max-width: 644px) 100%"
             className="rounded-lg object-cover"
             quality={95}
-            priority
+            priority={isAboveFold}
+            loading={isAboveFold ? 'eager' : 'lazy'}
             placeholder="blur"
             blurDataURL="/blur.svg"
           />
