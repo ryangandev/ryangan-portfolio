@@ -4,12 +4,26 @@ import { Link } from 'next-view-transitions';
 
 import PageSummary from '@/components/page-summary';
 import BackButton from '@/components/navigation/back-button';
+import { siteName } from '@/data/site';
 import { getSortedPosts } from '@/lib/content';
 import { parseContentDate } from '@/lib/date';
 import { cn } from '@/lib/utils';
 
+const description =
+  'Insights and lessons from my journey in software development.';
+
 export const metadata: Metadata = {
   title: 'Blog - Ryan Gan',
+  description,
+  alternates: { canonical: '/blog' },
+  openGraph: {
+    title: 'Blog - Ryan Gan',
+    description,
+    url: '/blog',
+    siteName,
+    locale: 'en_US',
+    type: 'website',
+  },
 };
 
 export default async function Page() {
