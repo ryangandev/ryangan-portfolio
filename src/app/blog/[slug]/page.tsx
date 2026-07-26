@@ -1,5 +1,6 @@
 import React from 'react';
 import { format } from 'date-fns';
+import type { Metadata } from 'next';
 import Image from 'next/image';
 import { notFound } from 'next/navigation';
 
@@ -7,6 +8,7 @@ import ViewCounter from '@/components/blog/view-counter';
 import Callout from '@/components/callout';
 import Mdx from '@/components/mdx/mdx-components';
 import BackButton from '@/components/navigation/back-button';
+import { siteName } from '@/data/site';
 import { getAllPostSlugs, getPostBySlug } from '@/lib/content';
 import { parseContentDate } from '@/lib/date';
 import { PostData } from '@/models/post';
@@ -41,7 +43,7 @@ export const generateMetadata = async ({
   params,
 }: {
   params: Promise<{ slug: string }>;
-}) => {
+}): Promise<Metadata> => {
   const { slug } = await params;
   const post = await getPostData(slug);
 
@@ -51,8 +53,30 @@ export const generateMetadata = async ({
     };
   }
 
+  const url = `/blog/${post.slug}`;
+
   return {
     title: post.title + ' - Blog',
+    description: post.summary,
+    alternates: {
+      canonical: url,
+    },
+    openGraph: {
+      title: post.title,
+      description: post.summary,
+      url,
+      siteName,
+      locale: 'en_US',
+      type: 'article',
+      publishedTime: parseContentDate(post.publishedDate).toISOString(),
+      authors: [post.author],
+      tags: post.topics,
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: post.title,
+      description: post.summary,
+    },
   };
 };
 

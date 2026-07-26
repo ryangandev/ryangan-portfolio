@@ -6,30 +6,32 @@ import { Analytics } from '@vercel/analytics/next';
 import { geistSans } from '@/assets/fonts';
 import SiteFooter from '@/components/site-footer';
 import { Toaster } from '@/components/ui/sonner';
+import { siteDescription, siteName, siteTitle, siteUrl } from '@/data/site';
 import { cn } from '@/lib/utils';
 import { AppProviders } from '@/providers/app-providers';
 import '@/styles/globals.css';
 
-const title = 'Ryan Gan | Software Engineer';
-const description = 'My name is Ryan Gan and I am a Software Engineer.';
-
 export const metadata: Metadata = {
-  // Required for `opengraph-image.png` to resolve to an absolute URL.
-  metadataBase: new URL('https://ryangan.me'),
-  title,
-  description,
+  // Required for `opengraph-image.png` and every relative `openGraph.url` on a
+  // nested page to resolve to an absolute URL.
+  metadataBase: new URL(siteUrl),
+  title: siteTitle,
+  description: siteDescription,
+  alternates: {
+    canonical: '/',
+  },
   openGraph: {
-    title,
-    description,
+    title: siteTitle,
+    description: siteDescription,
     url: '/',
-    siteName: 'Ryan Gan',
+    siteName,
     locale: 'en_US',
     type: 'website',
   },
   twitter: {
     card: 'summary_large_image',
-    title,
-    description,
+    title: siteTitle,
+    description: siteDescription,
   },
 };
 

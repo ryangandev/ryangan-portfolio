@@ -1,5 +1,6 @@
 import React from 'react';
 import { format } from 'date-fns';
+import type { Metadata } from 'next';
 import Image from 'next/image';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
@@ -9,6 +10,7 @@ import SocialIcon from '@/components/icons/social-icon';
 import TechStackIcon from '@/components/icons/tech-stack-icon';
 import Mdx from '@/components/mdx/mdx-components';
 import BackButton from '@/components/navigation/back-button';
+import { siteName } from '@/data/site';
 import { getAllProjectSlugs, getProjectBySlug } from '@/lib/content';
 import { parseContentDate } from '@/lib/date';
 import { TechStackIconName } from '@/models/data';
@@ -44,7 +46,7 @@ export const generateMetadata = async ({
   params,
 }: {
   params: Promise<{ slug: string }>;
-}) => {
+}): Promise<Metadata> => {
   const { slug } = await params;
   const project = await getProjectData(slug);
 
@@ -54,8 +56,32 @@ export const generateMetadata = async ({
     };
   }
 
+  const url = `/portfolio/${project.slug}`;
+
   return {
     title: project.title + ' - Portfolio',
+    description: project.summary,
+    alternates: {
+      canonical: url,
+    },
+    openGraph: {
+      title: project.title,
+      description: project.summary,
+      url,
+      siteName,
+      locale: 'en_US',
+      type: 'article',
+      publishedTime: parseContentDate(project.date).toISOString(),
+      // The project's own thumbnail beats the site-wide card here — a link to a
+      // project should preview as that project.
+      images: [{ url: project.thumbnailUrl, alt: project.title }],
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: project.title,
+      description: project.summary,
+      images: [project.thumbnailUrl],
+    },
   };
 };
 
