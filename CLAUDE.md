@@ -41,12 +41,27 @@ since counting code as prose badly overstates a code-heavy post.
 
 Tailwind v4 is configured entirely in CSS — there is no `tailwind.config.ts`. The
 theme lives in `@theme inline` in `globals.css`, dark mode is a `@custom-variant`
-matching the `.dark` class next-themes sets, and `mdx.css` plus the loading
-animation are `@import`ed there rather than from components, because v4 `@apply`
-needs a shared context. `color-level-*` helpers are `@utility` rules.
+matching the `.dark` class next-themes sets, and `mdx.css` is `@import`ed there
+rather than from components, because v4 `@apply` needs a shared context.
+`color-level-*` helpers are `@utility` rules.
 
 Do not "modernize" `rounded-sm` to `rounded-xs`: the theme overrides `--radius-sm`
 to 4px, and the rename would silently fall back to the 2px default.
+
+## No loading.tsx, on purpose
+
+There is deliberately no root `loading.tsx`. Every route is Static or SSG and
+Links prefetch by default, so the RSC payload is already cached by the time a
+link is clicked — a loading boundary had nothing to fill on a normal navigation
+(measured: zero fallback renders across a real client-side transition). What it
+did do was render the fallback client-side whenever hydration ran slowly,
+flashing a full-page "Loading" screen mid-article at random. It also fought
+`next-view-transitions`, which cross-fades pages: animating into a loading
+screen and back out looks worse than not animating.
+
+If a genuinely slow route is ever added, give it a scoped `loading.tsx` in that
+segment rather than reinstating a global one, and prefer a top progress bar over
+a layout-replacing spinner.
 
 ## Post view counts
 

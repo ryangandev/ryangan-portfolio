@@ -1,7 +1,6 @@
 @import 'tailwindcss';
 @import 'tw-animate-css';
 @import './mdx.css';
-@import '../assets/animations/loading.css';
 
 @plugin '@tailwindcss/typography';
 
