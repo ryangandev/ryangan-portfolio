@@ -33,3 +33,6 @@ yarn-error.log*
 
 # lock files
 *.yaml
+
+# prisma generated client
+/src/generated/

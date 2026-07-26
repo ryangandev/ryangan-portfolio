@@ -2,6 +2,7 @@ import fs from 'fs';
 import path from 'path';
 import matter from 'gray-matter';
 
+import { getReadingTime } from '@/lib/reading-time';
 import { PostData, PostMetadata } from '@/models/post';
 import { ProjectData, ProjectMetadata } from '@/models/project';
 
@@ -114,6 +115,7 @@ export const getPostBySlug = async (slug: string): Promise<PostData> => {
     slug,
     ...(data as Omit<PostMetadata, 'slug'>),
     content,
+    readingTime: getReadingTime(content),
   };
 };
 

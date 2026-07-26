@@ -1,0 +1,102 @@
+// Prisma 7: the connection URL lives in `prisma.config.ts`, not here, and the
+// client is generated to an explicit path rather than into node_modules.
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+// ---------------------------------------------------------------------------
+// Post views
+// ---------------------------------------------------------------------------
+
+/// Running view total per post. `slug` is the primary key so a view is a single
+/// atomic upsert with no lookup first.
+model PostView {
+  slug      String   @id
+  count     Int      @default(0)
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@map("post_views")
+}
+
+/// One row per (browser session, post), used to keep a reload from counting
+/// twice. Sessions rather than IP addresses: an IP is personal data, is shared
+/// by everyone behind a NAT or campus network, and changes as people move
+/// between networks, so it both over- and under-counts.
+///
+/// The composite primary key is what enforces the dedup — the insert is an
+/// `ON CONFLICT DO NOTHING`, and whether it wrote a row is what decides if the
+/// total gets incremented.
+model PostViewSession {
+  sessionId String   @map("session_id")
+  slug      String
+  viewedAt  DateTime @default(now()) @map("viewed_at")
+
+  @@id([sessionId, slug])
+  @@index([viewedAt])
+  @@map("post_view_sessions")
+}
+
+// ---------------------------------------------------------------------------
+// Auth.js (NextAuth) adapter tables
+//
+// These already exist in the Neon database and hold live rows. They are kept
+// in the schema so `prisma db push` reconciles against them instead of
+// dropping them. There is no Session model because the intended setup is JWT
+// sessions, which only need User and Account.
+// ---------------------------------------------------------------------------
+
+enum UserRole {
+  USER
+  ADMIN
+}
+
+model User {
+  id            String    @id @default(cuid())
+  name          String?
+  email         String    @unique
+  emailVerified DateTime? @map("email_verified")
+  image         String?
+  role          UserRole  @default(USER)
+  createdAt     DateTime  @default(now()) @map("created_at")
+  updatedAt     DateTime  @updatedAt @map("updated_at")
+
+  accounts Account[]
+
+  @@map("users")
+}
+
+model Account {
+  id                String  @id @default(cuid())
+  userId            String  @map("user_id")
+  type              String
+  provider          String
+  providerAccountId String  @map("provider_account_id")
+  refresh_token     String? @db.Text
+  access_token      String? @db.Text
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String? @db.Text
+  session_state     String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+  @@map("accounts")
+}
+
+/// Never-built guestbook feature. Empty, but kept so `db push` does not drop
+/// the table out from under you; safe to delete once you have decided against
+/// reviving it.
+model GuestbookNote {
+  id        String   @id @default(cuid())
+  text      String   @db.Text
+  createdAt DateTime @default(now()) @map("created_at")
+
+  @@map("guestbook_notes")
+}

@@ -3,6 +3,7 @@ import { format } from 'date-fns';
 import Image from 'next/image';
 import { notFound } from 'next/navigation';
 
+import ViewCounter from '@/components/blog/view-counter';
 import Callout from '@/components/callout';
 import Mdx from '@/components/mdx/mdx-components';
 import BackButton from '@/components/navigation/back-button';
@@ -54,14 +55,18 @@ export const generateMetadata = async ({
   };
 };
 
-export default async function Page({ params }: { params: Promise<{ slug: string }> }) {
+export default async function Page({
+  params,
+}: {
+  params: Promise<{ slug: string }>;
+}) {
   const { slug } = await params;
   const post = await getPostData(slug);
 
   if (!post) {
     notFound();
   }
-  console.log('post', post.publishedDate);
+
   return (
     <main className="relative">
       <BackButton name="Blog" href="/blog" />
@@ -69,8 +74,8 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
       <article className="space-y-8">
         <h1 className="text-3xl font-bold md:text-4xl">{post.title}</h1>
 
-        <section className="space-y-3 md:flex md:justify-between">
-          <div className="flex items-center space-x-2 text-sm">
+        <section className="space-y-3 text-sm md:flex md:items-center md:justify-between">
+          <div className="flex items-center space-x-2">
             <Image
               src="https://ik.imagekit.io/ryangan/profile-icon.jpeg?updatedAt=1718985313938"
               alt="Ryan Gan"
@@ -88,6 +93,11 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
                 {format(new Date(post.publishedDate), 'MMM dd, yyyy')}
               </span>
             </div>
+          </div>
+
+          <div className="flex items-center gap-1.5 text-muted-foreground">
+            <span>{post.readingTime} min read</span>
+            <ViewCounter slug={post.slug} />
           </div>
         </section>
         {post.summary && (

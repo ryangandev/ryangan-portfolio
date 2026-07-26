@@ -10,6 +10,6 @@ export type PostMetadata = {
 
 export type PostData = PostMetadata & {
   content: string;
-  views?: number;
-  est_read_time?: string;
+  /** Estimated minutes to read, derived from `content` */
+  readingTime: number;
 };
