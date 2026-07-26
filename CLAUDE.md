@@ -91,7 +91,11 @@ Older Prisma recipes do not apply here:
 
 - The connection URL is **not** in `schema.prisma` — it is in `prisma.config.ts`,
   pointed at `DATABASE_URL_UNPOOLED`, because migrations take advisory locks that
-  do not survive a transaction pooler.
+  do not survive a transaction pooler. That config resolves `env()` **eagerly**,
+  even for `prisma generate`, which never connects — so a deploy setting only
+  `DATABASE_URL` would fail at the `postinstall` generate step. Hence the
+  fallback to `DATABASE_URL`, which keeps production down to one variable.
+  Runtime reads only `DATABASE_URL`; `DATABASE_URL_UNPOOLED` is CLI-only.
 - The generator is `prisma-client` (not `prisma-client-js`) and requires an
   explicit `output`.
 - Every database needs a driver adapter; `src/lib/db.ts` uses `PrismaNeon` against
