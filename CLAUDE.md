@@ -63,6 +63,47 @@ The site uses a file-based content system with MDX files:
 - **MDX Components**: Custom components for enhanced MDX rendering
 - **Provider Pattern**: Context providers for theme, navigation state, and active sections
 
+### Brand Mark & Icons
+
+The icon is the letter **R** from **Geist SemiBold** — the same typeface the site is
+set in — knocked out of a monochrome squircle. It replaced a calligraphic script
+"RG" mark (July 2026) that predated the site's current minimalist direction.
+
+Geometry, normalised to a `100x100` box and identical across every asset:
+
+- tile — full-bleed rounded square, corner radius `24`
+- glyph — ink bounding box `56` tall, centred on `(50, 50)`
+
+The glyph is shipped as **outlines, not text**, so nothing depends on the font
+loading. The path lives in two places and they must stay in sync: `src/app/icon.svg`
+and `R_PATH` in `src/components/logo.tsx`. To regenerate it, extract the `R` from
+`node_modules/geist/dist/fonts/geist-sans/Geist-SemiBold.ttf` with `fontTools`.
+
+Assets, all generated from that one glyph:
+
+| File | Notes |
+| --- | --- |
+| `src/app/icon.svg` | Theme-adaptive via `prefers-color-scheme`. Preferred by modern browsers. |
+| `src/app/favicon.ico` | 16/32/48/64/128/256, each frame rendered natively rather than downscaled. Fallback. |
+| `src/app/apple-icon.png` | 180x180, full-bleed **square** with no alpha — iOS applies its own mask. |
+| `src/app/opengraph-image.png` | 1200x630. Auto-wired by Next; needs `metadataBase` in `layout.tsx` to resolve absolutely. |
+| `public/icon-{192,512}.png` | Rounded, `purpose: 'any'`, referenced from `src/app/manifest.ts`. |
+| `public/icon-maskable-512.png` | Full-bleed, glyph shrunk to `0.40` so it survives Android's 80% safe-zone crop. |
+
+Two things that are easy to get wrong:
+
+- **Knockout letters need more weight than positive ones.** Irradiation makes
+  white-on-dark read thinner, so the mark uses SemiBold even though headings use
+  Medium. Medium looks visibly under-weight once knocked out.
+- **Pillow drops any ICO frame larger than the base image.** The `.ico` must be
+  saved from the 256px frame with the smaller ones passed via `append_images`, or
+  you silently ship a single 16px frame.
+
+`Logo` (`src/components/logo.tsx`) renders the mark two ways, both painting with
+`currentColor` so they invert with the theme on their own: `variant="tile"` (the
+squircle, knocked out with `fill-rule="evenodd"`) and `variant="mark"` (the bare
+letterform, currently used in `site-footer.tsx`).
+
 ### Migration Notes
 
 Migrated from Next.js 15 to 16 and Tailwind CSS 3 to 4 (July 2026).
@@ -94,7 +135,9 @@ Migrated from Next.js 15 to 16 and Tailwind CSS 3 to 4 (July 2026).
 - **`scroll-behavior`**: Next 16 only neutralizes smooth scrolling during navigation when
   `data-scroll-behavior="smooth"` is on `<html>`; added in `app/layout.tsx`.
 - **Turbopack asset strictness**: `favicon.ico` contained a grayscale+alpha (`LA`) PNG frame that
-  Turbopack refuses to decode. All 9 frames were re-encoded as RGBA.
+  Turbopack refuses to decode. All 9 frames were re-encoded as RGBA. (Historical — that
+  favicon has since been replaced entirely; see Brand Mark & Icons above. The RGBA
+  constraint still applies to any future frame.)
 - **Tailwind v4**: `tailwind.config.ts` deleted; theme now lives in `@theme inline` in
   `src/styles/globals.css`. The `color-level-*` helpers became `@utility` rules so `@apply` still
   works. `mdx.css` and `loading.css` are now `@import`ed from `globals.css` rather than imported

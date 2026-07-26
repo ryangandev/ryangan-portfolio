@@ -10,9 +10,27 @@ import { cn } from '@/lib/utils';
 import { AppProviders } from '@/providers/app-providers';
 import '@/styles/globals.css';
 
+const title = 'Ryan Gan | Software Engineer';
+const description = 'My name is Ryan Gan and I am a Software Engineer.';
+
 export const metadata: Metadata = {
-  title: 'Ryan Gan | Software Engineer',
-  description: 'My name is Ryan Gan and I am a Software Engineer.',
+  // Required for `opengraph-image.png` to resolve to an absolute URL.
+  metadataBase: new URL('https://ryangan.me'),
+  title,
+  description,
+  openGraph: {
+    title,
+    description,
+    url: '/',
+    siteName: 'Ryan Gan',
+    locale: 'en_US',
+    type: 'website',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title,
+    description,
+  },
 };
 
 export default function RootLayout({
