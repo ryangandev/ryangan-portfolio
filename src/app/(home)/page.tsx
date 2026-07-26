@@ -4,6 +4,7 @@ import { Link } from 'next-view-transitions';
 import { newsreader } from '@/assets/fonts';
 import AnimatedLink from '@/components/animated-link';
 import { getFeaturedProjects } from '@/lib/content';
+import { parseContentDate } from '@/lib/date';
 import { cn } from '@/lib/utils';
 
 export default async function Home() {
@@ -62,7 +63,7 @@ export default async function Home() {
               </span>
               <div className="my-auto h-px flex-1 bg-border/80"></div>
               <span className="color-level-5">
-                {format(new Date(project.date), 'yyyy')}
+                {format(parseContentDate(project.date), 'yyyy')}
               </span>
             </Link>
           </li>

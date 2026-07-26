@@ -8,6 +8,7 @@ import Callout from '@/components/callout';
 import Mdx from '@/components/mdx/mdx-components';
 import BackButton from '@/components/navigation/back-button';
 import { getAllPostSlugs, getPostBySlug } from '@/lib/content';
+import { parseContentDate } from '@/lib/date';
 import { PostData } from '@/models/post';
 
 /**
@@ -90,7 +91,7 @@ export default async function Page({
               <span className="font-medium">{post.author}</span>
               <span className="text-muted-foreground">
                 Published on{' '}
-                {format(new Date(post.publishedDate), 'MMM dd, yyyy')}
+                {format(parseContentDate(post.publishedDate), 'MMM dd, yyyy')}
               </span>
             </div>
           </div>
