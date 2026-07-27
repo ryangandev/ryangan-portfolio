@@ -120,9 +120,21 @@
   }
 
   html {
-    /* Scrollbar layout shift solution: https://stackoverflow.com/a/39289453 */
-    overflow-x: hidden;
-    margin-right: calc(-1 * (100vw - 100%));
+    /*
+      Reserve the scrollbar gutter on every page, so moving between a short
+      page and a scrolling one does not shift the content sideways.
+
+      This replaces an `overflow-x: hidden` plus negative-margin hack from
+      before the property existed. That hack cost more than it looked: any
+      `overflow` other than `visible` on an ancestor silently disables
+      `position: sticky` inside it, and the negative margin has to be undone by
+      hand anywhere `100vw` is used. Browsers without `scrollbar-gutter`
+      (Safari below 18.2) simply do not reserve the space — the same layout
+      shift the hack was for, and a non-issue on the platforms where those
+      versions run, since macOS and iOS default to overlay scrollbars that
+      take no layout space at all.
+    */
+    scrollbar-gutter: stable;
   }
 
   body {

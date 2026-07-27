@@ -10,13 +10,13 @@ This is my portfolio and blog site that showcases my work and projects, built wi
 
 ### ⚡ Tech Stack
 
-- **Next.js 15** with App Router
-- **React 19** with latest features  
-- **TypeScript** with strict mode
-- **Tailwind CSS** with shadcn/ui components
-- **Prisma v6** with PostgreSQL
+- **Next.js 16** with App Router and Turbopack
+- **React 19** with latest features
+- **TypeScript 6** with strict mode
+- **Tailwind CSS v4** with shadcn/ui components
+- **Prisma 7** with Neon Postgres
 - **MDX** for blog posts and project content
-- **Framer Motion** for animations
+- **Resend** for the contact form
 - **Vercel Analytics** for insights
 
 ## 📢 Feedback
