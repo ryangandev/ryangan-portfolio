@@ -52,12 +52,12 @@ export default async function Page() {
                     className={cn(
                       'group/item relative flex py-3',
                       index !== 0 &&
-                        "after:absolute after:left-[70px] after:right-0 after:top-0 after:h-px after:bg-border after:content-[''] md:after:left-[160px]",
+                        "after:absolute after:top-0 after:right-0 after:left-[70px] after:h-px after:bg-border after:content-[''] md:after:left-[160px]",
                     )}
                   >
                     <span
                       className={cn(
-                        'color-level-5 absolute',
+                        'absolute color-level-5',
                         'transition-colors group-hover/section:text-neutral-900 dark:group-hover/section:text-neutral-100',
                       )}
                     >
@@ -66,11 +66,11 @@ export default async function Page() {
                     <div
                       className={cn(
                         'ml-[70px] flex w-full items-center justify-between transition-opacity md:ml-[160px]',
-                        'group-hover/item:!opacity-100 group-hover:opacity-50',
+                        'group-hover:opacity-50 group-hover/item:!opacity-100',
                       )}
                     >
                       <span className="color-level-1">{post.title}</span>
-                      <span className="color-level-5 mx-2 text-sm">
+                      <span className="mx-2 text-sm color-level-5">
                         {format(parseContentDate(post.publishedDate), 'MM/dd')}
                       </span>
                     </div>

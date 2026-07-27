@@ -29,15 +29,15 @@ export default async function Home() {
       </p>
       <ul className="mb-7 list-inside list-disc space-y-2">
         <li>
-          <span className="color-level-2 font-medium">Frontend</span>: React,
+          <span className="font-medium color-level-2">Frontend</span>: React,
           Next.js, TypeScript, Redux
         </li>
         <li>
-          <span className="color-level-2 font-medium">Backend</span>: Node.js,
+          <span className="font-medium color-level-2">Backend</span>: Node.js,
           SpringBoot, Java, PostgreSQL, MongoDB, Prisma
         </li>
         <li>
-          <span className="color-level-2 font-medium">Tools & Others</span>:
+          <span className="font-medium color-level-2">Tools & Others</span>:
           CI/CD, Git, Docker, Postman, Agile, AWS, Vercel
         </li>
       </ul>
@@ -51,14 +51,14 @@ export default async function Home() {
         {featuredProjects.map((project) => (
           <li
             key={project.slug}
-            className="py-2 transition-opacity hover:!opacity-100 group-hover:opacity-60"
+            className="py-2 transition-opacity group-hover:opacity-60 hover:!opacity-100"
           >
             <Link
               href={`/portfolio/${project.slug}`}
               className="flex space-x-2.5"
             >
-              <span className="color-level-2 font-medium">{project.title}</span>
-              <span className="color-level-4 hidden md:block">
+              <span className="font-medium color-level-2">{project.title}</span>
+              <span className="hidden color-level-4 md:block">
                 {project.summary}
               </span>
               <div className="my-auto h-px flex-1 bg-border/80"></div>
