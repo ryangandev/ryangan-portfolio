@@ -20,7 +20,7 @@ export const getPostViews = async (slug: string): Promise<number | null> => {
 
     return post?.count ?? 0;
   } catch (error) {
-    console.log('Post view read error: ', error);
+    console.error('Post view read error: ', error);
     return null;
   }
 };
@@ -59,7 +59,7 @@ export const recordPostView = async (
 
     return post.count;
   } catch (error) {
-    console.log('Post view write error: ', error);
+    console.error('Post view write error: ', error);
     return null;
   }
 };

@@ -79,7 +79,7 @@ export const sendEmailAction = async (data: z.infer<typeof ContactSchema>) => {
     });
 
     if (result.error) {
-      console.log('Resend response error: ', result.error);
+      console.error('Resend response error: ', result.error);
       // Return a general server error message to replace resend result error
       return serverError;
     }
@@ -90,7 +90,7 @@ export const sendEmailAction = async (data: z.infer<typeof ContactSchema>) => {
       message: 'Message sent successfully',
     };
   } catch (error) {
-    console.log('Resend api call error: ', error);
+    console.error('Resend api call error: ', error);
     // Return a general server error message for resend api call error
     return serverError;
   }
