@@ -26,7 +26,7 @@ const CustomLink: React.FC<CustomLinkProps> = ({
     >
       {children}
       <LuArrowUpRight
-        className="inline-block text-gray-400 transition-all group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:text-gray-700 dark:text-[#3b3b3b] dark:group-hover:text-gray-300"
+        className="inline-block text-gray-400 transition-all group-hover:translate-x-0.5 group-hover:-translate-y-0.5 group-hover:text-gray-700 dark:text-[#3b3b3b] dark:group-hover:text-gray-300"
         size={16}
       />
     </Link>

@@ -13,7 +13,7 @@ type SearchProps = {
 const Search = ({ placeholder, setSearchTerm, className }: SearchProps) => {
   return (
     <div className={cn('relative', className)}>
-      <MagnifyingGlassIcon className="absolute left-3 top-1/2 h-5 w-5 -translate-y-1/2 text-gray-500" />
+      <MagnifyingGlassIcon className="absolute top-1/2 left-3 h-5 w-5 -translate-y-1/2 text-gray-500" />
       <Input
         className="pl-10"
         placeholder={placeholder || 'Search...'}

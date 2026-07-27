@@ -24,7 +24,7 @@ export default function AnimatedLink({
       {...props}
       target={isExternal ? '_blank' : '_self'}
       className={cn(
-        'color-level-2 group inline-block font-medium underline decoration-gray-400 underline-offset-4 transition-colors hover:decoration-gray-700 dark:decoration-gray-600 dark:hover:decoration-gray-300',
+        'group inline-block font-medium color-level-2 underline decoration-gray-400 underline-offset-4 transition-colors hover:decoration-gray-700 dark:decoration-gray-600 dark:hover:decoration-gray-300',
         // 'group no-underline',
         className,
       )}
@@ -39,7 +39,7 @@ export default function AnimatedLink({
       {isExternal && (
         <LuArrowUpRight
           className={cn(
-            'inline-block text-gray-400 transition-all group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:text-gray-700 dark:text-gray-600 dark:group-hover:text-gray-300',
+            'inline-block text-gray-400 transition-all group-hover:translate-x-0.5 group-hover:-translate-y-0.5 group-hover:text-gray-700 dark:text-gray-600 dark:group-hover:text-gray-300',
             iconClassName,
           )}
           size={16}
