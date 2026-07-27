@@ -15,6 +15,7 @@ import {
   FormField,
   FormItem,
   FormLabel,
+  FormMessage,
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
@@ -32,28 +33,13 @@ const ContactForm = () => {
     },
   });
 
+  // `zodResolver` runs the schema before `handleSubmit` calls this, so
+  // `values` is already valid — there is nothing left to check here. The
+  // server validates independently, which is the check that actually matters,
+  // since a server action is reachable without going through this form.
   const onSubmit = async (values: z.infer<typeof ContactSchema>) => {
-    // Client-side validation
-    const validatedData = ContactSchema.safeParse(values);
-
-    // If data is invalid, return error toast
-    if (!validatedData.success) {
-      let errorMessages = '';
-
-      validatedData.error.issues.forEach((issue) => {
-        errorMessages += String(issue.path[0]) + ': ' + issue.message + '.\n';
-      });
-
-      toast.error('Invalid Fields', {
-        description: errorMessages,
-      });
-
-      return;
-    }
-
-    // Send email
     try {
-      const response = await sendEmailAction(validatedData.data);
+      const response = await sendEmailAction(values);
 
       // If error, show error toast
       if (response.error) {
@@ -86,10 +72,11 @@ const ContactForm = () => {
           name="senderName"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>{`Name ${form.formState.errors.senderName ? `- ${form.formState.errors.senderName.message}` : ''}`}</FormLabel>
+              <FormLabel>Name</FormLabel>
               <FormControl>
                 <Input placeholder="Your name" {...field} />
               </FormControl>
+              <FormMessage />
             </FormItem>
           )}
         />
@@ -99,7 +86,7 @@ const ContactForm = () => {
           name="senderEmail"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>{`Email ${form.formState.errors.senderEmail ? `- ${form.formState.errors.senderEmail.message}` : ''}`}</FormLabel>
+              <FormLabel>Email</FormLabel>
               <FormControl>
                 <Input
                   placeholder="youremail@example.com"
@@ -107,6 +94,7 @@ const ContactForm = () => {
                   {...field}
                 />
               </FormControl>
+              <FormMessage />
             </FormItem>
           )}
         />
@@ -116,12 +104,11 @@ const ContactForm = () => {
           name="message"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>
-                {`Message ${form.formState.errors.message ? `- ${form.formState.errors.message.message}` : ''}`}
-              </FormLabel>
+              <FormLabel>Message</FormLabel>
               <FormControl>
                 <Textarea placeholder="Say something here..." {...field} />
               </FormControl>
+              <FormMessage />
             </FormItem>
           )}
         />
