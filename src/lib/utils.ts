@@ -34,6 +34,11 @@ export const getErrorMessage = (error: unknown): string => {
 
 /**
  * Checks if pathname is active
+ *
+ * The match is on path segments, not on characters. A bare `startsWith` — which
+ * is what this used to do — would light up `/portfolio` for `/portfolio-archive`,
+ * since one string is a prefix of the other without being an ancestor of it.
+ *
  * @param href nav link
  * @param pathname current pathname
  * @returns true if pathname is active
@@ -43,9 +48,9 @@ export const checkPathnameActive = (
   pathname: string,
 ): boolean => {
   // Special case for homepage
-  if (pathname !== '/' && href === '/') {
-    return false;
+  if (href === '/') {
+    return pathname === '/';
   }
 
-  return pathname === href || pathname.startsWith(href);
+  return pathname === href || pathname.startsWith(href + '/');
 };

@@ -125,7 +125,7 @@ export default async function Page({
           </div>
 
           <div className="ml-2.5 flex items-end space-x-4 font-semibold md:ml-0">
-            {project.link.github && (
+            {project.link?.github && (
               <Link
                 href={project.link.github}
                 target="_blank"
@@ -137,7 +137,7 @@ export default async function Page({
                 </span>
               </Link>
             )}
-            {project.link.live && (
+            {project.link?.live && (
               <Link
                 href={project.link.live}
                 target="_blank"
