@@ -1,5 +1,6 @@
 import fs from 'fs';
 import path from 'path';
+import { cache } from 'react';
 import matter from 'gray-matter';
 import { z } from 'zod';
 
@@ -16,6 +17,13 @@ const contentDirectory = path.join(process.cwd(), 'src', 'content');
 const projectsDirectory = path.join(contentDirectory, 'projects');
 const postsDirectory = path.join(contentDirectory, 'posts');
 
+/*
+ * Every reader below is wrapped in React's `cache()`, which memoizes per
+ * request. Rendering one post calls `getPostBySlug` from both
+ * `generateMetadata` and the page component, and the index pages read every
+ * file; without the cache each of those went back to the filesystem.
+ */
+
 /**
  * List the slugs of every `.mdx` file in a content directory.
  *
@@ -26,14 +34,14 @@ const postsDirectory = path.join(contentDirectory, 'posts');
  * from `format`. Git ignores those files, so CI never saw it and only local
  * builds broke.
  */
-const getSlugs = async (directory: string): Promise<string[]> => {
+const getSlugs = cache(async (directory: string): Promise<string[]> => {
   const files = await fs.promises.readdir(directory);
 
   return files
     .filter((fileName) => fileName.endsWith('.mdx'))
     .map((fileName) => fileName.replace(/\.mdx$/, ''))
     .sort();
-};
+});
 
 /**
  * Read one MDX file and validate its frontmatter
@@ -75,27 +83,29 @@ export const getAllProjectSlugs = async (): Promise<string[]> =>
   getSlugs(projectsDirectory);
 
 /**
- * Read a project, keeping its metadata and body apart so the lists can take
- * the metadata alone
+ * Read a project once per request, keeping its metadata and body apart so the
+ * lists can take the metadata alone
  * @returns null when no project has this slug
  */
-const loadProject = async (
-  slug: string,
-): Promise<{ metadata: ProjectMetadata; content: string } | null> => {
-  // Checked against the directory listing rather than trusted, since the
-  // slug may come from a request and is about to become a file path.
-  if (!(await getAllProjectSlugs()).includes(slug)) {
-    return null;
-  }
+const loadProject = cache(
+  async (
+    slug: string,
+  ): Promise<{ metadata: ProjectMetadata; content: string } | null> => {
+    // Checked against the directory listing rather than trusted, since the
+    // slug may come from a request and is about to become a file path.
+    if (!(await getAllProjectSlugs()).includes(slug)) {
+      return null;
+    }
 
-  const { frontmatter, content } = await readContentFile(
-    projectsDirectory,
-    slug,
-    ProjectFrontmatterSchema,
-  );
+    const { frontmatter, content } = await readContentFile(
+      projectsDirectory,
+      slug,
+      ProjectFrontmatterSchema,
+    );
 
-  return { metadata: { slug, ...frontmatter }, content };
-};
+    return { metadata: { slug, ...frontmatter }, content };
+  },
+);
 
 /**
  * Get metadata and content of a project by slug
@@ -115,7 +125,7 @@ export const getProjectBySlug = async (
  *          the portfolio list is a client component, and everything returned
  *          here is serialized into its props.
  */
-export const getSortedProjects = async (): Promise<ProjectMetadata[]> => {
+export const getSortedProjects = cache(async (): Promise<ProjectMetadata[]> => {
   const slugs = await getAllProjectSlugs();
   const projects = await Promise.all(slugs.map(loadProject));
 
@@ -123,7 +133,7 @@ export const getSortedProjects = async (): Promise<ProjectMetadata[]> => {
     .filter((project) => project !== null)
     .map((project) => project.metadata)
     .sort(newestFirst((project) => project.date));
-};
+});
 
 /**
  * Projects flagged `featured` in their frontmatter, newest first.
@@ -147,25 +157,27 @@ export const getAllPostSlugs = async (): Promise<string[]> =>
   getSlugs(postsDirectory);
 
 /**
- * Read a post, keeping its metadata and body apart so the lists can take the
- * metadata alone
+ * Read a post once per request, keeping its metadata and body apart so the
+ * lists can take the metadata alone
  * @returns null when no post has this slug
  */
-const loadPost = async (
-  slug: string,
-): Promise<{ metadata: PostMetadata; content: string } | null> => {
-  if (!(await getAllPostSlugs()).includes(slug)) {
-    return null;
-  }
+const loadPost = cache(
+  async (
+    slug: string,
+  ): Promise<{ metadata: PostMetadata; content: string } | null> => {
+    if (!(await getAllPostSlugs()).includes(slug)) {
+      return null;
+    }
 
-  const { frontmatter, content } = await readContentFile(
-    postsDirectory,
-    slug,
-    PostFrontmatterSchema,
-  );
+    const { frontmatter, content } = await readContentFile(
+      postsDirectory,
+      slug,
+      PostFrontmatterSchema,
+    );
 
-  return { metadata: { slug, ...frontmatter }, content };
-};
+    return { metadata: { slug, ...frontmatter }, content };
+  },
+);
 
 /**
  * Get metadata and content of a post by slug
@@ -189,22 +201,21 @@ export const getPostBySlug = async (slug: string): Promise<PostData | null> => {
  * @returns Posts newest first, without their bodies, and the distinct years
  *          they were published in, newest first
  */
-export const getSortedPosts = async (): Promise<{
-  posts: PostMetadata[];
-  years: number[];
-}> => {
-  const slugs = await getAllPostSlugs();
-  const posts = (await Promise.all(slugs.map(loadPost)))
-    .filter((post) => post !== null)
-    .map((post) => post.metadata)
-    .sort(newestFirst((post) => post.publishedDate));
+export const getSortedPosts = cache(
+  async (): Promise<{ posts: PostMetadata[]; years: number[] }> => {
+    const slugs = await getAllPostSlugs();
+    const posts = (await Promise.all(slugs.map(loadPost)))
+      .filter((post) => post !== null)
+      .map((post) => post.metadata)
+      .sort(newestFirst((post) => post.publishedDate));
 
-  const years = new Set(
-    posts.map((post) => parseContentDate(post.publishedDate).getFullYear()),
-  );
+    const years = new Set(
+      posts.map((post) => parseContentDate(post.publishedDate).getFullYear()),
+    );
 
-  return {
-    posts,
-    years: Array.from(years).sort((a, b) => b - a),
-  };
-};
+    return {
+      posts,
+      years: Array.from(years).sort((a, b) => b - a),
+    };
+  },
+);
