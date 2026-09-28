@@ -3,11 +3,12 @@
 import React, { useRef, useState } from 'react';
 import { GeistSans } from 'geist/font/sans';
 import { GoCheck, GoCopy } from 'react-icons/go';
+import { LuCode } from 'react-icons/lu';
 import { toast } from 'sonner';
 
 import TechStackIcon from '@/components/icons/tech-stack-icon';
 import { cn } from '@/lib/utils';
-import { TechStackIconName } from '@/models/data';
+import { isTechStackIconName, techStack } from '@/data/tech-stack';
 
 type CustomPreProps = {
   children: React.ReactNode;
@@ -49,12 +50,12 @@ const CustomPre: React.FC<CustomPreProps> = ({
             GeistSans.className,
           )}
         >
-          <TechStackIcon
-            name={language as TechStackIconName}
-            size={16}
-            className="mr-2"
-          />
-          {language}
+          {isTechStackIconName(language) ? (
+            <TechStackIcon name={language} size={16} className="mr-2" />
+          ) : (
+            <LuCode size={16} className="mr-2 color-level-4" aria-hidden />
+          )}
+          {isTechStackIconName(language) ? techStack[language].label : language}
         </span>
 
         <button
@@ -70,7 +71,7 @@ const CustomPre: React.FC<CustomPreProps> = ({
       </div>
       <pre
         ref={preRef}
-        className={cn('mt-2 rounded-md border px-5 pb-5 pt-[68px]', className)}
+        className={cn('mt-2 rounded-md border px-5 pt-[68px] pb-5', className)}
         data-language={language}
         {...props}
       >

@@ -16,7 +16,7 @@ const SESSION_COOKIE = 'pv_session';
  * to both over- and under-count. This id is a random opaque value tied to
  * nothing else.
  *
- * No `maxAge`, so it is a true session cookie — it dies when the browser
+ * No `maxAge`, so it is a true session cookie - it dies when the browser
  * closes, and reopening the site counts as a fresh visit.
  */
 const getSessionId = async (): Promise<string> => {

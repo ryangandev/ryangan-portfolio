@@ -5,7 +5,7 @@ export const geistSans = GeistSans;
 
 // `style` has to be set explicitly. next/font bakes the style into the
 // generated class, and because that class is unlayered and emitted after
-// Tailwind's utilities it wins on source order — so with the default
+// Tailwind's utilities it wins on source order - so with the default
 // (`normal`) the `italic` utility silently does nothing.
 //
 // Italic only: the sole use of this font is the italic tagline on the home
@@ -22,7 +22,7 @@ export const newsreader = Newsreader({
 //
 // Moving a face to its point of use does not localise the cost: Turbopack
 // merges every next/font stylesheet into one shared CSS chunk, so a face is
-// preloaded on any route that loads that chunk — which is all of them.
+// preloaded on any route that loads that chunk - which is all of them.
 // `GeistMono` is imported directly by `components/mdx/custom-code.tsx` and is
 // still preloaded on the home page, which renders no code blocks. Dropping a
 // face from the payload therefore means removing its last import, not

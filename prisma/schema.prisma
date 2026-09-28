@@ -28,7 +28,7 @@ model PostView {
 /// by everyone behind a NAT or campus network, and changes as people move
 /// between networks, so it both over- and under-counts.
 ///
-/// The composite primary key is what enforces the dedup — the insert is an
+/// The composite primary key is what enforces the dedup - the insert is an
 /// `ON CONFLICT DO NOTHING`, and whether it wrote a row is what decides if the
 /// total gets incremented.
 model PostViewSession {
@@ -39,6 +39,26 @@ model PostViewSession {
   @@id([sessionId, slug])
   @@index([viewedAt])
   @@map("post_view_sessions")
+}
+
+// ---------------------------------------------------------------------------
+// Contact form
+// ---------------------------------------------------------------------------
+
+/// One row per contact form submission that reached the rate limit check, so
+/// the limit holds across serverless instances rather than per instance.
+///
+/// `client_key` is a SHA-256 of the caller's IP address, never the address
+/// itself, and rows older than a day are deleted as new ones arrive, so the
+/// table only ever holds the last day of pseudonymous keys.
+model ContactSubmission {
+  id          String   @id @default(cuid())
+  clientKey   String   @map("client_key")
+  submittedAt DateTime @default(now()) @map("submitted_at")
+
+  @@index([clientKey, submittedAt])
+  @@index([submittedAt])
+  @@map("contact_submissions")
 }
 
 // ---------------------------------------------------------------------------

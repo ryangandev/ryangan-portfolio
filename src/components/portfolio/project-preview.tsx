@@ -5,18 +5,32 @@ import { Link } from 'next-view-transitions';
 import HighlightedText from '@/components/highlighted-text';
 import TechStackIcon from '@/components/icons/tech-stack-icon';
 import { cn } from '@/lib/utils';
-import { TechStackIconName } from '@/models/data';
+import { techStack } from '@/data/tech-stack';
 import { ProjectMetadata } from '@/models/project';
 
 type ProjectPreviewProps = {
   project: ProjectMetadata;
   searchTerm?: string;
+  /** Position in the grid, used to decide whether the thumbnail is eager */
+  index?: number;
 };
+
+/**
+ * The grid is two columns, so only the first two cards can be above the fold on
+ * any realistic viewport. Marking every thumbnail `priority` - which is what
+ * this did - opts all of them out of lazy loading and emits a high-priority
+ * preload each, so the images nobody has scrolled to yet compete with the one
+ * that decides LCP.
+ */
+const EAGER_CARDS = 2;
 
 const ProjectPreview: React.FC<ProjectPreviewProps> = ({
   project,
   searchTerm = '',
+  index = 0,
 }) => {
+  const isAboveFold = index < EAGER_CARDS;
+
   return (
     <div className="group flex flex-col">
       <Link
@@ -31,10 +45,13 @@ const ProjectPreview: React.FC<ProjectPreviewProps> = ({
             src={project.thumbnailUrl}
             alt={project.title}
             fill
-            sizes="(max-width: 644px) 100%"
+            // Two 312px columns from md up (644px less the 20px gap), one full
+            // column below.
+            sizes="(min-width: 768px) 312px, (min-width: 692px) 644px, calc(100vw - 48px)"
             className="rounded-lg object-cover"
             quality={95}
-            priority
+            priority={isAboveFold}
+            loading={isAboveFold ? 'eager' : 'lazy'}
             placeholder="blur"
             blurDataURL="/blur.svg"
           />
@@ -60,9 +77,10 @@ const ProjectPreview: React.FC<ProjectPreviewProps> = ({
         {project.techStack.map((tech) => (
           <TechStackIcon
             key={tech}
-            name={tech as TechStackIconName}
+            name={tech}
             size={16}
             className="flex shrink-0"
+            title={techStack[tech].label}
           />
         ))}
       </div>

@@ -1,43 +1,64 @@
-import React from 'react';
+import type { IconType } from 'react-icons';
 import { FaReact, FaUnity } from 'react-icons/fa';
-import { SiJavascript } from 'react-icons/si';
 import { LuGraduationCap } from 'react-icons/lu';
+import { SiJavascript } from 'react-icons/si';
 
-export const experiencesData = [
+export type Experience = {
+  role: string;
+  organization: string;
+  location: string;
+  /** `YYYY-MM` */
+  start: string;
+  /** `YYYY-MM`, or null while it is ongoing */
+  end: string | null;
+  description: string;
+  icon: IconType;
+};
+
+/**
+ * Work and education, most recently active first. Kept in that order by hand
+ * rather than sorted, since "most recent" for an overlapping co-op and degree
+ * is a judgment call, not a date comparison.
+ */
+export const experience: Experience[] = [
   {
-    title: 'Graphic Designer & Game Develeoper Co-Op',
-    company: 'Epistemitek',
+    role: 'Frontend Developer',
+    organization: 'Dynasty11 Studio',
     location: 'Philadelphia, PA',
-    description:
-      'Contributed to the development of an educational game in Unity to educate students about the human immune system. Designed new fonts for Pittman Shorthand and used Omnigraffle to structure plans and summaries for various experiments.',
-    icon: React.createElement(FaUnity),
-    date: 'March 2021 - September 2021',
-  },
-  {
-    title: 'CMDB Enginner Co-Op',
-    company: 'Berkley Technology Services',
-    location: 'Wilmington, DE',
-    description:
-      'Developed and optimized workflow scripts using JavaScript. Utilized SQL for database updates. Troubleshot and resolved configuration item issues. Assisted in the Probes to Pattern migration within ServiceNow.',
-    icon: React.createElement(SiJavascript),
-    date: 'March 2022 - March 2023',
-  },
-  {
-    title: 'Bachelor of Science in Computer Science',
-    company: 'Drexel University',
-    location: 'Philadelphia, PA',
-    description:
-      'On September 7, 2023, I completed my 5-Year Undergraduate Co-Op program, graduating with a Bachelor of Science in Computer Science as well as concentrations in Game Development and Artificial Intelligence.',
-    icon: React.createElement(LuGraduationCap),
-    date: 'September 2018 - September 2023',
-  },
-  {
-    title: 'Frontend Developer',
-    company: 'Dynasty11 Studio',
-    location: 'Philadelphia, PA',
+    start: '2022-09',
+    end: null,
     description:
       'Implemented the store section of the "Player 2" app, focusing on UI, application flow, and the representation of cosmetic items. Integrated RevenueCat to manage in-app purchases, ensuring cross-platform compatibility. Troubleshot and resolved bugs of the app in production.',
-    icon: React.createElement(FaReact),
-    date: 'September 2022 - present',
+    icon: FaReact,
   },
-] as const;
+  {
+    role: 'Bachelor of Science in Computer Science',
+    organization: 'Drexel University',
+    location: 'Philadelphia, PA',
+    start: '2018-09',
+    end: '2023-09',
+    description:
+      'Completed the 5-year undergraduate co-op program with concentrations in Game Development and Artificial Intelligence.',
+    icon: LuGraduationCap,
+  },
+  {
+    role: 'CMDB Engineer Co-Op',
+    organization: 'Berkley Technology Services',
+    location: 'Wilmington, DE',
+    start: '2022-03',
+    end: '2023-03',
+    description:
+      'Developed and optimized workflow scripts using JavaScript. Utilized SQL for database updates. Troubleshot and resolved configuration item issues. Assisted in the Probes to Pattern migration within ServiceNow.',
+    icon: SiJavascript,
+  },
+  {
+    role: 'Graphic Designer & Game Developer Co-Op',
+    organization: 'Epistemitek',
+    location: 'Philadelphia, PA',
+    start: '2021-03',
+    end: '2021-09',
+    description:
+      'Contributed to the development of an educational game in Unity to educate students about the human immune system. Designed new fonts for Pittman Shorthand and used Omnigraffle to structure plans and summaries for various experiments.',
+    icon: FaUnity,
+  },
+];

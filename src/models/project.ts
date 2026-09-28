@@ -1,16 +1,7 @@
-export type ProjectMetadata = {
+import type { ProjectFrontmatter } from '@/schemas/content-schema';
+
+export type ProjectMetadata = ProjectFrontmatter & {
   slug: string;
-  title: string;
-  date: string;
-  featured: boolean;
-  role: string;
-  summary: string;
-  thumbnailUrl: string;
-  techStack: string[];
-  link: {
-    github: string;
-    live: string;
-  };
 };
 
 export type ProjectData = ProjectMetadata & {

@@ -12,8 +12,8 @@ type ViewCounterProps = {
  * Records a view on mount and renders the running total.
  *
  * Posts are statically generated, so the count has to be fetched from the
- * client. Nothing is rendered until a number comes back — and nothing at all
- * when view tracking is unconfigured — which keeps the metadata row from
+ * client. Nothing is rendered until a number comes back - and nothing at all
+ * when view tracking is unconfigured - which keeps the metadata row from
  * reserving space for a count that may never arrive.
  */
 const ViewCounter: React.FC<ViewCounterProps> = ({ slug }) => {

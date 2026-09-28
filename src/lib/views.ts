@@ -3,7 +3,7 @@ import { db } from '@/lib/db';
 /**
  * Post view counts, stored in Postgres alongside everything else rather than in
  * a separate key-value store. Comments will be read on every post page anyway,
- * so the database is already on the critical path — a second datastore would
+ * so the database is already on the critical path - a second datastore would
  * buy nothing.
  *
  * Reads and writes here fail soft: any error resolves to `null` and the UI
@@ -20,7 +20,7 @@ export const getPostViews = async (slug: string): Promise<number | null> => {
 
     return post?.count ?? 0;
   } catch (error) {
-    console.log('Post view read error: ', error);
+    console.error('Post view read error: ', error);
     return null;
   }
 };
@@ -29,8 +29,8 @@ export const getPostViews = async (slug: string): Promise<number | null> => {
  * Count a view of a post, unless this session already viewed it
  * @param slug the post being viewed
  * @param sessionId opaque id identifying the browser session
- * @returns The post's view total — unchanged if this session had already been
- *          counted — or null if the database could not be reached
+ * @returns The post's view total - unchanged if this session had already been
+ *          counted - or null if the database could not be reached
  */
 export const recordPostView = async (
   slug: string,
@@ -59,7 +59,7 @@ export const recordPostView = async (
 
     return post.count;
   } catch (error) {
-    console.log('Post view write error: ', error);
+    console.error('Post view write error: ', error);
     return null;
   }
 };

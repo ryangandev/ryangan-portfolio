@@ -1,0 +1,38 @@
+# Dependency build scripts are opt-in. Prisma needs its engines. The others
+# ship prebuilt binaries and work without their postinstall checks: sharp
+# (Next's image optimizer, which Vercel replaces with its own), esbuild
+# (react-email's preview CLI), and unrs-resolver (ESLint's import resolver).
+#
+# `allowBuilds` is read by pnpm 11+, which no longer reads the `pnpm` field in
+# package.json. `onlyBuiltDependencies` is the pnpm 10 spelling of the same
+# list, kept so an older pnpm on the build host resolves the same way.
+allowBuilds:
+  '@prisma/engines': true
+  prisma: true
+  esbuild: false
+  sharp: false
+  unrs-resolver: false
+
+onlyBuiltDependencies:
+  - '@prisma/engines'
+  - prisma
+
+# Prisma's CLI pins these exactly, below their advisories' fixes. Both are
+# CLI-only (config merging, and the MySQL driver this project never loads) and
+# never ship to the browser or the server bundle. Remove each once `prisma`
+# depends on a fixed version itself.
+overrides:
+  deepmerge-ts: ^8.0.2
+  mysql2: ^3.24.4
+
+# ESLint 9 is out of support, but these plugins (all pulled in by
+# eslint-config-next) have not yet published a release declaring ESLint 10 in
+# their peer range. Their rules run correctly on 10 (checked rule-for-rule
+# against 9 on a probe file); the one crash, in eslint-plugin-react's version
+# detection, is sidestepped in eslint.config.mjs. Remove each entry once the
+# plugin's own peer range includes ^10.
+peerDependencyRules:
+  allowedVersions:
+    eslint-plugin-import>eslint: '10'
+    eslint-plugin-jsx-a11y>eslint: '10'
+    eslint-plugin-react>eslint: '10'
