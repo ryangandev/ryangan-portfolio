@@ -4,7 +4,15 @@ import { Link } from 'next-view-transitions';
 import { newsreader } from '@/assets/fonts';
 import AnimatedLink from '@/components/animated-link';
 import ExperienceList from '@/components/experience-list';
+import JsonLd from '@/components/json-ld';
 import { experience } from '@/data/experience';
+import {
+  authorAvatarUrl,
+  authorProfiles,
+  siteDescription,
+  siteName,
+  siteUrl,
+} from '@/data/site';
 import { getFeaturedPosts, getFeaturedProjects } from '@/lib/content';
 import { parseContentDate } from '@/lib/date';
 import { cn } from '@/lib/utils';
@@ -17,6 +25,19 @@ export default async function Home() {
 
   return (
     <main>
+      <JsonLd
+        data={{
+          '@context': 'https://schema.org',
+          '@type': 'Person',
+          name: siteName,
+          alternateName: 'Zhiheng Gan',
+          url: siteUrl,
+          image: authorAvatarUrl,
+          jobTitle: 'Software Engineer',
+          description: siteDescription,
+          sameAs: authorProfiles,
+        }}
+      />
       <h1>Zhiheng(Ryan) Gan</h1>
 
       <h3 className={cn(newsreader.className, 'mb-7 text-[17.5px] italic')}>

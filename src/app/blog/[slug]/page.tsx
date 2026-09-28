@@ -8,9 +8,10 @@ import TopicList from '@/components/blog/topic-list';
 import ViewCounter from '@/components/blog/view-counter';
 import Byline from '@/components/byline';
 import Callout from '@/components/callout';
+import JsonLd from '@/components/json-ld';
 import Mdx from '@/components/mdx/mdx-components';
 import BackButton from '@/components/navigation/back-button';
-import { feedAlternates, siteName } from '@/data/site';
+import { feedAlternates, siteName, siteUrl } from '@/data/site';
 import {
   getAdjacentPosts,
   getAllPostSlugs,
@@ -85,6 +86,23 @@ export default async function Page({
 
   return (
     <main className="relative">
+      <JsonLd
+        data={{
+          '@context': 'https://schema.org',
+          '@type': 'BlogPosting',
+          headline: post.title,
+          description: post.summary,
+          datePublished: post.publishedDate,
+          url: `${siteUrl}/blog/${post.slug}`,
+          mainEntityOfPage: `${siteUrl}/blog/${post.slug}`,
+          keywords: post.topics,
+          author: {
+            '@type': 'Person',
+            name: post.author,
+            url: siteUrl,
+          },
+        }}
+      />
       <BackButton name="Blog" href="/blog" />
 
       <article className="space-y-8">

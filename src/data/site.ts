@@ -44,3 +44,10 @@ export const feedAlternates = {
     'application/rss+xml': [{ url: '/feed.xml', title: blogTitle }],
   },
 };
+
+/** The profiles the contact page links to, in schema.org `sameAs` terms */
+export const authorProfiles = [
+  'https://github.com/ryangandev',
+  'https://www.linkedin.com/in/ryangan1/',
+  'https://medium.com/@ryangan.dev',
+];
