@@ -26,3 +26,21 @@ export const authorAvatarUrl =
  * largest variant to every screen.
  */
 export const contentImageSizes = '(min-width: 692px) 644px, calc(100vw - 48px)';
+
+export const blogTitle = 'Blog - Ryan Gan';
+
+export const blogDescription =
+  'Insights and lessons from my journey in software development.';
+
+/**
+ * Advertises the RSS feed to browsers and feed readers.
+ *
+ * Next replaces `alternates` wholesale rather than merging it, so a page that
+ * sets its own canonical URL drops the layout's feed link unless it spreads
+ * this in as well.
+ */
+export const feedAlternates = {
+  types: {
+    'application/rss+xml': [{ url: '/feed.xml', title: blogTitle }],
+  },
+};

@@ -10,7 +10,7 @@ import Byline from '@/components/byline';
 import Callout from '@/components/callout';
 import Mdx from '@/components/mdx/mdx-components';
 import BackButton from '@/components/navigation/back-button';
-import { siteName } from '@/data/site';
+import { feedAlternates, siteName } from '@/data/site';
 import {
   getAdjacentPosts,
   getAllPostSlugs,
@@ -47,6 +47,7 @@ export const generateMetadata = async ({
     description: post.summary,
     alternates: {
       canonical: url,
+      ...feedAlternates,
     },
     openGraph: {
       title: post.title,

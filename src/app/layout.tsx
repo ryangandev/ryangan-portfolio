@@ -7,7 +7,13 @@ import { Analytics } from '@vercel/analytics/next';
 import { geistSans } from '@/assets/fonts';
 import SiteFooter from '@/components/site-footer';
 import { Toaster } from '@/components/ui/sonner';
-import { siteDescription, siteName, siteTitle, siteUrl } from '@/data/site';
+import {
+  feedAlternates,
+  siteDescription,
+  siteName,
+  siteTitle,
+  siteUrl,
+} from '@/data/site';
 import { cn } from '@/lib/utils';
 import '@/styles/globals.css';
 
@@ -19,6 +25,7 @@ export const metadata: Metadata = {
   description: siteDescription,
   alternates: {
     canonical: '/',
+    ...feedAlternates,
   },
   openGraph: {
     title: siteTitle,

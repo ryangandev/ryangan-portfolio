@@ -4,7 +4,7 @@ import { notFound } from 'next/navigation';
 import PostArchive from '@/components/blog/post-archive';
 import BackButton from '@/components/navigation/back-button';
 import PageSummary from '@/components/page-summary';
-import { siteName } from '@/data/site';
+import { feedAlternates, siteName } from '@/data/site';
 import { getTopicBySlug, getTopics } from '@/lib/content';
 
 type TopicPageProps = {
@@ -36,7 +36,7 @@ export const generateMetadata = async ({
   return {
     title,
     description,
-    alternates: { canonical: url },
+    alternates: { canonical: url, ...feedAlternates },
     openGraph: {
       title,
       description,

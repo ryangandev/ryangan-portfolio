@@ -3,19 +3,22 @@ import { Metadata } from 'next';
 import PostArchive from '@/components/blog/post-archive';
 import PageSummary from '@/components/page-summary';
 import BackButton from '@/components/navigation/back-button';
-import { siteName } from '@/data/site';
+import AnimatedLink from '@/components/animated-link';
+import {
+  blogDescription,
+  blogTitle,
+  feedAlternates,
+  siteName,
+} from '@/data/site';
 import { getSortedPosts } from '@/lib/content';
 
-const description =
-  'Insights and lessons from my journey in software development.';
-
 export const metadata: Metadata = {
-  title: 'Blog - Ryan Gan',
-  description,
-  alternates: { canonical: '/blog' },
+  title: blogTitle,
+  description: blogDescription,
+  alternates: { canonical: '/blog', ...feedAlternates },
   openGraph: {
-    title: 'Blog - Ryan Gan',
-    description,
+    title: blogTitle,
+    description: blogDescription,
     url: '/blog',
     siteName,
     locale: 'en_US',
@@ -32,7 +35,11 @@ export default async function Page() {
       <h1>Blog</h1>
       <PageSummary>
         Here I share insights and lessons from my journey in software
-        development.
+        development. Follow along with the{' '}
+        <AnimatedLink href="/feed.xml" isExternal>
+          RSS feed
+        </AnimatedLink>
+        .
       </PageSummary>
       <PostArchive posts={posts} />
     </main>
