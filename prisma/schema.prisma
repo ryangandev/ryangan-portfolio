@@ -42,6 +42,26 @@ model PostViewSession {
 }
 
 // ---------------------------------------------------------------------------
+// Contact form
+// ---------------------------------------------------------------------------
+
+/// One row per contact form submission that reached the rate limit check, so
+/// the limit holds across serverless instances rather than per instance.
+///
+/// `client_key` is a SHA-256 of the caller's IP address, never the address
+/// itself, and rows older than a day are deleted as new ones arrive, so the
+/// table only ever holds the last day of pseudonymous keys.
+model ContactSubmission {
+  id          String   @id @default(cuid())
+  clientKey   String   @map("client_key")
+  submittedAt DateTime @default(now()) @map("submitted_at")
+
+  @@index([clientKey, submittedAt])
+  @@index([submittedAt])
+  @@map("contact_submissions")
+}
+
+// ---------------------------------------------------------------------------
 // Auth.js (NextAuth) adapter tables
 //
 // These already exist in the Neon database and hold live rows. They are kept
