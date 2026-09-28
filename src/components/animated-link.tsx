@@ -25,17 +25,10 @@ export default function AnimatedLink({
       target={isExternal ? '_blank' : '_self'}
       className={cn(
         'group inline-block font-medium color-level-2 underline decoration-gray-400 underline-offset-4 transition-colors hover:decoration-gray-700 dark:decoration-gray-600 dark:hover:decoration-gray-300',
-        // 'group no-underline',
         className,
       )}
     >
-      {/* <span
-        className={cn(
-          'relative transition-colors after:absolute after:-bottom-[2px] after:left-0 after:right-0 after:h-px after:bg-gray-400 after:content-[""] after:group-hover:bg-gray-700 dark:after:bg-gray-600 dark:after:group-hover:bg-gray-300',
-        )}
-      > */}
       {children}
-      {/* </span> */}
       {isExternal && (
         <LuArrowUpRight
           className={cn(
