@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 
+import { ThemeProvider } from 'next-themes';
 import { ViewTransitions } from 'next-view-transitions';
 import { Analytics } from '@vercel/analytics/next';
 
@@ -8,7 +9,6 @@ import SiteFooter from '@/components/site-footer';
 import { Toaster } from '@/components/ui/sonner';
 import { siteDescription, siteName, siteTitle, siteUrl } from '@/data/site';
 import { cn } from '@/lib/utils';
-import { AppProviders } from '@/providers/app-providers';
 import '@/styles/globals.css';
 
 export const metadata: Metadata = {
@@ -54,14 +54,20 @@ export default function RootLayout({
             geistSans.className,
           )}
         >
-          <AppProviders>
+          <ThemeProvider
+            attribute="class"
+            defaultTheme="light"
+            enableSystem={false}
+            storageKey="rg-theme"
+            disableTransitionOnChange
+          >
             <div className="relative mx-auto w-full max-w-[692px] grow px-6 py-16 md:pt-32">
               {children}
             </div>
             <SiteFooter />
             <Analytics />
             <Toaster richColors />
-          </AppProviders>
+          </ThemeProvider>
         </body>
       </html>
     </ViewTransitions>
