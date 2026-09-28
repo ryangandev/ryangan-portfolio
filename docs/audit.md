@@ -21,7 +21,9 @@ Every change below is its own commit on `fix/audit-first-pass`, with the evidenc
 | `pnpm format:check` | Passes for the whole repository                                                      |
 | `pnpm build`        | Passes; every route is Static or SSG, 28 prerendered including 2 generated OG cards  |
 | CI                  | The same five checks run on every pull request, from a clean install with no secrets |
+| Vercel              | The preview deployment of this branch builds, the first build under pnpm 12          |
 | Installs            | No warnings on pnpm 12.6; frozen installs also verified on pnpm 10.34                |
+| Production database | In sync with the schema: `prisma migrate diff` reports no difference                 |
 
 Every dependency is on its latest release, with two deliberate exceptions:
 
@@ -84,6 +86,13 @@ The rules were checked to fire identically on 9 and 10 against a probe file.
 pnpm 12 had stopped reading the `pnpm` field in `package.json`, which made every install fail.
 The settings moved to `pnpm-workspace.yaml`, and `packageManager` now pins pnpm for local, CI, and Vercel alike.
 
+### Production database
+
+`contact_submissions` was created with `prisma db push` on September 28.
+A read-only `prisma migrate diff` against production beforehand showed exactly one `CREATE TABLE` and two `CREATE INDEX`, with nothing altered or dropped, so the existing tables already matched the schema.
+Afterwards the same diff reports no difference.
+The code deployed before this branch never reads the table, so creating it ahead of the merge changed nothing live.
+
 ### Cleanup
 
 - Two unreachable component trees deleted: the site header with its navigation, and the skills section with its scroll tracking, 14 files in all.
@@ -140,32 +149,12 @@ Each was reproduced in the browser or against a production build before it was f
 
 1. **Check the experience entries before merging.** They date from 2023 and now appear on the home page, including Dynasty11 Studio as the current role.
    The Drexel description was trimmed because it repeated the degree and the date shown beside it.
-2. **Create the rate limit table** once this is deployed.
-   Until then the form falls back to the in-memory limit and logs one error per submission.
-   Run `pnpm prisma db push` against production.
-   The schema keeps every existing table, so this table should be its only change, but that could not be checked from here without reading the production database.
-   `db push` stops and asks before anything that would lose data.
-   The SQL for this table, generated from the schema:
-
-   ```sql
-   CREATE TABLE "contact_submissions" (
-       "id" TEXT NOT NULL,
-       "client_key" TEXT NOT NULL,
-       "submitted_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-       CONSTRAINT "contact_submissions_pkey" PRIMARY KEY ("id")
-   );
-   CREATE INDEX "contact_submissions_client_key_submitted_at_idx" ON "contact_submissions"("client_key", "submitted_at");
-   CREATE INDEX "contact_submissions_submitted_at_idx" ON "contact_submissions"("submitted_at");
-   ```
-
-3. **Enable Speed Insights** for the project in the Vercel dashboard.
+2. **Enable Speed Insights** for the project in the Vercel dashboard.
    Until then its script is a 404 on every page.
-4. **Verify a domain in Resend** and set `CONTACT_FROM_EMAIL` to an address on it.
+3. **Verify a domain in Resend** and set `CONTACT_FROM_EMAIL` to an address on it.
    The default sender only delivers to the Resend account owner.
-5. **Submit the sitemap** to Google Search Console.
+4. **Submit the sitemap** to Google Search Console.
    It now also lists the seven topic pages.
-6. **Confirm the first Vercel build under pnpm 12.** `packageManager` makes the build host switch to it.
-   The preview deployment of this branch is the check.
 
 ## Decisions left to you
 
