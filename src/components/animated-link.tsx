@@ -45,7 +45,7 @@ export default function AnimatedLink({
         {children}
         <LuArrowUpRight
           className={cn(
-            'inline-block text-gray-400 transition-all group-hover:translate-x-0.5 group-hover:-translate-y-0.5 group-hover:text-gray-700 dark:text-gray-600 dark:group-hover:text-gray-300',
+            '-mr-0.5 inline-block text-gray-400 transition-all group-hover:translate-x-0.5 group-hover:-translate-y-0.5 group-hover:text-gray-700 dark:text-gray-600 dark:group-hover:text-gray-300',
             iconClassName,
           )}
           size={16}
