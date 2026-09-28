@@ -25,7 +25,7 @@ const toAddress = process.env.CONTACT_TO_EMAIL ?? 'ryangan.dev@gmail.com';
 
 /**
  * A success shape returned without sending anything. Used for submissions that
- * are dropped on purpose — telling a bot it was caught only teaches it what to
+ * are dropped on purpose - telling a bot it was caught only teaches it what to
  * change.
  */
 const silentlyAccepted = {

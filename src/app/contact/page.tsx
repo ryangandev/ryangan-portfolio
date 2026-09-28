@@ -6,7 +6,7 @@ import BackButton from '@/components/navigation/back-button';
 import { siteName } from '@/data/site';
 
 const description =
-  'Get in touch — a question, a project idea, or just to say hello.';
+  'Get in touch with a question, a project idea, or just to say hello.';
 
 export const metadata: Metadata = {
   title: 'Contact - Ryan Gan',

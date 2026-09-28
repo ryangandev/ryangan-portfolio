@@ -54,7 +54,7 @@ export const generateMetadata = async ({
       locale: 'en_US',
       type: 'article',
       publishedTime: parseContentDate(project.date).toISOString(),
-      // The project's own thumbnail beats the site-wide card here — a link to a
+      // The project's own thumbnail beats the site-wide card here - a link to a
       // project should preview as that project.
       images: [{ url: project.thumbnailUrl, alt: project.title }],
     },

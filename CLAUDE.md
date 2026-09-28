@@ -4,11 +4,11 @@ Guidance for Claude Code (claude.ai/code) when working in this repository.
 
 ## Commands
 
-- `pnpm dev` — development server
-- `pnpm build` / `pnpm start` — production build and serve
-- `pnpm lint` — `eslint .` (`next lint` was removed in Next.js 16)
-- `pnpm typecheck` — `tsc --noEmit`
-- `pnpm prisma generate` — after install and after any schema change
+- `pnpm dev` - development server
+- `pnpm build` / `pnpm start` - production build and serve
+- `pnpm lint` - `eslint .` (`next lint` was removed in Next.js 16)
+- `pnpm typecheck` - `tsc --noEmit`
+- `pnpm prisma generate` - after install and after any schema change
 
 ## Stack
 
@@ -18,14 +18,14 @@ Prisma 7 against Neon Postgres, Resend for contact email.
 
 ## Layout
 
-- `src/app/` — routes and layouts
-- `src/components/` — grouped by feature; `ui/` is shadcn/ui, `mdx/` renders MDX
-- `src/content/` — MDX for `projects/` and `posts/`
-- `src/lib/` — content parsing, db client, utilities
-- `src/actions/` — server actions
+- `src/app/` - routes and layouts
+- `src/components/` - grouped by feature; `ui/` is shadcn/ui, `mdx/` renders MDX
+- `src/content/` - MDX for `projects/` and `posts/`
+- `src/lib/` - content parsing, db client, utilities
+- `src/actions/` - server actions
 - `src/models/`, `src/schemas/`, `src/data/`, `src/providers/`, `src/hooks/`
-- `src/styles/globals.css` — the single Tailwind entry point
-- `src/generated/prisma` — generated client; gitignored, and excluded from ESLint and Prettier
+- `src/styles/globals.css` - the single Tailwind entry point
+- `src/generated/prisma` - generated client; gitignored, and excluded from ESLint and Prettier
 
 `@/*` aliases to `src/*`.
 
@@ -39,7 +39,7 @@ since counting code as prose badly overstates a code-heavy post.
 
 ## Styling
 
-Tailwind v4 is configured entirely in CSS — there is no `tailwind.config.ts`. The
+Tailwind v4 is configured entirely in CSS - there is no `tailwind.config.ts`. The
 theme lives in `@theme inline` in `globals.css`, dark mode is a `@custom-variant`
 matching the `.dark` class next-themes sets, and `mdx.css` is `@import`ed there
 rather than from components, because v4 `@apply` needs a shared context.
@@ -52,7 +52,7 @@ to 4px, and the rename would silently fall back to the 2px default.
 
 There is deliberately no root `loading.tsx`. Every route is Static or SSG and
 Links prefetch by default, so the RSC payload is already cached by the time a
-link is clicked — a loading boundary had nothing to fill on a normal navigation
+link is clicked - a loading boundary had nothing to fill on a normal navigation
 (measured: zero fallback renders across a real client-side transition). What it
 did do was render the fallback client-side whenever hydration ran slowly,
 flashing a full-page "Loading" screen mid-article at random. It also fought
@@ -70,7 +70,7 @@ a second datastore would buy nothing once comments are also read per page.
 
 - **Fails soft.** Any database error resolves to `null` and `ViewCounter` renders
   nothing, separator dot included. The site builds and runs with no database
-  reachable — which is also the state before the tables exist.
+  reachable - which is also the state before the tables exist.
 - **Counted client-side.** Posts are static, so `ViewCounter` calls
   `recordPostViewAction` on mount, guarded by a ref so Strict Mode does not
   double-count. The action validates the slug against `getAllPostSlugs()` because
@@ -89,10 +89,10 @@ a second datastore would buy nothing once comments are also read per page.
 
 Older Prisma recipes do not apply here:
 
-- The connection URL is **not** in `schema.prisma` — it is in `prisma.config.ts`,
+- The connection URL is **not** in `schema.prisma` - it is in `prisma.config.ts`,
   pointed at `DATABASE_URL_UNPOOLED`, because migrations take advisory locks that
   do not survive a transaction pooler. That config resolves `env()` **eagerly**,
-  even for `prisma generate`, which never connects — so a deploy setting only
+  even for `prisma generate`, which never connects - so a deploy setting only
   `DATABASE_URL` would fail at the `postinstall` generate step. Hence the
   fallback to `DATABASE_URL`, which keeps production down to one variable.
   Runtime reads only `DATABASE_URL`; `DATABASE_URL_UNPOOLED` is CLI-only.
@@ -120,7 +120,7 @@ alpha), `opengraph-image.png` (1200x630, needs `metadataBase`),
 to survive Android's safe-zone crop). Two traps when regenerating: knockout letters
 need more weight than positive ones (hence SemiBold, though headings are Medium),
 and Pillow drops any ICO frame larger than the base image, so save from the 256px
-frame with the rest in `append_images`. Every ICO frame must be RGBA — Turbopack
+frame with the rest in `append_images`. Every ICO frame must be RGBA - Turbopack
 refuses to decode grayscale+alpha.
 
 ## Pinned on purpose
@@ -140,5 +140,5 @@ refuses to decode grayscale+alpha.
 ## Dead code
 
 `site-header.tsx`, `menubar.tsx`, `navigation/main-nav.tsx`,
-`navigation/mobile-main-nav.tsx` and `ui/dropdown-menu.tsx` are unreachable —
+`navigation/mobile-main-nav.tsx` and `ui/dropdown-menu.tsx` are unreachable -
 nothing renders `SiteHeader`. Delete them if the header is not coming back.

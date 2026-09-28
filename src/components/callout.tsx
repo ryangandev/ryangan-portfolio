@@ -10,8 +10,8 @@ type CalloutProps = {
 /**
  * The non-default variants set a light background with no `dark:` counterpart,
  * so in dark mode they rendered near-black prose on near-white. Nothing passes
- * `type` from the app today — MDX can, since `Callout` is exposed to it in
- * `mdx-components.tsx` — so the bug was latent rather than visible.
+ * `type` from the app today - MDX can, since `Callout` is exposed to it in
+ * `mdx-components.tsx` - so the bug was latent rather than visible.
  *
  * The default variant deliberately keeps the theme's own border and
  * background, so a plain callout reads as a quiet inset rather than an alert.

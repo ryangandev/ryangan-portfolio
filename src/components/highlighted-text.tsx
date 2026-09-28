@@ -11,7 +11,7 @@ type HighlightedTextProps = {
  * threw `SyntaxError: Invalid regular expression: /((/gi: Unterminated group`
  * during render and blanked the portfolio page; `[`, `*`, `+`, `?` and a
  * trailing backslash did the same. The metacharacters that happened not to
- * throw were still wrong — typing `.` highlighted every character.
+ * throw were still wrong - typing `.` highlighted every character.
  */
 const escapeRegExp = (value: string) =>
   value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');

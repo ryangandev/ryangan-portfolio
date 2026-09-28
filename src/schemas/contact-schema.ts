@@ -21,7 +21,7 @@ export const ContactSchema = z.object({
     .max(5000, { message: 'Message is too long (5000 characters max)' }),
   /**
    * Honeypot. Hidden from people and from assistive technology, so a real
-   * sender never fills it in — but a bot that fills every field it finds will.
+   * sender never fills it in - but a bot that fills every field it finds will.
    * Named `website` because that is a field name a bot expects to be real.
    */
   website: z.string().optional(),

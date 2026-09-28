@@ -15,7 +15,7 @@ type CustomCodeProps = {
 /**
  * Blocks longer than this collapse behind an expand button.
  *
- * Kept in sync by hand with the `max-h-[calc(50*1lh)]` below — Tailwind class
+ * Kept in sync by hand with the `max-h-[calc(50*1lh)]` below - Tailwind class
  * names cannot interpolate a JS value, and expressing the cap in `lh` units
  * ties it to the code block's own line height rather than to the hard-coded
  * pixel height it used to be. That number was `1132px`, which was this many

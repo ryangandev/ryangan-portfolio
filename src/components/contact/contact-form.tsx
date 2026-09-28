@@ -34,7 +34,7 @@ const ContactForm = () => {
   });
 
   // `zodResolver` runs the schema before `handleSubmit` calls this, so
-  // `values` is already valid — there is nothing left to check here. The
+  // `values` is already valid - there is nothing left to check here. The
   // server validates independently, which is the check that actually matters,
   // since a server action is reachable without going through this form.
   const onSubmit = async (values: z.infer<typeof ContactSchema>) => {

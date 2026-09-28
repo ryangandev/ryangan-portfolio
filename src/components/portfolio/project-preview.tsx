@@ -17,8 +17,8 @@ type ProjectPreviewProps = {
 
 /**
  * The grid is two columns, so only the first two cards can be above the fold on
- * any realistic viewport. Marking every thumbnail `priority` — which is what
- * this did — opts all of them out of lazy loading and emits a high-priority
+ * any realistic viewport. Marking every thumbnail `priority` - which is what
+ * this did - opts all of them out of lazy loading and emits a high-priority
  * preload each, so the images nobody has scrolled to yet compete with the one
  * that decides LCP.
  */

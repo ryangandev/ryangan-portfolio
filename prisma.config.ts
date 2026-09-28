@@ -10,8 +10,8 @@ import { defineConfig, env } from 'prisma/config';
  * `src/lib/db.ts`.
  *
  * The fallback matters more than it looks. Prisma resolves this eagerly when
- * the config loads — even for `prisma generate`, which never opens a
- * connection — so without it a deploy that only sets `DATABASE_URL` fails at
+ * the config loads - even for `prisma generate`, which never opens a
+ * connection - so without it a deploy that only sets `DATABASE_URL` fails at
  * the `postinstall` generate step rather than at any query. Falling back keeps
  * production down to a single environment variable.
  *
