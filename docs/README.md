@@ -17,7 +17,7 @@ Load only the document and section a request needs.
 | The contact form                                           | [architecture.md#contact-form](architecture.md#contact-form)             |
 | Security headers                                           | [architecture.md#security-headers](architecture.md#security-headers)     |
 | The logo, favicons, or OpenGraph images                    | [architecture.md#brand-mark](architecture.md#brand-mark)                 |
-| pnpm, CI, deploys, or why a dependency is pinned           | [architecture.md#tooling-and-deploy](architecture.md#tooling-and-deploy) |
+| pnpm, CI, deploys, tests, or why a dependency is pinned    | [architecture.md#tooling-and-deploy](architecture.md#tooling-and-deploy) |
 
 List the headings with `rg '^##' docs/architecture.md` and read only the matching section.
 

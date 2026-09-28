@@ -21,7 +21,7 @@ Last reviewed: 2026-09-28.
 | Shared UI primitives                      | `src/components/ui` (shadcn/ui)                                                                                                                                  |
 | Headers, build, CI, and dependencies      | `next.config.mjs`, `package.json`, `pnpm-workspace.yaml`, `.github/`                                                                                             |
 
-Tests sit next to the code they cover as `*.test.ts`.
+Unit tests sit next to the code they cover as `*.test.ts`; see [Tests](#tests) for the rest.
 
 ## Content
 
@@ -176,7 +176,7 @@ Traps when regenerating:
 ## Tooling and deploy
 
 Vercel deploys `main` and builds a preview for every pull request.
-CI (`.github/workflows/ci.yml`) runs format check, lint, typecheck, tests, and build on every pull request and push to `main`, from a clean install with no secrets.
+CI (`.github/workflows/ci.yml`) runs format check, lint, typecheck, unit tests, build, and browser tests on every pull request and push to `main`, from a clean install with no secrets.
 Dependabot opens dependency updates.
 
 pnpm is pinned by `packageManager` in `package.json`, and pnpm 10 and later switch to that version on their own, so local installs, CI, and Vercel resolve with the same pnpm.
@@ -199,3 +199,21 @@ pnpm 11 and later no longer read the `pnpm` field in `package.json`; the setting
 
 `tests/upstream-pins.test.ts` reads the installed packages and fails, naming what to remove, once a dependency update makes the ESLint, Prisma override, or TypeScript workaround unnecessary.
 Dependabot's updates are what trip it.
+
+### Tests
+
+- **Unit tests** (Vitest, `pnpm test`) sit beside their code in `src/` and mock the database.
+  `tests/` holds checks on the repository itself.
+- **Browser tests** (Playwright, `pnpm test:e2e`) live in `e2e/` and cover the flows that have broken before: the contact form's states, the theme toggle, and client-side navigation.
+
+The browser tests run against a production build, since static rendering, prefetching, and the inline theme script only behave as visitors see them there.
+`playwright.config.ts` starts that server cut off from everything real:
+
+- `DATABASE_URL` points at a host that cannot resolve, so the view counter and rate limit fail soft, and nothing is written to production.
+- Resend is pointed at `e2e/mock-resend.mjs` through `RESEND_BASE_URL`, so no email is sent.
+  A subject containing `resend-fail` makes it answer with an error.
+- Each contact test sends its own `x-forwarded-for`, so the rate limit, which keys on the caller's IP, cannot leak between tests.
+
+Any console error or uncaught exception fails a test, since that is how hydration mismatches surface.
+Vercel's analytics scripts, which only exist on Vercel, are answered with an empty script.
+Start the server with `next start`, not `pnpm exec next start`: pnpm's native binary does not pass on the stop signal, and Playwright then waits on the orphaned server forever.

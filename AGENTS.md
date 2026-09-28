@@ -15,7 +15,8 @@ Do not read every doc by default.
 
 - `pnpm dev` - development server
 - `pnpm build` - generates the Prisma client, then builds
-- `pnpm format:check`, `pnpm lint`, `pnpm typecheck`, `pnpm test` - what CI runs on every pull request, along with the build
+- `pnpm format:check`, `pnpm lint`, `pnpm typecheck`, `pnpm test` - what CI runs on every pull request, along with the build and the browser tests
+- `pnpm test:e2e` - builds, then runs the Playwright browser tests against the production build, with no database and no real email; see [Tests](docs/architecture.md#tests)
 - `pnpm format` - Prettier over the whole repository
 - `pnpm prisma generate` - after install and after any schema change
 
