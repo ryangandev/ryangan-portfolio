@@ -3,6 +3,7 @@ import type { Metadata } from 'next';
 import { ThemeProvider } from 'next-themes';
 import { ViewTransitions } from 'next-view-transitions';
 import { Analytics } from '@vercel/analytics/next';
+import { SpeedInsights } from '@vercel/speed-insights/next';
 
 import { geistSans } from '@/assets/fonts';
 import SiteFooter from '@/components/site-footer';
@@ -73,6 +74,7 @@ export default function RootLayout({
             </div>
             <SiteFooter />
             <Analytics />
+            <SpeedInsights />
             <Toaster richColors />
           </ThemeProvider>
         </body>
