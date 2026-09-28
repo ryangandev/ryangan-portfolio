@@ -192,3 +192,38 @@
 @utility color-level-6 {
   @apply text-neutral-400 dark:text-neutral-600;
 }
+
+/*
+  Reading progress on posts: a bar across the top of the viewport that fills
+  as the page scrolls. It is a scroll-driven animation, so it costs no
+  JavaScript and never lags the scroll. Browsers without scroll timelines do
+  not show it at all rather than showing a bar stuck at zero.
+*/
+@keyframes reading-progress {
+  to {
+    transform: scaleX(1);
+  }
+}
+
+.reading-progress {
+  display: none;
+}
+
+@supports (animation-timeline: scroll()) {
+  .reading-progress {
+    position: fixed;
+    inset: 0 0 auto;
+    z-index: 50;
+    display: block;
+    height: 2px;
+    transform: scaleX(0);
+    transform-origin: 0 50%;
+    background-color: var(--color-neutral-900);
+    animation: reading-progress linear both;
+    animation-timeline: scroll(root block);
+  }
+
+  .dark .reading-progress {
+    background-color: var(--color-neutral-100);
+  }
+}

@@ -4,12 +4,13 @@ import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 
 import PostNavigation from '@/components/blog/post-navigation';
+import TableOfContents from '@/components/blog/table-of-contents';
 import TopicList from '@/components/blog/topic-list';
 import ViewCounter from '@/components/blog/view-counter';
 import Byline from '@/components/byline';
 import Callout from '@/components/callout';
 import JsonLd from '@/components/json-ld';
-import Mdx from '@/components/mdx/mdx-components';
+import { compileMdx } from '@/components/mdx/mdx-components';
 import BackButton from '@/components/navigation/back-button';
 import { feedAlternates, siteName, siteUrl } from '@/data/site';
 import {
@@ -84,6 +85,8 @@ export default async function Page({
     notFound();
   }
 
+  const { content, headings } = await compileMdx(post.content);
+
   return (
     <main className="relative">
       <JsonLd
@@ -104,7 +107,17 @@ export default async function Page({
           },
         }}
       />
+      <div className="reading-progress" aria-hidden />
       <BackButton name="Blog" href="/blog" />
+      {headings.length > 1 && (
+        // The right-hand gutter only exists from xl up. The aside spans the
+        // article's height so the list can stick while the article scrolls.
+        <aside className="absolute top-0 left-full hidden h-full xl:block">
+          <div className="sticky top-32 ml-10 w-56">
+            <TableOfContents headings={headings} />
+          </div>
+        </aside>
+      )}
 
       <article className="space-y-8">
         <h1 className="text-3xl font-bold md:text-4xl">{post.title}</h1>
@@ -127,7 +140,7 @@ export default async function Page({
         )}
 
         <section className="prose max-w-[644px] dark:prose-invert">
-          <Mdx source={post.content} />
+          {content}
         </section>
 
         <footer className="space-y-8 border-t pt-8">
