@@ -6,7 +6,8 @@ import { z } from 'zod';
 
 import { parseContentDate } from '@/lib/date';
 import { getReadingTime } from '@/lib/reading-time';
-import { PostData, PostMetadata } from '@/models/post';
+import { toTopicSlug } from '@/lib/topics';
+import { PostData, PostMetadata, Topic } from '@/models/post';
 import { ProjectData, ProjectMetadata } from '@/models/project';
 import {
   PostFrontmatterSchema,
@@ -197,25 +198,47 @@ export const getPostBySlug = async (slug: string): Promise<PostData | null> => {
 };
 
 /**
- * Get all post metadata and unique sorted years
- * @returns Posts newest first, without their bodies, and the distinct years
- *          they were published in, newest first
+ * @returns Metadata for every post, newest first, without the bodies
  */
-export const getSortedPosts = cache(
-  async (): Promise<{ posts: PostMetadata[]; years: number[] }> => {
-    const slugs = await getAllPostSlugs();
-    const posts = (await Promise.all(slugs.map(loadPost)))
-      .filter((post) => post !== null)
-      .map((post) => post.metadata)
-      .sort(newestFirst((post) => post.publishedDate));
+export const getSortedPosts = cache(async (): Promise<PostMetadata[]> => {
+  const slugs = await getAllPostSlugs();
+  const posts = await Promise.all(slugs.map(loadPost));
 
-    const years = new Set(
-      posts.map((post) => parseContentDate(post.publishedDate).getFullYear()),
-    );
+  return posts
+    .filter((post) => post !== null)
+    .map((post) => post.metadata)
+    .sort(newestFirst((post) => post.publishedDate));
+});
 
-    return {
-      posts,
-      years: Array.from(years).sort((a, b) => b - a),
-    };
-  },
-);
+/**
+ * Every topic used by at least one post, with its posts newest first
+ * @returns Topics with the most posts first, then alphabetically. Each takes
+ *          its display name from the first (newest) post that uses it.
+ */
+export const getTopics = cache(async (): Promise<Topic[]> => {
+  const posts = await getSortedPosts();
+  const topics = new Map<string, Topic>();
+
+  for (const post of posts) {
+    for (const name of post.topics) {
+      const slug = toTopicSlug(name);
+      const topic = topics.get(slug) ?? { slug, name, posts: [] };
+
+      if (!topic.posts.includes(post)) {
+        topic.posts.push(post);
+      }
+
+      topics.set(slug, topic);
+    }
+  }
+
+  return [...topics.values()].sort(
+    (a, b) => b.posts.length - a.posts.length || a.name.localeCompare(b.name),
+  );
+});
+
+/**
+ * @returns The topic with this slug, or null when no post uses it
+ */
+export const getTopicBySlug = async (slug: string): Promise<Topic | null> =>
+  (await getTopics()).find((topic) => topic.slug === slug) ?? null;

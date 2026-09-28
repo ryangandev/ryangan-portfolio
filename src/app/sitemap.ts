@@ -1,7 +1,7 @@
 import type { MetadataRoute } from 'next';
 
 import { siteUrl } from '@/data/site';
-import { getSortedPosts, getSortedProjects } from '@/lib/content';
+import { getSortedPosts, getSortedProjects, getTopics } from '@/lib/content';
 import { parseContentDate } from '@/lib/date';
 
 /**
@@ -9,9 +9,10 @@ import { parseContentDate } from '@/lib/date';
  * file is indexable the moment it ships.
  */
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const [{ posts }, projects] = await Promise.all([
+  const [posts, projects, topics] = await Promise.all([
     getSortedPosts(),
     getSortedProjects(),
+    getTopics(),
   ]);
 
   const staticRoutes: MetadataRoute.Sitemap = [
@@ -34,6 +35,13 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       lastModified: parseContentDate(project.date),
       changeFrequency: 'yearly' as const,
       priority: 0.7,
+    })),
+    ...topics.map((topic) => ({
+      url: `${siteUrl}/blog/topics/${topic.slug}`,
+      // A topic page changes when its newest post is published.
+      lastModified: parseContentDate(topic.posts[0].publishedDate),
+      changeFrequency: 'monthly' as const,
+      priority: 0.4,
     })),
   ];
 }

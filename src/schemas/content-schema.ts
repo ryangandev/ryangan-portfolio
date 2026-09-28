@@ -30,7 +30,14 @@ export const PostFrontmatterSchema = z.strictObject({
   publishedDate: ContentDate,
   featured: z.boolean().default(false),
   summary: NonEmpty,
-  topics: z.array(NonEmpty).default([]),
+  // A topic becomes a URL segment, so it needs something to put in one.
+  topics: z
+    .array(
+      NonEmpty.regex(/[a-z0-9]/i, {
+        message: 'A topic needs at least one letter or digit',
+      }),
+    )
+    .default([]),
 });
 
 export const ProjectFrontmatterSchema = z.strictObject({

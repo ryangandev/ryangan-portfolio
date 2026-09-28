@@ -3,6 +3,7 @@ import { format } from 'date-fns';
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 
+import TopicList from '@/components/blog/topic-list';
 import ViewCounter from '@/components/blog/view-counter';
 import Byline from '@/components/byline';
 import Callout from '@/components/callout';
@@ -100,6 +101,10 @@ export default async function Page({
         <section className="prose max-w-[644px] dark:prose-invert">
           <Mdx source={post.content} />
         </section>
+
+        <footer className="border-t pt-8">
+          <TopicList topics={post.topics} />
+        </footer>
       </article>
     </main>
   );

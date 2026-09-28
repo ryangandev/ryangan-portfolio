@@ -8,8 +8,11 @@ import {
   getProjectBySlug,
   getSortedPosts,
   getSortedProjects,
+  getTopicBySlug,
+  getTopics,
 } from '@/lib/content';
 import { parseContentDate } from '@/lib/date';
+import { toTopicSlug } from '@/lib/topics';
 
 // These run against the real files in src/content, so they assert properties
 // that must hold for any content rather than specific titles or counts.
@@ -38,21 +41,15 @@ describe('content readers', () => {
     ).toBeNull();
   });
 
-  it('sorts posts newest first and lists their years newest first', async () => {
-    const { posts, years } = await getSortedPosts();
+  it('sorts posts newest first', async () => {
+    const posts = await getSortedPosts();
     const times = posts.map((post) => time(post.publishedDate));
 
     expect(times).toEqual([...times].sort((a, b) => b - a));
-    expect(years).toEqual([...new Set(years)].sort((a, b) => b - a));
-    expect(new Set(years)).toEqual(
-      new Set(
-        posts.map((post) => parseContentDate(post.publishedDate).getFullYear()),
-      ),
-    );
   });
 
   it('leaves bodies out of the lists', async () => {
-    const { posts } = await getSortedPosts();
+    const posts = await getSortedPosts();
     const projects = await getSortedProjects();
 
     for (const item of [...posts, ...projects]) {
@@ -67,5 +64,34 @@ describe('content readers', () => {
 
     expect(times).toEqual([...times].sort((a, b) => b - a));
     expect(featured).toEqual(projects.filter((project) => project.featured));
+  });
+});
+
+describe('topics', () => {
+  it('slugs topic names so case and separator variants share a page', () => {
+    expect(toTopicSlug('React Hook Form')).toBe('react-hook-form');
+    expect(toTopicSlug('react-hook-form')).toBe('react-hook-form');
+    expect(toTopicSlug('Next.js')).toBe('next-js');
+    expect(toTopicSlug('  C# / .NET  ')).toBe('c-net');
+  });
+
+  it('groups every post under each of its topics, newest first', async () => {
+    const posts = await getSortedPosts();
+    const topics = await getTopics();
+
+    for (const post of posts) {
+      for (const name of post.topics) {
+        const topic = topics.find((t) => t.slug === toTopicSlug(name));
+        expect(topic?.posts).toContainEqual(post);
+      }
+    }
+
+    for (const topic of topics) {
+      const times = topic.posts.map((post) => time(post.publishedDate));
+      expect(times).toEqual([...times].sort((a, b) => b - a));
+      expect(await getTopicBySlug(topic.slug)).toEqual(topic);
+    }
+
+    expect(await getTopicBySlug('no-such-topic')).toBeNull();
   });
 });
