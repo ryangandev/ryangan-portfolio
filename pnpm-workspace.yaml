@@ -24,3 +24,15 @@ onlyBuiltDependencies:
 overrides:
   deepmerge-ts: ^8.0.2
   mysql2: ^3.24.4
+
+# ESLint 9 is out of support, but these plugins (all pulled in by
+# eslint-config-next) have not yet published a release declaring ESLint 10 in
+# their peer range. Their rules run correctly on 10 (checked rule-for-rule
+# against 9 on a probe file); the one crash, in eslint-plugin-react's version
+# detection, is sidestepped in eslint.config.mjs. Remove each entry once the
+# plugin's own peer range includes ^10.
+peerDependencyRules:
+  allowedVersions:
+    eslint-plugin-import>eslint: '10'
+    eslint-plugin-jsx-a11y>eslint: '10'
+    eslint-plugin-react>eslint: '10'

@@ -125,8 +125,13 @@ refuses to decode grayscale+alpha.
 
 ## Pinned on purpose
 
-- **ESLint `9.39.5`.** ESLint 10 removes `context.getFilename()`, which
-  `eslint-plugin-react` (via `eslint-config-next`) still calls, hard-crashing lint.
+- **ESLint 10 ahead of its plugins.** ESLint 9 is out of support, but
+  `eslint-plugin-react`, `-import`, and `-jsx-a11y` (via `eslint-config-next`)
+  have not released ESLint 10 peer ranges. `peerDependencyRules` in
+  `pnpm-workspace.yaml` accepts 10 for those three. `eslint-plugin-react`'s
+  React version detection calls the removed `context.getFilename()`, so
+  `eslint.config.mjs` sets `settings.react.version` from the installed React.
+  Drop both workarounds as the plugins catch up.
 - **TypeScript `6.0.3`.** TypeScript 7 ships no programmatic JS API until 7.1,
   breaking both `next build` and typescript-eslint.
 - **`images.qualities`** is set explicitly in `next.config.mjs`; Next 16 defaults
