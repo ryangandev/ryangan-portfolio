@@ -62,8 +62,3 @@ export type TechStackIconName =
   | 'oauth'
   | 'firebase'
   | 'trello';
-
-export type SkillsData = {
-  name: string;
-  iconName: TechStackIconName;
-}[];

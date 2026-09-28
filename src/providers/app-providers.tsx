@@ -1,6 +1,5 @@
 'use client';
 
-import { ActiveSectionContextProvider } from '@/providers/active-section-context';
 import { ThemeProvider } from '@/providers/theme-provider';
 
 export function AppProviders({ children }: { children: React.ReactNode }) {
@@ -12,7 +11,7 @@ export function AppProviders({ children }: { children: React.ReactNode }) {
       storageKey="rg-theme"
       disableTransitionOnChange
     >
-      <ActiveSectionContextProvider>{children}</ActiveSectionContextProvider>
+      {children}
     </ThemeProvider>
   );
 }
