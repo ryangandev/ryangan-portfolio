@@ -1,3 +1,5 @@
+import { TechStackIconName } from '@/data/tech-stack';
+
 export type ProjectMetadata = {
   slug: string;
   title: string;
@@ -6,7 +8,7 @@ export type ProjectMetadata = {
   role: string;
   summary: string;
   thumbnailUrl: string;
-  techStack: string[];
+  techStack: TechStackIconName[];
   /**
    * Both the key and each URL are optional, because the content already says
    * so: Grapple Grub and Player 2 Helpdesk define only `live`. The type used

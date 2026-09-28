@@ -11,9 +11,9 @@ import TechStackIcon from '@/components/icons/tech-stack-icon';
 import Mdx from '@/components/mdx/mdx-components';
 import BackButton from '@/components/navigation/back-button';
 import { siteName } from '@/data/site';
+import { techStack } from '@/data/tech-stack';
 import { getAllProjectSlugs, getProjectBySlug } from '@/lib/content';
 import { parseContentDate } from '@/lib/date';
-import { TechStackIconName } from '@/models/data';
 import { ProjectData } from '@/models/project';
 
 /**
@@ -162,9 +162,9 @@ export default async function Page({
               key={tech}
               className="flex cursor-default items-center space-x-2"
             >
-              <TechStackIcon name={tech as TechStackIconName} size={16} />
+              <TechStackIcon name={tech} size={16} />
               <span className="text-xs font-medium text-black uppercase dark:text-white">
-                {tech}
+                {techStack[tech].label}
               </span>
             </span>
           ))}

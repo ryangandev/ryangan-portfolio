@@ -5,7 +5,7 @@ import { Link } from 'next-view-transitions';
 import HighlightedText from '@/components/highlighted-text';
 import TechStackIcon from '@/components/icons/tech-stack-icon';
 import { cn } from '@/lib/utils';
-import { TechStackIconName } from '@/models/data';
+import { techStack } from '@/data/tech-stack';
 import { ProjectMetadata } from '@/models/project';
 
 type ProjectPreviewProps = {
@@ -75,9 +75,10 @@ const ProjectPreview: React.FC<ProjectPreviewProps> = ({
         {project.techStack.map((tech) => (
           <TechStackIcon
             key={tech}
-            name={tech as TechStackIconName}
+            name={tech}
             size={16}
             className="flex shrink-0"
+            title={techStack[tech].label}
           />
         ))}
       </div>
