@@ -24,7 +24,6 @@ These need an account or a judgment only Ryan has.
 
 ## Open decisions
 
-- **Home page copy.** It still says "Currently, I'm exploring GraphQL".
 - **Prisma leftovers.** Build the guestbook, or drop `User`, `Account`, and `GuestbookNote` in a migration.
   Until then they stay in the schema; see [Database](architecture.md#database).
 - **Comments.** The loading-states post ends by inviting a comment, and there is nowhere to leave one.

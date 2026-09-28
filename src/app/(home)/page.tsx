@@ -50,26 +50,26 @@ export default async function Home() {
 
       <h2>About Me</h2>
       <p className="mb-4">
-        As a software engineer specializing in full-stack development with 3
+        As a software engineer specializing in full-stack development with 4
         years of experience, my tech stack includes:
       </p>
       <ul className="mb-7 list-inside list-disc space-y-2">
         <li>
           <span className="font-medium color-level-2">Frontend</span>: React,
-          Next.js, TypeScript, Redux
+          Next.js, TypeScript, JavaScript, Redux
         </li>
         <li>
           <span className="font-medium color-level-2">Backend</span>: Node.js,
-          SpringBoot, Java, PostgreSQL, MongoDB, Prisma
+          Express, Fastify, Java, Spring Boot, PostgreSQL, MongoDB, Prisma
         </li>
         <li>
           <span className="font-medium color-level-2">Tools & Others</span>:
-          CI/CD, Git, Docker, Postman, Agile, AWS, Vercel
+          AWS, CI/CD, Playwright, Jest, Splunk, Git, Docker, Vercel
         </li>
       </ul>
       <p>
         I embrace continuous learning and am constantly picking up new skills.
-        Currently, I&apos;m exploring GraphQL.
+        Currently, I&apos;m exploring building software with AI coding agents.
       </p>
 
       <h2>Experience</h2>
