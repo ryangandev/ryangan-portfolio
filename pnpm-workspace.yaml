@@ -1,0 +1,18 @@
+# Dependency build scripts are opt-in. Prisma needs its engines. The others
+# ship prebuilt binaries and work without their postinstall checks: sharp
+# (Next's image optimizer, which Vercel replaces with its own), esbuild
+# (react-email's preview CLI), and unrs-resolver (ESLint's import resolver).
+#
+# `allowBuilds` is read by pnpm 11+, which no longer reads the `pnpm` field in
+# package.json. `onlyBuiltDependencies` is the pnpm 10 spelling of the same
+# list, kept so an older pnpm on the build host resolves the same way.
+allowBuilds:
+  '@prisma/engines': true
+  prisma: true
+  esbuild: false
+  sharp: false
+  unrs-resolver: false
+
+onlyBuiltDependencies:
+  - '@prisma/engines'
+  - prisma

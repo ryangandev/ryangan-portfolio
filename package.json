@@ -2,12 +2,6 @@
   "name": "ryangan-portfolio",
   "version": "2.0.0",
   "private": true,
-  "pnpm": {
-    "onlyBuiltDependencies": [
-      "@prisma/engines",
-      "prisma"
-    ]
-  },
   "scripts": {
     "build": "next build",
     "dev": "next dev",
