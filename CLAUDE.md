@@ -99,7 +99,7 @@ Older Prisma recipes do not apply here:
 - The generator is `prisma-client` (not `prisma-client-js`) and requires an
   explicit `output`.
 - Every database needs a driver adapter; `src/lib/db.ts` uses `PrismaNeon` against
-  the *pooled* endpoint so serverless cold starts cannot exhaust a TCP pool.
+  the _pooled_ endpoint so serverless cold starts cannot exhaust a TCP pool.
 - The schema keeps the Auth.js `User`/`Account` models and the empty
   `GuestbookNote` even though nothing reads them. They are live tables in Neon and
   `prisma db push` would drop them.
