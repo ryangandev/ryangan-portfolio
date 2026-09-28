@@ -13,6 +13,14 @@ import { describeError } from '@/lib/describe-error';
  */
 
 /**
+ * How long a session stays counted for a post. The table would otherwise grow
+ * by a row per new session per post, forever. A session cookie rarely outlives
+ * this, and one that does counts once more after a month away, which is a
+ * genuine return visit anyway.
+ */
+const SESSION_RETENTION_MS = 30 * 24 * 60 * 60_000;
+
+/**
  * Read a post's view count without changing it
  */
 export const getPostViews = async (slug: string): Promise<number | null> => {
@@ -52,11 +60,20 @@ export const recordPostView = async (
       return getPostViews(slug);
     }
 
-    const post = await db.postView.upsert({
-      where: { slug },
-      create: { slug, count: 1 },
-      update: { count: { increment: 1 } },
-    });
+    // Pruning rides on new views rather than a cron: sessions only need
+    // deleting while the table is growing, and that is exactly when this runs.
+    const [post] = await Promise.all([
+      db.postView.upsert({
+        where: { slug },
+        create: { slug, count: 1 },
+        update: { count: { increment: 1 } },
+      }),
+      db.postViewSession.deleteMany({
+        where: {
+          viewedAt: { lt: new Date(Date.now() - SESSION_RETENTION_MS) },
+        },
+      }),
+    ]);
 
     return post.count;
   } catch (error) {

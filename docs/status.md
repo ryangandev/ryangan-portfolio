@@ -34,7 +34,6 @@ These need an account or a judgment only Ryan has.
 ## Next work
 
 - Drop the ESLint workarounds, the Prisma overrides, and the TypeScript pin as upstream catches up; Dependabot surfaces each.
-- Prune `post_view_sessions`, which grows forever; `viewed_at` is already indexed for it.
 - Add browser tests for the flows that have broken before: contact form states, the theme toggle, and client-side navigation.
 
 ## Deliberately not done

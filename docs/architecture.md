@@ -126,7 +126,8 @@ Views live in the same Postgres database as everything else (`src/lib/views.ts`)
 - **Dedup is a database constraint.** `PostViewSession` is keyed on `(sessionId, slug)` and the insert uses `skipDuplicates`; whether a row was written decides whether the total increments.
   Catching a unique violation instead would abort the surrounding transaction and leave nothing to read.
 
-`post_view_sessions` is never pruned, but `viewed_at` is indexed so it can be.
+Sessions are kept for 30 days.
+Each newly counted view deletes older ones, through the `viewed_at` index, so the table stops growing without a cron; a session that returns after a month counts once more.
 
 Loading a post in `pnpm dev` records a view in whatever database `DATABASE_URL` points at, which locally is production.
 To test pages without writing, run the dev server with `DATABASE_URL` pointed at an unreachable host; the counter fails soft.
