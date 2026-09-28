@@ -17,7 +17,8 @@ This is my portfolio and blog site that showcases my work and projects, built wi
 - **Prisma 7** with Neon Postgres
 - **MDX** for blog posts and project content
 - **Resend** for the contact form
-- **Vercel Analytics** for insights
+- **Vercel Analytics** and **Speed Insights** for traffic and real-user performance
+- **Vitest** and **GitHub Actions** for tests and CI
 
 ## 📢 Feedback
 
