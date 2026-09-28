@@ -16,10 +16,10 @@ jobs:
   check:
     runs-on: ubuntu-latest
     env:
-      # prisma.config.ts resolves the URL eagerly, even for the `prisma
-      # generate` that postinstall runs, which never connects. Nothing in this
-      # job touches a database: the build is fully static and the tests mock
-      # the client.
+      # prisma.config.ts resolves the URL eagerly, even for `prisma generate`
+      # (run by postinstall and again by the build), which never connects.
+      # Nothing in this job touches a database: the build is fully static and
+      # the tests mock the client.
       DATABASE_URL: postgresql://ci:ci@localhost:5432/ci
     steps:
       - uses: actions/checkout@v7
@@ -37,4 +37,9 @@ jobs:
       - run: pnpm lint
       - run: pnpm typecheck
       - run: pnpm test
+
+      # Build without the client postinstall generated, as Vercel does: its
+      # build cache restores node_modules, pnpm then skips the install and its
+      # postinstall, and the build has to generate the client itself.
+      - run: rm -rf src/generated/prisma
       - run: pnpm build

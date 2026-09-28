@@ -5,7 +5,7 @@ Guidance for Claude Code (claude.ai/code) when working in this repository.
 ## Commands
 
 - `pnpm dev` - development server
-- `pnpm build` / `pnpm start` - production build and serve
+- `pnpm build` / `pnpm start` - production build, which generates the Prisma client first, and serve
 - `pnpm lint` - `eslint .` (`next lint` was removed in Next.js 16)
 - `pnpm typecheck` - `tsc --noEmit`
 - `pnpm test` - Vitest, once (`pnpm test:watch` to watch)
@@ -113,10 +113,13 @@ The default sender is Resend's shared sandbox, which only delivers to the accoun
 Older Prisma recipes do not apply here:
 
 - The connection URL is **not** in `schema.prisma` - it is in `prisma.config.ts`, pointed at `DATABASE_URL_UNPOOLED`, because migrations take advisory locks that do not survive a transaction pooler.
-  That config resolves `env()` **eagerly**, even for `prisma generate`, which never connects - so a deploy setting only `DATABASE_URL` would fail at the `postinstall` generate step.
+  That config resolves `env()` **eagerly**, even for `prisma generate`, which never connects - so a deploy setting only `DATABASE_URL` would fail at the generate step.
   Hence the fallback to `DATABASE_URL`, which keeps production down to one variable.
   Runtime reads only `DATABASE_URL`; `DATABASE_URL_UNPOOLED` is CLI-only.
 - The generator is `prisma-client` (not `prisma-client-js`) and requires an explicit `output`.
+- **The build runs `prisma generate` itself.** The client is generated into `src/generated/prisma`, which is gitignored, so a fresh clone does not have it.
+  `postinstall` also generates, but only on a real install: pnpm 12 skips the install, lifecycle scripts included, when `node_modules` is already current, and a restored Vercel build cache is exactly that.
+  Keep the generate in `build`; relying on `postinstall` alone fails every deploy after the first.
 - Every database needs a driver adapter; `src/lib/db.ts` uses `PrismaNeon` against the _pooled_ endpoint so serverless cold starts cannot exhaust a TCP pool.
 - The schema keeps the Auth.js `User`/`Account` models and the empty `GuestbookNote` even though nothing reads them.
   They are live tables in Neon and `prisma db push` would drop them.

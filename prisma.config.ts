@@ -12,8 +12,8 @@ import { defineConfig, env } from 'prisma/config';
  * The fallback matters more than it looks. Prisma resolves this eagerly when
  * the config loads - even for `prisma generate`, which never opens a
  * connection - so without it a deploy that only sets `DATABASE_URL` fails at
- * the `postinstall` generate step rather than at any query. Falling back keeps
- * production down to a single environment variable.
+ * the generate step rather than at any query. Falling back keeps production
+ * down to a single environment variable.
  *
  * Set `DATABASE_URL_UNPOOLED` wherever you actually run `db push` or `migrate`.
  * Those commands can hang or fail in confusing ways against the pooled endpoint.

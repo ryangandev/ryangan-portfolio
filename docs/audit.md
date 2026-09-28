@@ -21,7 +21,7 @@ Every change below is its own commit on `fix/audit-first-pass`, with the evidenc
 | `pnpm format:check` | Passes for the whole repository                                                      |
 | `pnpm build`        | Passes; every route is Static or SSG, 28 prerendered including 2 generated OG cards  |
 | CI                  | The same five checks run on every pull request, from a clean install with no secrets |
-| Vercel              | The preview deployment of this branch builds, the first build under pnpm 12          |
+| Vercel              | Previews build under pnpm 12, including from a restored build cache                  |
 | Installs            | No warnings on pnpm 12.6; frozen installs also verified on pnpm 10.34                |
 | Production database | In sync with the schema: `prisma migrate diff` reports no difference                 |
 
@@ -85,6 +85,13 @@ The rules were checked to fire identically on 9 and 10 against a probe file.
 
 pnpm 12 had stopped reading the `pnpm` field in `package.json`, which made every install fail.
 The settings moved to `pnpm-workspace.yaml`, and `packageManager` now pins pnpm for local, CI, and Vercel alike.
+
+pnpm 12 also skips an install entirely, lifecycle scripts included, when `node_modules` is already current.
+On Vercel that is every build after the first, because the build cache restores `node_modules`.
+So the first preview under pnpm 12 built, and the second failed with `Can't resolve '@/generated/prisma/client'`: `postinstall` never ran, and the generated client is gitignored.
+It reproduces locally by installing into a fresh clone over another clone's `node_modules`.
+In the same setup pnpm 10 runs `postinstall` and regenerates, which is why `main` never hit it.
+The build script now runs `prisma generate` itself, and CI deletes the generated client before building so it cannot come to depend on `postinstall` again.
 
 ### Production database
 
