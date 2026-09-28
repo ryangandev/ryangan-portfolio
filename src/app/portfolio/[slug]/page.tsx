@@ -14,25 +14,6 @@ import { siteName } from '@/data/site';
 import { techStack } from '@/data/tech-stack';
 import { getAllProjectSlugs, getProjectBySlug } from '@/lib/content';
 import { parseContentDate } from '@/lib/date';
-import { ProjectData } from '@/models/project';
-
-/**
- * Get project data by slug or null if project is not found
- */
-const getProjectData = async (slug: string): Promise<ProjectData | null> => {
-  const allSlugs = await getAllProjectSlugs();
-  if (!allSlugs.includes(slug)) {
-    return null;
-  }
-
-  try {
-    const project = await getProjectBySlug(slug);
-    return project;
-  } catch (error) {
-    console.error(`Error fetching project data for slug ${slug}:`, error);
-    return null;
-  }
-};
 
 export const generateStaticParams = async () => {
   const slugs = await getAllProjectSlugs();
@@ -48,7 +29,7 @@ export const generateMetadata = async ({
   params: Promise<{ slug: string }>;
 }): Promise<Metadata> => {
   const { slug } = await params;
-  const project = await getProjectData(slug);
+  const project = await getProjectBySlug(slug);
 
   if (!project) {
     return {
@@ -91,7 +72,7 @@ export default async function Page({
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
-  const project = await getProjectData(slug);
+  const project = await getProjectBySlug(slug);
 
   if (!project) {
     notFound();

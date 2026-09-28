@@ -1,11 +1,7 @@
-export type PostMetadata = {
+import type { PostFrontmatter } from '@/schemas/content-schema';
+
+export type PostMetadata = PostFrontmatter & {
   slug: string;
-  title: string;
-  author: string;
-  publishedDate: string;
-  featured: boolean;
-  summary: string;
-  topics: string[];
 };
 
 export type PostData = PostMetadata & {

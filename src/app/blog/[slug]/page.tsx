@@ -11,25 +11,6 @@ import BackButton from '@/components/navigation/back-button';
 import { siteName } from '@/data/site';
 import { getAllPostSlugs, getPostBySlug } from '@/lib/content';
 import { parseContentDate } from '@/lib/date';
-import { PostData } from '@/models/post';
-
-/**
- * Get post data by slug or null if post is not found
- */
-const getPostData = async (slug: string): Promise<PostData | null> => {
-  const allSlugs = await getAllPostSlugs();
-  if (!allSlugs.includes(slug)) {
-    return null;
-  }
-
-  try {
-    const post = await getPostBySlug(slug);
-    return post;
-  } catch (error) {
-    console.error(`Error fetching post data for slug ${slug}:`, error);
-    return null;
-  }
-};
 
 export const generateStaticParams = async () => {
   const slugs = await getAllPostSlugs();
@@ -45,7 +26,7 @@ export const generateMetadata = async ({
   params: Promise<{ slug: string }>;
 }): Promise<Metadata> => {
   const { slug } = await params;
-  const post = await getPostData(slug);
+  const post = await getPostBySlug(slug);
 
   if (!post) {
     return {
@@ -86,7 +67,7 @@ export default async function Page({
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
-  const post = await getPostData(slug);
+  const post = await getPostBySlug(slug);
 
   if (!post) {
     notFound();

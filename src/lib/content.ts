@@ -1,26 +1,27 @@
 import fs from 'fs';
 import path from 'path';
 import matter from 'gray-matter';
+import { z } from 'zod';
 
 import { parseContentDate } from '@/lib/date';
 import { getReadingTime } from '@/lib/reading-time';
 import { PostData, PostMetadata } from '@/models/post';
 import { ProjectData, ProjectMetadata } from '@/models/project';
+import {
+  PostFrontmatterSchema,
+  ProjectFrontmatterSchema,
+} from '@/schemas/content-schema';
 
-const projectsDirectory = path.join(
-  process.cwd(),
-  'src',
-  'content',
-  'projects',
-);
-const postsDirectory = path.join(process.cwd(), 'src', 'content', 'posts');
+const contentDirectory = path.join(process.cwd(), 'src', 'content');
+const projectsDirectory = path.join(contentDirectory, 'projects');
+const postsDirectory = path.join(contentDirectory, 'posts');
 
 /**
  * List the slugs of every `.mdx` file in a content directory.
  *
  * The extension filter is what keeps the build honest. Without it every entry
- * `readdir` returns became a slug, so a stray `.DS_Store` — which macOS creates
- * in any directory Finder has visited — turned into a post with no frontmatter,
+ * `readdir` returns became a slug, so a stray `.DS_Store` (which macOS creates
+ * in any directory Finder has visited) turned into a post with no frontmatter,
  * and the undefined date it produced took down `pnpm build` with a RangeError
  * from `format`. Git ignores those files, so CI never saw it and only local
  * builds broke.
@@ -30,7 +31,40 @@ const getSlugs = async (directory: string): Promise<string[]> => {
 
   return files
     .filter((fileName) => fileName.endsWith('.mdx'))
-    .map((fileName) => fileName.replace(/\.mdx$/, ''));
+    .map((fileName) => fileName.replace(/\.mdx$/, ''))
+    .sort();
+};
+
+/**
+ * Read one MDX file and validate its frontmatter
+ * @throws when the frontmatter does not match the schema, naming the file and
+ *         each offending field, so a content mistake fails the build
+ */
+const readContentFile = async <Schema extends z.ZodType>(
+  directory: string,
+  slug: string,
+  schema: Schema,
+): Promise<{ frontmatter: z.output<Schema>; content: string }> => {
+  const filePath = path.join(directory, `${slug}.mdx`);
+  const { data, content } = matter(
+    await fs.promises.readFile(filePath, 'utf8'),
+  );
+  const result = schema.safeParse(data);
+
+  if (!result.success) {
+    throw new Error(
+      `Invalid frontmatter in ${path.relative(process.cwd(), filePath)}\n` +
+        z.prettifyError(result.error),
+    );
+  }
+
+  return { frontmatter: result.data, content };
+};
+
+const newestFirst = <T>(getDate: (item: T) => string) => {
+  return (a: T, b: T) =>
+    parseContentDate(getDate(b)).getTime() -
+    parseContentDate(getDate(a)).getTime();
 };
 
 /**
@@ -41,45 +75,54 @@ export const getAllProjectSlugs = async (): Promise<string[]> =>
   getSlugs(projectsDirectory);
 
 /**
- * Get metadata and content of a project by slug
- * @param slug a project slug
- * @returns Slug, metadata and content of the project
+ * Read a project, keeping its metadata and body apart so the lists can take
+ * the metadata alone
+ * @returns null when no project has this slug
  */
-export const getProjectBySlug = async (slug: string): Promise<ProjectData> => {
-  const fileName = slug + '.mdx';
-  const fullPath = path.join(projectsDirectory, fileName);
-  const fileContents = await fs.promises.readFile(fullPath, 'utf8');
-  const { data, content } = matter(fileContents);
+const loadProject = async (
+  slug: string,
+): Promise<{ metadata: ProjectMetadata; content: string } | null> => {
+  // Checked against the directory listing rather than trusted, since the
+  // slug may come from a request and is about to become a file path.
+  if (!(await getAllProjectSlugs()).includes(slug)) {
+    return null;
+  }
 
-  return {
+  const { frontmatter, content } = await readContentFile(
+    projectsDirectory,
     slug,
-    ...(data as Omit<ProjectMetadata, 'slug'>),
-    content,
-  };
+    ProjectFrontmatterSchema,
+  );
+
+  return { metadata: { slug, ...frontmatter }, content };
 };
 
 /**
- * @returns Array of project metadata for each project that are sorted by date from newest to oldest
+ * Get metadata and content of a project by slug
+ * @param slug a project slug, possibly straight from the URL
+ * @returns The project, or null when no project has this slug
+ */
+export const getProjectBySlug = async (
+  slug: string,
+): Promise<ProjectData | null> => {
+  const project = await loadProject(slug);
+
+  return project && { ...project.metadata, content: project.content };
+};
+
+/**
+ * @returns Metadata for every project, newest first. Bodies are left out:
+ *          the portfolio list is a client component, and everything returned
+ *          here is serialized into its props.
  */
 export const getSortedProjects = async (): Promise<ProjectMetadata[]> => {
   const slugs = await getAllProjectSlugs();
-  const projects = await Promise.all(
-    slugs.map(async (slug) => {
-      const fullPath = path.join(projectsDirectory, slug + '.mdx');
-      const fileContents = await fs.promises.readFile(fullPath, 'utf8');
-      const { data } = matter(fileContents);
+  const projects = await Promise.all(slugs.map(loadProject));
 
-      return {
-        slug,
-        ...(data as Omit<ProjectMetadata, 'slug'>),
-      };
-    }),
-  );
-
-  return projects.sort(
-    (a, b) =>
-      parseContentDate(b.date).getTime() - parseContentDate(a.date).getTime(),
-  );
+  return projects
+    .filter((project) => project !== null)
+    .map((project) => project.metadata)
+    .sort(newestFirst((project) => project.date));
 };
 
 /**
@@ -89,8 +132,6 @@ export const getSortedProjects = async (): Promise<ProjectMetadata[]> => {
  * It used to be a copy of one, and the two comparators drifted: this function's
  * was the inverse of the other, so the home page listed featured projects
  * oldest first while the portfolio page listed them newest first.
- *
- * @returns Array of featured project metadata, sorted from newest to oldest
  */
 export const getFeaturedProjects = async (): Promise<ProjectMetadata[]> => {
   const projects = await getSortedProjects();
@@ -106,56 +147,64 @@ export const getAllPostSlugs = async (): Promise<string[]> =>
   getSlugs(postsDirectory);
 
 /**
- * Get metadata and content of a post by slug
- * @param slug a post slug
- * @returns Slug, metadata and content of the post
+ * Read a post, keeping its metadata and body apart so the lists can take the
+ * metadata alone
+ * @returns null when no post has this slug
  */
-export const getPostBySlug = async (slug: string): Promise<PostData> => {
-  const fileName = slug + '.mdx';
-  const fullPath = path.join(postsDirectory, fileName);
-  const fileContents = await fs.promises.readFile(fullPath, 'utf8');
-  const { data, content } = matter(fileContents);
+const loadPost = async (
+  slug: string,
+): Promise<{ metadata: PostMetadata; content: string } | null> => {
+  if (!(await getAllPostSlugs()).includes(slug)) {
+    return null;
+  }
 
-  return {
+  const { frontmatter, content } = await readContentFile(
+    postsDirectory,
     slug,
-    ...(data as Omit<PostMetadata, 'slug'>),
-    content,
-    readingTime: getReadingTime(content),
-  };
+    PostFrontmatterSchema,
+  );
+
+  return { metadata: { slug, ...frontmatter }, content };
+};
+
+/**
+ * Get metadata and content of a post by slug
+ * @param slug a post slug, possibly straight from the URL
+ * @returns The post, or null when no post has this slug
+ */
+export const getPostBySlug = async (slug: string): Promise<PostData | null> => {
+  const post = await loadPost(slug);
+
+  return (
+    post && {
+      ...post.metadata,
+      content: post.content,
+      readingTime: getReadingTime(post.content),
+    }
+  );
 };
 
 /**
  * Get all post metadata and unique sorted years
- * @returns An object with an array of sorted posts metadata and an array of unique sorted years
+ * @returns Posts newest first, without their bodies, and the distinct years
+ *          they were published in, newest first
  */
 export const getSortedPosts = async (): Promise<{
   posts: PostMetadata[];
   years: number[];
 }> => {
   const slugs = await getAllPostSlugs();
-  const posts = await Promise.all(
-    slugs.map(async (slug) => {
-      const fullPath = path.join(postsDirectory, slug + '.mdx');
-      const fileContents = await fs.promises.readFile(fullPath, 'utf8');
-      const { data } = matter(fileContents);
+  const posts = (await Promise.all(slugs.map(loadPost)))
+    .filter((post) => post !== null)
+    .map((post) => post.metadata)
+    .sort(newestFirst((post) => post.publishedDate));
 
-      return {
-        slug,
-        ...(data as Omit<PostMetadata, 'slug'>),
-      };
-    }),
-  );
-
-  const yearsSet: Set<number> = new Set(
+  const years = new Set(
     posts.map((post) => parseContentDate(post.publishedDate).getFullYear()),
   );
 
   return {
-    posts: posts.sort(
-      (a, b) =>
-        parseContentDate(b.publishedDate).getTime() -
-        parseContentDate(a.publishedDate).getTime(),
-    ),
-    years: Array.from(yearsSet).sort((a, b) => b - a),
+    posts,
+    years: Array.from(years).sort((a, b) => b - a),
   };
 };
