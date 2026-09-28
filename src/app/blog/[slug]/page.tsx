@@ -3,6 +3,7 @@ import { format } from 'date-fns';
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 
+import PostNavigation from '@/components/blog/post-navigation';
 import TopicList from '@/components/blog/topic-list';
 import ViewCounter from '@/components/blog/view-counter';
 import Byline from '@/components/byline';
@@ -10,7 +11,11 @@ import Callout from '@/components/callout';
 import Mdx from '@/components/mdx/mdx-components';
 import BackButton from '@/components/navigation/back-button';
 import { siteName } from '@/data/site';
-import { getAllPostSlugs, getPostBySlug } from '@/lib/content';
+import {
+  getAdjacentPosts,
+  getAllPostSlugs,
+  getPostBySlug,
+} from '@/lib/content';
 import { parseContentDate } from '@/lib/date';
 
 export const generateStaticParams = async () => {
@@ -68,7 +73,10 @@ export default async function Page({
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
-  const post = await getPostBySlug(slug);
+  const [post, adjacent] = await Promise.all([
+    getPostBySlug(slug),
+    getAdjacentPosts(slug),
+  ]);
 
   if (!post) {
     notFound();
@@ -102,8 +110,9 @@ export default async function Page({
           <Mdx source={post.content} />
         </section>
 
-        <footer className="border-t pt-8">
+        <footer className="space-y-8 border-t pt-8">
           <TopicList topics={post.topics} />
+          <PostNavigation {...adjacent} />
         </footer>
       </article>
     </main>

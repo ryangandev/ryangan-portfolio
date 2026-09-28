@@ -211,6 +211,27 @@ export const getSortedPosts = cache(async (): Promise<PostMetadata[]> => {
 });
 
 /**
+ * The posts published either side of this one
+ * @returns `older` and `newer` neighbours, each null at the ends of the list
+ */
+export const getAdjacentPosts = async (
+  slug: string,
+): Promise<{ older: PostMetadata | null; newer: PostMetadata | null }> => {
+  const posts = await getSortedPosts();
+  const index = posts.findIndex((post) => post.slug === slug);
+
+  if (index === -1) {
+    return { older: null, newer: null };
+  }
+
+  // Newest first, so the older post is the next one in the list.
+  return {
+    older: posts[index + 1] ?? null,
+    newer: posts[index - 1] ?? null,
+  };
+};
+
+/**
  * Every topic used by at least one post, with its posts newest first
  * @returns Topics with the most posts first, then alphabetically. Each takes
  *          its display name from the first (newest) post that uses it.

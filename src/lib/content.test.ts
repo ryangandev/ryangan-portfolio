@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 
 import {
+  getAdjacentPosts,
   getAllPostSlugs,
   getAllProjectSlugs,
   getFeaturedProjects,
@@ -64,6 +65,24 @@ describe('content readers', () => {
 
     expect(times).toEqual([...times].sort((a, b) => b - a));
     expect(featured).toEqual(projects.filter((project) => project.featured));
+  });
+});
+
+describe('getAdjacentPosts', () => {
+  it('links each post to the ones published either side of it', async () => {
+    const posts = await getSortedPosts();
+
+    for (const [index, post] of posts.entries()) {
+      const { older, newer } = await getAdjacentPosts(post.slug);
+
+      expect(older).toEqual(posts[index + 1] ?? null);
+      expect(newer).toEqual(posts[index - 1] ?? null);
+    }
+
+    expect(await getAdjacentPosts('no-such-post')).toEqual({
+      older: null,
+      newer: null,
+    });
   });
 });
 
