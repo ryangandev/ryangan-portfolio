@@ -1,6 +1,13 @@
+import { neonConfig } from '@neondatabase/serverless';
 import { PrismaNeon } from '@prisma/adapter-neon';
+import ws from 'ws';
 
 import { PrismaClient } from '@/generated/prisma/client';
+
+// The driver defaults to Node's built-in WebSocket, which by design says
+// nothing about why a connection failed. `ws` reports the cause, such as
+// `getaddrinfo ENOTFOUND` or `ECONNREFUSED`, which `describeError` then logs.
+neonConfig.webSocketConstructor = ws;
 
 /**
  * Shared Prisma client.

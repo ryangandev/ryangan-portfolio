@@ -7,7 +7,7 @@ Last reviewed: 2026-09-28.
 The site is live and feature-complete for now; what remains is mostly outside the code.
 
 - Every dependency is on its latest release except the deliberate [pinned versions](architecture.md#pinned-versions), and `pnpm audit` reports no known vulnerabilities.
-- Format, lint, typecheck, tests, and build pass locally and in CI.
+- Format, lint, typecheck, unit tests, build, and browser tests pass locally and in CI.
 - Every route is Static or SSG.
 - The production database matches `prisma/schema.prisma`; `prisma migrate diff` reports no difference.
 - Vercel builds under pnpm 12, including from a restored build cache.
@@ -33,10 +33,8 @@ These need an account or a judgment only Ryan has.
 
 ## Next work
 
-- Drop the ESLint workarounds, the Prisma overrides, and the TypeScript pin as upstream catches up; Dependabot surfaces each.
-- Prune `post_view_sessions`, which grows forever; `viewed_at` is already indexed for it.
-- Log database failures with a message: the Neon adapter surfaces them as a bare `ErrorEvent`, which says nothing in the logs.
-- Add browser tests for the flows that have broken before: contact form states, the theme toggle, and client-side navigation.
+Nothing is queued in code.
+The dependency workarounds come out when [their tripwire](architecture.md#pinned-versions) fails on an update.
 
 ## Deliberately not done
 

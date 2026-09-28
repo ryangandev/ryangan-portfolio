@@ -13,6 +13,9 @@ export default defineConfig([
     'out/**',
     'build/**',
     'next-env.d.ts',
+    'test-results/**',
+    'playwright-report/**',
+    'blob-report/**',
     // Prisma 7 emits the client as real source files rather than into
     // node_modules, so they have to be ignored explicitly.
     'src/generated/**',

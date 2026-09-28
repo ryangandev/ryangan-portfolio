@@ -21,7 +21,7 @@ Last reviewed: 2026-09-28.
 | Shared UI primitives                      | `src/components/ui` (shadcn/ui)                                                                                                                                  |
 | Headers, build, CI, and dependencies      | `next.config.mjs`, `package.json`, `pnpm-workspace.yaml`, `.github/`                                                                                             |
 
-Tests sit next to the code they cover as `*.test.ts`.
+Unit tests sit next to the code they cover as `*.test.ts`; see [Tests](#tests) for the rest.
 
 ## Content
 
@@ -100,6 +100,9 @@ Older Prisma recipes do not apply:
 - The generator is `prisma-client` (not `prisma-client-js`) and requires an explicit `output`.
 - Every database needs a driver adapter.
   `src/lib/db.ts` uses `PrismaNeon` against the pooled endpoint, so serverless cold starts cannot exhaust a TCP pool.
+- **Database errors are logged through `describeError`** (`src/lib/describe-error.ts`).
+  A failed connection rejects with the WebSocket's `ErrorEvent`, not an Error, which logs as a bare `ErrorEvent { type: 'error' }`.
+  The driver is given the `ws` package because Node's built-in WebSocket withholds the reason; with `ws`, the log names it, as in `WebSocket error: getaddrinfo ENOTFOUND db.invalid (wss://db.invalid/v2)`.
 - **The build runs `prisma generate` itself.** The client is generated into `src/generated/prisma`, which is gitignored, so a fresh clone does not have it.
   `postinstall` also generates, but only on a real install: pnpm 12 skips the install, lifecycle scripts included, when `node_modules` is already current, and a restored Vercel build cache is exactly that.
   Relying on `postinstall` alone fails every deploy after the first; CI deletes the generated client before building to catch it.
@@ -123,7 +126,8 @@ Views live in the same Postgres database as everything else (`src/lib/views.ts`)
 - **Dedup is a database constraint.** `PostViewSession` is keyed on `(sessionId, slug)` and the insert uses `skipDuplicates`; whether a row was written decides whether the total increments.
   Catching a unique violation instead would abort the surrounding transaction and leave nothing to read.
 
-`post_view_sessions` is never pruned, but `viewed_at` is indexed so it can be.
+Sessions are kept for 30 days.
+Each newly counted view deletes older ones, through the `viewed_at` index, so the table stops growing without a cron; a session that returns after a month counts once more.
 
 Loading a post in `pnpm dev` records a view in whatever database `DATABASE_URL` points at, which locally is production.
 To test pages without writing, run the dev server with `DATABASE_URL` pointed at an unreachable host; the counter fails soft.
@@ -172,7 +176,7 @@ Traps when regenerating:
 ## Tooling and deploy
 
 Vercel deploys `main` and builds a preview for every pull request.
-CI (`.github/workflows/ci.yml`) runs format check, lint, typecheck, tests, and build on every pull request and push to `main`, from a clean install with no secrets.
+CI (`.github/workflows/ci.yml`) runs format check, lint, typecheck, unit tests, build, and browser tests on every pull request and push to `main`, from a clean install with no secrets.
 Dependabot opens dependency updates.
 
 pnpm is pinned by `packageManager` in `package.json`, and pnpm 10 and later switch to that version on their own, so local installs, CI, and Vercel resolve with the same pnpm.
@@ -192,3 +196,24 @@ pnpm 11 and later no longer read the `pnpm` field in `package.json`; the setting
 - **TypeScript 6.0.3.** TypeScript 7.0 ships no programmatic JS API, so typescript-eslint cannot load and `pnpm lint` fails, even though `next build` itself runs on 7.0.
   Revisit at 7.1; Dependabot ignores TypeScript majors until then.
 - **Prisma 7.** Prisma 8 is published under `latest` but is still a release candidate.
+
+`tests/upstream-pins.test.ts` reads the installed packages and fails, naming what to remove, once a dependency update makes the ESLint, Prisma override, or TypeScript workaround unnecessary.
+Dependabot's updates are what trip it.
+
+### Tests
+
+- **Unit tests** (Vitest, `pnpm test`) sit beside their code in `src/` and mock the database.
+  `tests/` holds checks on the repository itself.
+- **Browser tests** (Playwright, `pnpm test:e2e`) live in `e2e/` and cover the flows that have broken before: the contact form's states, the theme toggle, and client-side navigation.
+
+The browser tests run against a production build, since static rendering, prefetching, and the inline theme script only behave as visitors see them there.
+`playwright.config.ts` starts that server cut off from everything real:
+
+- `DATABASE_URL` points at a host that cannot resolve, so the view counter and rate limit fail soft, and nothing is written to production.
+- Resend is pointed at `e2e/mock-resend.mjs` through `RESEND_BASE_URL`, so no email is sent.
+  A subject containing `resend-fail` makes it answer with an error.
+- Each contact test sends its own `x-forwarded-for`, so the rate limit, which keys on the caller's IP, cannot leak between tests.
+
+Any console error or uncaught exception fails a test, since that is how hydration mismatches surface.
+Vercel's analytics scripts, which only exist on Vercel, are answered with an empty script.
+Start the server with `next start`, not `pnpm exec next start`: pnpm's native binary does not pass on the stop signal, and Playwright then waits on the orphaned server forever.

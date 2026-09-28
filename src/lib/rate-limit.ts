@@ -2,6 +2,7 @@ import { createHash } from 'node:crypto';
 import { headers } from 'next/headers';
 
 import { db } from '@/lib/db';
+import { describeError } from '@/lib/describe-error';
 
 /**
  * Flood control for the contact form: at most `MAX_PER_WINDOW` submissions per
@@ -112,7 +113,10 @@ export const allowContactSubmission = async (): Promise<boolean> => {
   try {
     return await recordDurableAttempt(key, now);
   } catch (error) {
-    console.error('Contact rate limit store error, using memory: ', error);
+    console.error(
+      'Contact rate limit store error, using memory:',
+      describeError(error),
+    );
     return recordAttempt(key, now);
   }
 };
