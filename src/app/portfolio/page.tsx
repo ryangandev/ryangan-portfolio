@@ -31,7 +31,7 @@ export default async function Page() {
       <BackButton name="Home" href="/" />
       <h1>Portfolio</h1>
       <PageSummary>
-        Here is a seletion of the projects I&apos;ve worked on. I&apos;m always
+        Here is a selection of the projects I&apos;ve worked on. I&apos;m always
         open to feedback and opportunities to collaborate!
       </PageSummary>
       <ProjectList projects={projects} />

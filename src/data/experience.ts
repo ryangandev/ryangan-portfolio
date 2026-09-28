@@ -5,7 +5,7 @@ import { LuGraduationCap } from 'react-icons/lu';
 
 export const experiencesData = [
   {
-    title: 'Graphic Designer & Game Develeoper Co-Op',
+    title: 'Graphic Designer & Game Developer Co-Op',
     company: 'Epistemitek',
     location: 'Philadelphia, PA',
     description:
@@ -14,7 +14,7 @@ export const experiencesData = [
     date: 'March 2021 - September 2021',
   },
   {
-    title: 'CMDB Enginner Co-Op',
+    title: 'CMDB Engineer Co-Op',
     company: 'Berkley Technology Services',
     location: 'Wilmington, DE',
     description:
