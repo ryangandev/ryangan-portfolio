@@ -1,0 +1,22 @@
+version: 2
+
+updates:
+  - package-ecosystem: npm
+    directory: /
+    schedule:
+      interval: weekly
+    # One PR for everything that should be routine, so updates keep landing
+    # instead of piling up as a dozen single-package PRs. Majors stay separate.
+    groups:
+      minor-and-patch:
+        update-types: [minor, patch]
+    ignore:
+      # TypeScript 7.0 has no programmatic API, which typescript-eslint needs.
+      # Revisit at 7.1 (see "Pinned on purpose" in CLAUDE.md).
+      - dependency-name: typescript
+        update-types: [version-update:semver-major]
+
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: monthly
