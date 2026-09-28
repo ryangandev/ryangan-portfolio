@@ -38,7 +38,7 @@ export default async function Home() {
           sameAs: authorProfiles,
         }}
       />
-      <h1>Zhiheng(Ryan) Gan</h1>
+      <h1>Zhiheng (Ryan) Gan</h1>
 
       <h3 className={cn(newsreader.className, 'mb-7 text-[17.5px] italic')}>
         I am a user before a developer.
