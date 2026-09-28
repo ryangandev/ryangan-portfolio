@@ -1,4 +1,5 @@
 import { db } from '@/lib/db';
+import { describeError } from '@/lib/describe-error';
 
 /**
  * Post view counts, stored in Postgres alongside everything else rather than in
@@ -20,7 +21,7 @@ export const getPostViews = async (slug: string): Promise<number | null> => {
 
     return post?.count ?? 0;
   } catch (error) {
-    console.error('Post view read error: ', error);
+    console.error('Post view read error:', describeError(error));
     return null;
   }
 };
@@ -59,7 +60,7 @@ export const recordPostView = async (
 
     return post.count;
   } catch (error) {
-    console.error('Post view write error: ', error);
+    console.error('Post view write error:', describeError(error));
     return null;
   }
 };

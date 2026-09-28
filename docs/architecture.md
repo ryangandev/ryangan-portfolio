@@ -100,6 +100,9 @@ Older Prisma recipes do not apply:
 - The generator is `prisma-client` (not `prisma-client-js`) and requires an explicit `output`.
 - Every database needs a driver adapter.
   `src/lib/db.ts` uses `PrismaNeon` against the pooled endpoint, so serverless cold starts cannot exhaust a TCP pool.
+- **Database errors are logged through `describeError`** (`src/lib/describe-error.ts`).
+  A failed connection rejects with the WebSocket's `ErrorEvent`, not an Error, which logs as a bare `ErrorEvent { type: 'error' }`.
+  The driver is given the `ws` package because Node's built-in WebSocket withholds the reason; with `ws`, the log names it, as in `WebSocket error: getaddrinfo ENOTFOUND db.invalid (wss://db.invalid/v2)`.
 - **The build runs `prisma generate` itself.** The client is generated into `src/generated/prisma`, which is gitignored, so a fresh clone does not have it.
   `postinstall` also generates, but only on a real install: pnpm 12 skips the install, lifecycle scripts included, when `node_modules` is already current, and a restored Vercel build cache is exactly that.
   Relying on `postinstall` alone fails every deploy after the first; CI deletes the generated client before building to catch it.
