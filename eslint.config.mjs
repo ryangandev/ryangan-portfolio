@@ -16,6 +16,10 @@ export default defineConfig([
     'test-results/**',
     'playwright-report/**',
     'blob-report/**',
+    // Agent worktrees check out other branches under .claude/worktrees, and
+    // flat config does not read .gitignore, so their files would be linted
+    // as part of this checkout.
+    '.claude/**',
     // Prisma 7 emits the client as real source files rather than into
     // node_modules, so they have to be ignored explicitly.
     'src/generated/**',
