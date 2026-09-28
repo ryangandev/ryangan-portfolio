@@ -95,6 +95,7 @@ export default async function Page({
           datePublished: post.publishedDate,
           url: `${siteUrl}/blog/${post.slug}`,
           mainEntityOfPage: `${siteUrl}/blog/${post.slug}`,
+          image: `${siteUrl}/blog/${post.slug}/opengraph-image`,
           keywords: post.topics,
           author: {
             '@type': 'Person',
