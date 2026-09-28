@@ -4,6 +4,7 @@ import {
   getAdjacentPosts,
   getAllPostSlugs,
   getAllProjectSlugs,
+  getFeaturedPosts,
   getFeaturedProjects,
   getPostBySlug,
   getProjectBySlug,
@@ -112,5 +113,16 @@ describe('topics', () => {
     }
 
     expect(await getTopicBySlug('no-such-topic')).toBeNull();
+  });
+});
+
+describe('getFeaturedPosts', () => {
+  it('returns flagged posts, or the newest ones when none are flagged', async () => {
+    const posts = await getSortedPosts();
+    const flagged = posts.filter((post) => post.featured);
+    const featured = await getFeaturedPosts(2);
+
+    expect(featured).toEqual(flagged.length > 0 ? flagged : posts.slice(0, 2));
+    expect(featured.length).toBeGreaterThan(0);
   });
 });

@@ -211,6 +211,19 @@ export const getSortedPosts = cache(async (): Promise<PostMetadata[]> => {
 });
 
 /**
+ * Posts for the home page: the ones flagged `featured`, newest first, or the
+ * newest few when none are flagged, so the section is never empty.
+ */
+export const getFeaturedPosts = async (
+  fallbackCount = 2,
+): Promise<PostMetadata[]> => {
+  const posts = await getSortedPosts();
+  const featured = posts.filter((post) => post.featured);
+
+  return featured.length > 0 ? featured : posts.slice(0, fallbackCount);
+};
+
+/**
  * The posts published either side of this one
  * @returns `older` and `newer` neighbours, each null at the ends of the list
  */

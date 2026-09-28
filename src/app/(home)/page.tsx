@@ -5,12 +5,15 @@ import { newsreader } from '@/assets/fonts';
 import AnimatedLink from '@/components/animated-link';
 import ExperienceList from '@/components/experience-list';
 import { experience } from '@/data/experience';
-import { getFeaturedProjects } from '@/lib/content';
+import { getFeaturedPosts, getFeaturedProjects } from '@/lib/content';
 import { parseContentDate } from '@/lib/date';
 import { cn } from '@/lib/utils';
 
 export default async function Home() {
-  const featuredProjects = await getFeaturedProjects();
+  const [featuredProjects, featuredPosts] = await Promise.all([
+    getFeaturedProjects(),
+    getFeaturedPosts(),
+  ]);
 
   return (
     <main>
@@ -66,7 +69,7 @@ export default async function Home() {
               <span className="hidden color-level-4 md:block">
                 {project.summary}
               </span>
-              <div className="my-auto h-px flex-1 bg-border/80"></div>
+              <div className="mt-3.5 h-px min-w-4 flex-1 bg-border/80"></div>
               <span className="color-level-5">
                 {format(parseContentDate(project.date), 'yyyy')}
               </span>
@@ -78,6 +81,24 @@ export default async function Home() {
         Above are some of my featured projects. View all my projects{' '}
         <AnimatedLink href="/portfolio">here</AnimatedLink>.
       </p>
+
+      <h2>Writing</h2>
+      <ul className="group mb-7 text-[15px]">
+        {featuredPosts.map((post) => (
+          <li
+            key={post.slug}
+            className="py-2 transition-opacity group-hover:opacity-60 hover:!opacity-100"
+          >
+            <Link href={`/blog/${post.slug}`} className="flex space-x-2.5">
+              <span className="font-medium color-level-2">{post.title}</span>
+              <div className="mt-3.5 h-px min-w-4 flex-1 bg-border/80"></div>
+              <span className="color-level-5">
+                {format(parseContentDate(post.publishedDate), 'yyyy')}
+              </span>
+            </Link>
+          </li>
+        ))}
+      </ul>
 
       <h2>More</h2>
       <p>
