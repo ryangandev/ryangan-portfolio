@@ -16,13 +16,11 @@ The site is live and feature-complete for now; what remains is mostly outside th
 
 These need an account or a judgment only Ryan has.
 
-1. Check `src/data/experience.ts`.
-   The entries date from 2023 and now appear on the home page, with Dynasty11 Studio as the current role.
-2. Enable Speed Insights for the project in the Vercel dashboard.
+1. Enable Speed Insights for the project in the Vercel dashboard.
    Until then its script is a 404 on every page.
-3. Verify a domain in Resend and set `CONTACT_FROM_EMAIL` to an address on it.
+2. Verify a domain in Resend and set `CONTACT_FROM_EMAIL` to an address on it.
    The default sender only delivers to the Resend account owner.
-4. Submit the sitemap to Google Search Console.
+3. Submit the sitemap to Google Search Console.
 
 ## Open decisions
 

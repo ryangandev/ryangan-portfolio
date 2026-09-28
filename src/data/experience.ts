@@ -1,7 +1,8 @@
 import type { IconType } from 'react-icons';
-import { FaReact, FaUnity } from 'react-icons/fa';
+import { FaNodeJs, FaReact, FaUnity } from 'react-icons/fa';
 import { LuGraduationCap } from 'react-icons/lu';
-import { SiJavascript } from 'react-icons/si';
+import { SiJavascript, SiMongodb } from 'react-icons/si';
+import { TbBrandReactNative } from 'react-icons/tb';
 
 export type Experience = {
   role: string;
@@ -22,14 +23,44 @@ export type Experience = {
  */
 export const experience: Experience[] = [
   {
-    role: 'Frontend Developer',
-    organization: 'Dynasty11 Studio',
-    location: 'Philadelphia, PA',
-    start: '2022-09',
+    role: 'Software Development Engineer',
+    organization: 'Adobe',
+    location: 'San Jose, CA',
+    start: '2026-04',
     end: null,
     description:
-      'Implemented the store section of the "Player 2" app, focusing on UI, application flow, and the representation of cosmetic items. Integrated RevenueCat to manage in-app purchases, ensuring cross-platform compatibility. Troubleshot and resolved bugs of the app in production.',
+      'Primary frontend contributor to a 0-to-1 conversational creation experience that brings Adobe Express into Acrobat. Built most of its UI in React and TypeScript, including designs that render as they stream in over SSE, and drove integration across the Express and Acrobat teams. Received a Bravo Award in July 2026.',
     icon: FaReact,
+  },
+  {
+    role: 'Software Engineer',
+    organization: 'Walmart (via BeaconFire)',
+    location: 'Sunnyvale, CA',
+    start: '2025-05',
+    end: '2026-01',
+    description:
+      "Worked on the service behind the interactive in-store maps in Walmart's mobile apps: migrated it from Node.js 12 to 22 in one sprint, cut 2-4 seconds from every store's map, and gated its releases with Playwright. Built the internal platform that runs and rolls back map refreshes across thousands of stores.",
+    icon: FaNodeJs,
+  },
+  {
+    role: 'Full Stack Engineering Consultant',
+    organization: 'BeaconFire Solution',
+    location: 'East Windsor, NJ',
+    start: '2024-10',
+    end: '2025-05',
+    description:
+      'Built a full-stack HR onboarding and management platform with React, Redux Toolkit, and Node.js, including JWT authentication, role-based access control, and 30+ REST APIs. Stored sensitive employee documents in Amazon S3 alongside a MongoDB database.',
+    icon: SiMongodb,
+  },
+  {
+    role: 'Software Engineer',
+    organization: 'Dynasty 11 Studios',
+    location: 'Philadelphia, PA',
+    start: '2022-09',
+    end: '2024-05',
+    description:
+      "Built React and React Native features for the HelpDesk and Player 2 products, from technician dashboards to the Player 2 store. Cut the store's load time by 60% by redesigning its data models and Spring Boot APIs, and implemented cross-platform in-app purchases with RevenueCat.",
+    icon: TbBrandReactNative,
   },
   {
     role: 'Bachelor of Science in Computer Science',
