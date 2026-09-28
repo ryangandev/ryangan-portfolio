@@ -45,7 +45,9 @@ const ProjectPreview: React.FC<ProjectPreviewProps> = ({
             src={project.thumbnailUrl}
             alt={project.title}
             fill
-            sizes="(max-width: 644px) 100%"
+            // Two 312px columns from md up (644px less the 20px gap), one full
+            // column below.
+            sizes="(min-width: 768px) 312px, (min-width: 692px) 644px, calc(100vw - 48px)"
             className="rounded-lg object-cover"
             quality={95}
             priority={isAboveFold}

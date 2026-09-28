@@ -1,10 +1,10 @@
 import React from 'react';
 import { format } from 'date-fns';
 import type { Metadata } from 'next';
-import Image from 'next/image';
 import { notFound } from 'next/navigation';
 
 import ViewCounter from '@/components/blog/view-counter';
+import Byline from '@/components/byline';
 import Callout from '@/components/callout';
 import Mdx from '@/components/mdx/mdx-components';
 import BackButton from '@/components/navigation/back-button';
@@ -80,25 +80,11 @@ export default async function Page({
       <article className="space-y-8">
         <h1 className="text-3xl font-bold md:text-4xl">{post.title}</h1>
 
-        <section className="space-y-3 text-sm md:flex md:items-center md:justify-between">
-          <div className="flex items-center space-x-2">
-            <Image
-              src="https://ik.imagekit.io/ryangan/profile-icon.jpeg?updatedAt=1718985313938"
-              alt="Ryan Gan"
-              width={0}
-              height={0}
-              sizes="100vw"
-              className="h-auto w-10 rounded-full"
-              quality={95}
-            />
-            <div className="flex flex-col">
-              <span className="font-medium">{post.author}</span>
-              <span className="text-muted-foreground">
-                Published on{' '}
-                {format(parseContentDate(post.publishedDate), 'MMM dd, yyyy')}
-              </span>
-            </div>
-          </div>
+        <section className="space-y-3 text-sm md:flex md:items-center md:justify-between md:space-y-0">
+          <Byline author={post.author}>
+            Published on{' '}
+            {format(parseContentDate(post.publishedDate), 'MMM dd, yyyy')}
+          </Byline>
 
           <div className="flex items-center gap-1.5 text-muted-foreground">
             <span>{post.readingTime} min read</span>

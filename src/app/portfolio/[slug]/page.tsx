@@ -5,12 +5,13 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 
+import Byline from '@/components/byline';
 import Callout from '@/components/callout';
 import SocialIcon from '@/components/icons/social-icon';
 import TechStackIcon from '@/components/icons/tech-stack-icon';
 import Mdx from '@/components/mdx/mdx-components';
 import BackButton from '@/components/navigation/back-button';
-import { siteName } from '@/data/site';
+import { contentImageSizes, siteName } from '@/data/site';
 import { techStack } from '@/data/tech-stack';
 import { getAllProjectSlugs, getProjectBySlug } from '@/lib/content';
 import { parseContentDate } from '@/lib/date';
@@ -85,27 +86,13 @@ export default async function Page({
       <article className="space-y-8">
         <h1 className="text-3xl font-bold md:text-4xl">{project.title}</h1>
 
-        <section className="space-y-3 md:flex md:justify-between">
-          <div className="flex items-center space-x-2 text-sm">
-            <Image
-              src="https://ik.imagekit.io/ryangan/profile-icon.jpeg?updatedAt=1718985313938"
-              alt="Ryan Gan"
-              width={0}
-              height={0}
-              sizes="100vw"
-              className="h-auto w-10 rounded-full"
-              quality={95}
-            />
-            <div className="flex flex-col">
-              <span className="font-medium">Ryan Gan</span>
-              <span className="text-muted-foreground">
-                {project.role} /{' '}
-                {format(parseContentDate(project.date), 'MMM dd, yyyy')}
-              </span>
-            </div>
-          </div>
+        <section className="space-y-3 md:flex md:items-center md:justify-between md:space-y-0">
+          <Byline author="Ryan Gan">
+            {project.role} /{' '}
+            {format(parseContentDate(project.date), 'MMM dd, yyyy')}
+          </Byline>
 
-          <div className="ml-2.5 flex items-end space-x-4 font-semibold md:ml-0">
+          <div className="flex items-center space-x-4 font-semibold">
             {project.link?.github && (
               <Link
                 href={project.link.github}
@@ -160,7 +147,7 @@ export default async function Page({
           alt={project.title}
           width={0}
           height={0}
-          sizes="(max-width: 644px) 100%"
+          sizes={contentImageSizes}
           className="h-auto w-full rounded-lg shadow-md"
           quality={95}
           priority
