@@ -16,3 +16,11 @@ allowBuilds:
 onlyBuiltDependencies:
   - '@prisma/engines'
   - prisma
+
+# Prisma's CLI pins these exactly, below their advisories' fixes. Both are
+# CLI-only (config merging, and the MySQL driver this project never loads) and
+# never ship to the browser or the server bundle. Remove each once `prisma`
+# depends on a fixed version itself.
+overrides:
+  deepmerge-ts: ^8.0.2
+  mysql2: ^3.24.4
