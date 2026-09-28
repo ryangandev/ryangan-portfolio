@@ -33,8 +33,9 @@ These need an account or a judgment only Ryan has.
 
 ## Next work
 
-- Drop the ESLint workarounds, the Prisma overrides, and the TypeScript pin as upstream catches up; Dependabot surfaces each.
 - Add browser tests for the flows that have broken before: contact form states, the theme toggle, and client-side navigation.
+
+The dependency workarounds come out when [their tripwire](architecture.md#pinned-versions) fails on an update.
 
 ## Deliberately not done
 

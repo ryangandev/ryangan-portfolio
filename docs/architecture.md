@@ -196,3 +196,6 @@ pnpm 11 and later no longer read the `pnpm` field in `package.json`; the setting
 - **TypeScript 6.0.3.** TypeScript 7.0 ships no programmatic JS API, so typescript-eslint cannot load and `pnpm lint` fails, even though `next build` itself runs on 7.0.
   Revisit at 7.1; Dependabot ignores TypeScript majors until then.
 - **Prisma 7.** Prisma 8 is published under `latest` but is still a release candidate.
+
+`tests/upstream-pins.test.ts` reads the installed packages and fails, naming what to remove, once a dependency update makes the ESLint, Prisma override, or TypeScript workaround unnecessary.
+Dependabot's updates are what trip it.
