@@ -3,6 +3,8 @@ import { Link } from 'next-view-transitions';
 
 import { newsreader } from '@/assets/fonts';
 import AnimatedLink from '@/components/animated-link';
+import ExperienceList from '@/components/experience-list';
+import { experience } from '@/data/experience';
 import { getFeaturedProjects } from '@/lib/content';
 import { parseContentDate } from '@/lib/date';
 import { cn } from '@/lib/utils';
@@ -45,6 +47,9 @@ export default async function Home() {
         I embrace continuous learning and am constantly picking up new skills.
         Currently, I&apos;m exploring GraphQL.
       </p>
+
+      <h2>Experience</h2>
+      <ExperienceList items={experience} />
 
       <h2>Featured Portfolio</h2>
       <ul className="group mb-7 text-[15px]">
