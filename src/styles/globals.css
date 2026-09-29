@@ -6,6 +6,23 @@
 
 @custom-variant dark (&:where(.dark, .dark *));
 
+/*
+  The opposite of Tailwind's `noscript:`, for anything only script could undo,
+  such as content collapsed behind a button.
+*/
+@custom-variant scripting (@media (scripting: enabled));
+
+/*
+  How far up from its bottom edge `Expandable` fades its content out.
+  Registered as a length so the fade can transition; an unregistered custom
+  property would jump.
+*/
+@property --fade-height {
+  syntax: '<length>';
+  inherits: false;
+  initial-value: 0px;
+}
+
 :root {
   --background: 0 0% 100%;
   --foreground: 222.2 84% 4.9%;
@@ -139,6 +156,15 @@
 
   body {
     @apply bg-background leading-7 text-foreground;
+  }
+
+  /*
+    Elements focused only by script, so keyboard focus follows the view, as
+    back to top does with the page's main content. A reader never tabs to
+    them, and a ring around the whole page would only be noise.
+  */
+  [tabindex='-1']:focus {
+    outline: none;
   }
 
   h1 {

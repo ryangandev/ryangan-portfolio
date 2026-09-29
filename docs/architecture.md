@@ -6,7 +6,7 @@ Last reviewed: 2026-09-28.
 
 | Area                                      | Where                                                                                                                                                            |
 | ----------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Home page and experience timeline         | `src/app/(home)/page.tsx`, `src/components/experience-list.tsx`, `src/data/experience.ts`                                                                        |
+| Home page and experience timeline         | `src/app/(home)/page.tsx`, `src/components/experience-list.tsx`, `src/components/expandable.tsx`, `src/data/experience.ts`, `src/assets/logos`                   |
 | Portfolio list, search, and project pages | `src/app/portfolio`, `src/components/portfolio`, `src/components/search.tsx`, `src/components/highlighted-text.tsx`                                              |
 | Blog, topics, and post-only UI            | `src/app/blog`, `src/components/blog`                                                                                                                            |
 | MDX source and rendering                  | `src/content/{projects,posts}`, `src/components/mdx`, `src/styles/mdx.css`                                                                                       |
@@ -18,6 +18,7 @@ Last reviewed: 2026-09-28.
 | Admin portal                              | `src/app/admin`, `src/components/admin`, `src/actions/admin-actions.ts`, `src/lib/admin`, `src/schemas/admin-content-schema.ts`, `src/lib/collections.ts`        |
 | Sign-in                                   | `src/auth.ts`, `src/app/api/auth/[...nextauth]/route.ts`, `src/types/next-auth.d.ts`                                                                             |
 | Database                                  | `prisma/schema.prisma`, `prisma.config.ts`, `src/lib/db.ts`; the generated client is in `src/generated/prisma`, gitignored and excluded from ESLint and Prettier |
+| Footer and back to top                    | `src/components/site-footer.tsx`, `src/components/back-to-top.tsx`                                                                                               |
 | Theme, fonts, and global styles           | `src/styles/globals.css`, `src/assets/fonts.ts`, `src/components/theme-toggle.tsx`                                                                               |
 | Logo, icons, and OpenGraph images         | `src/components/logo.tsx`, `src/app/{icon.svg,favicon.ico,apple-icon.png,opengraph-image.png}`, `src/app/blog/[slug]/opengraph-image.tsx`, `public/icon-*.png`   |
 | Shared UI primitives                      | `src/components/ui` (shadcn/ui)                                                                                                                                  |
@@ -54,6 +55,15 @@ Posts are compiled with `compileMdx` (`src/components/mdx/mdx-components.tsx`), 
 A rehype plugin placed directly after rehype-slug collects them, so the ids are the rendered ones; do not re-derive them from the Markdown.
 The table of contents shows beside posts from `xl` up; the reading progress bar is a CSS scroll-driven animation in `globals.css` with no JavaScript.
 
+The experience timeline is data, not MDX: `src/data/experience.ts`, kept in order by hand.
+Each entry's `mark` is the organization's logo from `src/assets/logos`, cropped to a circle.
+Every logo is a 64x64 tile: the organization's own mark, taken from its website and centered on its brand color, so it reads in both themes.
+Marks are centered optically, not by bounding box: each sits three quarters of the way from its box's center toward its center of mass, which is what keeps a bottom-heavy mark like Adobe's "A" from looking low.
+An organization with no public logo gets a react-icons icon in an outlined circle instead.
+The home page shows the timeline collapsed to its first two entries by `Expandable`, fading out above a button that expands and collapses it; collapsing scrolls the page with it, so the button stays where it was clicked.
+It collapses by entry rather than to a fixed height, which would land somewhere new with every change to the text and at every screen width, sooner or later on the next logo's top edge.
+Without JavaScript the timeline shows in full: the entries are hidden only under the `scripting:` variant in `globals.css`.
+
 ## Styling
 
 Tailwind 4 is configured entirely in CSS; there is no `tailwind.config.ts`.
@@ -70,6 +80,10 @@ Image `sizes` must describe the rendered width, or next/image serves its largest
 Content-width images use `contentImageSizes` from `src/data/site.ts`; `%` is not a valid `sizes` length.
 Only the first two portfolio cards and a project's hero image are `priority`.
 `images.qualities` is set explicitly in `next.config.mjs`, because Next 16 defaults to `[75]` and project and post images render at `quality={95}`.
+
+From `xl` up, the right-hand gutter holds a post's table of contents and, on every page, the back-to-top link.
+The table of contents sits at `left-full ml-10` of the content column; `back-to-top.tsx` is fixed-position, so it repeats that offset as `calc(50% + 362px)`, and both change together if the column's width does.
+Below `xl` there is no gutter, and back to top is a round button in the corner, above the footer.
 
 ## Routing and SEO
 
@@ -88,6 +102,13 @@ It also fought the view transitions: animating into a loading screen and back ou
 If a genuinely slow route is ever added, give it a scoped `loading.tsx` in that segment, and prefer a top progress bar over a layout-replacing spinner.
 The admin pages are the one case: they wait on GitHub, so `src/app/admin/loading.tsx` shows a bar across the top.
 Because they stream, an admin URL that does not exist answers 200 with the not-found page, the status having gone out before the page decides; behind sign-in and `noindex`, that costs nothing.
+
+### Not found
+
+`src/app/not-found.tsx` renders for every unmatched URL and every `notFound()`, such as an unknown post slug, inside the root layout.
+It answers with a 404 status, and Next adds `noindex` on its own.
+It titles unmatched URLs "Page not found"; the `[slug]` pages give their own misses a more specific title.
+It lists the site's sections in the home page's list style, so a dead link still leads somewhere.
 
 ### Metadata
 
@@ -155,6 +176,14 @@ The action is a public endpoint that sends email, so it has three layers:
 Email goes through Resend.
 `CONTACT_FROM_EMAIL` and `CONTACT_TO_EMAIL` set the addresses.
 The default sender is Resend's shared sandbox, which only delivers to the account owner.
+
+On the page, each field is a row with its label in a left column, like the blog archive.
+The rule under a row sweeps in from the left while its field has focus, and stays drawn in red while the field is invalid.
+The send button sits inside the message row, so a row counts as focused only while its own input or textarea is, not the button.
+The inputs are plain elements rather than the shadcn primitives, since those draw a box the row replaces.
+The form is `noValidate`, so every invalid field gets the same inline message instead of some getting the browser's tooltip.
+The profiles listed under the form come from `authorProfiles` in `src/data/site.ts`, which the home page's JSON-LD also uses.
+`SocialIcon` draws every social icon from Tabler's outline set, whose stroke matches the Lucide icons beside them; mixing sets is what made the old icons look uneven.
 
 ## Admin portal
 
@@ -224,6 +253,7 @@ Traps when regenerating:
 
 Vercel deploys `main` and builds a preview for every pull request.
 CI (`.github/workflows/ci.yml`) runs format check, lint, typecheck, unit tests, build, and browser tests on every pull request and push to `main`, from a clean install with no secrets.
+`pnpm typecheck` runs `next typegen` first: `next-env.d.ts` and the route types are generated and gitignored, and CI type-checks before it builds, so without them a clean checkout cannot resolve imports such as `*.svg`.
 Dependabot opens dependency updates.
 
 pnpm is pinned by `packageManager` in `package.json`, and pnpm 10 and later switch to that version on their own, so local installs, CI, and Vercel resolve with the same pnpm.
@@ -254,7 +284,7 @@ Dependabot's updates are what trip it.
 
 - **Unit tests** (Vitest, `pnpm test`) sit beside their code in `src/` and mock the database.
   `tests/` holds checks on the repository itself.
-- **Browser tests** (Playwright, `pnpm test:e2e`) live in `e2e/` and cover the flows that have broken before: the contact form's states, the theme toggle, and client-side navigation.
+- **Browser tests** (Playwright, `pnpm test:e2e`) live in `e2e/` and cover the flows that have broken before: the contact form's states, the theme toggle, client-side navigation, and the 404 page, plus the home page's expandable timeline and back to top.
   For the admin portal they cover what a visitor who is not signed in meets, up to GitHub's authorize URL, which they intercept.
   Past sign-in the portal acts on GitHub as the signed-in user, so its repository calls are unit tested against a fake Octokit instead.
 

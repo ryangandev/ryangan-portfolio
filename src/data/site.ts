@@ -1,3 +1,5 @@
+import type { SocialIconName } from '@/models/data';
+
 /**
  * Canonical site identity, shared by `metadataBase`, the sitemap, and robots.
  *
@@ -55,9 +57,32 @@ export const contentRepository = {
   branch: 'main',
 } as const;
 
-/** The profiles the contact page links to, in schema.org `sameAs` terms */
-export const authorProfiles = [
-  'https://github.com/ryangandev',
-  'https://www.linkedin.com/in/ryangan1/',
-  'https://medium.com/@ryangan.dev',
+/**
+ * The profiles the contact page lists, and the home page's schema.org
+ * `sameAs`, in the order the contact page shows them
+ */
+export const authorProfiles: {
+  name: string;
+  icon: SocialIconName;
+  handle: string;
+  url: string;
+}[] = [
+  {
+    name: 'GitHub',
+    icon: 'github',
+    handle: 'ryangandev',
+    url: 'https://github.com/ryangandev',
+  },
+  {
+    name: 'LinkedIn',
+    icon: 'linkedin',
+    handle: 'ryangan1',
+    url: 'https://www.linkedin.com/in/ryangan1/',
+  },
+  {
+    name: 'Medium',
+    icon: 'medium',
+    handle: '@ryangan.dev',
+    url: 'https://medium.com/@ryangan.dev',
+  },
 ];

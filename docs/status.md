@@ -16,19 +16,16 @@ The site is live and feature-complete for now; what remains is mostly outside th
 
 These need an account or a judgment only Ryan has.
 
-1. Check `src/data/experience.ts`.
-   The entries date from 2023 and now appear on the home page, with Dynasty11 Studio as the current role.
-2. Enable Speed Insights for the project in the Vercel dashboard.
+1. Enable Speed Insights for the project in the Vercel dashboard.
    Until then its script is a 404 on every page.
-3. Verify a domain in Resend and set `CONTACT_FROM_EMAIL` to an address on it.
+2. Verify a domain in Resend and set `CONTACT_FROM_EMAIL` to an address on it.
    The default sender only delivers to the Resend account owner.
-4. Submit the sitemap to Google Search Console.
-5. Redirect `www.ryangan.me` to `ryangan.me` in the Vercel domain settings.
+3. Submit the sitemap to Google Search Console.
+4. Redirect `www.ryangan.me` to `ryangan.me` in the Vercel domain settings.
    Both serve the site today, and the GitHub App only accepts the `ryangan.me` callback, so signing in to `/admin` from `www` fails.
 
 ## Open decisions
 
-- **Home page copy.** It still says "Currently, I'm exploring GraphQL".
 - **Guestbook table.** Build the guestbook, or drop `GuestbookNote` in a migration.
   Until then it stays in the schema; see [Database](architecture.md#database).
   `User` and `Account` back the admin portal's sign-in.

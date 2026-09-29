@@ -87,15 +87,12 @@ const FormLabel = React.forwardRef<
   React.ElementRef<typeof LabelPrimitive.Root>,
   React.ComponentPropsWithoutRef<typeof LabelPrimitive.Root>
 >(({ className, ...props }, ref) => {
-  const { error, formItemId } = useFormField();
+  const { formItemId } = useFormField();
 
+  // No error color here: the contact form colors the whole row, label
+  // included, from the control's `aria-invalid`.
   return (
-    <Label
-      ref={ref}
-      className={cn(error && 'text-destructive', className)}
-      htmlFor={formItemId}
-      {...props}
-    />
+    <Label ref={ref} className={className} htmlFor={formItemId} {...props} />
   );
 });
 FormLabel.displayName = 'FormLabel';
@@ -135,7 +132,13 @@ const FormMessage = React.forwardRef<
     <p
       ref={ref}
       id={formMessageId}
-      className={cn('text-sm font-medium text-destructive', className)}
+      // Not `text-destructive`: the dark theme's is a background red, too
+      // dark to read as text on the page. `mb-0` undoes the paragraph margin
+      // from the base styles, which is meant for prose.
+      className={cn(
+        'mt-1 mb-0 text-sm text-red-600 dark:text-red-400',
+        className,
+      )}
       {...props}
     >
       {body}

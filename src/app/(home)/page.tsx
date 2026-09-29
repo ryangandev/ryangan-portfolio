@@ -3,6 +3,7 @@ import { Link } from 'next-view-transitions';
 
 import { newsreader } from '@/assets/fonts';
 import AnimatedLink from '@/components/animated-link';
+import Expandable from '@/components/expandable';
 import ExperienceList from '@/components/experience-list';
 import JsonLd from '@/components/json-ld';
 import { experience } from '@/data/experience';
@@ -35,47 +36,55 @@ export default async function Home() {
           image: authorAvatarUrl,
           jobTitle: 'Software Engineer',
           description: siteDescription,
-          sameAs: authorProfiles,
+          sameAs: authorProfiles.map((profile) => profile.url),
         }}
       />
       <h1>Zhiheng (Ryan) Gan</h1>
 
-      <h3 className={cn(newsreader.className, 'mb-7 text-[17.5px] italic')}>
+      <p
+        className={cn(
+          newsreader.className,
+          'text-[17.5px] font-medium color-level-2 italic',
+        )}
+      >
         I am a user before a developer.
-      </h3>
-      <p>
-        I like to craft polished, user-centric software that brings satisfaction
-        through every little detail.
       </p>
 
       <h2>About Me</h2>
       <p className="mb-4">
-        As a software engineer specializing in full-stack development with 3
-        years of experience, my tech stack includes:
+        I like to craft polished, user-centric software that brings satisfaction
+        through every little detail. As a software engineer specializing in
+        full-stack development with 4 years of experience, my tech stack
+        includes:
       </p>
-      <ul className="mb-7 list-inside list-disc space-y-2">
+      <ul className="mb-7 list-inside list-disc space-y-2 pl-5.5 -indent-5.5">
         <li>
           <span className="font-medium color-level-2">Frontend</span>: React,
-          Next.js, TypeScript, Redux
+          Next.js, TypeScript, JavaScript, Redux
         </li>
         <li>
           <span className="font-medium color-level-2">Backend</span>: Node.js,
-          SpringBoot, Java, PostgreSQL, MongoDB, Prisma
+          Express, Fastify, Java, Spring Boot, PostgreSQL, MongoDB, Prisma
         </li>
         <li>
           <span className="font-medium color-level-2">Tools & Others</span>:
-          CI/CD, Git, Docker, Postman, Agile, AWS, Vercel
+          AWS, CI/CD, Playwright, Jest, Splunk, Git, Docker, Vercel
         </li>
       </ul>
       <p>
         I embrace continuous learning and am constantly picking up new skills.
-        Currently, I&apos;m exploring GraphQL.
+        Currently, I&apos;m exploring building software with AI coding agents.
       </p>
 
       <h2>Experience</h2>
-      <ExperienceList items={experience} />
+      <Expandable
+        collapsedClassName="scripting:[&>ol>li:nth-child(n+3)]:hidden"
+        label="Expand to view all"
+      >
+        <ExperienceList items={experience} />
+      </Expandable>
 
-      <h2>Featured Portfolio</h2>
+      <h2>Featured Projects</h2>
       <ul className="group mb-7 text-[15px]">
         {featuredProjects.map((project) => (
           <li

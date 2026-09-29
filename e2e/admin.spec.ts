@@ -65,9 +65,9 @@ test('shows an unknown collection or a malformed slug as not found, not a sign-i
     await page.goto(path);
 
     await expect(page).toHaveURL(path);
-    await expect(
-      page.getByRole('heading', { name: '404 - Not Found' }),
-    ).toBeVisible();
+    await expect(page.getByRole('heading', { level: 1 })).toHaveText(
+      'Page not found',
+    );
   }
 });
 
