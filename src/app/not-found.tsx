@@ -1,6 +1,8 @@
 import type { Metadata } from 'next';
 import { Link } from 'next-view-transitions';
 
+import PageSummary from '@/components/page-summary';
+
 export const metadata: Metadata = {
   title: 'Page not found - Ryan Gan',
 };
@@ -35,10 +37,10 @@ const NotFound = () => {
         404
       </p>
       <h1>Page not found</h1>
-      <p>
+      <PageSummary>
         This page doesn&apos;t exist, or it has moved. Here are a few places to
         pick up from instead.
-      </p>
+      </PageSummary>
       <ul className="group mb-7 text-[15px]">
         {destinations.map((destination) => (
           <li
