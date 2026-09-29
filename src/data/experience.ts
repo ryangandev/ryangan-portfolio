@@ -38,7 +38,7 @@ export const experience: Experience[] = [
     start: '2026-04',
     end: null,
     description:
-      'Primary frontend contributor to a 0-to-1 conversational creation experience that brings Adobe Express into Acrobat. Built most of its UI in React and TypeScript, including designs that render as they stream in over SSE, and drove integration across the Express and Acrobat teams. Received a Bravo Award in July 2026.',
+      'On the Acrobat Web team, currently integrating Adobe Express with Acrobat.',
     mark: adobe,
   },
   {
@@ -48,7 +48,7 @@ export const experience: Experience[] = [
     start: '2025-05',
     end: '2026-01',
     description:
-      "Worked on the service behind the interactive in-store maps in Walmart's mobile apps: migrated it from Node.js 12 to 22 in one sprint, cut 2-4 seconds from every store's map, and gated its releases with Playwright. Built the internal platform that runs and rolls back map refreshes across thousands of stores.",
+      "Contributed to the team behind the interactive in-store maps in Walmart's apps, working on the map service and the internal platform that refreshes maps across stores.",
     mark: walmart,
   },
   {
@@ -57,8 +57,7 @@ export const experience: Experience[] = [
     location: 'East Windsor, NJ',
     start: '2024-10',
     end: '2025-05',
-    description:
-      'Built a full-stack HR onboarding and management platform with React, Redux Toolkit, and Node.js, including JWT authentication, role-based access control, and 30+ REST APIs. Stored sensitive employee documents in Amazon S3 alongside a MongoDB database.',
+    description: 'Built a full-stack HR onboarding and management platform.',
     mark: beaconfire,
   },
   {
@@ -68,7 +67,7 @@ export const experience: Experience[] = [
     start: '2022-09',
     end: '2024-05',
     description:
-      "Built React and React Native features for the HelpDesk and Player 2 products, from technician dashboards to the Player 2 store. Cut the store's load time by 60% by redesigning its data models and Spring Boot APIs, and implemented cross-platform in-app purchases with RevenueCat.",
+      'Built the in-app store for Player 2, a mobile social networking app for gamers, selling cosmetic items through RevenueCat. Also built the frontend of HelpDesk, a web app where users submit tickets and technicians track them.',
     mark: dynasty11,
   },
   {
@@ -88,17 +87,17 @@ export const experience: Experience[] = [
     start: '2022-03',
     end: '2023-03',
     description:
-      'Developed and optimized workflow scripts using JavaScript. Utilized SQL for database updates. Troubleshot and resolved configuration item issues. Assisted in the Probes to Pattern migration within ServiceNow.',
+      "Optimized ServiceNow workflows with JavaScript and wrote SQL views over the CMDB's data. Also worked on the migration from probes to patterns in ServiceNow.",
     mark: berkley,
   },
   {
-    role: 'Graphic Designer & Game Developer Co-Op',
+    role: 'Unity Developer Co-Op',
     organization: 'Epistemitek',
     location: 'Philadelphia, PA',
     start: '2021-03',
     end: '2021-09',
     description:
-      'Contributed to the development of an educational game in Unity to educate students about the human immune system. Designed new fonts for Pittman Shorthand and used Omnigraffle to structure plans and summaries for various experiments.',
+      'Contributed to an educational game in Unity that teaches students about the human immune system.',
     mark: FaUnity,
   },
 ];
