@@ -105,7 +105,7 @@ const ContactInfo = () => {
         <CopyButton value={discordId} what="Discord ID" />
       </Row>
       <Row icon="location" label="Location">
-        San Jose, CA
+        <span className="font-medium color-level-2">San Jose, CA</span>
       </Row>
     </dl>
   );
