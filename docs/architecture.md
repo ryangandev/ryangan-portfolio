@@ -94,6 +94,13 @@ It also fought the view transitions: animating into a loading screen and back ou
 
 If a genuinely slow route is ever added, give it a scoped `loading.tsx` in that segment, and prefer a top progress bar over a layout-replacing spinner.
 
+### Not found
+
+`src/app/not-found.tsx` renders for every unmatched URL and every `notFound()`, such as an unknown post slug, inside the root layout.
+It answers with a 404 status, and Next adds `noindex` on its own.
+It titles unmatched URLs "Page not found"; the `[slug]` pages give their own misses a more specific title.
+It lists the site's sections in the home page's list style, so a dead link still leads somewhere.
+
 ### Metadata
 
 `metadataBase` and the site constants come from `src/data/site.ts`.
@@ -159,6 +166,14 @@ Email goes through Resend.
 `CONTACT_FROM_EMAIL` and `CONTACT_TO_EMAIL` set the addresses.
 The default sender is Resend's shared sandbox, which only delivers to the account owner.
 
+On the page, each field is a row with its label in a left column, like the blog archive.
+The rule under a row sweeps in from the left while its field has focus, and stays drawn in red while the field is invalid.
+The send button sits inside the message row, so a row counts as focused only while its own input or textarea is, not the button.
+The inputs are plain elements rather than the shadcn primitives, since those draw a box the row replaces.
+The form is `noValidate`, so every invalid field gets the same inline message instead of some getting the browser's tooltip.
+The profiles listed under the form come from `authorProfiles` in `src/data/site.ts`, which the home page's JSON-LD also uses.
+`SocialIcon` draws every social icon from Tabler's outline set, whose stroke matches the Lucide icons beside them; mixing sets is what made the old icons look uneven.
+
 ## Security headers
 
 `next.config.mjs` sends `nosniff`, a referrer policy, `frame-ancestors 'none'` with `X-Frame-Options: DENY`, and a permissions policy on every route, and turns off `X-Powered-By`.
@@ -218,7 +233,7 @@ Dependabot's updates are what trip it.
 
 - **Unit tests** (Vitest, `pnpm test`) sit beside their code in `src/` and mock the database.
   `tests/` holds checks on the repository itself.
-- **Browser tests** (Playwright, `pnpm test:e2e`) live in `e2e/` and cover the flows that have broken before: the contact form's states, the theme toggle, and client-side navigation, plus the home page's expandable timeline and back to top.
+- **Browser tests** (Playwright, `pnpm test:e2e`) live in `e2e/` and cover the flows that have broken before: the contact form's states, the theme toggle, client-side navigation, and the 404 page, plus the home page's expandable timeline and back to top.
 
 The browser tests run against a production build, since static rendering, prefetching, and the inline theme script only behave as visitors see them there.
 `playwright.config.ts` starts that server cut off from everything real:
