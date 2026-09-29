@@ -1,6 +1,6 @@
 # Status
 
-Last reviewed: 2026-09-28.
+Last reviewed: 2026-09-29.
 
 ## Current state
 
@@ -23,11 +23,8 @@ These need an account or a judgment only Ryan has.
 3. Verify a domain in Resend and set `CONTACT_FROM_EMAIL` to an address on it.
    The default sender only delivers to the Resend account owner.
 4. Submit the sitemap to Google Search Console.
-5. Set the admin portal's variables in Vercel: `AUTH_SECRET` (a new one, not the local value), and `AUTH_GITHUB_ID` and `AUTH_GITHUB_SECRET` from the "Ryan Gan Portfolio Admin" GitHub App, with a client secret generated for production.
-   Until then `/admin` cannot sign anyone in on ryangan.me.
-6. Create a restricted ImageKit API key that can only upload, and set `IMAGEKIT_PUBLIC_KEY` and `IMAGEKIT_PRIVATE_KEY` locally and in Vercel.
-   ImageKit asks for a code from Ryan's email to create one.
-   Until then the editor hides its upload buttons.
+5. Redirect `www.ryangan.me` to `ryangan.me` in the Vercel domain settings.
+   Both serve the site today, and the GitHub App only accepts the `ryangan.me` callback, so signing in to `/admin` from `www` fails.
 
 ## Open decisions
 
