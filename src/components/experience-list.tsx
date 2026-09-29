@@ -29,7 +29,7 @@ const ExperienceMark = ({ mark }: Pick<Experience, 'mark'>) => {
 
   return (
     <span
-      className="mt-0.5 flex size-7 shrink-0 items-center justify-center rounded-full border color-level-4"
+      className="mt-0.5 flex size-7 shrink-0 items-center justify-center rounded-full border text-neutral-400 dark:text-neutral-300"
       aria-hidden
     >
       <Icon size={14} />

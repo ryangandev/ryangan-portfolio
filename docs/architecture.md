@@ -51,6 +51,7 @@ The table of contents shows beside posts from `xl` up; the reading progress bar 
 The experience timeline is data, not MDX: `src/data/experience.ts`, kept in order by hand.
 Each entry's `mark` is the organization's logo from `src/assets/logos`, cropped to a circle.
 Every logo is a 64x64 tile: the organization's own mark, taken from its website and centered on its brand color, so it reads in both themes.
+Marks are centered optically, not by bounding box: each sits three quarters of the way from its box's center toward its center of mass, which is what keeps a bottom-heavy mark like Adobe's "A" from looking low.
 An organization with no public logo gets a react-icons icon in an outlined circle instead.
 
 ## Styling
