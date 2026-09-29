@@ -15,6 +15,8 @@ Last reviewed: 2026-09-28.
 | Site constants, metadata, feeds, and SEO  | `src/data/site.ts`, `src/app/layout.tsx`, `src/app/{sitemap,robots,manifest}.ts`, `src/app/feed.xml/route.ts`, `src/components/json-ld.tsx`                      |
 | Post view counter                         | `src/lib/views.ts`, `src/actions/post-actions.ts`, `src/components/blog/view-counter.tsx`                                                                        |
 | Contact form                              | `src/app/contact`, `src/components/contact`, `src/actions/contact-actions.ts`, `src/schemas/contact-schema.ts`, `src/lib/rate-limit.ts`, `src/email`             |
+| Admin portal                              | `src/app/admin`, `src/components/admin`, `src/actions/admin-actions.ts`, `src/lib/admin`, `src/schemas/admin-content-schema.ts`, `src/lib/collections.ts`        |
+| Sign-in                                   | `src/auth.ts`, `src/app/api/auth/[...nextauth]/route.ts`, `src/types/next-auth.d.ts`                                                                             |
 | Database                                  | `prisma/schema.prisma`, `prisma.config.ts`, `src/lib/db.ts`; the generated client is in `src/generated/prisma`, gitignored and excluded from ESLint and Prettier |
 | Theme, fonts, and global styles           | `src/styles/globals.css`, `src/assets/fonts.ts`, `src/components/theme-toggle.tsx`                                                                               |
 | Logo, icons, and OpenGraph images         | `src/components/logo.tsx`, `src/app/{icon.svg,favicon.ico,apple-icon.png,opengraph-image.png}`, `src/app/blog/[slug]/opengraph-image.tsx`, `public/icon-*.png`   |
@@ -37,12 +39,16 @@ Projects and posts are MDX files with gray-matter frontmatter in `src/content/`,
 - **Dates** go through `parseContentDate` (`src/lib/date.ts`), which reads `YYYY-MM-DD` as local midnight.
   `new Date('YYYY-MM-DD')` is UTC and renders the previous day anywhere west of UTC.
 - **Tech stack** slugs are the keys of `src/data/tech-stack.ts`, which holds each icon, brand colors, and display label.
+- **Thumbnails** must be `https://ik.imagekit.io` URLs, the one host `images.remotePatterns` in `next.config.mjs` allows; next/image refuses any other.
 - **Topics** become URL slugs through `toTopicSlug` (`src/lib/topics.ts`) and get statically generated pages at `/blog/topics/[topic]`.
 - **Featured:** projects flagged `featured` appear on the home page.
   For posts, the flagged ones do, or the two newest when none are flagged, so flagging one post replaces both.
 
 Reading time is derived, never authored.
 `getReadingTime` (`src/lib/reading-time.ts`) runs inside `getPostBySlug` and scores prose at 220 wpm and fenced code at 40 lines a minute, since counting code as prose badly overstates a code-heavy post.
+
+The [admin portal](#admin-portal) writes these same files, through GitHub.
+`src/lib/collections.ts` names the two directories for it; `src/lib/content.ts` spells them out again, because the bundler only scopes file tracing to paths it can read statically, and otherwise ships the whole project with every server function.
 
 Posts are compiled with `compileMdx` (`src/components/mdx/mdx-components.tsx`), which also returns the post's `h2`s for the table of contents.
 A rehype plugin placed directly after rehype-slug collects them, so the ids are the rendered ones; do not re-derive them from the Markdown.
@@ -75,11 +81,13 @@ Pages cross-fade with `next-view-transitions`.
 ### No loading.tsx, on purpose
 
 There is deliberately no root `loading.tsx`.
-Every route is Static or SSG and links prefetch by default, so the RSC payload is already cached when a link is clicked; a loading boundary had nothing to fill on a normal navigation (measured: zero fallback renders across a real client-side transition).
+Every public route is Static or SSG and links prefetch by default, so the RSC payload is already cached when a link is clicked; a loading boundary had nothing to fill on a normal navigation (measured: zero fallback renders across a real client-side transition).
 What it did do was render the fallback client-side whenever hydration ran slowly, flashing a full-page "Loading" screen mid-article at random.
 It also fought the view transitions: animating into a loading screen and back out looks worse than not animating.
 
 If a genuinely slow route is ever added, give it a scoped `loading.tsx` in that segment, and prefer a top progress bar over a layout-replacing spinner.
+The admin pages are the one case: they wait on GitHub, so `src/app/admin/loading.tsx` shows a bar across the top.
+Because they stream, an admin URL that does not exist answers 200 with the not-found page, the status having gone out before the page decides; behind sign-in and `noindex`, that costs nothing.
 
 ### Metadata
 
@@ -87,6 +95,7 @@ If a genuinely slow route is ever added, give it a scoped `loading.tsx` in that 
 Every page sets a description, a canonical URL, and OpenGraph tags.
 The site also publishes `sitemap.xml` (including topic pages), `robots.txt`, a web manifest, an RSS feed at `/feed.xml`, and JSON-LD: a Person on the home page and a BlogPosting on each post.
 Vercel Analytics and Speed Insights load from the root layout.
+The admin pages are `noindex` and disallowed in `robots.txt`.
 
 ## Database
 
@@ -106,9 +115,9 @@ Older Prisma recipes do not apply:
 - **The build runs `prisma generate` itself.** The client is generated into `src/generated/prisma`, which is gitignored, so a fresh clone does not have it.
   `postinstall` also generates, but only on a real install: pnpm 12 skips the install, lifecycle scripts included, when `node_modules` is already current, and a restored Vercel build cache is exactly that.
   Relying on `postinstall` alone fails every deploy after the first; CI deletes the generated client before building to catch it.
-- The schema keeps the Auth.js `User` and `Account` models and the empty `GuestbookNote` even though nothing reads them.
-  They are live tables in Neon, and `prisma db push` would drop them.
-  Whether to build on them or drop them is an [open decision](status.md#open-decisions).
+- `User` and `Account` are the Auth.js tables behind the [admin portal](#admin-portal)'s sign-in.
+  The empty `GuestbookNote` stays in the schema although nothing reads it: it is a live table, and `prisma db push` would drop it.
+  Whether to build on it or drop it is an [open decision](status.md#open-decisions).
 
 The database is only ever an enhancement: the site builds and runs with no database reachable.
 `.env.example` documents every variable.
@@ -129,7 +138,8 @@ Views live in the same Postgres database as everything else (`src/lib/views.ts`)
 Sessions are kept for 30 days.
 Each newly counted view deletes older ones, through the `viewed_at` index, so the table stops growing without a cron; a session that returns after a month counts once more.
 
-Loading a post in `pnpm dev` records a view in whatever database `DATABASE_URL` points at, which locally is production.
+Loading a post in `pnpm dev` records a view in whatever database `DATABASE_URL` points at, and signing in to the admin portal writes to `users` and `accounts` there.
+The local `.env` points at the Neon `dev` branch; production is the `main` branch, whose URLs are kept apart in `.env.prod.local`.
 To test pages without writing, run the dev server with `DATABASE_URL` pointed at an unreachable host; the counter fails soft.
 
 ## Contact form
@@ -145,6 +155,43 @@ The action is a public endpoint that sends email, so it has three layers:
 Email goes through Resend.
 `CONTACT_FROM_EMAIL` and `CONTACT_TO_EMAIL` set the addresses.
 The default sender is Resend's shared sandbox, which only delivers to the account owner.
+
+## Admin portal
+
+`/admin` is where Ryan writes posts and adds projects without editing MDX by hand.
+Content stays in the repository: the portal is a form over the same files, and GitHub is its only store.
+
+- **A draft is a pull request.** Saving commits the item's file to the branch `content/<collection>/<slug>` and opens a pull request into `main` the first time, so every draft gets CI and a Vercel preview.
+  Publishing saves, then squash-merges it and deletes the branch, and Vercel deploys `main`.
+  Discarding closes the pull request unmerged.
+  A branch whose pull request is no longer open is a leftover, and the next save resets it to `main`.
+- **Nothing saved elsewhere is overwritten.** The editor keeps the blob id of the file it loaded and sends it with every write, so GitHub refuses a save over a newer version; publishing passes the commit it saved last, so GitHub refuses to merge anything unseen.
+- **Publishing waits out GitHub.** For a few seconds after a push, the pull request still reports its previous head, and the merge API answers 409 or 405.
+  `publishDraft` (`src/lib/admin/repository.ts`) retries while the branch still holds the saved commit, and only a moved branch or a real conflict with `main` fails.
+- **Files are written exactly as a hand-formatted one.** `src/lib/admin/content-file.ts` writes frontmatter in schema order and flow style, and `src/lib/admin/format.ts` runs Prettier's standalone build with every built-in language, so code blocks are formatted too.
+  The standalone build cannot load the Tailwind plugin, which reads the stylesheet from disk, so `prettier.config.js` leaves class sorting out of MDX for the CLI as well; otherwise a saved file could fail `format:check`.
+  A test writes every existing content file back byte for byte, and compares the output with the CLI's.
+- **The preview is the page.** `renderContentPreview` (`src/components/admin/content-preview.tsx`) renders the item with the post and project pages' own `PostHeader`, `ProjectHeader`, and `ArticleBody` and the MDX pipeline.
+  The editor pages render it too, for the preview they open with, and that is load-bearing: a server action can only return client components (the code block's copy button, `next/link`, `next/image`) that the calling page's module graph includes.
+  The pages pass it as a `ContentPreview` element rather than a rendered tree, which spares React's development build a false missing-key warning.
+- **Unsaved work survives in the browser.** The editor keeps a copy of unsaved changes in `localStorage` and offers it back, so a closed tab or an expired sign-in loses nothing; it also warns before leaving with unsaved changes.
+- **Images upload straight to ImageKit** from the browser, signed by a server action (HMAC-SHA1 of a one-time token and expiry under `IMAGEKIT_PRIVATE_KEY`), so files never pass through a server action's 1 MB limit.
+  Without `IMAGEKIT_PUBLIC_KEY` and `IMAGEKIT_PRIVATE_KEY` the upload buttons are hidden and image URLs can still be pasted.
+  Posts upload into `/Blog/<slug>` and projects into `/Project Screenshots/<slug>`, where the existing screenshots are.
+
+### Sign-in
+
+Auth.js v5 (`src/auth.ts`) with GitHub as the only provider, JWT sessions, and the Prisma adapter for the `users` and `accounts` tables.
+
+- **The provider is a GitHub App**, "Ryan Gan Portfolio Admin", installed on this repository alone, with read and write access to contents and pull requests and read access to email addresses.
+  Its token reaches this one repository, where an OAuth App's `public_repo` token could write to every public repository the account has.
+  It needs `AUTH_GITHUB_ID` and `AUTH_GITHUB_SECRET`, and `AUTH_SECRET` signs the session.
+- **Only someone who can push to the repository gets in.** The `signIn` callback asks GitHub, before Auth.js writes anything, so a refused sign-in leaves no row behind.
+  Admins get the `ADMIN` role, and every admin page and server action checks for it itself: a layout does not protect server actions, which are public endpoints.
+- **The portal commits as the signed-in user**, with their GitHub token from `accounts`.
+  Auth.js stores tokens only when it first links an account, so the `jwt` callback stores them again on every sign-in.
+  GitHub App tokens expire after eight hours; `getGitHubToken` (`src/lib/admin/github-token.ts`) refreshes them, and asks for a new sign-in once the refresh token is spent.
+- **The callback URLs** registered on the app are `https://ryangan.me/api/auth/callback/github` and `http://localhost:3000/api/auth/callback/github`, so sign-in works locally only on port 3000.
 
 ## Security headers
 
@@ -196,6 +243,9 @@ pnpm 11 and later no longer read the `pnpm` field in `package.json`; the setting
 - **TypeScript 6.0.3.** TypeScript 7.0 ships no programmatic JS API, so typescript-eslint cannot load and `pnpm lint` fails, even though `next build` itself runs on 7.0.
   Revisit at 7.1; Dependabot ignores TypeScript majors until then.
 - **Prisma 7.** Prisma 8 is published under `latest` but is still a release candidate.
+- **next-auth 5.0.0-beta.32**, pinned exactly because v5 has only ever been published as betas, and a caret range would take the next one unreviewed.
+  It is the maintained line for Next 16 and the one whose adapter matches the `users` and `accounts` tables.
+- **Runtime dependencies that look like dev tools.** `prettier` and the rehype and remark plugins are `dependencies`: the admin portal formats and compiles MDX at request time, not only in the build.
 
 `tests/upstream-pins.test.ts` reads the installed packages and fails, naming what to remove, once a dependency update makes the ESLint, Prisma override, or TypeScript workaround unnecessary.
 Dependabot's updates are what trip it.
@@ -205,6 +255,8 @@ Dependabot's updates are what trip it.
 - **Unit tests** (Vitest, `pnpm test`) sit beside their code in `src/` and mock the database.
   `tests/` holds checks on the repository itself.
 - **Browser tests** (Playwright, `pnpm test:e2e`) live in `e2e/` and cover the flows that have broken before: the contact form's states, the theme toggle, and client-side navigation.
+  For the admin portal they cover what a visitor who is not signed in meets, up to GitHub's authorize URL, which they intercept.
+  Past sign-in the portal acts on GitHub as the signed-in user, so its repository calls are unit tested against a fake Octokit instead.
 
 The browser tests run against a production build, since static rendering, prefetching, and the inline theme script only behave as visitors see them there.
 `playwright.config.ts` starts that server cut off from everything real:
@@ -213,6 +265,7 @@ The browser tests run against a production build, since static rendering, prefet
 - Resend is pointed at `e2e/mock-resend.mjs` through `RESEND_BASE_URL`, so no email is sent.
   A subject containing `resend-fail` makes it answer with an error.
 - Each contact test sends its own `x-forwarded-for`, so the rate limit, which keys on the caller's IP, cannot leak between tests.
+- The Auth.js variables are placeholders, with `AUTH_TRUST_HOST`, which Vercel implies and `next start` does not.
 
 Any console error or uncaught exception fails a test, since that is how hydration mismatches surface.
 Vercel's analytics scripts, which only exist on Vercel, are answered with an empty script.

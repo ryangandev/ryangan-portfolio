@@ -7,6 +7,8 @@ export default function robots(): MetadataRoute.Robots {
     rules: {
       userAgent: '*',
       allow: '/',
+      // Behind sign-in, and marked noindex as well.
+      disallow: ['/admin', '/api/'],
     },
     sitemap: `${siteUrl}/sitemap.xml`,
   };

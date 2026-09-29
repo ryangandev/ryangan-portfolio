@@ -8,7 +8,7 @@ The site is live and feature-complete for now; what remains is mostly outside th
 
 - Every dependency is on its latest release except the deliberate [pinned versions](architecture.md#pinned-versions), and `pnpm audit` reports no known vulnerabilities.
 - Format, lint, typecheck, unit tests, build, and browser tests pass locally and in CI.
-- Every route is Static or SSG.
+- Every public route is Static or SSG; the admin portal's routes are dynamic.
 - The production database matches `prisma/schema.prisma`; `prisma migrate diff` reports no difference.
 - Vercel builds under pnpm 12, including from a restored build cache.
 
@@ -23,12 +23,18 @@ These need an account or a judgment only Ryan has.
 3. Verify a domain in Resend and set `CONTACT_FROM_EMAIL` to an address on it.
    The default sender only delivers to the Resend account owner.
 4. Submit the sitemap to Google Search Console.
+5. Set the admin portal's variables in Vercel: `AUTH_SECRET` (a new one, not the local value), and `AUTH_GITHUB_ID` and `AUTH_GITHUB_SECRET` from the "Ryan Gan Portfolio Admin" GitHub App, with a client secret generated for production.
+   Until then `/admin` cannot sign anyone in on ryangan.me.
+6. Create a restricted ImageKit API key that can only upload, and set `IMAGEKIT_PUBLIC_KEY` and `IMAGEKIT_PRIVATE_KEY` locally and in Vercel.
+   ImageKit asks for a code from Ryan's email to create one.
+   Until then the editor hides its upload buttons.
 
 ## Open decisions
 
 - **Home page copy.** It still says "Currently, I'm exploring GraphQL".
-- **Prisma leftovers.** Build the guestbook, or drop `User`, `Account`, and `GuestbookNote` in a migration.
-  Until then they stay in the schema; see [Database](architecture.md#database).
+- **Guestbook table.** Build the guestbook, or drop `GuestbookNote` in a migration.
+  Until then it stays in the schema; see [Database](architecture.md#database).
+  `User` and `Account` back the admin portal's sign-in.
 - **Comments.** The loading-states post ends by inviting a comment, and there is nowhere to leave one.
 
 ## Next work

@@ -64,10 +64,9 @@ model ContactSubmission {
 // ---------------------------------------------------------------------------
 // Auth.js (NextAuth) adapter tables
 //
-// These already exist in the Neon database and hold live rows. They are kept
-// in the schema so `prisma db push` reconciles against them instead of
-// dropping them. There is no Session model because the intended setup is JWT
-// sessions, which only need User and Account.
+// The admin portal's sign-in (`src/auth.ts`). There is no Session model
+// because sessions are JWTs in a cookie, which only need User and Account.
+// Account holds each user's GitHub tokens, which the portal commits with.
 // ---------------------------------------------------------------------------
 
 enum UserRole {
