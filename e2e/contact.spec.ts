@@ -25,7 +25,7 @@ const fillForm = async (page: Page, name: string) => {
 };
 
 const submitButton = (page: Page) =>
-  page.getByRole('button', { name: 'Submit' });
+  page.getByRole('button', { name: 'Send message' });
 
 test.beforeEach(async ({ page }, testInfo) => {
   // The rate limit keys on the caller's IP, and every test calls from this
@@ -135,6 +135,21 @@ test('stops sending after three messages, without telling the sender', async ({
   }
 
   expect(await sentWith(request, name)).toHaveLength(3);
+});
+
+test('copies the Discord ID, which is not a link', async ({
+  context,
+  page,
+}) => {
+  await context.grantPermissions(['clipboard-read', 'clipboard-write']);
+  await page.getByRole('button', { name: 'Copy Discord ID' }).click();
+
+  await expect(
+    page.getByText('Discord ID has been copied to your clipboard.'),
+  ).toBeVisible();
+  expect(await page.evaluate(() => navigator.clipboard.readText())).toBe(
+    'ryiscrispy',
+  );
 });
 
 test.describe('without JavaScript', () => {

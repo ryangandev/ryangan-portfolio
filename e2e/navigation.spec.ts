@@ -107,17 +107,27 @@ test('does not download the resume just because its link is in view', async ({
   expect(pdfRequests).toEqual([]);
 });
 
-test('answers an unknown post with a 404 page', async ({
+test('answers an unknown post with a 404 page that leads back in', async ({
   page,
   consoleErrors,
 }) => {
   const response = await page.goto('/blog/not-a-real-post');
 
   expect(response?.status()).toBe(404);
-  await expect(page.getByText('404 - Not Found')).toBeVisible();
+  await expect(page.getByRole('heading', { level: 1 })).toHaveText(
+    'Page not found',
+  );
 
   // Chrome logs the page's own 404 status as a console error. Here that is
   // the point, so claim exactly that one and let anything else still fail.
   expect(consoleErrors).toEqual([expect.stringContaining('status of 404')]);
   consoleErrors.length = 0;
+
+  const check = await watchNavigation(page);
+
+  await page.locator('main a[href="/blog"]').click();
+  await expect(page).toHaveURL('/blog');
+  await expect(page.getByRole('heading', { level: 1 })).toHaveText('Blog');
+
+  await check();
 });

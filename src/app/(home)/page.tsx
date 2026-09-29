@@ -35,7 +35,7 @@ export default async function Home() {
           image: authorAvatarUrl,
           jobTitle: 'Software Engineer',
           description: siteDescription,
-          sameAs: authorProfiles,
+          sameAs: authorProfiles.map((profile) => profile.url),
         }}
       />
       <h1>Zhiheng (Ryan) Gan</h1>
