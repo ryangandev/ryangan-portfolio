@@ -127,11 +127,13 @@ const ContactForm = () => {
 
   const isSubmitting = form.formState.isSubmitting;
 
+  // Grey like the labels, brightening with the message's label while the
+  // message has focus, or while the button itself is pointed at or focused.
   const sendButton = (
     <button
       type="submit"
       disabled={isSubmitting}
-      className="group/send inline-flex h-8 cursor-pointer items-center gap-1 rounded-full pr-2.5 pl-3.5 text-sm font-medium whitespace-nowrap color-level-2 transition-colors hover:bg-neutral-100 hover:color-level-0 focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-hidden disabled:pointer-events-none disabled:opacity-60 dark:hover:bg-neutral-800"
+      className="group/send inline-flex h-8 cursor-pointer items-center gap-1 rounded-full pr-2.5 pl-3.5 text-sm font-medium whitespace-nowrap color-level-5 transition-colors duration-300 group-has-[textarea:focus]/row:color-level-1 hover:bg-neutral-100 hover:color-level-1 focus-visible:color-level-1 focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-hidden disabled:pointer-events-none disabled:opacity-60 dark:hover:bg-neutral-800"
     >
       Send message
       {isSubmitting ? (

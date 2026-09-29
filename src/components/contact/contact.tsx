@@ -17,7 +17,7 @@ const Contact = () => {
       className="motion-safe:animate-in motion-safe:duration-1000 motion-safe:fade-in"
     >
       <ContactForm />
-      <h2>Elsewhere</h2>
+      <h2>Find me</h2>
       <ContactInfo />
     </section>
   );
