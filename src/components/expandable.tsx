@@ -22,6 +22,11 @@ const DURATION_MS = 700;
  * Content cut off at a fixed height until the reader expands it, and cut off
  * again when they collapse it.
  *
+ * The cut-off content fades out through a mask rather than under a gradient
+ * painted in the page's background color. A painted gradient never quite
+ * matches: the dark background, hsl(0 0% 10%), is 25.5 in sRGB, and blended
+ * pixels round the other way from the solid page, leaving a visible box.
+ *
  * Each toggle animates `max-height` from the height on screen to the new
  * state's, both measured, so a toggle in the middle of an animation carries on
  * from where it is. Collapsing scrolls the page along with the shrinking
@@ -90,25 +95,18 @@ const Expandable = ({
 
   return (
     <div>
-      <div className="relative">
-        <div
-          ref={contentRef}
-          id={contentId}
-          className={cn(
-            'overflow-hidden',
-            !isExpanded && collapsedClassName,
-            'noscript:max-h-none',
-          )}
-        >
-          {children}
-        </div>
-        <div
-          aria-hidden
-          className={cn(
-            'pointer-events-none absolute inset-x-0 bottom-0 h-24 bg-linear-to-b from-transparent to-background transition-opacity duration-500 noscript:hidden',
-            isExpanded && 'opacity-0',
-          )}
-        />
+      <div
+        ref={contentRef}
+        id={contentId}
+        className={cn(
+          'overflow-hidden [mask-image:linear-gradient(to_bottom,black_calc(100%-var(--fade-height)),transparent)] transition-[--fade-height] duration-500',
+          isExpanded
+            ? '[--fade-height:0px]'
+            : ['[--fade-height:6rem]', collapsedClassName],
+          'noscript:max-h-none noscript:[mask-image:none]',
+        )}
+      >
+        {children}
       </div>
       <div className="flex justify-center noscript:hidden">
         <button
