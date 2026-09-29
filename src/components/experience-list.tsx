@@ -9,6 +9,22 @@ const formatRange = ({ start, end }: Experience) =>
   `${formatMonth(start)} - ${end ? formatMonth(end) : 'Present'}`;
 
 /**
+ * Keeps hyphenated words such as "in-app" and "co-op" whole on one line.
+ * Browsers break lines after a hyphen, and Geist has no non-breaking hyphen
+ * (U+2011) to stop them, so one would render in a fallback font.
+ */
+const keepHyphenatedWords = (text: string) =>
+  text.split(/(\S+-\S+)/).map((part, index) =>
+    index % 2 ? (
+      <span key={index} className="whitespace-nowrap">
+        {part}
+      </span>
+    ) : (
+      part
+    ),
+  );
+
+/**
  * The logo, cropped to a circle. Logos carry their own brand-colored tile, so
  * a faint outline gives the dark ones an edge against the dark theme.
  */
@@ -57,7 +73,9 @@ const ExperienceList = ({ items }: ExperienceListProps) => {
             <p className="mb-2 text-sm color-level-4">
               {item.organization}, {item.location}
             </p>
-            <p className="mb-0 text-[15px] text-pretty">{item.description}</p>
+            <p className="mb-0 text-[15px] text-pretty">
+              {keepHyphenatedWords(item.description)}
+            </p>
           </div>
         </li>
       ))}
