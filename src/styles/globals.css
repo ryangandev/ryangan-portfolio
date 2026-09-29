@@ -141,6 +141,15 @@
     @apply bg-background leading-7 text-foreground;
   }
 
+  /*
+    Elements focused only by script, so keyboard focus follows the view (back
+    to top, an expanded section). A reader never tabs to them, and a ring
+    around the whole page would only be noise.
+  */
+  [tabindex='-1']:focus {
+    outline: none;
+  }
+
   h1 {
     @apply mb-7 font-medium color-level-0;
   }

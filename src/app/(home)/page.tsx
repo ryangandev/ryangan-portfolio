@@ -3,6 +3,7 @@ import { Link } from 'next-view-transitions';
 
 import { newsreader } from '@/assets/fonts';
 import AnimatedLink from '@/components/animated-link';
+import Expandable from '@/components/expandable';
 import ExperienceList from '@/components/experience-list';
 import JsonLd from '@/components/json-ld';
 import { experience } from '@/data/experience';
@@ -40,10 +41,15 @@ export default async function Home() {
       />
       <h1>Zhiheng (Ryan) Gan</h1>
 
-      <h3 className={cn(newsreader.className, 'mb-7 text-[17.5px] italic')}>
-        I am a user before a developer.
-      </h3>
       <p>
+        <span
+          className={cn(
+            newsreader.className,
+            'text-[17.5px] font-medium color-level-2 italic',
+          )}
+        >
+          I am a user before a developer.
+        </span>{' '}
         I like to craft polished, user-centric software that brings satisfaction
         through every little detail.
       </p>
@@ -73,7 +79,12 @@ export default async function Home() {
       </p>
 
       <h2>Experience</h2>
-      <ExperienceList items={experience} />
+      <Expandable
+        collapsedClassName="max-h-[26rem] md:max-h-[19rem]"
+        label="Expand to view all"
+      >
+        <ExperienceList items={experience} />
+      </Expandable>
 
       <h2>Featured Portfolio</h2>
       <ul className="group mb-7 text-[15px]">
