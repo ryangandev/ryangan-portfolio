@@ -153,6 +153,14 @@ Email goes through Resend.
 `CONTACT_FROM_EMAIL` and `CONTACT_TO_EMAIL` set the addresses.
 The default sender is Resend's shared sandbox, which only delivers to the account owner.
 
+On the page, each field is a row with its label in a left column, like the blog archive.
+The rule under a row sweeps in from the left while its field has focus, and stays drawn in red while the field is invalid.
+The send button sits inside the message row, so a row counts as focused only while its own input or textarea is, not the button.
+The inputs are plain elements rather than the shadcn primitives, since those draw a box the row replaces.
+The form is `noValidate`, so every invalid field gets the same inline message instead of some getting the browser's tooltip.
+The profiles listed under the form come from `authorProfiles` in `src/data/site.ts`, which the home page's JSON-LD also uses.
+`SocialIcon` draws every social icon from Tabler's outline set, whose stroke matches the Lucide icons beside them; mixing sets is what made the old icons look uneven.
+
 ## Security headers
 
 `next.config.mjs` sends `nosniff`, a referrer policy, `frame-ancestors 'none'` with `X-Frame-Options: DENY`, and a permissions policy on every route, and turns off `X-Powered-By`.

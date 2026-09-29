@@ -1,10 +1,14 @@
 import React from 'react';
-import { AiFillGithub } from 'react-icons/ai';
-import { BiLogoLinkedin } from 'react-icons/bi';
-import { CiGlobe } from 'react-icons/ci';
-import { FaDiscord, FaMedium } from 'react-icons/fa6';
-import { MdLocationPin, MdOutlineEmail } from 'react-icons/md';
 import { SiCodesandbox } from 'react-icons/si';
+import {
+  TbBrandDiscord,
+  TbBrandGithub,
+  TbBrandLinkedin,
+  TbBrandMedium,
+  TbMail,
+  TbMapPin,
+  TbWorld,
+} from 'react-icons/tb';
 
 import { cn } from '@/lib/utils';
 import { SocialIconName } from '@/models/data';
@@ -16,6 +20,10 @@ type SocialIconProps = {
 };
 
 /**
+ * All from Tabler's outline set, so they share one stroke with each other and
+ * with the Lucide icons beside them, like the copy button and the external
+ * link arrow. They were once a mix of five sets, outlined and filled.
+ *
  * @param name - the name of the social icon
  * @param size - (optional) the default size is 24
  * @param className - (optional) the icon style
@@ -27,19 +35,19 @@ const SocialIcon: React.FC<SocialIconProps> = ({
 }) => {
   switch (name) {
     case 'linkedin':
-      return <BiLogoLinkedin size={size} className={cn(className)} />;
+      return <TbBrandLinkedin size={size} className={cn(className)} />;
     case 'github':
-      return <AiFillGithub size={size} className={cn(className)} />;
+      return <TbBrandGithub size={size} className={cn(className)} />;
     case 'discord':
-      return <FaDiscord size={size} className={cn(className)} />;
+      return <TbBrandDiscord size={size} className={cn(className)} />;
     case 'medium':
-      return <FaMedium size={size} className={cn(className)} />;
+      return <TbBrandMedium size={size} className={cn(className)} />;
     case 'email':
-      return <MdOutlineEmail size={size} className={cn(className)} />;
+      return <TbMail size={size} className={cn(className)} />;
     case 'location':
-      return <MdLocationPin size={size} className={cn(className)} />;
+      return <TbMapPin size={size} className={cn(className)} />;
     case 'website':
-      return <CiGlobe size={size} className={cn(className)} />;
+      return <TbWorld size={size} className={cn(className)} />;
     default:
       return (
         <SiCodesandbox
