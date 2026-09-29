@@ -40,7 +40,21 @@ test('starts the GitHub sign-in, coming back to the page it was sent from', asyn
   });
 
   await page.goto('/admin/posts/new');
-  await page.getByRole('button', { name: 'Sign in with GitHub' }).click();
+
+  const button = page.getByRole('button', { name: 'Sign in with GitHub' });
+
+  // Clicked before hydration, the button posts its form natively, and the
+  // server answers with a redirect to GitHub that Playwright follows without
+  // routing, so the test would reach the real GitHub. React marks each
+  // element it has hydrated.
+  await expect
+    .poll(() =>
+      button.evaluate((element) =>
+        Object.keys(element).some((key) => key.startsWith('__reactFiber')),
+      ),
+    )
+    .toBe(true);
+  await button.click();
   await expect(page.getByText('GitHub', { exact: true })).toBeVisible();
 
   expect(authorize?.searchParams.get('client_id')).toBe('e2e-github-id');
