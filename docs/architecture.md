@@ -189,6 +189,7 @@ Traps when regenerating:
 
 Vercel deploys `main` and builds a preview for every pull request.
 CI (`.github/workflows/ci.yml`) runs format check, lint, typecheck, unit tests, build, and browser tests on every pull request and push to `main`, from a clean install with no secrets.
+`pnpm typecheck` runs `next typegen` first: `next-env.d.ts` and the route types are generated and gitignored, and CI type-checks before it builds, so without them a clean checkout cannot resolve imports such as `*.svg`.
 Dependabot opens dependency updates.
 
 pnpm is pinned by `packageManager` in `package.json`, and pnpm 10 and later switch to that version on their own, so local installs, CI, and Vercel resolve with the same pnpm.
