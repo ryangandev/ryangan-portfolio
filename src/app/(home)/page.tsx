@@ -41,25 +41,23 @@ export default async function Home() {
       />
       <h1>Zhiheng (Ryan) Gan</h1>
 
-      <p>
-        <span
-          className={cn(
-            newsreader.className,
-            'text-[17.5px] font-medium color-level-2 italic',
-          )}
-        >
-          I am a user before a developer.
-        </span>{' '}
-        I like to craft polished, user-centric software that brings satisfaction
-        through every little detail.
+      <p
+        className={cn(
+          newsreader.className,
+          'text-[17.5px] font-medium color-level-2 italic',
+        )}
+      >
+        I am a user before a developer.
       </p>
 
       <h2>About Me</h2>
       <p className="mb-4">
-        As a software engineer specializing in full-stack development with 4
-        years of experience, my tech stack includes:
+        I like to craft polished, user-centric software that brings satisfaction
+        through every little detail. As a software engineer specializing in
+        full-stack development with 4 years of experience, my tech stack
+        includes:
       </p>
-      <ul className="mb-7 list-inside list-disc space-y-2">
+      <ul className="mb-7 list-inside list-disc space-y-2 pl-5.5 -indent-5.5">
         <li>
           <span className="font-medium color-level-2">Frontend</span>: React,
           Next.js, TypeScript, JavaScript, Redux
