@@ -48,7 +48,7 @@ export const experience: Experience[] = [
     start: '2025-05',
     end: '2026-01',
     description:
-      'Contributed to the store maps team, whose interactive maps cover 9,000 Walmart stores. Migrated the map service from Node.js 12 to 22, and worked on the internal platform that refreshes the maps.',
+      'Migrated the service behind the in-store maps for 9,000 Walmart stores from Node.js\u00a012\u00a0to\u00a022, and built the internal platform that rolls out map updates to every store.',
     mark: walmart,
   },
   {
