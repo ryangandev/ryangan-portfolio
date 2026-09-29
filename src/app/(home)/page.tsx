@@ -84,7 +84,7 @@ export default async function Home() {
         <ExperienceList items={experience} />
       </Expandable>
 
-      <h2>Featured Portfolio</h2>
+      <h2>Featured Projects</h2>
       <ul className="group mb-7 text-[15px]">
         {featuredProjects.map((project) => (
           <li
