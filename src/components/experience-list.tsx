@@ -1,4 +1,5 @@
 import { format, parseISO } from 'date-fns';
+import Image from 'next/image';
 
 import { Experience } from '@/data/experience';
 
@@ -6,6 +7,51 @@ const formatMonth = (value: string) => format(parseISO(value), 'MMM yyyy');
 
 const formatRange = ({ start, end }: Experience) =>
   `${formatMonth(start)} - ${end ? formatMonth(end) : 'Present'}`;
+
+/**
+ * Keeps hyphenated words such as "in-app" and "co-op" whole on one line.
+ * Browsers break lines after a hyphen, and Geist has no non-breaking hyphen
+ * (U+2011) to stop them, so one would render in a fallback font.
+ */
+const keepHyphenatedWords = (text: string) =>
+  text.split(/(\S+-\S+)/).map((part, index) =>
+    index % 2 ? (
+      <span key={index} className="whitespace-nowrap">
+        {part}
+      </span>
+    ) : (
+      part
+    ),
+  );
+
+/**
+ * The logo, cropped to a circle. Logos carry their own brand-colored tile, so
+ * a faint outline gives the dark ones an edge against the dark theme.
+ */
+const ExperienceMark = ({ mark }: Pick<Experience, 'mark'>) => {
+  if (typeof mark !== 'function') {
+    return (
+      <Image
+        src={mark}
+        alt=""
+        width={28}
+        height={28}
+        className="mt-0.5 size-7 shrink-0 rounded-full outline-1 -outline-offset-1 outline-black/5 dark:outline-white/10"
+      />
+    );
+  }
+
+  const Icon = mark;
+
+  return (
+    <span
+      className="mt-0.5 flex size-7 shrink-0 items-center justify-center rounded-full border text-neutral-400 dark:text-neutral-300"
+      aria-hidden
+    >
+      <Icon size={14} />
+    </span>
+  );
+};
 
 type ExperienceListProps = {
   items: Experience[];
@@ -16,12 +62,7 @@ const ExperienceList = ({ items }: ExperienceListProps) => {
     <ol className="mb-7 space-y-7">
       {items.map((item) => (
         <li key={`${item.organization}-${item.start}`} className="flex gap-4">
-          <span
-            className="mt-0.5 flex size-7 shrink-0 items-center justify-center rounded-full border color-level-4"
-            aria-hidden
-          >
-            <item.icon size={14} />
-          </span>
+          <ExperienceMark mark={item.mark} />
           <div className="min-w-0 flex-1">
             <div className="flex flex-wrap items-baseline justify-between gap-x-4">
               <h3 className="text-base">{item.role}</h3>
@@ -32,7 +73,9 @@ const ExperienceList = ({ items }: ExperienceListProps) => {
             <p className="mb-2 text-sm color-level-4">
               {item.organization}, {item.location}
             </p>
-            <p className="mb-0 text-[15px]">{item.description}</p>
+            <p className="mb-0 text-[15px] text-pretty">
+              {keepHyphenatedWords(item.description)}
+            </p>
           </div>
         </li>
       ))}

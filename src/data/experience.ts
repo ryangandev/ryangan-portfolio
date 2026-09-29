@@ -1,7 +1,13 @@
+import type { StaticImageData } from 'next/image';
 import type { IconType } from 'react-icons';
-import { FaReact, FaUnity } from 'react-icons/fa';
-import { LuGraduationCap } from 'react-icons/lu';
-import { SiJavascript } from 'react-icons/si';
+import { FaUnity } from 'react-icons/fa';
+
+import adobe from '@/assets/logos/adobe.svg';
+import beaconfire from '@/assets/logos/beaconfire.svg';
+import berkley from '@/assets/logos/berkley.svg';
+import drexel from '@/assets/logos/drexel.svg';
+import dynasty11 from '@/assets/logos/dynasty11.svg';
+import walmart from '@/assets/logos/walmart.svg';
 
 export type Experience = {
   role: string;
@@ -12,7 +18,11 @@ export type Experience = {
   /** `YYYY-MM`, or null while it is ongoing */
   end: string | null;
   description: string;
-  icon: IconType;
+  /**
+   * The organization's logo, from `src/assets/logos`, or an icon standing in
+   * for one that has no public logo
+   */
+  mark: StaticImageData | IconType;
 };
 
 /**
@@ -22,14 +32,43 @@ export type Experience = {
  */
 export const experience: Experience[] = [
   {
-    role: 'Frontend Developer',
-    organization: 'Dynasty11 Studio',
-    location: 'Philadelphia, PA',
-    start: '2022-09',
+    role: 'Software Development Engineer',
+    organization: 'Adobe',
+    location: 'San Jose, CA',
+    start: '2026-04',
     end: null,
     description:
-      'Implemented the store section of the "Player 2" app, focusing on UI, application flow, and the representation of cosmetic items. Integrated RevenueCat to manage in-app purchases, ensuring cross-platform compatibility. Troubleshot and resolved bugs of the app in production.',
-    icon: FaReact,
+      'On the Acrobat Web team, currently bringing the Adobe Express experience into Acrobat.',
+    mark: adobe,
+  },
+  {
+    role: 'Software Engineer',
+    organization: 'Walmart (via BeaconFire)',
+    location: 'Sunnyvale, CA',
+    start: '2025-05',
+    end: '2026-01',
+    description:
+      'Migrated the service behind the in-store maps for 9,000 Walmart stores from Node.js\u00a012\u00a0to\u00a022, and built the internal platform that rolls out map updates to every store.',
+    mark: walmart,
+  },
+  {
+    role: 'Full Stack Engineering Consultant',
+    organization: 'BeaconFire Solution',
+    location: 'East Windsor, NJ',
+    start: '2024-10',
+    end: '2025-05',
+    description: 'Built a full-stack HR onboarding and management platform.',
+    mark: beaconfire,
+  },
+  {
+    role: 'Software Engineer',
+    organization: 'Dynasty 11 Studios',
+    location: 'Philadelphia, PA',
+    start: '2022-09',
+    end: '2024-05',
+    description:
+      'Built the store for Player 2, a mobile social networking app for gamers, enabling in-app purchases through RevenueCat. Also built the frontend of HelpDesk, a web app where users submit tickets and technicians track them.',
+    mark: dynasty11,
   },
   {
     role: 'Bachelor of Science in Computer Science',
@@ -39,7 +78,7 @@ export const experience: Experience[] = [
     end: '2023-09',
     description:
       'Completed the 5-year undergraduate co-op program with concentrations in Game Development and Artificial Intelligence.',
-    icon: LuGraduationCap,
+    mark: drexel,
   },
   {
     role: 'CMDB Engineer Co-Op',
@@ -48,17 +87,17 @@ export const experience: Experience[] = [
     start: '2022-03',
     end: '2023-03',
     description:
-      'Developed and optimized workflow scripts using JavaScript. Utilized SQL for database updates. Troubleshot and resolved configuration item issues. Assisted in the Probes to Pattern migration within ServiceNow.',
-    icon: SiJavascript,
+      "Optimized ServiceNow workflows with JavaScript and wrote SQL views over the CMDB's data. Also worked on the migration from probes to patterns in ServiceNow.",
+    mark: berkley,
   },
   {
-    role: 'Graphic Designer & Game Developer Co-Op',
+    role: 'Unity Developer Co-Op',
     organization: 'Epistemitek',
     location: 'Philadelphia, PA',
     start: '2021-03',
     end: '2021-09',
     description:
-      'Contributed to the development of an educational game in Unity to educate students about the human immune system. Designed new fonts for Pittman Shorthand and used Omnigraffle to structure plans and summaries for various experiments.',
-    icon: FaUnity,
+      'Contributed to an educational game in Unity that teaches students about the human immune system.',
+    mark: FaUnity,
   },
 ];
