@@ -81,6 +81,13 @@ It also fought the view transitions: animating into a loading screen and back ou
 
 If a genuinely slow route is ever added, give it a scoped `loading.tsx` in that segment, and prefer a top progress bar over a layout-replacing spinner.
 
+### Not found
+
+`src/app/not-found.tsx` renders for every unmatched URL and every `notFound()`, such as an unknown post slug, inside the root layout.
+It answers with a 404 status, and Next adds `noindex` on its own.
+It titles unmatched URLs "Page not found"; the `[slug]` pages give their own misses a more specific title.
+It lists the site's sections in the home page's list style, so a dead link still leads somewhere.
+
 ### Metadata
 
 `metadataBase` and the site constants come from `src/data/site.ts`.
@@ -204,7 +211,7 @@ Dependabot's updates are what trip it.
 
 - **Unit tests** (Vitest, `pnpm test`) sit beside their code in `src/` and mock the database.
   `tests/` holds checks on the repository itself.
-- **Browser tests** (Playwright, `pnpm test:e2e`) live in `e2e/` and cover the flows that have broken before: the contact form's states, the theme toggle, and client-side navigation.
+- **Browser tests** (Playwright, `pnpm test:e2e`) live in `e2e/` and cover the flows that have broken before: the contact form's states, the theme toggle, client-side navigation, and the 404 page.
 
 The browser tests run against a production build, since static rendering, prefetching, and the inline theme script only behave as visitors see them there.
 `playwright.config.ts` starts that server cut off from everything real:
