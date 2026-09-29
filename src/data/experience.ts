@@ -38,7 +38,7 @@ export const experience: Experience[] = [
     start: '2026-04',
     end: null,
     description:
-      'On the Acrobat Web team, currently integrating Adobe Express with Acrobat.',
+      'On the Acrobat Web team, currently bringing the Adobe Express experience into Acrobat.',
     mark: adobe,
   },
   {
@@ -48,7 +48,7 @@ export const experience: Experience[] = [
     start: '2025-05',
     end: '2026-01',
     description:
-      "Contributed to the team behind the interactive in-store maps in Walmart's apps, working on the map service and the internal platform that refreshes maps across stores.",
+      'Contributed to the store maps team, whose interactive maps cover 9,000 Walmart stores. Migrated the map service from Node.js 12 to 22, and worked on the internal platform that refreshes the maps.',
     mark: walmart,
   },
   {
@@ -67,7 +67,7 @@ export const experience: Experience[] = [
     start: '2022-09',
     end: '2024-05',
     description:
-      'Built the in-app store for Player 2, a mobile social networking app for gamers, selling cosmetic items through RevenueCat. Also built the frontend of HelpDesk, a web app where users submit tickets and technicians track them.',
+      'Built the store for Player 2, a mobile social networking app for gamers, enabling in-app purchases through RevenueCat. Also built the frontend of HelpDesk, a web app where users submit tickets and technicians track them.',
     mark: dynasty11,
   },
   {
