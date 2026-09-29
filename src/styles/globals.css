@@ -142,9 +142,9 @@
   }
 
   /*
-    Elements focused only by script, so keyboard focus follows the view (back
-    to top, an expanded section). A reader never tabs to them, and a ring
-    around the whole page would only be noise.
+    Elements focused only by script, so keyboard focus follows the view, as
+    back to top does with the page's main content. A reader never tabs to
+    them, and a ring around the whole page would only be noise.
   */
   [tabindex='-1']:focus {
     outline: none;

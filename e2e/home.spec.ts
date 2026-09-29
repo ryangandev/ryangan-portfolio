@@ -8,22 +8,38 @@ const timeline = (page: Page) => page.locator('main ol').locator('..');
 const hiddenHeight = (box: Locator) =>
   box.evaluate((element) => element.scrollHeight - element.clientHeight);
 
-test('shows the start of the experience timeline, and all of it on request', async ({
+test('expands the experience timeline, and collapses it where it was clicked', async ({
   page,
 }) => {
   await page.goto('/');
 
-  const expand = page.getByRole('button', { name: 'Expand to view all' });
+  const toggle = page.locator('main button[aria-expanded]');
 
   expect(await hiddenHeight(timeline(page))).toBeGreaterThan(0);
-  await expect(expand).toHaveAttribute('aria-expanded', 'false');
+  await expect(toggle).toHaveAccessibleName('Expand to view all');
 
-  await expand.click();
+  await toggle.click();
 
-  await expect(expand).toBeHidden();
+  await expect(toggle).toHaveAttribute('aria-expanded', 'true');
+  await expect(toggle).toHaveAccessibleName('Collapse');
   await expect.poll(() => hiddenHeight(timeline(page))).toBe(0);
-  // The button that had focus is gone, so focus moves to what it revealed.
-  await expect(timeline(page)).toBeFocused();
+
+  // Collapse from the bottom of the list, as a reader who just read it would.
+  await toggle.evaluate((button) =>
+    button.scrollIntoView({ block: 'end', behavior: 'instant' }),
+  );
+  const before = (await toggle.boundingBox())!.y;
+
+  await toggle.click();
+
+  await expect(toggle).toHaveAttribute('aria-expanded', 'false');
+  await expect.poll(() => hiddenHeight(timeline(page))).toBeGreaterThan(0);
+  // The page scrolled up with the list, so the button is still under the
+  // pointer rather than a screen or two below the section.
+  await expect
+    .poll(async () => Math.abs((await toggle.boundingBox())!.y - before))
+    .toBeLessThanOrEqual(1);
+  await expect(toggle).toBeFocused();
 });
 
 test.describe('without JavaScript', () => {

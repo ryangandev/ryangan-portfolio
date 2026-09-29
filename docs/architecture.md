@@ -54,7 +54,8 @@ Each entry's `mark` is the organization's logo from `src/assets/logos`, cropped 
 Every logo is a 64x64 tile: the organization's own mark, taken from its website and centered on its brand color, so it reads in both themes.
 Marks are centered optically, not by bounding box: each sits three quarters of the way from its box's center toward its center of mass, which is what keeps a bottom-heavy mark like Adobe's "A" from looking low.
 An organization with no public logo gets a react-icons icon in an outlined circle instead.
-The home page shows the timeline collapsed to a fixed height by `Expandable`, fading out behind an expand button; without JavaScript it shows in full, through Tailwind's `noscript:` variant.
+The home page shows the timeline collapsed to a fixed height by `Expandable`, fading out above a button that expands and collapses it; collapsing scrolls the page with it, so the button stays where it was clicked.
+Without JavaScript the timeline shows in full, through Tailwind's `noscript:` variant.
 
 ## Styling
 
