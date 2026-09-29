@@ -6,7 +6,7 @@ Last reviewed: 2026-09-28.
 
 | Area                                      | Where                                                                                                                                                            |
 | ----------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Home page and experience timeline         | `src/app/(home)/page.tsx`, `src/components/experience-list.tsx`, `src/data/experience.ts`                                                                        |
+| Home page and experience timeline         | `src/app/(home)/page.tsx`, `src/components/experience-list.tsx`, `src/data/experience.ts`, `src/assets/logos`                                                    |
 | Portfolio list, search, and project pages | `src/app/portfolio`, `src/components/portfolio`, `src/components/search.tsx`, `src/components/highlighted-text.tsx`                                              |
 | Blog, topics, and post-only UI            | `src/app/blog`, `src/components/blog`                                                                                                                            |
 | MDX source and rendering                  | `src/content/{projects,posts}`, `src/components/mdx`, `src/styles/mdx.css`                                                                                       |
@@ -47,6 +47,11 @@ Reading time is derived, never authored.
 Posts are compiled with `compileMdx` (`src/components/mdx/mdx-components.tsx`), which also returns the post's `h2`s for the table of contents.
 A rehype plugin placed directly after rehype-slug collects them, so the ids are the rendered ones; do not re-derive them from the Markdown.
 The table of contents shows beside posts from `xl` up; the reading progress bar is a CSS scroll-driven animation in `globals.css` with no JavaScript.
+
+The experience timeline is data, not MDX: `src/data/experience.ts`, kept in order by hand.
+Each entry's `mark` is the organization's logo from `src/assets/logos`, cropped to a circle.
+Every logo is a 64x64 tile: the organization's own mark, taken from its website and centered on its brand color, so it reads in both themes.
+An organization with no public logo gets a react-icons icon in an outlined circle instead.
 
 ## Styling
 

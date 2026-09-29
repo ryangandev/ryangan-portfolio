@@ -1,8 +1,13 @@
+import type { StaticImageData } from 'next/image';
 import type { IconType } from 'react-icons';
-import { FaNodeJs, FaReact, FaUnity } from 'react-icons/fa';
-import { LuGraduationCap } from 'react-icons/lu';
-import { SiJavascript, SiMongodb } from 'react-icons/si';
-import { TbBrandReactNative } from 'react-icons/tb';
+import { FaUnity } from 'react-icons/fa';
+
+import adobe from '@/assets/logos/adobe.svg';
+import beaconfire from '@/assets/logos/beaconfire.svg';
+import berkley from '@/assets/logos/berkley.svg';
+import drexel from '@/assets/logos/drexel.svg';
+import dynasty11 from '@/assets/logos/dynasty11.svg';
+import walmart from '@/assets/logos/walmart.svg';
 
 export type Experience = {
   role: string;
@@ -13,7 +18,11 @@ export type Experience = {
   /** `YYYY-MM`, or null while it is ongoing */
   end: string | null;
   description: string;
-  icon: IconType;
+  /**
+   * The organization's logo, from `src/assets/logos`, or an icon standing in
+   * for one that has no public logo
+   */
+  mark: StaticImageData | IconType;
 };
 
 /**
@@ -30,7 +39,7 @@ export const experience: Experience[] = [
     end: null,
     description:
       'Primary frontend contributor to a 0-to-1 conversational creation experience that brings Adobe Express into Acrobat. Built most of its UI in React and TypeScript, including designs that render as they stream in over SSE, and drove integration across the Express and Acrobat teams. Received a Bravo Award in July 2026.',
-    icon: FaReact,
+    mark: adobe,
   },
   {
     role: 'Software Engineer',
@@ -40,7 +49,7 @@ export const experience: Experience[] = [
     end: '2026-01',
     description:
       "Worked on the service behind the interactive in-store maps in Walmart's mobile apps: migrated it from Node.js 12 to 22 in one sprint, cut 2-4 seconds from every store's map, and gated its releases with Playwright. Built the internal platform that runs and rolls back map refreshes across thousands of stores.",
-    icon: FaNodeJs,
+    mark: walmart,
   },
   {
     role: 'Full Stack Engineering Consultant',
@@ -50,7 +59,7 @@ export const experience: Experience[] = [
     end: '2025-05',
     description:
       'Built a full-stack HR onboarding and management platform with React, Redux Toolkit, and Node.js, including JWT authentication, role-based access control, and 30+ REST APIs. Stored sensitive employee documents in Amazon S3 alongside a MongoDB database.',
-    icon: SiMongodb,
+    mark: beaconfire,
   },
   {
     role: 'Software Engineer',
@@ -60,7 +69,7 @@ export const experience: Experience[] = [
     end: '2024-05',
     description:
       "Built React and React Native features for the HelpDesk and Player 2 products, from technician dashboards to the Player 2 store. Cut the store's load time by 60% by redesigning its data models and Spring Boot APIs, and implemented cross-platform in-app purchases with RevenueCat.",
-    icon: TbBrandReactNative,
+    mark: dynasty11,
   },
   {
     role: 'Bachelor of Science in Computer Science',
@@ -70,7 +79,7 @@ export const experience: Experience[] = [
     end: '2023-09',
     description:
       'Completed the 5-year undergraduate co-op program with concentrations in Game Development and Artificial Intelligence.',
-    icon: LuGraduationCap,
+    mark: drexel,
   },
   {
     role: 'CMDB Engineer Co-Op',
@@ -80,7 +89,7 @@ export const experience: Experience[] = [
     end: '2023-03',
     description:
       'Developed and optimized workflow scripts using JavaScript. Utilized SQL for database updates. Troubleshot and resolved configuration item issues. Assisted in the Probes to Pattern migration within ServiceNow.',
-    icon: SiJavascript,
+    mark: berkley,
   },
   {
     role: 'Graphic Designer & Game Developer Co-Op',
@@ -90,6 +99,6 @@ export const experience: Experience[] = [
     end: '2021-09',
     description:
       'Contributed to the development of an educational game in Unity to educate students about the human immune system. Designed new fonts for Pittman Shorthand and used Omnigraffle to structure plans and summaries for various experiments.',
-    icon: FaUnity,
+    mark: FaUnity,
   },
 ];
