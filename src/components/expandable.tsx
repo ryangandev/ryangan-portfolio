@@ -9,8 +9,10 @@ import { cn } from '@/lib/utils';
 type ExpandableProps = {
   children: React.ReactNode;
   /**
-   * The `max-h-*` class for the collapsed state. The content fades out over
-   * its last lines, above the toggle.
+   * The classes that cut the content short while it is collapsed, such as
+   * hiding all but its first few entries. Give them the `scripting:` variant,
+   * since without script nothing could expand the content again. The content
+   * fades out over its last lines, above the toggle.
    */
   collapsedClassName: string;
   label: string;
@@ -19,8 +21,13 @@ type ExpandableProps = {
 const DURATION_MS = 700;
 
 /**
- * Content cut off at a fixed height until the reader expands it, and cut off
- * again when they collapse it.
+ * Content cut short until the reader expands it, and cut short again when they
+ * collapse it.
+ *
+ * The collapsed content ends where `collapsedClassName` ends it, such as after
+ * a whole entry, rather than at a fixed height. A fixed height lands somewhere
+ * new with every change to the text and at every screen width, and sooner or
+ * later on the top edge of the next entry.
  *
  * The cut-off content fades out through a mask rather than under a gradient
  * painted in the page's background color. A painted gradient never quite
@@ -29,10 +36,10 @@ const DURATION_MS = 700;
  *
  * Each toggle animates `max-height` from the height on screen to the new
  * state's, both measured, so a toggle in the middle of an animation carries on
- * from where it is. Collapsing scrolls the page along with the shrinking
- * content, keeping the toggle under the pointer instead of leaving the reader
- * far below the section. Without JavaScript nothing is cut off, since nothing
- * could expand it.
+ * from where it is. While collapsing, the collapsed classes wait for the
+ * animation to finish, so the content has something to shrink over. Collapsing
+ * also scrolls the page along with the shrinking content, keeping the toggle
+ * under the pointer instead of leaving the reader far below the section.
  */
 const Expandable = ({
   children,
@@ -44,6 +51,7 @@ const Expandable = ({
   const toggleRef = useRef<HTMLButtonElement>(null);
   const animationRef = useRef<Animation | null>(null);
   const [isExpanded, setIsExpanded] = useState(false);
+  const [isCollapsing, setIsCollapsing] = useState(false);
 
   const toggle = () => {
     const content = contentRef.current!;
@@ -55,7 +63,10 @@ const Expandable = ({
     ).matches;
 
     animationRef.current?.cancel();
-    flushSync(() => setIsExpanded(!isExpanded));
+    flushSync(() => {
+      setIsExpanded(!isExpanded);
+      setIsCollapsing(false);
+    });
 
     const to = content.getBoundingClientRect().height;
 
@@ -74,12 +85,25 @@ const Expandable = ({
       return;
     }
 
+    // Show the whole content again, now that `to` is measured, for the
+    // animation to shrink. Nothing paints before the animation clamps it.
+    if (isExpanded) flushSync(() => setIsCollapsing(true));
+
     const animation = content.animate(
       [{ maxHeight: `${from}px` }, { maxHeight: `${to}px` }],
-      { duration: DURATION_MS, easing: 'ease-in-out' },
+      { duration: DURATION_MS, easing: 'ease-in-out', fill: 'forwards' },
     );
 
     animationRef.current = animation;
+
+    animation.finished.then(
+      () => {
+        // Hold the end height until the collapsed classes take over from it.
+        if (isExpanded) flushSync(() => setIsCollapsing(false));
+        animation.cancel();
+      },
+      () => {},
+    );
 
     if (isExpanded) {
       const follow = () => {
@@ -100,10 +124,9 @@ const Expandable = ({
         id={contentId}
         className={cn(
           'overflow-hidden [mask-image:linear-gradient(to_bottom,black_calc(100%-var(--fade-height)),transparent)] transition-[--fade-height] duration-500',
-          isExpanded
-            ? '[--fade-height:0px]'
-            : ['[--fade-height:6rem]', collapsedClassName],
-          'noscript:max-h-none noscript:[mask-image:none]',
+          isExpanded ? '[--fade-height:0px]' : '[--fade-height:6rem]',
+          !isExpanded && !isCollapsing && collapsedClassName,
+          'noscript:[mask-image:none]',
         )}
       >
         {children}

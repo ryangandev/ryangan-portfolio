@@ -7,6 +7,12 @@
 @custom-variant dark (&:where(.dark, .dark *));
 
 /*
+  The opposite of Tailwind's `noscript:`, for anything only script could undo,
+  such as content collapsed behind a button.
+*/
+@custom-variant scripting (@media (scripting: enabled));
+
+/*
   How far up from its bottom edge `Expandable` fades its content out.
   Registered as a length so the fade can transition; an unregistered custom
   property would jump.

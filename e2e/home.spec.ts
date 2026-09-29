@@ -2,8 +2,12 @@ import type { Locator, Page } from '@playwright/test';
 
 import { expect, test } from './fixtures';
 
-/** The experience timeline's scroll box, which clips it while collapsed */
+/** The experience timeline's box, which clips it while it animates */
 const timeline = (page: Page) => page.locator('main ol').locator('..');
+
+const entries = (page: Page) => page.locator('main ol > li');
+
+const visibleEntries = (page: Page) => entries(page).filter({ visible: true });
 
 const hiddenHeight = (box: Locator) =>
   box.evaluate((element) => element.scrollHeight - element.clientHeight);
@@ -14,14 +18,17 @@ test('expands the experience timeline, and collapses it where it was clicked', a
   await page.goto('/');
 
   const toggle = page.locator('main button[aria-expanded]');
+  const total = await entries(page).count();
 
-  expect(await hiddenHeight(timeline(page))).toBeGreaterThan(0);
+  expect(total).toBeGreaterThan(2);
+  await expect(visibleEntries(page)).toHaveCount(2);
   await expect(toggle).toHaveAccessibleName('Expand to view all');
 
   await toggle.click();
 
   await expect(toggle).toHaveAttribute('aria-expanded', 'true');
   await expect(toggle).toHaveAccessibleName('Collapse');
+  await expect(visibleEntries(page)).toHaveCount(total);
   await expect.poll(() => hiddenHeight(timeline(page))).toBe(0);
 
   // Collapse from the bottom of the list, as a reader who just read it would.
@@ -33,7 +40,7 @@ test('expands the experience timeline, and collapses it where it was clicked', a
   await toggle.click();
 
   await expect(toggle).toHaveAttribute('aria-expanded', 'false');
-  await expect.poll(() => hiddenHeight(timeline(page))).toBeGreaterThan(0);
+  await expect(visibleEntries(page)).toHaveCount(2);
   // The page scrolled up with the list, so the button is still under the
   // pointer rather than a screen or two below the section.
   await expect
@@ -50,6 +57,7 @@ test.describe('without JavaScript', () => {
   }) => {
     await page.goto('/');
 
+    await expect(visibleEntries(page)).toHaveCount(await entries(page).count());
     expect(await hiddenHeight(timeline(page))).toBe(0);
     await expect(
       page.getByRole('button', { name: 'Expand to view all' }),

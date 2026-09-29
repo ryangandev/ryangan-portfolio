@@ -78,7 +78,7 @@ export default async function Home() {
 
       <h2>Experience</h2>
       <Expandable
-        collapsedClassName="max-h-[26rem] md:max-h-[19rem]"
+        collapsedClassName="scripting:[&>ol>li:nth-child(n+3)]:hidden"
         label="Expand to view all"
       >
         <ExperienceList items={experience} />

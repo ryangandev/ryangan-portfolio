@@ -57,7 +57,7 @@ const ExperienceList = ({ items }: ExperienceListProps) => {
             <p className="mb-2 text-sm color-level-4">
               {item.organization}, {item.location}
             </p>
-            <p className="mb-0 text-[15px]">{item.description}</p>
+            <p className="mb-0 text-[15px] text-pretty">{item.description}</p>
           </div>
         </li>
       ))}
