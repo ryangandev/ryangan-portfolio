@@ -38,6 +38,10 @@ const nextConfig = {
     qualities: [75, 95],
   },
   pageExtensions: ['js', 'jsx', 'mdx', 'ts', 'tsx'],
+  // Run by an AI agent, `next dev` would append a managed block to AGENTS.md
+  // pointing at the docs bundled with Next, and rewrite it on every upgrade.
+  // AGENTS.md makes the same point in its own words.
+  agentRules: false,
   async headers() {
     return [{ source: '/:path*', headers: securityHeaders }];
   },
