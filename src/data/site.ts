@@ -48,6 +48,16 @@ export const feedAlternates = {
 };
 
 /**
+ * The repository the site deploys from. Vercel builds `branch`, so the admin
+ * portal saves drafts as pull requests into it and publishes by merging them.
+ */
+export const contentRepository = {
+  owner: 'ryangandev',
+  name: 'ryangan-portfolio',
+  branch: 'main',
+} as const;
+
+/**
  * The profiles the contact page lists, and the home page's schema.org
  * `sameAs`, in the order the contact page shows them
  */

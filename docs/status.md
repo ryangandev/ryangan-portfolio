@@ -1,6 +1,6 @@
 # Status
 
-Last reviewed: 2026-09-28.
+Last reviewed: 2026-09-30.
 
 ## Current state
 
@@ -8,7 +8,7 @@ The site is live and feature-complete for now; what remains is mostly outside th
 
 - Every dependency is on its latest release except the deliberate [pinned versions](architecture.md#pinned-versions), and `pnpm audit` reports no known vulnerabilities.
 - Format, lint, typecheck, unit tests, build, and browser tests pass locally and in CI.
-- Every route is Static or SSG.
+- Every public route is Static or SSG; the admin portal's routes are dynamic.
 - The production database matches `prisma/schema.prisma`; `prisma migrate diff` reports no difference.
 - Vercel builds under pnpm 12, including from a restored build cache.
 
@@ -24,8 +24,9 @@ These need an account or a judgment only Ryan has.
 
 ## Open decisions
 
-- **Prisma leftovers.** Build the guestbook, or drop `User`, `Account`, and `GuestbookNote` in a migration.
-  Until then they stay in the schema; see [Database](architecture.md#database).
+- **Guestbook table.** Build the guestbook, or drop `GuestbookNote` in a migration.
+  Until then it stays in the schema; see [Database](architecture.md#database).
+  `User` and `Account` back the admin portal's sign-in.
 - **Comments.** The loading-states post ends by inviting a comment, and there is nowhere to leave one.
 
 ## Next work

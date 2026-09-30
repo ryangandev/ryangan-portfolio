@@ -11,6 +11,9 @@ Next.js 16 App Router, React 19, TypeScript 6, Tailwind CSS 4, Prisma 7 on Neon 
 
 Do not read every doc by default.
 
+Next.js 16 differs from what most models were trained on.
+Before writing code that uses a Next.js API, convention, or config option, read its guide in `node_modules/next/dist/docs/`, the docs for the installed version, and follow them over memory, deprecation notices included.
+
 ## Commands
 
 - `pnpm dev` - development server
@@ -21,7 +24,7 @@ Do not read every doc by default.
 - `pnpm prisma generate` - after install and after any schema change
 
 `@/*` aliases to `src/*`.
-CI needs no secrets: every route is static and the tests mock the database.
+CI needs no secrets: every public route is static, and the tests mock the database and GitHub.
 
 ## Rules that fail silently when broken
 
@@ -32,8 +35,11 @@ CI needs no secrets: every route is static and the tests mock the database.
 - Link anything that is not a page of this site, same-origin files included, with `AnimatedLink isExternal`. See [Routing and SEO](docs/architecture.md#routing-and-seo).
 - Do not add a root `loading.tsx`. See [Routing and SEO](docs/architecture.md#routing-and-seo).
 - Keep `prisma generate` in the `build` script. See [Database](docs/architecture.md#database).
-- Do not remove the unused Auth.js and guestbook models from the schema; they are live tables. See [Database](docs/architecture.md#database).
-- `pnpm dev` writes view counts to whatever database `DATABASE_URL` points at, which locally is production. See [Post views](docs/architecture.md#post-views).
+- Do not remove the unused `GuestbookNote` model from the schema; it is a live table. See [Database](docs/architecture.md#database).
+- `pnpm dev` writes view counts and admin sign-ins to whatever database `DATABASE_URL` points at. See [Post views](docs/architecture.md#post-views).
+- Every admin page and admin server action checks the session itself with `requireAdmin` or `getAdmin`; the admin layout protects nothing. See [Admin portal](docs/architecture.md#admin-portal).
+- Keep Tailwind class sorting out of MDX in `prettier.config.js`: the admin portal formats MDX without it, and a mismatch fails `format:check` on published content. See [Admin portal](docs/architecture.md#admin-portal).
+- Keep the content directory paths in `src/lib/content.ts` literal; a computed path ships the whole project with every server function. See [Content](docs/architecture.md#content).
 - Keep `src/app/icon.svg` and `R_PATH` in `src/components/logo.tsx` in sync. See [Brand mark](docs/architecture.md#brand-mark).
 - Check [Pinned versions](docs/architecture.md#pinned-versions) before upgrading TypeScript, Prisma, or ESLint.
 

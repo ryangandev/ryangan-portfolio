@@ -12,6 +12,7 @@ import { MOCK_RESEND_PORT, PORT } from './e2e/ports';
  * they would during an outage, and Resend is pointed at a local mock
  * (`e2e/mock-resend.mjs`), so no email is ever sent. These values override the
  * ones in `.env`, which Next only reads for variables not already set.
+ * The Auth.js values are placeholders for the same reason.
  */
 export default defineConfig({
   testDir: 'e2e',
@@ -47,6 +48,13 @@ export default defineConfig({
         DATABASE_URL: 'postgresql://e2e:e2e@db.invalid/e2e',
         RESEND_API_KEY: 're_e2e',
         RESEND_BASE_URL: `http://127.0.0.1:${MOCK_RESEND_PORT}`,
+        // Sign-in only ever reaches GitHub's authorize URL, which the admin
+        // tests intercept. Vercel trusts its own host; `next start` has to be
+        // told to.
+        AUTH_SECRET: 'e2e-auth-secret-not-used-anywhere-real',
+        AUTH_GITHUB_ID: 'e2e-github-id',
+        AUTH_GITHUB_SECRET: 'e2e-github-secret',
+        AUTH_TRUST_HOST: 'true',
       },
       reuseExistingServer: false,
     },

@@ -16,7 +16,7 @@ const ContentDate = z.preprocess(
   z.iso.date({ message: 'Expected a zero-padded date, e.g. 2023-03-20' }),
 );
 
-const NonEmpty = z.string().trim().min(1);
+const NonEmpty = z.string().trim().min(1, { message: 'Required' });
 
 /**
  * Frontmatter is parsed at the boundary rather than cast, so a missing field, a
@@ -46,8 +46,18 @@ export const ProjectFrontmatterSchema = z.strictObject({
   featured: z.boolean().default(false),
   role: NonEmpty,
   summary: NonEmpty,
-  thumbnailUrl: z.url(),
-  techStack: z.array(z.enum(techStackNames)).min(1),
+  // Rendered with next/image, which refuses any host missing from
+  // `images.remotePatterns` in next.config.mjs, and that lists only ImageKit.
+  // Without this a thumbnail from anywhere else validated and then broke the
+  // page at render time.
+  thumbnailUrl: z.url({
+    protocol: /^https$/,
+    hostname: /^ik\.imagekit\.io$/,
+    message: 'Expected an https://ik.imagekit.io image URL',
+  }),
+  techStack: z
+    .array(z.enum(techStackNames))
+    .min(1, { message: 'List at least one technology' }),
   // Either link may be absent: Grapple Grub and Player 2 Helpdesk have a live
   // site but no public repository.
   link: z

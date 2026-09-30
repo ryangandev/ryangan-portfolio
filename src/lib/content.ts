@@ -14,6 +14,9 @@ import {
   ProjectFrontmatterSchema,
 } from '@/schemas/content-schema';
 
+// Literal segments rather than the paths in `src/lib/collections.ts`: the
+// bundler only scopes file tracing to a directory it can read statically, and
+// otherwise ships the whole project with every server function.
 const contentDirectory = path.join(process.cwd(), 'src', 'content');
 const projectsDirectory = path.join(contentDirectory, 'projects');
 const postsDirectory = path.join(contentDirectory, 'posts');

@@ -15,6 +15,7 @@ Load only the document and section a request needs.
 | Prisma 7, the database, or environment variables                                       | [architecture.md#database](architecture.md#database)                     |
 | The post view counter                                                                  | [architecture.md#post-views](architecture.md#post-views)                 |
 | The contact form                                                                       | [architecture.md#contact-form](architecture.md#contact-form)             |
+| The admin portal, sign-in, drafts, or publishing                                       | [architecture.md#admin-portal](architecture.md#admin-portal)             |
 | Security headers                                                                       | [architecture.md#security-headers](architecture.md#security-headers)     |
 | The logo, favicons, or OpenGraph images                                                | [architecture.md#brand-mark](architecture.md#brand-mark)                 |
 | pnpm, CI, deploys, tests, or why a dependency is pinned                                | [architecture.md#tooling-and-deploy](architecture.md#tooling-and-deploy) |

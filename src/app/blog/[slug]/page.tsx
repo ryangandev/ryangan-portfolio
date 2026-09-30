@@ -1,14 +1,13 @@
 import React from 'react';
-import { format } from 'date-fns';
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 
+import ArticleBody from '@/components/article-body';
+import PostHeader from '@/components/blog/post-header';
 import PostNavigation from '@/components/blog/post-navigation';
 import TableOfContents from '@/components/blog/table-of-contents';
 import TopicList from '@/components/blog/topic-list';
 import ViewCounter from '@/components/blog/view-counter';
-import Byline from '@/components/byline';
-import Callout from '@/components/callout';
 import JsonLd from '@/components/json-ld';
 import { compileMdx } from '@/components/mdx/mdx-components';
 import BackButton from '@/components/navigation/back-button';
@@ -120,28 +119,16 @@ export default async function Page({
       )}
 
       <article className="space-y-8">
-        <h1 className="text-3xl font-bold md:text-4xl">{post.title}</h1>
+        <PostHeader
+          title={post.title}
+          author={post.author}
+          publishedDate={post.publishedDate}
+          readingTime={post.readingTime}
+          summary={post.summary}
+          viewCounter={<ViewCounter slug={post.slug} />}
+        />
 
-        <section className="space-y-3 text-sm md:flex md:items-center md:justify-between md:space-y-0">
-          <Byline author={post.author}>
-            Published on{' '}
-            {format(parseContentDate(post.publishedDate), 'MMM dd, yyyy')}
-          </Byline>
-
-          <div className="flex items-center gap-1.5 text-muted-foreground">
-            <span>{post.readingTime} min read</span>
-            <ViewCounter slug={post.slug} />
-          </div>
-        </section>
-        {post.summary && (
-          <Callout>
-            <p className="mb-0 font-medium italic">{post.summary}</p>
-          </Callout>
-        )}
-
-        <section className="prose max-w-[644px] dark:prose-invert">
-          {content}
-        </section>
+        <ArticleBody>{content}</ArticleBody>
 
         <footer className="space-y-8 border-t pt-8">
           <TopicList topics={post.topics} />
