@@ -40,7 +40,8 @@ const nextConfig = {
   pageExtensions: ['js', 'jsx', 'mdx', 'ts', 'tsx'],
   // Run by an AI agent, `next dev` would append a managed block to AGENTS.md
   // pointing at the docs bundled with Next, and rewrite it on every upgrade.
-  // AGENTS.md makes the same point in its own words.
+  // AGENTS.md makes the same point in its own words, and
+  // `tests/agent-docs.test.ts` fails the upgrade that moves the docs.
   agentRules: false,
   async headers() {
     return [{ source: '/:path*', headers: securityHeaders }];

@@ -12,7 +12,7 @@ Next.js 16 App Router, React 19, TypeScript 6, Tailwind CSS 4, Prisma 7 on Neon 
 Do not read every doc by default.
 
 Next.js 16 differs from what most models were trained on.
-For a Next API or convention, check the docs for the installed version in `node_modules/next/dist/docs/` rather than relying on memory.
+Before writing code that uses a Next.js API, convention, or config option, read its guide in `node_modules/next/dist/docs/`, the docs for the installed version, and follow them over memory, deprecation notices included.
 
 ## Commands
 

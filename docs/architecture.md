@@ -284,6 +284,7 @@ Dependabot's updates are what trip it.
 
 - **Unit tests** (Vitest, `pnpm test`) sit beside their code in `src/` and mock the database.
   `tests/` holds checks on the repository itself.
+  One is `tests/agent-docs.test.ts`: `AGENTS.md` sends agents to the docs bundled with the installed Next.js, and `agentRules: false` in `next.config.mjs` stops `next dev` from writing its own copy of that pointer into `AGENTS.md` whenever an agent runs it, so the test fails the Next update that moves the docs instead.
 - **Browser tests** (Playwright, `pnpm test:e2e`) live in `e2e/` and cover the flows that have broken before: the contact form's states, the theme toggle, client-side navigation, and the 404 page, plus the home page's expandable timeline and back to top.
   For the admin portal they cover what a visitor who is not signed in meets, up to GitHub's authorize URL, which they intercept.
   Past sign-in the portal acts on GitHub as the signed-in user, so its repository calls are unit tested against a fake Octokit instead.
