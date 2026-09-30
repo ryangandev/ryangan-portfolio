@@ -1,6 +1,6 @@
 # Status
 
-Last reviewed: 2026-09-29.
+Last reviewed: 2026-09-30.
 
 ## Current state
 
@@ -21,8 +21,6 @@ These need an account or a judgment only Ryan has.
 2. Verify a domain in Resend and set `CONTACT_FROM_EMAIL` to an address on it.
    The default sender only delivers to the Resend account owner.
 3. Submit the sitemap to Google Search Console.
-4. Redirect `www.ryangan.me` to `ryangan.me` in the Vercel domain settings.
-   Both serve the site today, and the GitHub App only accepts the `ryangan.me` callback, so signing in to `/admin` from `www` fails.
 
 ## Open decisions
 
