@@ -1,0 +1,48 @@
+---
+title: 'Footy Rooty Spa'
+date: '2026-08-31'
+featured: false
+role: 'Freelance Web Developer'
+summary: 'A landing page and booking site for a massage spa'
+thumbnailUrl: 'https://ik.imagekit.io/ryangan/Projects/footy-rooty-spa/footyrootyspa-thumbnail.png'
+techStack: ['react', 'javascript', 'tailwindcss', 'vite', 'vercel']
+link: { live: 'https://www.footyrootyspa.com/' }
+---
+
+## Overview
+
+_Footy Rooty Spa_ is a massage and foot reflexology spa with two locations, in Roseville and Citrus Heights, California.
+I built its website for a friend who runs the business.
+The site is where new clients find the services and prices, see the current deals, and book a visit at either store.
+
+## Features
+
+- **Promotion-Led Home Page** - A full-screen hero carousel animated with Framer Motion, where each slide can carry promo tags and a price card, so the spa's current deals are the first thing a visitor sees
+
+- **Location-First Booking** - Clients pick a store, then book through an embedded Mindbody appointments widget without leaving the site
+
+- **Services, Memberships, and Gift Cards** - The full menu with prices and prepaid packages, membership plans, and gift cards
+
+- **Store Pages** - A photo gallery of each store, its hours and phone number, and an embedded Google Map that opens in the visitor's maps app
+
+- **One Source for Copy and Prices** - Every price and line of copy lives in a single dictionary, so the frequent price and promotion changes are one-file edits that never leave two pages disagreeing
+
+- **Search and Ads** - Per-page titles and descriptions with React Helmet, Open Graph tags for link previews, and a Google Ads conversion tag
+
+## Booking
+
+Booking took three tries to get right.
+The first plan was to build it on the spa's existing point-of-sale system, Mase.
+Testing its documented REST endpoints showed that none of them existed: Mase offers hosted booking pages, not an open API.
+The site linked each location to its hosted page instead, then briefly switched to calling the store, and finally settled on Mindbody's embeddable appointments widget.
+
+Both stores share one Mindbody account, so the page asks for a location first and then tells the client which therapists work there.
+The widget's script loads only after a location is chosen, and the page tears it down on the way out, so the widget initializes again cleanly each time a visitor comes back to the page.
+
+## Screenshots
+
+![Home page](https://ik.imagekit.io/ryangan/Projects/footy-rooty-spa/footyrootyspa-home.png)
+![Services page](https://ik.imagekit.io/ryangan/Projects/footy-rooty-spa/footyrootyspa-services.png)
+![Booking with a location selected](https://ik.imagekit.io/ryangan/Projects/footy-rooty-spa/footyrootyspa-book.png)
+![Membership page](https://ik.imagekit.io/ryangan/Projects/footy-rooty-spa/footyrootyspa-membership.png)
+![Store locations](https://ik.imagekit.io/ryangan/Projects/footy-rooty-spa/footyrootyspa-contact.png)

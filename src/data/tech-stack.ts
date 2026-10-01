@@ -40,13 +40,14 @@ import {
   SiTailwindcss,
   SiTrello,
   SiTypescript,
-  SiVercel,
+  SiVite,
 } from 'react-icons/si';
 import {
   TbBrandAdobeIllustrator,
   TbBrandAdobePhotoshop,
   TbBrandOauth,
   TbBrandReactNative,
+  TbBrandVercel,
 } from 'react-icons/tb';
 
 type TechStackEntry = {
@@ -107,6 +108,11 @@ export const techStack = {
     label: 'Tailwind CSS',
     icon: SiTailwindcss,
     className: 'text-[#06B6D4]',
+  },
+  vite: {
+    label: 'Vite',
+    icon: SiVite,
+    className: 'text-[#646CFF] dark:text-[#8C92FF]',
   },
   expo: {
     label: 'Expo',
@@ -235,7 +241,7 @@ export const techStack = {
   // Deployment
   vercel: {
     label: 'Vercel',
-    icon: SiVercel,
+    icon: TbBrandVercel,
     className: 'text-[#000000] dark:text-[#FFFFFF]',
   },
   aws: {
