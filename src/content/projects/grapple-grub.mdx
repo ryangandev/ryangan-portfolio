@@ -72,19 +72,8 @@ public class TrafficPathFormer : MonoBehaviour
     }
   }
 
-  public enum LoopMode
-  {
-    OneShot,
-    OneShotDes,
-    Loop,
-    PingPong,
-    PingPongDelay
-  }
-
   [SerializeField] private bool _randomCar = true;
   [SerializeField] private Transform[] _car;
-  [SerializeField] private bool _playOnStart = true;
-  [SerializeField] private LoopMode _loopMode = LoopMode.Loop;
   [SerializeField] private float _speed = 1f;
   [SerializeField] private float _smoothing = 0.1f;
   [SerializeField] private bool _alignRotation = true;
@@ -94,14 +83,12 @@ public class TrafficPathFormer : MonoBehaviour
   [SerializeField] private int _numberOfCars = 40;
   [SerializeField] private float _minSafeDistance = 25;
 
-  private bool _movementActive;
-  private float _timer;
   private float _length;
   private bool _loopConnects;
 
   // added for Traffic System
   private int _maxNumberOfCars;
-  private List<Transform> _cars = new List<Transform>();
+  private List<CarMovement> _cars = new List<CarMovement>();
 
   public float speed => _speed;
 
@@ -115,67 +102,59 @@ public class TrafficPathFormer : MonoBehaviour
 
     Random.InitState(2023);
 
-    // check if total length of path is greater than 100
+    // a path shorter than 60 units is too short to hold any traffic
     if (_length < 60f) return;
 
-    if (_numberOfCars >= _maxNumberOfCars)
-    {
-      _numberOfCars = _maxNumberOfCars;
+    _numberOfCars = Mathf.Clamp(_numberOfCars, 0, _maxNumberOfCars);
 
-      // instantiate cars based on number of cars, and place them on the paths formed by PathAction equally apart from each other and facing forward
-      for (int i = 0; i < _numberOfCars; i++)
-      {
-        float equallyDividedTime = _length / _numberOfCars * i;
-        Vector3 position = GetPositionAtTime(equallyDividedTime);
-        Vector3 rotation = GetRotationAtTime(equallyDividedTime, false);
-        Transform car = null;
-        if (_randomCar)
-        {
-          car = Instantiate(_car[Random.Range(0, _car.Length)], position, Quaternion.Euler(rotation.x, rotation.y, 0));
-        }
-        else
-        {
-          car = Instantiate(_car[0], position, Quaternion.Euler(rotation.x, rotation.y, 0));
-        }
-        car.name = "Car " + i;
-        CarMovement carMovement = car.GetComponent<CarMovement>();
-        carMovement.setTimer(equallyDividedTime);
-        _cars.Add(car);
-        car.parent = transform;
-      }
-    }
-    else
+    float[] spawnTimes = GetSpawnTimes(_numberOfCars);
+
+    for (int i = 0; i < _numberOfCars; i++)
     {
-      // instantiate cars based on number of cars, and place them on the paths formed by PathAction randomly but keep them at minSafeDistance apart from each other and facing forward
-      for (int i = 0; i < _numberOfCars; i++)
-      {
-        float randomTime = Random.Range(0f, _length);
-        Vector3 position = GetPositionAtTime(randomTime);
-        Vector3 rotation = GetRotationAtTime(randomTime, false);
-        Transform car = null;
-        if (_randomCar)
-        {
-          car = Instantiate(_car[Random.Range(0, _car.Length)], position, Quaternion.Euler(rotation.x, rotation.y, 0));
-        }
-        else
-        {
-          car = Instantiate(_car[0], position, Quaternion.Euler(rotation.x, rotation.y, 0));
-        }
-        car.name = "Car " + i;
-        CarMovement carMovement = car.GetComponent<CarMovement>();
-        carMovement.setTimer(randomTime);
-        _cars.Add(car);
-        car.parent = transform;
-      }
+      SpawnCar(i, spawnTimes[i]);
     }
   }
 
-  private void Start()
+  // Place cars around the loop at random, but at least _minSafeDistance apart:
+  // pick sorted random offsets within the length the safe distances leave over,
+  // then push each car one safe distance further along than the car before it.
+  // The gap from the last car back around to the first is at least
+  // _minSafeDistance too.
+  private float[] GetSpawnTimes(int count)
   {
-    if (_playOnStart)
+    float slack = _length - count * _minSafeDistance;
+    float[] times = new float[count];
+
+    for (int i = 0; i < count; i++)
     {
-      _movementActive = true;
+      times[i] = Random.Range(0f, slack);
     }
+
+    System.Array.Sort(times);
+
+    for (int i = 0; i < count; i++)
+    {
+      times[i] += i * _minSafeDistance;
+    }
+
+    return times;
+  }
+
+  private void SpawnCar(int index, float time)
+  {
+    Vector3 position = GetPositionAtTime(time);
+    Vector3 rotation = GetRotationAtTime(time);
+    Transform prefab = _randomCar ? _car[Random.Range(0, _car.Length)] : _car[0];
+
+    Transform car = Instantiate(prefab, position, Quaternion.Euler(rotation.x, rotation.y, 0));
+    car.name = "Car " + index;
+    car.parent = transform;
+
+    CarMovement carMovement = car.GetComponent<CarMovement>();
+    carMovement.setTimer(time);
+    // start smoothing from the rotation the car spawned with, not from zero
+    carMovement._currentRotation = rotation;
+    _cars.Add(carMovement);
   }
 
   private void Update()
@@ -222,7 +201,7 @@ public class TrafficPathFormer : MonoBehaviour
     return (x - inMin) * (outMax - outMin) / (inMax - inMin) + outMin;
   }
 
-  private Vector3 GetRotationAtTime(float time, bool reverse)
+  private Vector3 GetRotationAtTime(float time)
   {
     float currentTime = 0f;
 
@@ -232,14 +211,7 @@ public class TrafficPathFormer : MonoBehaviour
 
       if (newTime >= time)
       {
-        if (reverse)
-        {
-          //Vector3return Quaternion.LookRotation(transform.TransformDirection(pathAction.movement), Vector3.up).eulerAngles + 180;
-        }
-        else
-        {
-          return Quaternion.LookRotation(transform.TransformDirection(pathAction.movement), Vector3.up).eulerAngles;
-        }
+        return Quaternion.LookRotation(transform.TransformDirection(pathAction.movement), Vector3.up).eulerAngles;
       }
       else
       {
@@ -273,20 +245,14 @@ public class TrafficPathFormer : MonoBehaviour
 
   private void UpdateTimer()
   {
-    foreach (Transform car in _cars)
+    foreach (CarMovement carMovement in _cars)
     {
-      CarMovement carMovement = car.GetComponent<CarMovement>();
       if (!carMovement._isMoving) continue;
 
-      carMovement._timer = Mathf.MoveTowards(carMovement._timer, _length + 1f, Time.deltaTime * GetSpeedMultiplierAtTime(carMovement._timer) * _speed * carMovement._speedMultiplier);
+      float distance = Time.deltaTime * GetSpeedMultiplierAtTime(carMovement._timer) * _speed * carMovement._speedMultiplier;
 
-      if (carMovement._timer > _length || carMovement._timer < 0f)
-      {
-        if (_loopMode == LoopMode.Loop)
-        {
-          carMovement._timer -= _length;
-        }
-      }
+      // the path is always a closed loop, so wrap around to the start
+      carMovement._timer = Mathf.Repeat(carMovement._timer + distance, _length);
     }
   }
 
@@ -335,9 +301,9 @@ public class TrafficPathFormer : MonoBehaviour
 
   private void UpdateObjectPosition()
   {
-    foreach (Transform car in _cars)
+    foreach (CarMovement carMovement in _cars)
     {
-      CarMovement carMovement = car.GetComponent<CarMovement>();
+      Transform car = carMovement.transform;
       carMovement._targetPosition = GetPositionAtTime(carMovement._timer);
 
       bool useSmoothing = true;
@@ -361,10 +327,10 @@ public class TrafficPathFormer : MonoBehaviour
 
   private void UpdateObjectRotation()
   {
-    foreach (Transform car in _cars)
+    foreach (CarMovement carMovement in _cars)
     {
-      CarMovement carMovement = car.GetComponent<CarMovement>();
-      carMovement._targetRotation = GetRotationAtTime(carMovement._timer, false);
+      Transform car = carMovement.transform;
+      carMovement._targetRotation = GetRotationAtTime(carMovement._timer);
 
       if (_smoothing >= 0.0001f)
       {
@@ -420,8 +386,6 @@ using UnityEngine;
 
 public class CarMovement : MonoBehaviour
 {
-  private bool _obstacleAhead;
-
   public bool _isMoving;
   public float _timer;
   [HideInInspector] public Vector3 _targetPosition;
@@ -431,10 +395,11 @@ public class CarMovement : MonoBehaviour
   [HideInInspector] public float _rotationVelocityX;
   [HideInInspector] public float _rotationVelocityY;
   [HideInInspector] public float _rotationVelocityZ;
-  [HideInInspector] public float _rotationVelocity;
   [HideInInspector] public float _speedMultiplier = 1f;
-  public float _furthurestRayCheck = 20f;
+  public float _furthestRayCheck = 20f;
   public float _closestRayCheck = 7.5f;
+  // how quickly _speedMultiplier moves between 0 and 1, per second
+  public float _acceleration = 1.8f;
   public LayerMask _layerMask;
 
   void Start()
@@ -452,78 +417,51 @@ public class CarMovement : MonoBehaviour
     this._timer = timer;
   }
 
-  public void setTargetPosition(Vector3 targetPosition)
-  {
-    this._targetPosition = targetPosition;
-  }
-
   // Use a ray cast method to detect if there is a traffic light ahead of the current car
   private void UpdateObstacleAhead()
   {
     RaycastHit hit;
-    if (Physics.Raycast(transform.position, transform.forward, out hit, _furthurestRayCheck, _layerMask))
+    if (Physics.Raycast(transform.position, transform.forward, out hit, _furthestRayCheck, _layerMask))
     {
       if (hit.collider.CompareTag("TrafficLight") && hit.collider.GetComponentInParent<TrafficLightController>()._isGreen)
       {
-        _obstacleAhead = false;
-        SpeedUpPerSecond(_speedMultiplier);
+        SpeedUp();
       }
       else if (hit.collider.CompareTag("TrafficLight") || hit.collider.CompareTag("Car"))
       {
-        float distanceToObstacle = hit.distance;
-        if (distanceToObstacle <= _closestRayCheck)
+        if (hit.distance <= _closestRayCheck)
         {
-          _obstacleAhead = true;
-          StopMovement(_speedMultiplier);
+          StopMovement();
         }
         else
         {
-          _obstacleAhead = true;
-          SlowDownPerSecond(_speedMultiplier);
+          SlowDown();
         }
       }
     }
     else
     {
-      _obstacleAhead = false;
-
-      SpeedUpPerSecond(_speedMultiplier);
+      SpeedUp();
     }
   }
 
-  // speedMultiplier needs to be tested to see if it's updating acceleration every frame
-  private void SlowDownPerSecond(float speedMultiplier)
+  // Scaled by Time.deltaTime, so a car slows down and speeds up at the same
+  // rate whatever the frame rate
+  private void SlowDown()
   {
-    if (speedMultiplier > 0)
-    {
-      speedMultiplier -= 0.03f;
-      _isMoving = true;
-    }
-    else
-    {
-      speedMultiplier = 0;
-      _isMoving = false;
-    }
+    _speedMultiplier = Mathf.MoveTowards(_speedMultiplier, 0f, _acceleration * Time.deltaTime);
+    _isMoving = _speedMultiplier > 0f;
   }
 
-  // speedMultiplier needs to be tested to see if it's updating acceleration every frame\
-  private void SpeedUpPerSecond(float speedMultiplier)
+  private void SpeedUp()
   {
-    if (speedMultiplier < 1)
-    {
-      speedMultiplier += 0.03f;
-      _isMoving = true;
-    }
-    else
-    {
-      speedMultiplier = 1;
-      _isMoving = true;
-    }
+    _speedMultiplier = Mathf.MoveTowards(_speedMultiplier, 1f, _acceleration * Time.deltaTime);
+    _isMoving = true;
   }
 
-  private void StopMovement(float speedMultiplier)
+  private void StopMovement()
   {
-    speedMultiplier = 0;
+    _speedMultiplier = 0f;
     _isMoving = false;
   }
 
@@ -531,7 +469,7 @@ public class CarMovement : MonoBehaviour
   private void OnDrawGizmos()
   {
     Gizmos.color = Color.blue;
-    Gizmos.DrawRay(transform.position, transform.forward * _furthurestRayCheck);
+    Gizmos.DrawRay(transform.position, transform.forward * _furthestRayCheck);
   }
 }
 ```
