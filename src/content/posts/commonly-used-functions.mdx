@@ -19,11 +19,18 @@ copyToClipboard('Hello, World!');
 ## 2. Get nth Day of the Year
 
 ```javascript
-const getDayOfYear = (date) =>
-  Math.floor((date - new Date(date.getFullYear(), 0, 0)) / 1000 / 60 / 60 / 24);
+const getDayOfYear = (date) => {
+  // Both dates at UTC midnight, so a daylight saving change in between
+  // cannot leave a day an hour short
+  const day = Date.UTC(date.getFullYear(), date.getMonth(), date.getDate());
+  // Day zero is December 31 of the year before
+  const dayZero = Date.UTC(date.getFullYear(), 0, 0);
+
+  return (day - dayZero) / (24 * 60 * 60 * 1000);
+};
 
 // example usage
-getDayOfYear(new Date(2024, 9, 20)); // 274
+getDayOfYear(new Date(2024, 8, 20)); // 264 (months start at 0: 8 is September)
 ```
 
 ## 3. Remove Duplicates from an Array
@@ -57,15 +64,7 @@ grayScale(255, 255, 255);
 ## 6. Parse Query Parameters from a URL
 
 ```javascript
-const parseQuery = (url) => {
-  q = {};
-
-  url.replace(/([^?&=]+)=([^&]*)/g, (_, key, value) => (
-    q[key] = value;
-  ));
-
-  return q;
-}
+const parseQuery = (url) => Object.fromEntries(new URL(url).searchParams);
 
 // example usage
 parseQuery('https://example.com?foo=bar&baz=qux');
@@ -85,8 +84,10 @@ pick({ a: 1, b: 2, c: 3 }, 'a', 'c'); // {a: 1, c: 3}
 ## 8. Get a Random Hex Color
 
 ```javascript
-const getRandomHexColor = () =>
-  '#' + Math.floor(Math.random() * * 0xffffff).toString(16).padEnd(6, '0');
+const getRandomHexColor = () => {
+  const color = Math.floor(Math.random() * 0x1000000); // 0x000000 to 0xffffff
+  return '#' + color.toString(16).padStart(6, '0');
+};
 
 // example usage
 getRandomHexColor();
