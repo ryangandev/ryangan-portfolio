@@ -81,6 +81,9 @@ Content-width images use `contentImageSizes` from `src/data/site.ts`; `%` is not
 Only the first two portfolio cards and a project's hero image are `priority`.
 `images.qualities` is set explicitly in `next.config.mjs`, because Next 16 defaults to `[75]` and project and post images render at `quality={95}`.
 
+A code block (`src/components/mdx/custom-pre.tsx`) is padded `px-4`, the same as its header, so the code lines up under the language icon and an 80-column line, the longest Prettier writes, fits the 644px column without scrolling.
+At `px-5` such a line overflows by 4px and its last character is clipped.
+
 From `xl` up, the right-hand gutter holds a post's table of contents and, on every page, the back-to-top link.
 The table of contents sits at `left-full ml-10` of the content column; `back-to-top.tsx` is fixed-position, so it repeats that offset as `calc(50% + 362px)`, and both change together if the column's width does.
 Below `xl` there is no gutter, and back to top is a round button in the corner, above the footer.
