@@ -85,7 +85,7 @@ The second method is only available if you’re using [React Hook Form](https://
 
 - May be challenging when integrating with some advanced React hooks like `useActionState` and `useFormStatus` as they require using form submission through `action` attribute instead of the `onSubmit` handler
 
-- Not the best solution for controlled components like Formik (This isn’t a con regarding form state handling, just React Hook Form as a form solution in general)
+- Controlled inputs, such as many UI library components, have to be wrapped in its `Controller` component (This isn’t a con regarding form state handling, just React Hook Form as a form solution in general)
 
 ### Use cases:
 
@@ -120,7 +120,7 @@ export default function MyForm() {
     <form onSubmit={handleSubmit(onSubmit)}>
       <input type="text" {...register('name')} disabled={isSubmitting} />
       <button type="submit" disabled={isSubmitting || !isDirty || !isValid}>
-        {isLoading ? 'Loading...' : 'Submit'}{' '}
+        {isSubmitting ? 'Loading...' : 'Submit'}{' '}
         {/*Could replace string with a spinner */}
       </button>
     </form>
@@ -130,13 +130,14 @@ export default function MyForm() {
 
 ## Method 3: useTransition Hook
 
-The [`useTransition`](https://react.dev/reference/react/useTransition) hook is not specifically designed for handling form loading state, but it could be a great alternative when the form submission take longer. It ensures the UI remains responsive during these operations by allowing lower-priority updates to be deferred until high-priority tasks are completed.
+The [`useTransition`](https://react.dev/reference/react/useTransition) hook is not specifically designed for handling form loading state, but since React 19 it tracks async functions too, which makes it a great alternative when the form submission takes longer. It ensures the UI remains responsive during these operations by allowing lower-priority updates to be deferred until high-priority tasks are completed.
 
 The `useTransition` hook does not take any parameters and returns an array containing an `isPending` flag and a `startTransition` function. The `isPending` flag indicates whether the transition is in progress, while the `startTransition` function allows you to mark a state update as a low-priority operation.
 
 ### Pros:
 
-- Prevents UI blocking during longer form submission
+- Tracks the pending state of the whole async submission, with no loading state to set and reset by hand
+- State updates made inside the transition render without blocking the UI
 
 ### Cons:
 
@@ -148,7 +149,14 @@ The `useTransition` hook does not take any parameters and returns an array conta
 
 ### Example:
 
-In the example, we wrap the API call within the `startTransition` function. This ensures that the submission state is captured by the `isPending` flag. Additionally, a `console.log("Test log 2")` statement is added after the `startTransition` function call. This line will execute first because the operations inside `startTransition` are marked as lower priority, allowing higher priority updates to complete first.
+In the example, we wrap the API call within the `startTransition` function.
+Since React 19, `startTransition` accepts an async function and keeps `isPending` true until it finishes, so the flag covers the whole submission; in React 18, it only covers the part that runs before the first `await`.
+
+Additionally, a `console.log('Test log 2')` statement is added after the `startTransition` function call, and it logs first.
+That is not because of priority: `startTransition` runs the function right away, the function pauses at its `await`, and `startTransition` returns while the request is still in flight.
+`Test log 1` follows two seconds later, when the request resolves.
+
+For the same reason, a failed request has to be caught inside the function, since a `try...catch` around `startTransition` has already finished by the time the request fails.
 
 ```typescript
 import { useState, useTransition } from 'react';
@@ -157,20 +165,19 @@ export default function MyForm() {
   const [name, setName] = useState<string>('');
   const [isPending, startTransition] = useTransition();
 
-  const onSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+  const onSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
-    try {
-      startTransition(async () => {
-        // Your Api call or server action here, simulating a server request below
-        await new Promise((resolve) => setTimeout(resolve, 2000)).then(() => {
-          console.log('Test log 1'); // This will be logged when the promise resolves
-        });
-      });
-      console.log('Test log 2'); // This will be logged first
-    } catch (error: any) {
-      // Your error handling logic here
-    }
+    startTransition(async () => {
+      try {
+        // Your Api call or server action here, simulating a request below
+        await new Promise((resolve) => setTimeout(resolve, 2000));
+        console.log('Test log 1'); // Logged second, once the request resolves
+      } catch (error: any) {
+        // Your error handling logic here
+      }
+    });
+    console.log('Test log 2'); // Logged first, while the request is in flight
   };
 
   return (
@@ -191,9 +198,9 @@ export default function MyForm() {
 ```
 
 <Callout>
-  Note: The hooks introduced in the following section are available only in
-  Next.js and the experimental version of React. The examples provided will be
-  part of a Next.js app.
+  Note: The hooks introduced in the following section are stable as of React 19,
+  and work with any action function, not only Server Actions. The examples
+  provided will be part of a Next.js app.
 </Callout>
 
 ## Method 4: useFormStatus Hook
@@ -203,14 +210,14 @@ The [`useFormStatus`](https://react.dev/reference/react-dom/hooks/useFormStatus)
 ```typescript
 const status = useFormStatus();
 const {
-  pending, // Form  submission state
+  pending, // Form submission state
   data, // Form data being submitted
-  method, // HTTP method, defaults to 'GET' if using server action
+  method, // HTTP method of the form, 'get' or 'post'
   action, // Action function being called
 } = status;
 ```
 
-One important thing to note is that the `useFormStatus` hook must be defined within a child component of the `<form>` element. This child component can be nested within any form.
+One important thing to note is that the `useFormStatus` hook must be called from a child component of the `<form>` element. This child component can be nested within any form.
 
 ### Pros:
 

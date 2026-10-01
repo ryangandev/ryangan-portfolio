@@ -71,7 +71,7 @@ const CustomPre: React.FC<CustomPreProps> = ({
       </div>
       <pre
         ref={preRef}
-        className={cn('mt-2 rounded-md border px-5 pt-[68px] pb-5', className)}
+        className={cn('mt-2 rounded-md border px-4 pt-[68px] pb-5', className)}
         data-language={language}
         {...props}
       >
