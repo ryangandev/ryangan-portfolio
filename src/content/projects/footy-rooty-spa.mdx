@@ -3,7 +3,7 @@ title: 'Footy Rooty Spa'
 date: '2026-08-31'
 featured: false
 role: 'Freelance Web Developer'
-summary: 'A landing page and booking site for a massage spa'
+summary: 'A landing page and online booking site for a massage spa'
 thumbnailUrl: 'https://ik.imagekit.io/ryangan/Projects/footy-rooty-spa/footyrootyspa-thumbnail.png'
 techStack: ['react', 'javascript', 'tailwindcss', 'vite', 'vercel']
 link: { live: 'https://www.footyrootyspa.com/' }
@@ -13,36 +13,38 @@ link: { live: 'https://www.footyrootyspa.com/' }
 
 _Footy Rooty Spa_ is a massage and foot reflexology spa with two locations, in Roseville and Citrus Heights, California.
 I built its website for a friend who runs the business.
-The site is where new clients find the services and prices, see the current deals, and book a visit at either store.
+New clients come to it to see what the spa offers and what it costs, catch the current deals, and book a visit at either store without picking up the phone.
 
 ## Features
 
-- **Promotion-Led Home Page** - A full-screen hero carousel animated with Framer Motion, where each slide can carry promo tags and a price card, so the spa's current deals are the first thing a visitor sees
+- **Promotion-Led Home Page** - A full-screen photo carousel puts the spa's current deals first, each slide with its own promo tags, price card, and call to action
 
-- **Location-First Booking** - Clients pick a store, then book through an embedded Mindbody appointments widget without leaving the site
+- **Services and Pricing** - The full treatment menu, from deep tissue and Swedish massage to foot reflexology, facials, and scalp therapy, with prices and prepaid packages
 
-- **Services, Memberships, and Gift Cards** - The full menu with prices and prepaid packages, membership plans, and gift cards
+- **Memberships and Gift Cards** - Membership plans and gift cards, with what each includes and how to buy one in store
 
-- **Store Pages** - A photo gallery of each store, its hours and phone number, and an embedded Google Map that opens in the visitor's maps app
+- **Online Booking** - Clients choose a store and book an appointment through an embedded Mindbody booking window, with the store's address one click away and its phone number as a fallback
 
-- **One Source for Copy and Prices** - Every price and line of copy lives in a single dictionary, so the frequent price and promotion changes are one-file edits that never leave two pages disagreeing
+- **Store Pages** - A photo gallery of each store, its hours and phone number, and an embedded map that opens in the visitor's maps app
 
-- **Search and Ads** - Per-page titles and descriptions with React Helmet, Open Graph tags for link previews, and a Google Ads conversion tag
+## Responsibilities
 
-## Booking
+- Built the whole site with **React**, **Tailwind CSS**, and **Vite**, from the page layouts to deployment on **Vercel**
 
-Booking took three tries to get right.
-The first plan was to build it on the spa's existing point-of-sale system, Mase.
-Testing its documented REST endpoints showed that none of them existed: Mase offers hosted booking pages, not an open API.
-The site linked each location to its hosted page instead, then briefly switched to calling the store, and finally settled on Mindbody's embeddable appointments widget.
+- Integrated **Mindbody** online booking for both stores, with guidance for choosing a store's therapist, a loading state, and a retry or call-the-store fallback when the booking window fails to load
 
-Both stores share one Mindbody account, so the page asks for a location first and then tells the client which therapists work there.
-The widget's script loads only after a location is chosen, and the page tears it down on the way out, so the widget initializes again cleanly each time a visitor comes back to the page.
+- Kept every price and promotion in a single source, so the frequent price and deal changes are one-file edits that never leave two pages disagreeing
+
+- Made the site fast on phones by generating responsive WebP versions of the photos, loading the hero photos on demand, and loading each page's code only when it is visited
+
+- Made the site accessible, with a carousel, photo galleries, and mobile menu that all work from the keyboard, and color contrast checked across buttons, badges, and price labels
+
+- Set up search and ads with per-page titles and descriptions, link previews, a not-found page, and a Google Ads conversion tag
 
 ## Screenshots
 
-![Home page](https://ik.imagekit.io/ryangan/Projects/footy-rooty-spa/footyrootyspa-home.png)
-![Services page](https://ik.imagekit.io/ryangan/Projects/footy-rooty-spa/footyrootyspa-services.png)
-![Booking with a location selected](https://ik.imagekit.io/ryangan/Projects/footy-rooty-spa/footyrootyspa-book.png)
-![Membership page](https://ik.imagekit.io/ryangan/Projects/footy-rooty-spa/footyrootyspa-membership.png)
-![Store locations](https://ik.imagekit.io/ryangan/Projects/footy-rooty-spa/footyrootyspa-contact.png)
+![Home page](https://ik.imagekit.io/ryangan/Projects/footy-rooty-spa/footyrootyspa-home.png?updatedAt=1791021289000)
+![Services page](https://ik.imagekit.io/ryangan/Projects/footy-rooty-spa/footyrootyspa-services.png?updatedAt=1791021289000)
+![Booking with a store selected](https://ik.imagekit.io/ryangan/Projects/footy-rooty-spa/footyrootyspa-book.png?updatedAt=1791021289000)
+![Membership page](https://ik.imagekit.io/ryangan/Projects/footy-rooty-spa/footyrootyspa-membership.png?updatedAt=1791021289000)
+![Store locations](https://ik.imagekit.io/ryangan/Projects/footy-rooty-spa/footyrootyspa-contact.png?updatedAt=1791021289000)
