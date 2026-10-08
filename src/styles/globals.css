@@ -209,9 +209,15 @@
   @apply text-neutral-600 dark:text-neutral-400;
 }
 
-/* Notice Text, Credits, Author, Copyright, Date */
+/*
+  Notice Text, Credits, Author, Copyright, Date
+
+  The dark value sits between neutral-500 and neutral-400, which no Tailwind
+  step does: neutral-500 is only 3.7:1 on the dark background, under the 4.5:1
+  that 14-15px text needs, and neutral-400 is already level 4. This is 5.0:1.
+*/
 @utility color-level-5 {
-  @apply text-neutral-500 dark:text-neutral-500;
+  @apply text-neutral-500 dark:text-[oklch(63%_0_0)];
 }
 
 /* Disabled Text, unimportant text */

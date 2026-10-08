@@ -1,8 +1,8 @@
 import React from 'react';
 import { format } from 'date-fns';
 import Image from 'next/image';
-import Link from 'next/link';
 
+import AnimatedLink from '@/components/animated-link';
 import Byline from '@/components/byline';
 import Callout from '@/components/callout';
 import SocialIcon from '@/components/icons/social-icon';
@@ -36,30 +36,22 @@ const ProjectHeader = ({ project, thumbnailFallback }: ProjectHeaderProps) => {
           {format(parseContentDate(project.date), 'MMM dd, yyyy')}
         </Byline>
 
-        <div className="flex items-center space-x-4 font-semibold">
+        <div className="flex items-center gap-4">
           {project.link?.github && (
-            <Link
-              href={project.link.github}
-              target="_blank"
-              className="flex items-center"
-            >
+            <span className="flex items-center">
               <SocialIcon name="github" size={20} className="mr-1 shrink-0" />
-              <span className="text-blue-700 hover:underline dark:text-blue-400">
+              <AnimatedLink href={project.link.github} isExternal>
                 Repository
-              </span>
-            </Link>
+              </AnimatedLink>
+            </span>
           )}
           {project.link?.live && (
-            <Link
-              href={project.link.live}
-              target="_blank"
-              className="flex items-center"
-            >
+            <span className="flex items-center whitespace-nowrap">
               <SocialIcon name="website" size={20} className="mr-1 shrink-0" />
-              <span className="whitespace-nowrap text-blue-700 hover:underline dark:text-blue-400">
+              <AnimatedLink href={project.link.live} isExternal>
                 Live Demo
-              </span>
-            </Link>
+              </AnimatedLink>
+            </span>
           )}
         </div>
       </section>

@@ -32,7 +32,7 @@ const HighlightedText: React.FC<HighlightedTextProps> = ({
     <span>
       {parts.map((part, index) =>
         part.toLowerCase() === highlightedString.toLowerCase() ? (
-          <span key={index} className="text-orange-600 dark:text-orange-400">
+          <span key={index} className="text-orange-700 dark:text-orange-400">
             {part}
           </span>
         ) : (
