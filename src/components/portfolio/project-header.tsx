@@ -1,13 +1,14 @@
 import React from 'react';
 import { format } from 'date-fns';
-import Image from 'next/image';
 
 import AnimatedLink from '@/components/animated-link';
 import Byline from '@/components/byline';
 import Callout from '@/components/callout';
+import FadeInImage from '@/components/fade-in-image';
 import SocialIcon from '@/components/icons/social-icon';
 import TechStackIcon from '@/components/icons/tech-stack-icon';
 import { contentImageSizes } from '@/data/site';
+import { getImagePlaceholder } from '@/lib/image-placeholder';
 import { techStack } from '@/data/tech-stack';
 import { parseContentDate } from '@/lib/date';
 import type { ProjectFrontmatter } from '@/schemas/content-schema';
@@ -25,7 +26,10 @@ type ProjectHeaderProps = {
  * The top of a project page: title, byline and links, tech stack, summary,
  * and thumbnail. Shared by the project page and the admin editor's preview.
  */
-const ProjectHeader = ({ project, thumbnailFallback }: ProjectHeaderProps) => {
+const ProjectHeader = async ({
+  project,
+  thumbnailFallback,
+}: ProjectHeaderProps) => {
   return (
     <>
       <h1 className="text-3xl font-bold md:text-4xl">{project.title}</h1>
@@ -75,17 +79,19 @@ const ProjectHeader = ({ project, thumbnailFallback }: ProjectHeaderProps) => {
       </Callout>
 
       {thumbnailFallback ?? (
-        <Image
+        <FadeInImage
           src={project.thumbnailUrl}
+          placeholderSrc={await getImagePlaceholder(project.thumbnailUrl)}
           alt={project.title}
-          width={0}
-          height={0}
+          // Every thumbnail is 1536 by 936, so the box is held at that shape
+          // before it loads. Another shape still shows at its own once loaded.
+          width={1536}
+          height={936}
           sizes={contentImageSizes}
+          wrapperClassName="w-full rounded-lg"
           className="h-auto w-full rounded-lg shadow-md"
           quality={95}
           priority
-          placeholder="blur"
-          blurDataURL="/blur.svg"
         />
       )}
     </>

@@ -8,9 +8,14 @@ import { ProjectMetadata } from '@/models/project';
 
 type ProjectListProps = {
   projects: ProjectMetadata[];
+  /** Each thumbnail's `getImagePlaceholder`, by project slug */
+  thumbnailPlaceholders: Record<string, string | undefined>;
 };
 
-const ProjectList: React.FC<ProjectListProps> = ({ projects }) => {
+const ProjectList: React.FC<ProjectListProps> = ({
+  projects,
+  thumbnailPlaceholders,
+}) => {
   const [searchTerm, setSearchTerm] = useState<string>('');
 
   return (
@@ -30,6 +35,7 @@ const ProjectList: React.FC<ProjectListProps> = ({ projects }) => {
             <ProjectPreview
               key={project.slug}
               project={project}
+              thumbnailPlaceholder={thumbnailPlaceholders[project.slug]}
               searchTerm={searchTerm}
               index={index}
             />

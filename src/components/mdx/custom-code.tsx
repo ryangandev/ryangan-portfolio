@@ -61,7 +61,7 @@ const CustomCode: React.FC<CustomCodeProps> = ({
             aria-label="Toggle expand/collapse code"
             onClick={() => setExpanded((prev) => !prev)}
             className={cn(
-              'mt-2 flex items-center rounded-md px-2.5 py-1 transition-colors hover:bg-gray-200 dark:hover:bg-gray-700',
+              'mt-2 flex items-center rounded-md px-2.5 py-1 transition-colors hover:bg-neutral-200 dark:hover:bg-neutral-700',
               GeistSans.className,
             )}
           >

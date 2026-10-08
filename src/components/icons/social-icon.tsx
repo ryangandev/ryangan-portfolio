@@ -1,5 +1,5 @@
 import React from 'react';
-import { SiCodesandbox } from 'react-icons/si';
+import type { IconType } from 'react-icons';
 import {
   TbBrandDiscord,
   TbBrandGithub,
@@ -19,6 +19,17 @@ type SocialIconProps = {
   className?: string;
 };
 
+/** A record rather than a switch, so a new name cannot be added without an icon */
+const icons: Record<SocialIconName, IconType> = {
+  linkedin: TbBrandLinkedin,
+  github: TbBrandGithub,
+  discord: TbBrandDiscord,
+  medium: TbBrandMedium,
+  email: TbMail,
+  location: TbMapPin,
+  website: TbWorld,
+};
+
 /**
  * All from Tabler's outline set, so they share one stroke with each other and
  * with the Lucide icons beside them, like the copy button and the external
@@ -33,29 +44,8 @@ const SocialIcon: React.FC<SocialIconProps> = ({
   size = 24,
   className,
 }) => {
-  switch (name) {
-    case 'linkedin':
-      return <TbBrandLinkedin size={size} className={cn(className)} />;
-    case 'github':
-      return <TbBrandGithub size={size} className={cn(className)} />;
-    case 'discord':
-      return <TbBrandDiscord size={size} className={cn(className)} />;
-    case 'medium':
-      return <TbBrandMedium size={size} className={cn(className)} />;
-    case 'email':
-      return <TbMail size={size} className={cn(className)} />;
-    case 'location':
-      return <TbMapPin size={size} className={cn(className)} />;
-    case 'website':
-      return <TbWorld size={size} className={cn(className)} />;
-    default:
-      return (
-        <SiCodesandbox
-          size={size}
-          className={cn('text-slate-900 dark:text-slate-800', className)}
-        />
-      );
-  }
+  const Icon = icons[name];
+  return <Icon size={size} className={cn(className)} />;
 };
 
 export default SocialIcon;

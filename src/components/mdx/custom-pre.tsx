@@ -60,7 +60,7 @@ const CustomPre: React.FC<CustomPreProps> = ({
 
         <button
           onClick={handleCopyToClipboard}
-          className="rounded-md p-1.5 transition-colors hover:bg-gray-200 dark:hover:bg-gray-700"
+          className="rounded-md p-1.5 transition-colors hover:bg-neutral-200 dark:hover:bg-neutral-700"
         >
           {isCopied ? (
             <GoCheck size={20} className="text-green-700 dark:text-green-300" />

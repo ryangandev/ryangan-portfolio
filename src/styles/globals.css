@@ -23,26 +23,34 @@
   initial-value: 0px;
 }
 
+/*
+  shadcn/ui's variables, on its neutral theme so they match the site's
+  neutral greys: each light value is a Tailwind neutral step (3.9% is
+  neutral-950, 45.1% neutral-500, 89.8% neutral-200 and so on). The dark
+  surfaces keep the site's own lighter background, 10%, with fills at 20% and
+  borders at 25% above it. These were once shadcn's slate and stone themes,
+  tinted blue in light and warm in dark.
+*/
 :root {
   --background: 0 0% 100%;
-  --foreground: 222.2 84% 4.9%;
+  --foreground: 0 0% 3.9%;
   --card: 0 0% 100%;
-  --card-foreground: 222.2 84% 4.9%;
+  --card-foreground: 0 0% 3.9%;
   --popover: 0 0% 100%;
-  --popover-foreground: 222.2 84% 4.9%;
-  --primary: 222.2 47.4% 11.2%;
-  --primary-foreground: 210 40% 98%;
-  --secondary: 210 40% 96.1%;
-  --secondary-foreground: 222.2 47.4% 11.2%;
-  --muted: 210 40% 96.1%;
-  --muted-foreground: 215.4 16.3% 46.9%;
-  --accent: 210 40% 96.1%;
-  --accent-foreground: 222.2 47.4% 11.2%;
+  --popover-foreground: 0 0% 3.9%;
+  --primary: 0 0% 9%;
+  --primary-foreground: 0 0% 98%;
+  --secondary: 0 0% 96.1%;
+  --secondary-foreground: 0 0% 9%;
+  --muted: 0 0% 96.1%;
+  --muted-foreground: 0 0% 45.1%;
+  --accent: 0 0% 96.1%;
+  --accent-foreground: 0 0% 9%;
   --destructive: 0 84.2% 60.2%;
-  --destructive-foreground: 210 40% 98%;
-  --border: 214.3 31.8% 91.4%;
-  --input: 214.3 31.8% 91.4%;
-  --ring: 222.2 84% 4.9%;
+  --destructive-foreground: 0 0% 98%;
+  --border: 0 0% 89.8%;
+  --input: 0 0% 89.8%;
+  --ring: 0 0% 3.9%;
   --radius: 0.5rem;
   --chart-1: 12 76% 61%;
   --chart-2: 173 58% 39%;
@@ -53,24 +61,24 @@
 
 .dark {
   --background: 0 0% 10%;
-  --foreground: 60 9.1% 97.8%;
+  --foreground: 0 0% 98%;
   --card: 0 0% 10%;
-  --card-foreground: 60 9.1% 97.8%;
+  --card-foreground: 0 0% 98%;
   --popover: 0 0% 10%;
-  --popover-foreground: 60 9.1% 97.8%;
-  --primary: 60 9.1% 97.8%;
-  --primary-foreground: 24 9.8% 10%;
-  --secondary: 12 6.5% 20%;
-  --secondary-foreground: 60 9.1% 97.8%;
-  --muted: 12 6.5% 20%;
-  --muted-foreground: 24 5.4% 63.9%;
-  --accent: 12 6.5% 20%;
-  --accent-foreground: 60 9.1% 97.8%;
+  --popover-foreground: 0 0% 98%;
+  --primary: 0 0% 98%;
+  --primary-foreground: 0 0% 9%;
+  --secondary: 0 0% 20%;
+  --secondary-foreground: 0 0% 98%;
+  --muted: 0 0% 20%;
+  --muted-foreground: 0 0% 63.9%;
+  --accent: 0 0% 20%;
+  --accent-foreground: 0 0% 98%;
   --destructive: 0 62.8% 30.6%;
-  --destructive-foreground: 60 9.1% 97.8%;
-  --border: 12 6.5% 25%;
-  --input: 12 6.5% 20%;
-  --ring: 24 5.7% 82.9%;
+  --destructive-foreground: 0 0% 98%;
+  --border: 0 0% 25%;
+  --input: 0 0% 20%;
+  --ring: 0 0% 83.1%;
   --chart-1: 220 70% 50%;
   --chart-2: 160 60% 45%;
   --chart-3: 30 80% 55%;
@@ -223,6 +231,27 @@
 /* Disabled Text, unimportant text */
 @utility color-level-6 {
   @apply text-neutral-400 dark:text-neutral-600;
+}
+
+/*
+  The grey stand-in for an image that is still loading, from `FadeInImage`:
+  the muted fill pulsing towards the border grey. It pulses its colour, not its
+  opacity as Tailwind's `animate-pulse` does, which would pulse the image
+  inside it too.
+*/
+@utility skeleton {
+  background-color: hsl(var(--muted));
+  animation: skeleton-pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+
+  @media (prefers-reduced-motion: reduce) {
+    animation: none;
+  }
+}
+
+@keyframes skeleton-pulse {
+  50% {
+    background-color: hsl(var(--border));
+  }
 }
 
 /*

@@ -74,7 +74,9 @@ Tailwind 4 is configured entirely in CSS; there is no `tailwind.config.ts`.
 - `mdx.css` is `@import`ed there rather than from components, because v4 `@apply` needs a shared context.
 - The `color-level-*` helpers are `@utility` rules.
   Every step holds 4.5:1 on its background in both themes except `color-level-6`, which is only for disabled text; dark `color-level-5` is an arbitrary `oklch(63% 0 0)` for that reason.
-- Greys come from the `neutral` scale. `ArticleBody` sets `prose-neutral`, because the typography plugin's default `gray` is tinted blue.
+- Greys come from the `neutral` scale, and nothing else: no `gray`, `zinc`, `slate` or `stone`, which are each tinted.
+  `ArticleBody` sets `prose-neutral`, because the typography plugin's default `gray` is tinted blue.
+  The shadcn/ui variables are on shadcn's neutral theme, except that the dark surfaces keep the site's own 10% background, with fills at 20% and borders at 25%.
 - There is one link style: `linkClassName` and `linkArrowClassName` in `animated-link.tsx`, which MDX links (`mdx/custom-link.tsx`) reuse without `inline-block` so they wrap inside prose.
 
 Do not "modernize" `rounded-sm` to `rounded-xs`: the theme overrides `--radius-sm` to 4px, and the rename would silently fall back to the 2px default.
@@ -82,6 +84,12 @@ Do not "modernize" `rounded-sm` to `rounded-xs`: the theme overrides `--radius-s
 Image `sizes` must describe the rendered width, or next/image serves its largest variant.
 Content-width images use `contentImageSizes` from `src/data/site.ts`; `%` is not a valid `sizes` length.
 Only the first two portfolio cards and a project's hero image are `priority`.
+Every image a reader waits for, from the portfolio cards to MDX screenshots and the byline avatar, renders through `FadeInImage` (`src/components/fade-in-image.tsx`): a blurred copy of itself until it loads, then a 300ms fade in.
+The copy is a 16px-wide version ImageKit makes on request, fetched by `getImagePlaceholder` (`src/lib/image-placeholder.ts`) while the page builds and inlined as a data URL of about 100 bytes; it needs a server component, so the portfolio page passes the cards theirs as props.
+If that fetch fails, the build warns and the image falls back to a grey pulsing `skeleton`.
+The wrapper is a block, as Tailwind's preflight makes every `<img>`, so it takes the image's margins and lays out exactly as the bare image did.
+An image with no known size holds a shape while it loads: a project's hero is declared 1536 by 936, the size of every thumbnail, and an MDX image holds 8:5, the shape of most screenshots, so a 16:9 one shifts slightly once it arrives.
+Do not use next/image's own `placeholder="blur"`: it paints the blur as the image's background, which the fade hides along with the image, and given a path instead of a data URL, as `/blur.svg` once was, it renders nothing at all.
 `images.qualities` is set explicitly in `next.config.mjs`, because Next 16 defaults to `[75]` and project and post images render at `quality={95}`.
 
 A code block (`src/components/mdx/custom-pre.tsx`) is padded `px-4`, the same as its header, so the code lines up under the language icon and an 80-column line, the longest Prettier writes, fits the 644px column without scrolling.
