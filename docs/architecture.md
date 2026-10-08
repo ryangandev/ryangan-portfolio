@@ -73,6 +73,9 @@ Tailwind 4 is configured entirely in CSS; there is no `tailwind.config.ts`.
 - Dark mode is a `@custom-variant` matching the `.dark` class next-themes sets.
 - `mdx.css` is `@import`ed there rather than from components, because v4 `@apply` needs a shared context.
 - The `color-level-*` helpers are `@utility` rules.
+  Every step holds 4.5:1 on its background in both themes except `color-level-6`, which is only for disabled text; dark `color-level-5` is an arbitrary `oklch(63% 0 0)` for that reason.
+- Greys come from the `neutral` scale. `ArticleBody` sets `prose-neutral`, because the typography plugin's default `gray` is tinted blue.
+- There is one link style: `linkClassName` and `linkArrowClassName` in `animated-link.tsx`, which MDX links (`mdx/custom-link.tsx`) reuse without `inline-block` so they wrap inside prose.
 
 Do not "modernize" `rounded-sm` to `rounded-xs`: the theme overrides `--radius-sm` to 4px, and the rename would silently fall back to the 2px default.
 
