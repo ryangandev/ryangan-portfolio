@@ -1,7 +1,7 @@
 import React from 'react';
-import Image from 'next/image';
 import { Link } from 'next-view-transitions';
 
+import FadeInImage from '@/components/fade-in-image';
 import HighlightedText from '@/components/highlighted-text';
 import TechStackIcon from '@/components/icons/tech-stack-icon';
 import { cn } from '@/lib/utils';
@@ -10,6 +10,8 @@ import { ProjectMetadata } from '@/models/project';
 
 type ProjectPreviewProps = {
   project: ProjectMetadata;
+  /** From `getImagePlaceholder`, which only a server component can call */
+  thumbnailPlaceholder?: string;
   searchTerm?: string;
   /** Position in the grid, used to decide whether the thumbnail is eager */
   index?: number;
@@ -26,6 +28,7 @@ const EAGER_CARDS = 2;
 
 const ProjectPreview: React.FC<ProjectPreviewProps> = ({
   project,
+  thumbnailPlaceholder,
   searchTerm = '',
   index = 0,
 }) => {
@@ -41,19 +44,19 @@ const ProjectPreview: React.FC<ProjectPreviewProps> = ({
         )}
       >
         <figure className="relative h-[189.1px]">
-          <Image
+          <FadeInImage
             src={project.thumbnailUrl}
+            placeholderSrc={thumbnailPlaceholder}
             alt={project.title}
             fill
             // Two 312px columns from md up (644px less the 20px gap), one full
             // column below.
             sizes="(min-width: 768px) 312px, (min-width: 692px) 644px, calc(100vw - 48px)"
+            wrapperClassName="absolute inset-0 rounded-lg"
             className="rounded-lg object-cover"
             quality={95}
             priority={isAboveFold}
             loading={isAboveFold ? 'eager' : 'lazy'}
-            placeholder="blur"
-            blurDataURL="/blur.svg"
           />
         </figure>
       </Link>

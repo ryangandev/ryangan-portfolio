@@ -3,6 +3,7 @@ import type { Metadata } from 'next';
 import PageSummary from '@/components/page-summary';
 import ProjectList from '@/components/portfolio/project-list';
 import { getSortedProjects } from '@/lib/content';
+import { getImagePlaceholder } from '@/lib/image-placeholder';
 import BackButton from '@/components/navigation/back-button';
 import { siteName } from '@/data/site';
 
@@ -25,6 +26,17 @@ export const metadata: Metadata = {
 
 export default async function Page() {
   const projects = await getSortedProjects();
+  const thumbnailPlaceholders = Object.fromEntries(
+    await Promise.all(
+      projects.map(
+        async (project) =>
+          [
+            project.slug,
+            await getImagePlaceholder(project.thumbnailUrl),
+          ] as const,
+      ),
+    ),
+  );
 
   return (
     <main className="relative">
@@ -34,7 +46,10 @@ export default async function Page() {
         Here is a selection of the projects I&apos;ve worked on. I&apos;m always
         open to feedback and opportunities to collaborate!
       </PageSummary>
-      <ProjectList projects={projects} />
+      <ProjectList
+        projects={projects}
+        thumbnailPlaceholders={thumbnailPlaceholders}
+      />
     </main>
   );
 }

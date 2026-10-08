@@ -59,7 +59,7 @@ export default function RootLayout({
       >
         <body
           className={cn(
-            'flex min-h-screen flex-col color-level-3 antialiased selection:bg-zinc-300 selection:text-zinc-950 dark:selection:bg-zinc-700 dark:selection:text-zinc-50',
+            'flex min-h-screen flex-col color-level-3 antialiased selection:bg-neutral-300 selection:text-neutral-950 dark:selection:bg-neutral-700 dark:selection:text-neutral-50',
             geistSans.className,
           )}
         >
