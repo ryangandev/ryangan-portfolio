@@ -36,6 +36,7 @@ import {
   SiSocketdotio,
   SiSpringboot,
   SiSqlite,
+  SiSupabase,
   SiSwift,
   SiTailwindcss,
   SiTrello,
@@ -184,6 +185,11 @@ export const techStack = {
     label: 'PostgreSQL',
     icon: SiPostgresql,
     className: 'text-[#4169E1]',
+  },
+  supabase: {
+    label: 'Supabase',
+    icon: SiSupabase,
+    className: 'text-[#3FCF8E]',
   },
   mysql: {
     label: 'MySQL',
