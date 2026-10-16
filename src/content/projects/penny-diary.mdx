@@ -1,0 +1,70 @@
+---
+title: 'Penny Diary'
+date: '2026-10-16'
+featured: false
+role: 'Solo Developer'
+summary: 'A personal finance tracker for iPhone and the web'
+thumbnailUrl: 'https://ik.imagekit.io/ryangan/Projects/penny-diary/pennydiary-thumbnail.png?updatedAt=1792179516000'
+techStack:
+  [
+    'swift',
+    'nextjs',
+    'react',
+    'typescript',
+    'tailwindcss',
+    'supabase',
+    'postgresql',
+    'vercel',
+  ]
+link: { live: 'https://pennydiary.rystudio.app/' }
+---
+
+## Overview
+
+_Penny Diary_ is a personal finance tracker: a SwiftUI iPhone app and a Next.js web app that share one ledger.
+Every entry is typed, spoken, or tapped in by the person who spent it, with no bank connection, and the app reads it back as a clear picture of where the money went.
+The iPhone app works on its own with no account, and _Penny Diary Pro_ syncs the ledger to the web and across devices.
+
+## Features
+
+- **Where It Went** - Home shows the period's spending as one large figure against the period before, twelve periods of history, and the categories that took the most, with their share and trend
+
+- **Fast Entry** - An Add sheet one tap away on every screen, fill-in by voice, title suggestions that bring their amount and category with them, and an Add Transaction action for Siri, Spotlight, and Shortcuts
+
+- **Apple Pay Automation** - A Shortcuts automation records each Apple Pay purchase as it happens, cleans up the merchant name, and marks the entry as automatic
+
+- **Reports** - Spending and income by category in a share ring, day-by-day bars, insights, and saved reports for the views that matter, such as food or fixed costs
+
+- **Recurring Entries** - Weekly, monthly, and yearly rules for rent, pay, and subscriptions, which write each entry on its due date, with what the next 30 days will bring
+
+- **Refunds and Adjustments** - A return or cashback is recorded against the purchase it belongs to, so the original amount stays on record and reports count what was really spent
+
+- **A Desk-Sized Web App** - The same ledger in a wide layout with a sidebar, side panels, and keyboard shortcuts for every common action, plus CSV export
+
+- **The Ledger Look** - A paper and ink design system in light Paper and dark Navy themes, built once and shared by both apps
+
+## Responsibilities
+
+- Designed and built the whole product alone, from the design system and both apps to the database, the subscription, and the App Store release plan
+
+- Built the iPhone app in **SwiftUI** as local-first: the ledger lives on the device and works offline, and a write queue syncs it to **Supabase** once the person signs in, recovering from refusals, conflicts, and lost answers without losing an entry
+
+- Built the web app with **Next.js**, **React**, **TypeScript**, and **Tailwind CSS**, deployed on **Vercel**, with every tab loading on the client so moving around the ledger never waits on the server
+
+- Designed the shared **PostgreSQL** schema in migrations, with row level security on every table, decimal amounts the database adds up itself, soft deletes with a recently deleted list, and SQL tests run against a fresh database
+
+- Kept every report number identical on both clients by mirroring the report logic in Swift and TypeScript and holding both to one shared parity fixture
+
+- Built _Penny Diary Pro_ with **StoreKit 2** and Supabase Edge Functions that record subscriptions from data Apple signed, so a purchase on the iPhone unlocks the web for the same account
+
+- Added Sign in with Apple and Google, a Face ID app lock, a daily logging reminder, a ledger currency chosen from the world's currencies, and a privacy policy that tests hold to every column the database stores
+
+## Screenshots
+
+![Web - Overview](https://ik.imagekit.io/ryangan/Projects/penny-diary/pennydiary-web-overview.png)
+![Web - Activity with an Apple Pay entry open](https://ik.imagekit.io/ryangan/Projects/penny-diary/pennydiary-web-activity.png)
+![Web - Report](https://ik.imagekit.io/ryangan/Projects/penny-diary/pennydiary-web-report.png)
+![Web - New entry](https://ik.imagekit.io/ryangan/Projects/penny-diary/pennydiary-web-editor.png)
+![Web - Recurring](https://ik.imagekit.io/ryangan/Projects/penny-diary/pennydiary-web-recurring.png)
+![iPhone - Home, Activity, and the Add sheet](https://ik.imagekit.io/ryangan/Projects/penny-diary/pennydiary-ios-light.png)
+![iPhone - Home, Activity, and Report in the Navy theme](https://ik.imagekit.io/ryangan/Projects/penny-diary/pennydiary-ios-navy.png)
