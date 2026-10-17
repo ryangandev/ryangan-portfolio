@@ -56,7 +56,7 @@ The [admin portal](#admin-portal) writes these same files, through GitHub.
 Posts are compiled with `compileMdx` (`src/components/mdx/mdx-components.tsx`), which also returns the post's `h2`s for the table of contents.
 A rehype plugin placed directly after rehype-slug collects them, so the ids are the rendered ones; do not re-derive them from the Markdown.
 The table of contents shows beside posts from `xl` up; the reading progress bar is a CSS scroll-driven animation in `globals.css` with no JavaScript.
-Project pages compile the same way, and show the table of contents under the project's facts once a case study has more than one `h2`.
+Project pages compile the same way, and show the table of contents in the left-hand gutter once a case study has more than one `h2`.
 
 ### Portfolio layout
 
@@ -110,10 +110,11 @@ Do not use next/image's own `placeholder="blur"`: it paints the blur as the imag
 A code block (`src/components/mdx/custom-pre.tsx`) is padded `px-4`, the same as its header, so the code lines up under the language icon and an 80-column line, the longest Prettier writes, fits the 644px column without scrolling.
 At `px-5` such a line overflows by 4px and its last character is clipped.
 
-From `xl` up, the right-hand gutter holds a post's table of contents, a project's facts (role, year, platforms, links, stack) above its table of contents, the `timeline` list's hovered thumbnail, and, on every page, the back-to-top link.
+From `xl` up, the right-hand gutter holds a post's table of contents, a project's facts (role, year, platforms, links, stack), the `timeline` list's hovered thumbnail, and, on every page, the back-to-top link.
+A project's table of contents goes in the left-hand gutter instead, under the back button and 192px wide so its left edge lines up with the button's `lg:-left-48`; the facts and the table of contents together are taller than a laptop screen.
 Below `xl` a project's facts sit under its title instead; the admin preview, which has no gutter, always shows them there.
-Everything in the gutter sits at `left-full ml-10` of the content column; `back-to-top.tsx` is fixed-position, so it repeats that offset as `calc(50% + 362px)`, and both change together if the column's width does.
-Below `xl` there is no gutter, and back to top is a round button in the corner, above the footer.
+Everything in the right-hand gutter sits at `left-full ml-10` of the content column; `back-to-top.tsx` is fixed-position, so it repeats that offset as `calc(50% + 362px)`, and both change together if the column's width does.
+Below `xl` there are no gutters, and back to top is a round button in the corner, above the footer.
 
 ## Routing and SEO
 

@@ -89,26 +89,30 @@ export default async function Page({
   return (
     <main className="relative">
       <BackButton name="Portfolio" href="/portfolio" />
-      {/* The right-hand gutter only exists from xl up. Below that the facts
-          sit under the title instead. The facts scroll away with the header
-          they belong to, and only the table of contents sticks: both together
-          are taller than a laptop screen leaves above the back-to-top link.
-          The aside spans the article's height so the list can stick while
-          the article scrolls. */}
-      <aside className="absolute top-0 left-full hidden h-full xl:block">
-        <div className="ml-10 flex h-full w-56 flex-col gap-10">
+      {/* The gutters only exist from xl up. Below that the facts sit under
+          the title, and there is no table of contents. The facts take the
+          right-hand gutter and scroll away with the header they belong to;
+          the table of contents takes the left, under the back button and
+          aligned with it, and sticks while the article scrolls. Each gutter
+          spans the article's height for that. */}
+      <aside className="absolute top-0 left-full hidden xl:block">
+        <div className="ml-10 w-56">
           <ProjectFacts
             project={project}
             stack={portfolioLayout.stack}
             placement="gutter"
           />
-          {headings.length > 1 && (
-            <div className="sticky top-32">
-              <TableOfContents headings={headings} />
-            </div>
-          )}
         </div>
       </aside>
+      {headings.length > 1 && (
+        // 192px wide, so its left edge lines up with the back button's at
+        // `lg:-left-48`.
+        <aside className="absolute top-0 right-full hidden h-full xl:block">
+          <div className="sticky top-32 mt-16 mr-10 w-38">
+            <TableOfContents headings={headings} />
+          </div>
+        </aside>
+      )}
 
       <article className="space-y-8">
         <ProjectHeader
