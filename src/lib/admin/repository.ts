@@ -9,7 +9,15 @@ import {
   contentFilePath,
   isCollection,
 } from '@/lib/collections';
+import {
+  portfolioLayoutPath,
+  serializePortfolioLayout,
+} from '@/lib/portfolio-layout';
 import { contentRepository } from '@/data/site';
+import {
+  PortfolioLayout,
+  PortfolioLayoutSchema,
+} from '@/schemas/portfolio-layout-schema';
 
 /*
  * The admin portal's view of the content in the GitHub repository.
@@ -681,6 +689,95 @@ export const discardDraft = (
     }
 
     await deleteBranch(octokit, branch);
+  });
+
+export type PortfolioLayoutFile = {
+  layout: PortfolioLayout;
+  /** Blob id of the file, which GitHub requires to update it */
+  sha: string;
+};
+
+/**
+ * The portfolio layout as `main` has it now. That can be ahead of the site,
+ * which shows the one it was built with until the next deploy finishes.
+ * @throws AdminError `invalid` when the file on `main` does not validate
+ */
+export const getPortfolioLayout = (
+  octokit: Octokit,
+): Promise<PortfolioLayoutFile> =>
+  withGitHub(async () => {
+    const { data } = await octokit.repos.getContent({
+      owner,
+      repo,
+      path: portfolioLayoutPath,
+      ref: baseBranch,
+    });
+
+    if (Array.isArray(data) || data.type !== 'file') {
+      throw new AdminError(`${portfolioLayoutPath} is not a file.`, 'invalid');
+    }
+
+    const result = PortfolioLayoutSchema.safeParse(
+      JSON.parse(Buffer.from(data.content, 'base64').toString('utf8')),
+    );
+
+    if (!result.success) {
+      throw new AdminError(
+        `${portfolioLayoutPath} on ${baseBranch} is not a valid layout. Fix it on GitHub.`,
+        'invalid',
+      );
+    }
+
+    return { layout: result.data, sha: data.sha };
+  });
+
+export type SavePortfolioLayoutInput = {
+  layout: PortfolioLayout;
+  /** Blob id of the file as the form loaded it */
+  baseSha: string;
+};
+
+/**
+ * Commit a new portfolio layout straight to `main`, with no draft: it is one
+ * setting, and the redeploy that follows is the only way to see it live.
+ * @returns the file as it now is on `main`
+ * @throws AdminError `conflict` when the file changed since the form loaded it
+ */
+export const savePortfolioLayout = (
+  octokit: Octokit,
+  { layout, baseSha }: SavePortfolioLayoutInput,
+): Promise<PortfolioLayoutFile> =>
+  withGitHub(async () => {
+    const content = serializePortfolioLayout(layout);
+    const sha = gitBlobSha(content);
+
+    if (sha === baseSha) {
+      throw new AdminError('There are no changes to save.', 'invalid');
+    }
+
+    try {
+      await octokit.repos.createOrUpdateFileContents({
+        owner,
+        repo,
+        path: portfolioLayoutPath,
+        branch: baseBranch,
+        message: 'Change the portfolio layout',
+        content: Buffer.from(content, 'utf8').toString('base64'),
+        sha: baseSha,
+      });
+    } catch (error) {
+      if (statusOf(error) === 409) {
+        throw new AdminError(
+          'The portfolio layout changed on GitHub after you opened it. ' +
+            'Reload to get the latest version.',
+          'conflict',
+        );
+      }
+
+      throw error;
+    }
+
+    return { layout, sha };
   });
 
 /**

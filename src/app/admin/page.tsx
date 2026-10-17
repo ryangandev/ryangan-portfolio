@@ -5,6 +5,7 @@ import { ChevronRightIcon, Pencil2Icon, PlusIcon } from '@radix-ui/react-icons';
 
 import { signOut } from '@/auth';
 import AdminProblem from '@/components/admin/admin-problem';
+import PortfolioLayoutForm from '@/components/admin/portfolio-layout-form';
 import BackButton from '@/components/navigation/back-button';
 import PageSummary from '@/components/page-summary';
 import { AdminError } from '@/lib/admin/errors';
@@ -14,10 +15,13 @@ import {
   ContentSummary,
   createOctokit,
   getContentOverview,
+  getPortfolioLayout,
+  PortfolioLayoutFile,
 } from '@/lib/admin/repository';
 import { requireAdmin } from '@/lib/admin/session';
 import { collectionNames, collections } from '@/lib/collections';
 import { parseContentDate } from '@/lib/date';
+import { portfolioLayout } from '@/lib/portfolio-layout';
 import { cn } from '@/lib/utils';
 
 const ContentRow = ({
@@ -154,12 +158,16 @@ const actions = [
 export default async function Page() {
   const admin = await requireAdmin('/admin');
   let overview: ContentOverview | null = null;
+  let layout: PortfolioLayoutFile | null = null;
   let problem: AdminError | null = null;
 
   try {
-    overview = await getContentOverview(
-      createOctokit(await getGitHubToken(admin.id)),
-    );
+    const octokit = createOctokit(await getGitHubToken(admin.id));
+
+    [overview, layout] = await Promise.all([
+      getContentOverview(octokit),
+      getPortfolioLayout(octokit),
+    ]);
   } catch (error) {
     if (!(error instanceof AdminError)) {
       throw error;
@@ -224,6 +232,16 @@ export default async function Page() {
         </div>
       )}
       {overview && <Overview overview={overview} />}
+      {layout && (
+        <section>
+          <h2>Portfolio layout</h2>
+          <p className="text-sm text-muted-foreground">
+            Saving commits the choice to main, and the site redeploys a minute
+            or two later.
+          </p>
+          <PortfolioLayoutForm file={layout} deployed={portfolioLayout} />
+        </section>
+      )}
     </main>
   );
 }

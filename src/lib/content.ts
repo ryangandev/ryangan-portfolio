@@ -154,6 +154,29 @@ export const getFeaturedProjects = async (): Promise<ProjectMetadata[]> => {
 };
 
 /**
+ * The projects either side of one in the portfolio list, which is newest
+ * first: previous is the newer one, next the older
+ */
+export const getAdjacentProjects = async (
+  slug: string,
+): Promise<{
+  previous: ProjectMetadata | null;
+  next: ProjectMetadata | null;
+}> => {
+  const projects = await getSortedProjects();
+  const index = projects.findIndex((project) => project.slug === slug);
+
+  if (index === -1) {
+    return { previous: null, next: null };
+  }
+
+  return {
+    previous: projects[index - 1] ?? null,
+    next: projects[index + 1] ?? null,
+  };
+};
+
+/**
  * Get a list of all post slugs in the posts directory
  * @returns Array of slugs for each post. Ex: ['post-1', 'post-2']
  */

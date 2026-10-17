@@ -22,6 +22,7 @@ const { getAdmin, github, untouchable } = vi.hoisted(() => {
       saveDraft: stub(),
       publishDraft: stub(),
       discardDraft: stub(),
+      savePortfolioLayout: stub(),
       compileMdx: stub(),
     },
   };
@@ -36,6 +37,7 @@ vi.mock('@/lib/admin/repository', () => ({
   saveDraft: github.saveDraft,
   publishDraft: github.publishDraft,
   discardDraft: github.discardDraft,
+  savePortfolioLayout: github.savePortfolioLayout,
 }));
 vi.mock('@/lib/admin/imagekit', () => ({ createImageUploadAuth: untouchable }));
 vi.mock('@/components/admin/content-preview', () => ({
@@ -64,6 +66,14 @@ describe('admin actions, signed out', () => {
     ['publishContentAction', () => actions.publishContentAction(input)],
     ['discardDraftAction', () => actions.discardDraftAction(input)],
     ['previewContentAction', () => actions.previewContentAction(input)],
+    [
+      'savePortfolioLayoutAction',
+      () =>
+        actions.savePortfolioLayoutAction({
+          layout: { list: 'timeline', stack: 'badges' },
+          baseSha: 'sha',
+        }),
+    ],
     [
       'createImageUploadAuthAction',
       () => actions.createImageUploadAuthAction(),
@@ -117,5 +127,22 @@ describe('publishContentAction', () => {
       error: 'GitHub cannot merge pull request #7',
       saved: { sha: 'saved-sha', draft, values: { slug: 'demo' } },
     });
+  });
+});
+
+describe('savePortfolioLayoutAction', () => {
+  it('refuses a layout the site does not have before reaching GitHub', async () => {
+    getAdmin.mockResolvedValue({ id: 'user-1', role: 'ADMIN' });
+
+    await expect(
+      actions.savePortfolioLayoutAction({
+        layout: { list: 'gallery', stack: 'icons' },
+        baseSha: 'sha',
+      }),
+    ).resolves.toEqual({
+      ok: false,
+      error: 'That is not a layout the site has.',
+    });
+    expect(github.savePortfolioLayout).not.toHaveBeenCalled();
   });
 });

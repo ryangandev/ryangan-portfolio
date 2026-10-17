@@ -1,9 +1,10 @@
 import type { Metadata } from 'next';
 
 import PageSummary from '@/components/page-summary';
-import ProjectList from '@/components/portfolio/project-list';
+import ProjectIndex from '@/components/portfolio/project-index';
 import { getSortedProjects } from '@/lib/content';
 import { getImagePlaceholder } from '@/lib/image-placeholder';
+import { portfolioLayout } from '@/lib/portfolio-layout';
 import BackButton from '@/components/navigation/back-button';
 import { siteName } from '@/data/site';
 
@@ -43,12 +44,14 @@ export default async function Page() {
       <BackButton name="Home" href="/" />
       <h1>Portfolio</h1>
       <PageSummary>
-        Here is a selection of the projects I&apos;ve worked on. I&apos;m always
-        open to feedback and opportunities to collaborate!
+        Here is a selection of the projects I&apos;ve worked on, from full-stack
+        web apps to games. I&apos;m always open to feedback and opportunities to
+        collaborate.
       </PageSummary>
-      <ProjectList
+      <ProjectIndex
         projects={projects}
         thumbnailPlaceholders={thumbnailPlaceholders}
+        layout={portfolioLayout.list}
       />
     </main>
   );

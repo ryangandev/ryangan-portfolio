@@ -7,6 +7,7 @@ import ProjectHeader from '@/components/portfolio/project-header';
 import { toFrontmatter } from '@/lib/admin/content-file';
 import { AdminError } from '@/lib/admin/errors';
 import type { Collection } from '@/lib/collections';
+import { portfolioLayout } from '@/lib/portfolio-layout';
 import { getReadingTime } from '@/lib/reading-time';
 import type { ProjectFormValues } from '@/schemas/admin-content-schema';
 import {
@@ -87,8 +88,11 @@ export const renderContentPreview = async (
           role: previewText(project.role, 'Role'),
           summary: previewText(project.summary, 'Summary'),
           date: previewDate(project.date),
+          platforms: project.platforms ?? [],
           techStack: project.techStack ?? [],
         }}
+        stack={portfolioLayout.stack}
+        factsInGutter={false}
         thumbnailFallback={
           hasThumbnail ? undefined : (
             <div className="flex aspect-video w-full items-center justify-center rounded-lg border border-dashed text-sm text-muted-foreground">

@@ -46,6 +46,7 @@ const blank: ContentFormValues = {
     date: '',
     featured: false,
     role: '',
+    platforms: [],
     summary: '',
     thumbnailUrl: '',
     techStack: [],
