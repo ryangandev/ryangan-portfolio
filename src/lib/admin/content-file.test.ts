@@ -102,6 +102,7 @@ describe('content files', () => {
         date: '2026-09-28',
         featured: true,
         role: 'Developer',
+        platforms: ['web', 'ios'],
         summary: 'A demo',
         thumbnailUrl: 'https://ik.imagekit.io/ryangan/demo.png',
         techStack: ['react', 'typescript'],
@@ -116,6 +117,7 @@ title: "Ryan's demo"
 date: '2026-09-28'
 featured: true
 role: 'Developer'
+platforms: ['web', 'ios']
 summary: 'A demo'
 thumbnailUrl: 'https://ik.imagekit.io/ryangan/demo.png'
 techStack: ['react', 'typescript']

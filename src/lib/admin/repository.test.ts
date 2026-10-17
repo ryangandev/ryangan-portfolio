@@ -6,9 +6,12 @@ import {
   discardDraft,
   Draft,
   getContentItem,
+  getPortfolioLayout,
   publishDraft,
   saveDraft,
+  savePortfolioLayout,
 } from '@/lib/admin/repository';
+import { serializePortfolioLayout } from '@/lib/portfolio-layout';
 
 // The live behaviour of these calls against GitHub was checked by hand; these
 // pin down the decisions made on top of them.
@@ -283,5 +286,55 @@ describe('discardDraft', () => {
     expect(octokit.pulls.update).toHaveBeenCalledWith(
       expect.objectContaining({ pull_number: 7, state: 'closed' }),
     );
+  });
+});
+
+describe('portfolio layout', () => {
+  const layout = { list: 'timeline', stack: 'badges' } as const;
+
+  it('commits a new layout straight to main, guarded by the sha it loaded', async () => {
+    octokit.repos.createOrUpdateFileContents.mockResolvedValue({ data: {} });
+
+    const saved = await savePortfolioLayout(asOctokit(), {
+      layout,
+      baseSha: 'loaded',
+    });
+
+    expect(octokit.repos.createOrUpdateFileContents).toHaveBeenCalledWith(
+      expect.objectContaining({
+        branch: 'main',
+        path: 'src/data/portfolio-layout.json',
+        sha: 'loaded',
+        content: Buffer.from(serializePortfolioLayout(layout)).toString(
+          'base64',
+        ),
+      }),
+    );
+    expect(saved).toEqual({
+      layout,
+      sha: gitBlobSha(serializePortfolioLayout(layout)),
+    });
+  });
+
+  it('reports a conflict when main changed after the form loaded', async () => {
+    octokit.repos.createOrUpdateFileContents.mockRejectedValue(httpError(409));
+
+    await expect(
+      savePortfolioLayout(asOctokit(), { layout, baseSha: 'loaded' }),
+    ).rejects.toMatchObject({ kind: 'conflict' });
+  });
+
+  it('refuses a layout file on main that the site would not build with', async () => {
+    octokit.repos.getContent.mockResolvedValue({
+      data: {
+        type: 'file',
+        sha: 'live',
+        content: Buffer.from('{ "list": "gallery" }').toString('base64'),
+      },
+    });
+
+    await expect(getPortfolioLayout(asOctokit())).rejects.toMatchObject({
+      kind: 'invalid',
+    });
   });
 });

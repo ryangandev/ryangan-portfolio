@@ -1,20 +1,21 @@
 import React from 'react';
-import { format } from 'date-fns';
 
-import AnimatedLink from '@/components/animated-link';
-import Byline from '@/components/byline';
-import Callout from '@/components/callout';
 import FadeInImage from '@/components/fade-in-image';
-import SocialIcon from '@/components/icons/social-icon';
-import TechStackIcon from '@/components/icons/tech-stack-icon';
+import ProjectFacts from '@/components/portfolio/project-facts';
 import { contentImageSizes } from '@/data/site';
 import { getImagePlaceholder } from '@/lib/image-placeholder';
-import { techStack } from '@/data/tech-stack';
-import { parseContentDate } from '@/lib/date';
+import { cn } from '@/lib/utils';
 import type { ProjectFrontmatter } from '@/schemas/content-schema';
+import type { PortfolioLayout } from '@/schemas/portfolio-layout-schema';
 
 type ProjectHeaderProps = {
   project: ProjectFrontmatter;
+  stack: PortfolioLayout['stack'];
+  /**
+   * The page shows the facts in the right-hand gutter from xl up, so here
+   * they stop at xl. The admin preview has no gutter and keeps them.
+   */
+  factsInGutter: boolean;
   /**
    * Replaces the thumbnail, for the admin preview while the URL is not one
    * next/image accepts
@@ -23,60 +24,25 @@ type ProjectHeaderProps = {
 };
 
 /**
- * The top of a project page: title, byline and links, tech stack, summary,
- * and thumbnail. Shared by the project page and the admin editor's preview.
+ * The top of a project page: title, summary, the facts below xl, and the
+ * thumbnail. Shared by the project page and the admin editor's preview.
  */
 const ProjectHeader = async ({
   project,
+  stack,
+  factsInGutter,
   thumbnailFallback,
 }: ProjectHeaderProps) => {
   return (
     <>
-      <h1 className="text-3xl font-bold md:text-4xl">{project.title}</h1>
+      <div className="flex flex-col gap-2">
+        <h1 className="mb-0 text-3xl font-bold md:text-4xl">{project.title}</h1>
+        <p className="mb-0 text-lg color-level-4">{project.summary}</p>
+      </div>
 
-      <section className="space-y-3 md:flex md:items-center md:justify-between md:space-y-0">
-        <Byline author="Ryan Gan">
-          {project.role} /{' '}
-          {format(parseContentDate(project.date), 'MMM dd, yyyy')}
-        </Byline>
-
-        <div className="flex items-center gap-4">
-          {project.link?.github && (
-            <span className="flex items-center">
-              <SocialIcon name="github" size={20} className="mr-1 shrink-0" />
-              <AnimatedLink href={project.link.github} isExternal>
-                Repository
-              </AnimatedLink>
-            </span>
-          )}
-          {project.link?.live && (
-            <span className="flex items-center whitespace-nowrap">
-              <SocialIcon name="website" size={20} className="mr-1 shrink-0" />
-              <AnimatedLink href={project.link.live} isExternal>
-                Live Demo
-              </AnimatedLink>
-            </span>
-          )}
-        </div>
-      </section>
-
-      <section className="flex flex-wrap items-center gap-4">
-        {project.techStack.map((tech) => (
-          <span
-            key={tech}
-            className="flex cursor-default items-center space-x-2"
-          >
-            <TechStackIcon name={tech} size={16} />
-            <span className="text-xs font-medium text-black uppercase dark:text-white">
-              {techStack[tech].label}
-            </span>
-          </span>
-        ))}
-      </section>
-
-      <Callout>
-        <p className="mb-0 font-medium italic">{project.summary}</p>
-      </Callout>
+      <div className={cn(factsInGutter && 'xl:hidden')}>
+        <ProjectFacts project={project} stack={stack} placement="inline" />
+      </div>
 
       {thumbnailFallback ?? (
         <FadeInImage
@@ -89,7 +55,7 @@ const ProjectHeader = async ({
           height={936}
           sizes={contentImageSizes}
           wrapperClassName="w-full rounded-lg"
-          className="h-auto w-full rounded-lg shadow-md"
+          className="h-auto w-full rounded-lg border border-border/80 shadow-md"
           quality={95}
           priority
         />
