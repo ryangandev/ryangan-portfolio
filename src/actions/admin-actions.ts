@@ -20,8 +20,10 @@ import {
   createOctokit,
   discardDraft,
   Draft,
+  PortfolioLayoutFile,
   publishDraft,
   saveDraft,
+  savePortfolioLayout,
 } from '@/lib/admin/repository';
 import { getAdmin } from '@/lib/admin/session';
 import { Collection, collections, isCollection } from '@/lib/collections';
@@ -29,6 +31,7 @@ import {
   ContentFormValues,
   contentFormSchemas,
 } from '@/schemas/admin-content-schema';
+import { PortfolioLayoutSchema } from '@/schemas/portfolio-layout-schema';
 
 /*
  * Every action here is a public endpoint, like any server action, so each one
@@ -264,6 +267,41 @@ export const previewContentAction = async (input: {
         assertCollection(input.collection),
         input.values,
       ),
+    };
+  } catch (error) {
+    return failure(error);
+  }
+};
+
+/**
+ * Commit a new portfolio layout to `main`. The site switches to it once the
+ * deploy that commit starts has finished.
+ */
+export const savePortfolioLayoutAction = async (input: {
+  layout: unknown;
+  baseSha: string;
+}): Promise<ActionResult<{ saved: PortfolioLayoutFile }>> => {
+  try {
+    const admin = await getAdmin();
+
+    if (!admin) {
+      return signedOut;
+    }
+
+    const layout = PortfolioLayoutSchema.safeParse(input.layout);
+
+    if (!layout.success) {
+      throw new AdminError('That is not a layout the site has.', 'invalid');
+    }
+
+    const octokit = createOctokit(await getGitHubToken(admin.id));
+
+    return {
+      ok: true,
+      saved: await savePortfolioLayout(octokit, {
+        layout: layout.data,
+        baseSha: input.baseSha,
+      }),
     };
   } catch (error) {
     return failure(error);

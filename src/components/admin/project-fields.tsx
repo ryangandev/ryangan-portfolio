@@ -6,6 +6,7 @@ import Image from 'next/image';
 import { Control, useWatch } from 'react-hook-form';
 import { toast } from 'sonner';
 
+import PlatformPicker from '@/components/admin/platform-picker';
 import TechStackPicker from '@/components/admin/tech-stack-picker';
 import { Button } from '@/components/ui/button';
 import {
@@ -65,6 +66,25 @@ const ProjectFields = ({ control, imageFolder }: ProjectFieldsProps) => {
           )}
         />
       </div>
+
+      <FormField
+        control={control}
+        name="platforms"
+        render={({ field, fieldState }) => (
+          <FormItem>
+            <FormLabel>Platforms</FormLabel>
+            <FormControl>
+              <PlatformPicker
+                value={field.value}
+                onChange={field.onChange}
+                onBlur={field.onBlur}
+                aria-invalid={fieldState.invalid}
+              />
+            </FormControl>
+            <FormMessage />
+          </FormItem>
+        )}
+      />
 
       <FormField
         control={control}

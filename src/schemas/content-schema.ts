@@ -1,5 +1,6 @@
 import { z } from 'zod';
 
+import { platformNames } from '@/data/platforms';
 import { techStackNames } from '@/data/tech-stack';
 
 /**
@@ -45,6 +46,9 @@ export const ProjectFrontmatterSchema = z.strictObject({
   date: ContentDate,
   featured: z.boolean().default(false),
   role: NonEmpty,
+  platforms: z
+    .array(z.enum(platformNames))
+    .min(1, { message: 'Pick at least one platform' }),
   summary: NonEmpty,
   // Rendered with next/image, which refuses any host missing from
   // `images.remotePatterns` in next.config.mjs, and that lists only ImageKit.

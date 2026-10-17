@@ -1,13 +1,13 @@
 # Architecture
 
-Last reviewed: 2026-09-28.
+Last reviewed: 2026-10-17.
 
 ## Code map
 
 | Area                                      | Where                                                                                                                                                            |
 | ----------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | Home page and experience timeline         | `src/app/(home)/page.tsx`, `src/components/experience-list.tsx`, `src/components/expandable.tsx`, `src/data/experience.ts`, `src/assets/logos`                   |
-| Portfolio list, search, and project pages | `src/app/portfolio`, `src/components/portfolio`, `src/components/search.tsx`, `src/components/highlighted-text.tsx`                                              |
+| Portfolio list, project pages, and layout | `src/app/portfolio`, `src/components/portfolio`, `src/data/platforms.ts`, `src/data/portfolio-layout.json`, `src/lib/portfolio-layout.ts`                        |
 | Blog, topics, and post-only UI            | `src/app/blog`, `src/components/blog`                                                                                                                            |
 | MDX source and rendering                  | `src/content/{projects,posts}`, `src/components/mdx`, `src/styles/mdx.css`                                                                                       |
 | Content reading and validation            | `src/lib/content.ts`, `src/schemas/content-schema.ts`, `src/models`, `src/lib/{date,topics,reading-time}.ts`                                                     |
@@ -40,6 +40,8 @@ Projects and posts are MDX files with gray-matter frontmatter in `src/content/`,
 - **Dates** go through `parseContentDate` (`src/lib/date.ts`), which reads `YYYY-MM-DD` as local midnight.
   `new Date('YYYY-MM-DD')` is UTC and renders the previous day anywhere west of UTC.
 - **Tech stack** slugs are the keys of `src/data/tech-stack.ts`, which holds each icon, brand colors, and display label.
+- **Platforms** are the keys of `src/data/platforms.ts` (`web`, `ios`, `game`), at least one per project.
+  They drive the portfolio list's filter and are shown in the order that file declares them, whatever order the frontmatter lists them in.
 - **Thumbnails** must be `https://ik.imagekit.io` URLs, the one host `images.remotePatterns` in `next.config.mjs` allows; next/image refuses any other.
 - **Topics** become URL slugs through `toTopicSlug` (`src/lib/topics.ts`) and get statically generated pages at `/blog/topics/[topic]`.
 - **Featured:** projects flagged `featured` appear on the home page.
@@ -54,6 +56,19 @@ The [admin portal](#admin-portal) writes these same files, through GitHub.
 Posts are compiled with `compileMdx` (`src/components/mdx/mdx-components.tsx`), which also returns the post's `h2`s for the table of contents.
 A rehype plugin placed directly after rehype-slug collects them, so the ids are the rendered ones; do not re-derive them from the Markdown.
 The table of contents shows beside posts from `xl` up; the reading progress bar is a CSS scroll-driven animation in `globals.css` with no JavaScript.
+Project pages compile the same way, and show the table of contents under the project's facts once a case study has more than one `h2`.
+
+### Portfolio layout
+
+The portfolio has two list layouts and two ways to show a project's tech stack, and `src/data/portfolio-layout.json` picks one of each:
+
+- `list`: `thumbnails`, a timeline grouped by year with a small thumbnail on each row, or `timeline`, text rows whose hovered project shows its thumbnail in the right-hand gutter.
+  Both have the platform filter above them.
+- `stack`: `icons`, each technology with its brand icon, or `badges`, outlined text pills.
+
+It is a file rather than a database setting so that every public page stays static and CI builds with no database.
+`src/lib/portfolio-layout.ts` parses it when the module loads, so an invalid file fails the build instead of falling back.
+The [admin portal](#admin-portal) changes it by committing to `main`, so a switch shows once that deploy has finished.
 
 The experience timeline is data, not MDX: `src/data/experience.ts`, kept in order by hand.
 Each entry's `mark` is the organization's logo from `src/assets/logos`, cropped to a circle.
@@ -83,9 +98,9 @@ Do not "modernize" `rounded-sm` to `rounded-xs`: the theme overrides `--radius-s
 
 Image `sizes` must describe the rendered width, or next/image serves its largest variant.
 Content-width images use `contentImageSizes` from `src/data/site.ts`; `%` is not a valid `sizes` length.
-Only the first two portfolio cards and a project's hero image are `priority`.
-Every image a reader waits for, from the portfolio cards to MDX screenshots and the byline avatar, renders through `FadeInImage` (`src/components/fade-in-image.tsx`): a blurred copy of itself until it loads, then a 300ms fade in.
-The copy is a 16px-wide version ImageKit makes on request, fetched by `getImagePlaceholder` (`src/lib/image-placeholder.ts`) while the page builds and inlined as a data URL of about 100 bytes; it needs a server component, so the portfolio page passes the cards theirs as props.
+Only a project's hero image is `priority`.
+Every image a reader waits for, from the portfolio thumbnails to MDX screenshots and the byline avatar, renders through `FadeInImage` (`src/components/fade-in-image.tsx`): a blurred copy of itself until it loads, then a 300ms fade in.
+The copy is a 16px-wide version ImageKit makes on request, fetched by `getImagePlaceholder` (`src/lib/image-placeholder.ts`) while the page builds and inlined as a data URL of about 100 bytes; it needs a server component, so the portfolio page passes the list's thumbnails theirs as props.
 If that fetch fails, the build warns and the image falls back to a grey pulsing `skeleton`.
 The wrapper is a block, as Tailwind's preflight makes every `<img>`, so it takes the image's margins and lays out exactly as the bare image did.
 An image with no known size holds a shape while it loads: a project's hero is declared 1536 by 936, the size of every thumbnail, and an MDX image holds 8:5, the shape of most screenshots, so a 16:9 one shifts slightly once it arrives.
@@ -95,8 +110,9 @@ Do not use next/image's own `placeholder="blur"`: it paints the blur as the imag
 A code block (`src/components/mdx/custom-pre.tsx`) is padded `px-4`, the same as its header, so the code lines up under the language icon and an 80-column line, the longest Prettier writes, fits the 644px column without scrolling.
 At `px-5` such a line overflows by 4px and its last character is clipped.
 
-From `xl` up, the right-hand gutter holds a post's table of contents and, on every page, the back-to-top link.
-The table of contents sits at `left-full ml-10` of the content column; `back-to-top.tsx` is fixed-position, so it repeats that offset as `calc(50% + 362px)`, and both change together if the column's width does.
+From `xl` up, the right-hand gutter holds a post's table of contents, a project's facts (role, year, platforms, links, stack) above its table of contents, the `timeline` list's hovered thumbnail, and, on every page, the back-to-top link.
+Below `xl` a project's facts sit under its title instead; the admin preview, which has no gutter, always shows them there.
+Everything in the gutter sits at `left-full ml-10` of the content column; `back-to-top.tsx` is fixed-position, so it repeats that offset as `calc(50% + 362px)`, and both change together if the column's width does.
 Below `xl` there is no gutter, and back to top is a round button in the corner, above the footer.
 
 ## Routing and SEO
@@ -221,6 +237,9 @@ Content stays in the repository: the portal is a form over the same files, and G
 - **Images upload straight to ImageKit** from the browser, signed by a server action (HMAC-SHA1 of a one-time token and expiry under `IMAGEKIT_PRIVATE_KEY`), so files never pass through a server action's 1 MB limit.
   Without `IMAGEKIT_PUBLIC_KEY` and `IMAGEKIT_PRIVATE_KEY` the upload buttons are hidden and image URLs can still be pasted.
   Posts upload into `/Blog/<slug>` and projects into `/Project Screenshots/<slug>`, where the existing screenshots are.
+- **The portfolio layout commits straight to `main`.** The dashboard's layout form writes `src/data/portfolio-layout.json` with no draft, since it is one setting and only the redeploy shows it; see [Portfolio layout](#portfolio-layout).
+  It sends the blob id it loaded, like the editor, so a change made elsewhere since is refused rather than overwritten.
+  The form says when `main` is ahead of what this deploy was built with.
 
 ### Sign-in
 

@@ -3,12 +3,20 @@ import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 
 import ArticleBody from '@/components/article-body';
-import Mdx from '@/components/mdx/mdx-components';
-import ProjectHeader from '@/components/portfolio/project-header';
+import TableOfContents from '@/components/blog/table-of-contents';
+import { compileMdx } from '@/components/mdx/mdx-components';
 import BackButton from '@/components/navigation/back-button';
+import ProjectFacts from '@/components/portfolio/project-facts';
+import ProjectHeader from '@/components/portfolio/project-header';
+import ProjectNavigation from '@/components/portfolio/project-navigation';
 import { siteName } from '@/data/site';
-import { getAllProjectSlugs, getProjectBySlug } from '@/lib/content';
+import {
+  getAdjacentProjects,
+  getAllProjectSlugs,
+  getProjectBySlug,
+} from '@/lib/content';
 import { parseContentDate } from '@/lib/date';
+import { portfolioLayout } from '@/lib/portfolio-layout';
 
 export const generateStaticParams = async () => {
   const slugs = await getAllProjectSlugs();
@@ -67,22 +75,53 @@ export default async function Page({
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
-  const project = await getProjectBySlug(slug);
+  const [project, adjacent] = await Promise.all([
+    getProjectBySlug(slug),
+    getAdjacentProjects(slug),
+  ]);
 
   if (!project) {
     notFound();
   }
 
+  const { content, headings } = await compileMdx(project.content);
+
   return (
     <main className="relative">
       <BackButton name="Portfolio" href="/portfolio" />
+      {/* The right-hand gutter only exists from xl up. Below that the facts
+          sit under the title instead. The facts scroll away with the header
+          they belong to, and only the table of contents sticks: both together
+          are taller than a laptop screen leaves above the back-to-top link.
+          The aside spans the article's height so the list can stick while
+          the article scrolls. */}
+      <aside className="absolute top-0 left-full hidden h-full xl:block">
+        <div className="ml-10 flex h-full w-56 flex-col gap-10">
+          <ProjectFacts
+            project={project}
+            stack={portfolioLayout.stack}
+            placement="gutter"
+          />
+          {headings.length > 1 && (
+            <div className="sticky top-32">
+              <TableOfContents headings={headings} />
+            </div>
+          )}
+        </div>
+      </aside>
 
       <article className="space-y-8">
-        <ProjectHeader project={project} />
+        <ProjectHeader
+          project={project}
+          stack={portfolioLayout.stack}
+          factsInGutter
+        />
 
-        <ArticleBody>
-          <Mdx source={project.content} />
-        </ArticleBody>
+        <ArticleBody>{content}</ArticleBody>
+
+        <footer className="border-t pt-8">
+          <ProjectNavigation {...adjacent} />
+        </footer>
       </article>
     </main>
   );

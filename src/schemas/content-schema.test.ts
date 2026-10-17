@@ -16,6 +16,7 @@ const project = {
   title: 'A project',
   date: '2023-10-28',
   role: 'Full-Stack Developer',
+  platforms: ['web'],
   summary: 'What it is',
   thumbnailUrl: 'https://ik.imagekit.io/ryangan/thumbnail.png',
   techStack: ['react', 'typescript'],
@@ -106,6 +107,24 @@ describe('ProjectFrontmatterSchema', () => {
     });
 
     expect(issuePaths(result)).toEqual(['techStack']);
+  });
+
+  it('rejects a project with no platform', () => {
+    const result = ProjectFrontmatterSchema.safeParse({
+      ...project,
+      platforms: [],
+    });
+
+    expect(issuePaths(result)).toEqual(['platforms']);
+  });
+
+  it('rejects a platform it does not know', () => {
+    const result = ProjectFrontmatterSchema.safeParse({
+      ...project,
+      platforms: ['web', 'android'],
+    });
+
+    expect(issuePaths(result)).toEqual(['platforms.1']);
   });
 
   it('rejects a thumbnail that is not a URL', () => {
