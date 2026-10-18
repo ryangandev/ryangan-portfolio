@@ -1,7 +1,7 @@
+import { ViewTransition } from 'react';
 import type { Metadata } from 'next';
 
 import { ThemeProvider } from 'next-themes';
-import { ViewTransitions } from 'next-view-transitions';
 import { Analytics } from '@vercel/analytics/next';
 import { SpeedInsights } from '@vercel/speed-insights/next';
 
@@ -50,37 +50,35 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <ViewTransitions>
-      <html
-        lang="en"
-        className="scroll-smooth"
-        data-scroll-behavior="smooth"
-        suppressHydrationWarning
+    <html
+      lang="en"
+      className="scroll-smooth"
+      data-scroll-behavior="smooth"
+      suppressHydrationWarning
+    >
+      <body
+        className={cn(
+          'flex min-h-screen flex-col color-level-3 antialiased selection:bg-neutral-300 selection:text-neutral-950 dark:selection:bg-neutral-700 dark:selection:text-neutral-50',
+          geistSans.className,
+        )}
       >
-        <body
-          className={cn(
-            'flex min-h-screen flex-col color-level-3 antialiased selection:bg-neutral-300 selection:text-neutral-950 dark:selection:bg-neutral-700 dark:selection:text-neutral-50',
-            geistSans.className,
-          )}
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="light"
+          enableSystem={false}
+          storageKey="rg-theme"
+          disableTransitionOnChange
         >
-          <ThemeProvider
-            attribute="class"
-            defaultTheme="light"
-            enableSystem={false}
-            storageKey="rg-theme"
-            disableTransitionOnChange
-          >
-            <div className="relative mx-auto w-full max-w-[692px] grow px-6 py-16 md:pt-32">
-              {children}
-            </div>
-            <SiteFooter />
-            <BackToTop />
-            <Analytics />
-            <SpeedInsights />
-            <Toaster richColors />
-          </ThemeProvider>
-        </body>
-      </html>
-    </ViewTransitions>
+          <div className="relative mx-auto w-full max-w-[692px] grow px-6 py-16 md:pt-32">
+            <ViewTransition>{children}</ViewTransition>
+          </div>
+          <SiteFooter />
+          <BackToTop />
+          <Analytics />
+          <SpeedInsights />
+          <Toaster richColors />
+        </ThemeProvider>
+      </body>
+    </html>
   );
 }

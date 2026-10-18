@@ -1,4 +1,4 @@
-import { Link } from 'next-view-transitions';
+import Link from 'next/link';
 import { GoArrowLeft, GoArrowRight } from 'react-icons/go';
 
 import FadeInImage from '@/components/fade-in-image';

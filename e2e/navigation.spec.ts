@@ -58,11 +58,55 @@ test('moves through the portfolio without reloading, and back', async ({
   await project.click();
   await expect(page).toHaveURL(href);
 
-  await page.getByRole('link', { name: 'Portfolio' }).click();
+  // The list is the page before, so the way up goes back to it rather than
+  // stacking a second copy on top of the project.
+  await page.getByRole('link', { name: 'Back to Portfolio' }).click();
+  await expect(page).toHaveURL('/portfolio');
+
+  await page.goForward();
+  await expect(page).toHaveURL(href);
+
+  await check();
+});
+
+test('goes up from a project the list did not open', async ({ page }) => {
+  // A featured project, opened from the home page rather than the list
+  await page.goto('/');
+  const href = (await page
+    .locator('main a[href^="/portfolio/"]')
+    .first()
+    .getAttribute('href'))!;
+
+  await page.goto(href);
+  const check = await watchNavigation(page);
+
+  await page.getByRole('link', { name: 'Back to Portfolio' }).click();
   await expect(page).toHaveURL('/portfolio');
 
   await page.goBack();
   await expect(page).toHaveURL(href);
+
+  await check();
+});
+
+test('goes back up to where the reader left the page', async ({ page }) => {
+  await page.goto('/');
+  const check = await watchNavigation(page);
+
+  // The blog link is near the bottom of the home page, well past one screen.
+  const blog = page.locator('main a[href="/blog"]');
+
+  await blog.scrollIntoViewIfNeeded();
+  const scrolledTo = await page.evaluate(() => window.scrollY);
+
+  expect(scrolledTo).toBeGreaterThan(0);
+
+  await blog.click();
+  await expect(page).toHaveURL('/blog');
+
+  await page.getByRole('link', { name: 'Back to Home' }).click();
+  await expect(page).toHaveURL('/');
+  await expect.poll(() => page.evaluate(() => window.scrollY)).toBe(scrolledTo);
 
   await check();
 });
