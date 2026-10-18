@@ -89,6 +89,7 @@ Tailwind 4 is configured entirely in CSS; there is no `tailwind.config.ts`.
 
 - The theme lives in `@theme inline`.
 - Dark mode is a `@custom-variant` matching the `.dark` class next-themes sets.
+  Visitors start on their system's setting, and the footer's Light, System, and Dark radios override it; the choice is kept in localStorage as `rg-theme`.
 - `mdx.css` is `@import`ed there rather than from components, because v4 `@apply` needs a shared context.
 - The `color-level-*` helpers are `@utility` rules.
   Every step holds 4.5:1 on its background in both themes except `color-level-6`, which is only for disabled text; dark `color-level-5` is an arbitrary `oklch(63% 0 0)` for that reason.

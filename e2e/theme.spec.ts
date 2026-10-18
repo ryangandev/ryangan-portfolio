@@ -2,16 +2,17 @@ import { expect, test } from './fixtures';
 
 const DARK = /(^|\s)dark(\s|$)/;
 
-test('toggles the theme and keeps it across reloads and navigation', async ({
+test('switches the theme and keeps it across reloads and navigation', async ({
   page,
 }) => {
   const html = page.locator('html');
-  const toggle = page.getByRole('button', { name: 'Toggle theme' });
+  const theme = page.getByRole('group', { name: 'Theme' });
 
   await page.goto('/');
   await expect(html).not.toHaveClass(DARK);
+  await expect(theme.getByRole('radio', { name: 'System' })).toBeChecked();
 
-  await toggle.click();
+  await theme.getByTitle('Dark').click();
   await expect(html).toHaveClass(DARK);
   expect(await page.evaluate(() => localStorage.getItem('rg-theme'))).toBe(
     'dark',
@@ -19,12 +20,34 @@ test('toggles the theme and keeps it across reloads and navigation', async ({
 
   await page.reload();
   await expect(html).toHaveClass(DARK);
+  await expect(theme.getByRole('radio', { name: 'Dark' })).toBeChecked();
 
   await page.locator('main a[href="/portfolio"]').click();
   await expect(page).toHaveURL('/portfolio');
   await expect(html).toHaveClass(DARK);
 
-  await toggle.click();
+  await theme.getByTitle('Light').click();
+  await expect(html).not.toHaveClass(DARK);
+});
+
+test('follows the system setting, including when it changes', async ({
+  page,
+}) => {
+  const html = page.locator('html');
+
+  await page.emulateMedia({ colorScheme: 'dark' });
+  await page.goto('/');
+  await expect(html).toHaveClass(DARK);
+
+  await page.emulateMedia({ colorScheme: 'light' });
+  await expect(html).not.toHaveClass(DARK);
+
+  // A choice of its own outranks the system's until System is chosen again.
+  const theme = page.getByRole('group', { name: 'Theme' });
+
+  await theme.getByTitle('Dark').click();
+  await expect(html).toHaveClass(DARK);
+  await theme.getByTitle('System').click();
   await expect(html).not.toHaveClass(DARK);
 });
 
