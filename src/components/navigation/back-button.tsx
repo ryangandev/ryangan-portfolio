@@ -1,25 +1,82 @@
-import { Link } from 'next-view-transitions';
-import { GoArrowUpLeft } from 'react-icons/go';
+'use client';
 
-import { cn } from '@/lib/utils';
+import { useRouter } from 'next/navigation';
+import Link from 'next/link';
+import { GoArrowLeft } from 'react-icons/go';
 
 type BackButtonProps = {
-  className?: string;
   name: string;
   href: string;
+  /**
+   * What follows the link down the left-hand gutter from xl up, such as a
+   * project's table of contents. Below xl it is not shown.
+   */
+  children?: React.ReactNode;
 };
 
-export default function BackButton({ className, name, href }: BackButtonProps) {
+/**
+ * The path of the page before this one in the tab, if it was on this site.
+ * Only the Navigation API can say; without it, null.
+ */
+const getPreviousPathname = () => {
+  if (!('navigation' in window) || !navigation.currentEntry) {
+    return null;
+  }
+
+  // `entries()` lists only this site's pages, so another site the reader came
+  // from never shows up here.
+  const previous = navigation.entries()[navigation.currentEntry.index - 1];
+
+  return previous?.url ? new URL(previous.url).pathname : null;
+};
+
+/**
+ * The way up to the page this one belongs to. When that is the page the reader
+ * just came from, it goes back instead, so the parent returns where it was
+ * left, scrolled as it was, and the browser's Back button does not then bounce
+ * the reader into the child again. Arriving from anywhere else, it is a plain
+ * link up.
+ *
+ * Below xl it sits above the page's title. From xl up it moves to the
+ * left-hand gutter and sticks there, with `children` under it, while the page
+ * scrolls. Narrower than xl, a window has no room left of the column for it.
+ */
+export default function BackButton({ name, href, children }: BackButtonProps) {
+  const router = useRouter();
+
+  const goBackIfParent = (event: React.MouseEvent<HTMLAnchorElement>) => {
+    const isPlainClick =
+      event.button === 0 &&
+      !event.metaKey &&
+      !event.ctrlKey &&
+      !event.shiftKey &&
+      !event.altKey;
+
+    if (isPlainClick && getPreviousPathname() === href) {
+      event.preventDefault();
+      router.back();
+    }
+  };
+
   return (
-    <Link
-      href={href}
-      className={cn(
-        'mb-8 flex items-center text-lg font-medium italic lg:absolute lg:-left-48',
-        className,
-      )}
-    >
-      <GoArrowUpLeft className="mr-2 inline-block h-6 w-6" />
-      {name}
-    </Link>
+    // Spans the page's height from xl up, so the rail inside can stick. It
+    // lets clicks through, and only the rail takes them.
+    <div className="mb-8 xl:pointer-events-none xl:absolute xl:inset-y-0 xl:right-full xl:mb-0">
+      <div className="xl:pointer-events-auto xl:sticky xl:top-32 xl:mr-10 xl:w-38">
+        <Link
+          href={href}
+          onClick={goBackIfParent}
+          className="group relative flex h-7 w-fit items-center gap-1.5 text-sm color-level-4 transition-colors after:absolute after:-inset-2 hover:color-level-2"
+        >
+          <GoArrowLeft
+            aria-hidden
+            className="size-4 transition-transform group-hover:-translate-x-0.5"
+          />
+          <span className="sr-only">Back to </span>
+          {name}
+        </Link>
+        {children && <div className="mt-6 hidden xl:block">{children}</div>}
+      </div>
+    </div>
   );
 }

@@ -1,6 +1,6 @@
 import React from 'react';
 import { format, formatDistanceToNow } from 'date-fns';
-import { Link } from 'next-view-transitions';
+import Link from 'next/link';
 import { ChevronRightIcon, Pencil2Icon, PlusIcon } from '@radix-ui/react-icons';
 
 import { signOut } from '@/auth';

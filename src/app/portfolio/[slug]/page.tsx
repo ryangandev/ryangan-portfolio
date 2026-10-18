@@ -88,14 +88,16 @@ export default async function Page({
 
   return (
     <main className="relative">
-      <BackButton name="Portfolio" href="/portfolio" />
       {/* The gutters only exist from xl up. Below that the facts sit under
-          the title, and there is no table of contents. The facts take the
-          right-hand gutter; the table of contents takes the left, under the
-          back button and aligned with it. Both stick while the article
-          scrolls, so each gutter spans the article's height. The facts stick
-          only in a `tall` window: in a shorter one they would run under the
-          back-to-top link, so they scroll away with the header instead. */}
+          the title, and there is no table of contents. The table of contents
+          rides in the left-hand gutter under the back button, which sticks
+          with it. The facts take the right-hand gutter and stick too, so it
+          spans the article's height, but only in a `tall` window: in a
+          shorter one they would run under the back-to-top link, so they
+          scroll away with the header instead. */}
+      <BackButton name="Portfolio" href="/portfolio">
+        {headings.length > 1 && <TableOfContents headings={headings} />}
+      </BackButton>
       <aside className="absolute inset-y-0 left-full hidden xl:block">
         <div className="ml-10 w-56 tall:sticky tall:top-32">
           <ProjectFacts
@@ -105,16 +107,6 @@ export default async function Page({
           />
         </div>
       </aside>
-      {headings.length > 1 && (
-        // 192px wide, so its left edge lines up with the back button's at
-        // `lg:-left-48`. It starts below the button rather than spanning the
-        // whole height: on top of the button, it took the button's clicks.
-        <aside className="absolute top-16 right-full bottom-0 hidden xl:block">
-          <div className="sticky top-32 mr-10 w-38">
-            <TableOfContents headings={headings} />
-          </div>
-        </aside>
-      )}
 
       <article className="space-y-8">
         <ProjectHeader

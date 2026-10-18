@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { Link } from 'next-view-transitions';
+import Link from 'next/link';
 
 import FadeInImage from '@/components/fade-in-image';
 import { PlatformName, platformLabels, platformNames } from '@/data/platforms';

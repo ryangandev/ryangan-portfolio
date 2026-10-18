@@ -1,5 +1,5 @@
 import { format } from 'date-fns';
-import { Link } from 'next-view-transitions';
+import Link from 'next/link';
 
 import { parseContentDate } from '@/lib/date';
 import { cn } from '@/lib/utils';
