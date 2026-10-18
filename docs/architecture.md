@@ -152,6 +152,7 @@ It also fought the view transitions: animating into a loading screen and back ou
 
 If a genuinely slow route is ever added, give it a scoped `loading.tsx` in that segment, and prefer a top progress bar over a layout-replacing spinner.
 The admin pages are the one case: they wait on GitHub, so `src/app/admin/loading.tsx` shows a bar across the top.
+The bar is fixed to the window but sits inside an empty block in the content column, because the page cross-fade measures whatever the loading state renders: measuring the bar itself, a 2px strip across the top, made each admin page shrink into the corner and grow back out.
 Because they stream, an admin URL that does not exist answers 200 with the not-found page, the status having gone out before the page decides; behind sign-in and `noindex`, that costs nothing.
 
 ### Not found
