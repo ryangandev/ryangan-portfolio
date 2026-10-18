@@ -13,6 +13,13 @@
 @custom-variant scripting (@media (scripting: enabled));
 
 /*
+  A window tall enough for a project's facts to stick in the gutter and still
+  clear the back-to-top link under them. `e2e/portfolio.spec.ts` checks every
+  project at this height.
+*/
+@custom-variant tall (@media (min-height: 50rem));
+
+/*
   How far up from its bottom edge `Expandable` fades its content out.
   Registered as a length so the fade can transition; an unregistered custom
   property would jump.
