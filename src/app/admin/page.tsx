@@ -1,9 +1,11 @@
 import React from 'react';
 import { format, formatDistanceToNow } from 'date-fns';
+import { headers } from 'next/headers';
 import Link from 'next/link';
+import { redirect } from 'next/navigation';
 import { ChevronRightIcon, Pencil2Icon, PlusIcon } from '@radix-ui/react-icons';
 
-import { signOut } from '@/auth';
+import { getAuth } from '@/auth';
 import AdminProblem from '@/components/admin/admin-problem';
 import PortfolioLayoutForm from '@/components/admin/portfolio-layout-form';
 import BackButton from '@/components/navigation/back-button';
@@ -186,7 +188,8 @@ export default async function Page() {
           action={async () => {
             'use server';
 
-            await signOut({ redirectTo: '/admin/sign-in' });
+            await getAuth().api.signOut({ headers: await headers() });
+            redirect('/admin/sign-in');
           }}
         >
           <span>{admin.login ? `@${admin.login}` : admin.name}</span>

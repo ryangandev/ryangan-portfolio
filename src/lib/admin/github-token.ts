@@ -2,18 +2,20 @@ import { db } from '@/lib/db';
 import { reauthorize } from '@/lib/admin/errors';
 
 /** Refresh this long before expiry, so a token cannot lapse mid-request */
-const EXPIRY_MARGIN_SECONDS = 60;
+const EXPIRY_MARGIN_MS = 60_000;
 
 type GitHubTokens = {
-  access_token: string;
-  refresh_token?: string;
-  expires_at?: number;
+  accessToken: string;
+  refreshToken: string | null;
+  accessTokenExpiresAt: Date | null;
+  refreshTokenExpiresAt: Date | null;
 };
 
-const nowInSeconds = () => Math.floor(Date.now() / 1000);
+const isFresh = (expiresAt: Date | null) =>
+  expiresAt === null || expiresAt.getTime() > Date.now() + EXPIRY_MARGIN_MS;
 
-const isFresh = (expiresAt: number | null) =>
-  expiresAt === null || expiresAt > nowInSeconds() + EXPIRY_MARGIN_SECONDS;
+const inSeconds = (seconds: unknown) =>
+  typeof seconds === 'number' ? new Date(Date.now() + seconds * 1000) : null;
 
 /**
  * Trade a refresh token for a new pair of tokens
@@ -44,34 +46,12 @@ const refreshTokens = async (
   }
 
   return {
-    access_token: body.access_token,
-    refresh_token: body.refresh_token,
-    expires_at:
-      typeof body.expires_in === 'number'
-        ? nowInSeconds() + body.expires_in
-        : undefined,
+    accessToken: body.access_token,
+    refreshToken:
+      typeof body.refresh_token === 'string' ? body.refresh_token : null,
+    accessTokenExpiresAt: inSeconds(body.expires_in),
+    refreshTokenExpiresAt: inSeconds(body.refresh_token_expires_in),
   };
-};
-
-/**
- * Store the tokens from a sign-in on the user's GitHub account row.
- *
- * Auth.js writes them when it first links an account and never again, so
- * without this a second sign-in would leave the old, possibly revoked, tokens
- * in place, and signing in again would not fix an expired authorization.
- */
-export const storeGitHubTokens = async (
-  userId: string,
-  tokens: GitHubTokens,
-): Promise<void> => {
-  await db.account.updateMany({
-    where: { userId, provider: 'github' },
-    data: {
-      access_token: tokens.access_token,
-      refresh_token: tokens.refresh_token ?? null,
-      expires_at: tokens.expires_at ?? null,
-    },
-  });
 };
 
 /**
@@ -79,28 +59,30 @@ export const storeGitHubTokens = async (
  * expire.
  *
  * Tokens from a GitHub App expire after eight hours and come with a refresh
- * token; tokens from an OAuth App do not expire, and have neither.
+ * token; tokens from an OAuth App do not expire, and have neither. Better Auth
+ * stores a fresh pair on every sign-in. It can refresh them too, but with a
+ * five-second margin and no answer to the race below, so this does it.
  *
  * @throws AdminError `reauthorize` when there is no usable token
  */
 export const getGitHubToken = async (userId: string): Promise<string> => {
   const account = await db.account.findFirst({
-    where: { userId, provider: 'github' },
+    where: { userId, providerId: 'github' },
   });
 
-  if (!account?.access_token) {
+  if (!account?.accessToken) {
     throw reauthorize();
   }
 
-  if (isFresh(account.expires_at)) {
-    return account.access_token;
+  if (isFresh(account.accessTokenExpiresAt)) {
+    return account.accessToken;
   }
 
-  if (!account.refresh_token) {
+  if (!account.refreshToken) {
     throw reauthorize();
   }
 
-  const refreshed = await refreshTokens(account.refresh_token);
+  const refreshed = await refreshTokens(account.refreshToken);
 
   if (!refreshed) {
     // GitHub rotates the refresh token on every use, so two requests that
@@ -108,14 +90,14 @@ export const getGitHubToken = async (userId: string): Promise<string> => {
     // stored a fresh access token by now.
     const latest = await db.account.findUnique({ where: { id: account.id } });
 
-    if (latest?.access_token && isFresh(latest.expires_at)) {
-      return latest.access_token;
+    if (latest?.accessToken && isFresh(latest.accessTokenExpiresAt)) {
+      return latest.accessToken;
     }
 
     throw reauthorize();
   }
 
-  await storeGitHubTokens(userId, refreshed);
+  await db.account.update({ where: { id: account.id }, data: refreshed });
 
-  return refreshed.access_token;
+  return refreshed.accessToken;
 };

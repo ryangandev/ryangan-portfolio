@@ -1,7 +1,8 @@
 import React from 'react';
+import { redirect } from 'next/navigation';
 import { AiFillGithub } from 'react-icons/ai';
 
-import { signIn } from '@/auth';
+import { getAuth } from '@/auth';
 import { Button } from '@/components/ui/button';
 
 type GitHubSignInButtonProps = {
@@ -20,7 +21,21 @@ const GitHubSignInButton = ({
       action={async () => {
         'use server';
 
-        await signIn('github', { redirectTo: returnTo });
+        const { url } = await getAuth().api.signInSocial({
+          body: {
+            provider: 'github',
+            callbackURL: returnTo,
+            // Back to the sign-in page with the reason, still headed for the
+            // same place on the next try.
+            errorCallbackURL: `/admin/sign-in?callbackUrl=${encodeURIComponent(returnTo)}`,
+          },
+        });
+
+        if (!url) {
+          throw new Error('Better Auth returned no GitHub authorize URL');
+        }
+
+        redirect(url);
       }}
     >
       <Button type="submit" className="gap-2">

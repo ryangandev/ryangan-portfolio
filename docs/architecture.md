@@ -16,7 +16,7 @@ Last reviewed: 2026-10-17.
 | Post view counter                         | `src/lib/views.ts`, `src/actions/post-actions.ts`, `src/components/blog/view-counter.tsx`                                                                        |
 | Contact form                              | `src/app/contact`, `src/components/contact`, `src/actions/contact-actions.ts`, `src/schemas/contact-schema.ts`, `src/lib/rate-limit.ts`, `src/email`             |
 | Admin portal                              | `src/app/admin`, `src/components/admin`, `src/actions/admin-actions.ts`, `src/lib/admin`, `src/schemas/admin-content-schema.ts`, `src/lib/collections.ts`        |
-| Sign-in                                   | `src/auth.ts`, `src/app/api/auth/[...nextauth]/route.ts`, `src/types/next-auth.d.ts`                                                                             |
+| Sign-in                                   | `src/auth.ts`, `src/app/api/auth/callback/github/route.ts`, `src/lib/admin/session.ts`                                                                           |
 | Database                                  | `prisma/schema.prisma`, `prisma.config.ts`, `src/lib/db.ts`; the generated client is in `src/generated/prisma`, gitignored and excluded from ESLint and Prettier |
 | Footer, back link, and back to top        | `src/components/site-footer.tsx`, `src/components/navigation/back-button.tsx`, `src/components/back-to-top.tsx`                                                  |
 | Theme, fonts, and global styles           | `src/styles/globals.css`, `src/assets/fonts.ts`, `src/components/theme-toggle.tsx`                                                                               |
@@ -187,7 +187,9 @@ Older Prisma recipes do not apply:
 - **The build runs `prisma generate` itself.** The client is generated into `src/generated/prisma`, which is gitignored, so a fresh clone does not have it.
   `postinstall` also generates, but only on a real install: pnpm 12 skips the install, lifecycle scripts included, when `node_modules` is already current, and a restored Vercel build cache is exactly that.
   Relying on `postinstall` alone fails every deploy after the first; CI deletes the generated client before building to catch it.
-- `User` and `Account` are the Auth.js tables behind the [admin portal](#admin-portal)'s sign-in.
+- `User`, `Account`, `Session`, and `Verification` are Better Auth's tables behind the [admin portal](#admin-portal)'s sign-in.
+  Their columns keep the snake_case names they had under Auth.js, through `@map`.
+  Nothing writes to `verifications`, since OAuth state rides in a cookie, but Better Auth's Prisma adapter refuses to start without it.
   The empty `GuestbookNote` stays in the schema although nothing reads it: it is a live table, and `prisma db push` would drop it.
   Whether to build on it or drop it is an [open decision](status.md#open-decisions).
 
@@ -265,16 +267,23 @@ Content stays in the repository: the portal is a form over the same files, and G
 
 ### Sign-in
 
-Auth.js v5 (`src/auth.ts`) with GitHub as the only provider, JWT sessions, and the Prisma adapter for the `users` and `accounts` tables.
+Better Auth (`src/auth.ts`) with GitHub as the only provider, sessions in the `sessions` table, and the Prisma adapter.
+The server calls it through `getAuth().api`, which creates it on first use: Better Auth checks its secret as soon as it is created, and the build, which imports it from every admin route, has none. The only route it serves over HTTP is GitHub's callback, `src/app/api/auth/callback/github/route.ts`, so the rest of its endpoints do not exist.
 
 - **The provider is a GitHub App**, "Ryan Gan Portfolio Admin", installed on this repository alone, with read and write access to contents and pull requests and read access to email addresses.
   Its token reaches this one repository, where an OAuth App's `public_repo` token could write to every public repository the account has.
-  It needs `AUTH_GITHUB_ID` and `AUTH_GITHUB_SECRET`, and `AUTH_SECRET` signs the session.
-- **Only someone who can push to the repository gets in.** The `signIn` callback asks GitHub, before Auth.js writes anything, so a refused sign-in leaves no row behind.
-  Admins get the `ADMIN` role, and every admin page and server action checks for it itself: a layout does not protect server actions, which are public endpoints.
+  It needs `AUTH_GITHUB_ID` and `AUTH_GITHUB_SECRET`, and `AUTH_SECRET` signs the session cookie and encrypts the OAuth state cookie.
+- **Only someone who can push to the repository gets in.** The provider's `getUserInfo` asks GitHub before Better Auth writes anything, and returning nothing refuses the sign-in, so it leaves no row behind.
+  A refused sign-in comes back to the sign-in page with `error=unable_to_get_user_info`.
+- **Admins get the `ADMIN` role** from a `session.create.before` hook, since only someone the gate let through ever gets a session.
+  `getUserInfo` cannot set it: Better Auth drops fields marked `input: false` from what a provider returns, which is what keeps a visitor from setting their own role.
+  Every admin page and server action checks the role itself with `requireAdmin` or `getAdmin`: a layout does not protect server actions, which are public endpoints.
+- **Sessions are rows**, valid for a week, so deleting a row signs that browser out.
+  Signing out deletes the row.
 - **The portal commits as the signed-in user**, with their GitHub token from `accounts`.
-  Auth.js stores tokens only when it first links an account, so the `jwt` callback stores them again on every sign-in.
-  GitHub App tokens expire after eight hours; `getGitHubToken` (`src/lib/admin/github-token.ts`) refreshes them, and asks for a new sign-in once the refresh token is spent.
+  Better Auth stores a fresh pair on every sign-in.
+  GitHub App tokens expire after eight hours; `getGitHubToken` (`src/lib/admin/github-token.ts`) refreshes them a minute early, and asks for a new sign-in once the refresh token is spent.
+- **The base URL** is `BETTER_AUTH_URL`, or else the live site in a production build and `http://localhost:3000` otherwise.
 - **The callback URLs** registered on the app are `https://ryangan.me/api/auth/callback/github` and `http://localhost:3000/api/auth/callback/github`, so sign-in works locally only on port 3000.
 
 ## Security headers
@@ -326,8 +335,6 @@ pnpm 11 and later no longer read the `pnpm` field in `package.json`; the setting
 - **TypeScript 6.0.3.** TypeScript 7.0 ships no programmatic JS API, so typescript-eslint cannot load and `pnpm lint` fails, even though `next build` itself runs on 7.0.
   Revisit at 7.1; Dependabot ignores TypeScript majors until then.
 - **Prisma 7.** Prisma 8 is published under `latest` but is still a release candidate.
-- **next-auth 5.0.0-beta.32**, pinned exactly because v5 has only ever been published as betas, and a caret range would take the next one unreviewed.
-  It is the maintained line for Next 16 and the one whose adapter matches the `users` and `accounts` tables.
 - **Runtime dependencies that look like dev tools.** `prettier` and the rehype and remark plugins are `dependencies`: the admin portal formats and compiles MDX at request time, not only in the build.
 
 `tests/upstream-pins.test.ts` reads the installed packages and fails, naming what to remove, once a dependency update makes the ESLint or TypeScript workaround unnecessary.
@@ -349,7 +356,7 @@ The browser tests run against a production build, since static rendering, prefet
 - Resend is pointed at `e2e/mock-resend.mjs` through `RESEND_BASE_URL`, so no email is sent.
   A subject containing `resend-fail` makes it answer with an error.
 - Each contact test sends its own `x-forwarded-for`, so the rate limit, which keys on the caller's IP, cannot leak between tests.
-- The Auth.js variables are placeholders, with `AUTH_TRUST_HOST`, which Vercel implies and `next start` does not.
+- The sign-in variables are placeholders, and `BETTER_AUTH_URL` is the test server's, so the authorize URL sends GitHub back to it.
 
 Any console error or uncaught exception fails a test, since that is how hydration mismatches surface.
 Vercel's analytics scripts, which only exist on Vercel, are answered with an empty script.
