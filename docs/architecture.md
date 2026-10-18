@@ -137,6 +137,12 @@ When the parent is the page the reader just came from, it goes back in history i
 It asks the Navigation API (`navigation.entries()`) what the previous page was; without that API it is always a plain link up.
 `e2e/navigation.spec.ts` covers both ways and the scroll position.
 
+The page does not scroll smoothly as a whole: there is no `scroll-smooth` on `<html>`, so Back and Forward put the reader where they were on the first frame instead of scrolling there from the top, and a new page starts at the top at once.
+Links within a page scroll smoothly by themselves through `InPageLink` (`src/components/in-page-link.tsx`): the table of contents, and every `#` link in MDX by way of `mdx/custom-link.tsx`, such as heading anchors and footnotes.
+It does what Next does for a hash link, a history entry pushed with `history.pushState`, then `scrollIntoView`, then focus on the section, but smoothly; for a reader who asks for reduced motion it leaves the click to the browser, which jumps.
+Link to a part of the same page with `InPageLink`, not a plain anchor or `next/link`, or the jump is instant.
+`e2e/navigation.spec.ts` samples the scroll position on every frame to check both: Back lands at once, and the table of contents scrolls smoothly unless motion is reduced.
+
 ### No loading.tsx, on purpose
 
 There is deliberately no root `loading.tsx`.

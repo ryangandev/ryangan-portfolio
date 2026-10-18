@@ -42,6 +42,39 @@ const watchNavigation = async (page: Page) => {
   };
 };
 
+type ScrollProbe = { scrollSamples?: number[]; stopSampling?: () => void };
+
+/**
+ * Record the scroll position on every frame from now on, so a scroll that
+ * animates shows up as the positions it passed through on the way. Call the
+ * returned function to stop and read them.
+ */
+const sampleScroll = async (page: Page) => {
+  await page.evaluate(() => {
+    const probe = window as unknown as ScrollProbe;
+    const samples: number[] = [];
+    let frame = 0;
+
+    const sample = () => {
+      samples.push(Math.round(window.scrollY));
+      frame = requestAnimationFrame(sample);
+    };
+
+    probe.scrollSamples = samples;
+    probe.stopSampling = () => cancelAnimationFrame(frame);
+    sample();
+  });
+
+  return () =>
+    page.evaluate(() => {
+      const probe = window as unknown as ScrollProbe;
+
+      probe.stopSampling?.();
+
+      return probe.scrollSamples ?? [];
+    });
+};
+
 test('moves through the portfolio without reloading, and back', async ({
   page,
 }) => {
@@ -103,12 +136,115 @@ test('goes back up to where the reader left the page', async ({ page }) => {
 
   await blog.click();
   await expect(page).toHaveURL('/blog');
+  // A new page starts at the top.
+  await expect.poll(() => page.evaluate(() => window.scrollY)).toBe(0);
+
+  // The way back puts the reader where they were at once, rather than
+  // scrolling them there from the top: every frame is either the page being
+  // left, scrolled to the top, or the home page where it was left.
+  let stopSampling = await sampleScroll(page);
 
   await page.getByRole('link', { name: 'Back to Home' }).click();
   await expect(page).toHaveURL('/');
   await expect.poll(() => page.evaluate(() => window.scrollY)).toBe(scrolledTo);
 
+  expect(
+    (await stopSampling()).filter((y) => y !== 0 && y !== scrolledTo),
+    'frames on the way back',
+  ).toEqual([]);
+
+  // The browser's own Back button does the same.
+  await page.goForward();
+  await expect(page).toHaveURL('/blog');
+  await expect.poll(() => page.evaluate(() => window.scrollY)).toBe(0);
+
+  stopSampling = await sampleScroll(page);
+
+  await page.goBack();
+  await expect(page).toHaveURL('/');
+  await expect.poll(() => page.evaluate(() => window.scrollY)).toBe(scrolledTo);
+
+  expect(
+    (await stopSampling()).filter((y) => y !== 0 && y !== scrolledTo),
+    'frames on the way back',
+  ).toEqual([]);
+
   await check();
+});
+
+test.describe('the table of contents', () => {
+  // The table of contents is in the right-hand gutter, which exists from xl up.
+  test.use({ viewport: { width: 1280, height: 800 } });
+
+  const post = '/blog/handle-form-loading-states';
+
+  /**
+   * Click the next to last entry, a long jump that still has room below to
+   * park its heading at the top, and return every scroll position on the way.
+   */
+  const jumpToSection = async (page: Page) => {
+    const entry = page
+      .getByRole('navigation', { name: 'On this page' })
+      .getByRole('link')
+      .nth(-2);
+    const id = (await entry.getAttribute('href'))!.slice(1);
+    const heading = page.locator(`[id="${id}"]`);
+    const stopSampling = await sampleScroll(page);
+
+    await entry.click();
+    await expect(page).toHaveURL(`${post}#${id}`);
+    await expect(entry).toHaveAttribute('aria-current', 'location');
+    // `scroll-mt-20` parks the heading 80px below the top.
+    await expect
+      .poll(() => heading.evaluate((el) => el.getBoundingClientRect().top))
+      .toBeCloseTo(80, 0);
+
+    return stopSampling();
+  };
+
+  test('scrolls to a section, and back', async ({ page }) => {
+    await page.goto(post);
+    const check = await watchNavigation(page);
+
+    const samples = await jumpToSection(page);
+    const landedAt = samples.at(-1)!;
+
+    // Smoothly: the jump passes through positions between the top and the
+    // section.
+    expect(
+      samples.filter((y) => y !== 0 && y !== landedAt).length,
+      'frames on the way to the section',
+    ).toBeGreaterThan(2);
+
+    // Back returns to the top of the post, at once.
+    const stopSampling = await sampleScroll(page);
+
+    await page.goBack();
+    await expect(page).toHaveURL(post);
+    await expect.poll(() => page.evaluate(() => window.scrollY)).toBe(0);
+
+    expect(
+      (await stopSampling()).filter((y) => y !== 0 && y !== landedAt),
+      'frames on the way back',
+    ).toEqual([]);
+
+    await check();
+  });
+
+  test('jumps to a section when the reader asks for less motion', async ({
+    page,
+  }) => {
+    await page.emulateMedia({ reducedMotion: 'reduce' });
+    await page.goto(post);
+
+    const samples = await jumpToSection(page);
+    const landedAt = samples.at(-1)!;
+
+    expect(
+      samples.filter((y) => y !== 0 && y !== landedAt),
+      'frames on the way to the section',
+    ).toEqual([]);
+  });
 });
 
 test('opens a post from the blog without reloading, and back', async ({

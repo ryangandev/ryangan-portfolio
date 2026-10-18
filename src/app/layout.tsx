@@ -50,12 +50,9 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html
-      lang="en"
-      className="scroll-smooth"
-      data-scroll-behavior="smooth"
-      suppressHydrationWarning
-    >
+    // No `scroll-smooth` here: it would animate Back and Forward too. Links
+    // within a page scroll smoothly by themselves; see `in-page-link.tsx`.
+    <html lang="en" suppressHydrationWarning>
       <body
         className={cn(
           'flex min-h-screen flex-col color-level-3 antialiased selection:bg-neutral-300 selection:text-neutral-950 dark:selection:bg-neutral-700 dark:selection:text-neutral-50',

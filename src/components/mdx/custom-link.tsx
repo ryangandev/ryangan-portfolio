@@ -1,12 +1,12 @@
 import React from 'react';
-import Link, { LinkProps } from 'next/link';
+import Link from 'next/link';
 import { LuArrowUpRight } from 'react-icons/lu';
 
 import { linkArrowClassName, linkClassName } from '@/components/animated-link';
+import InPageLink from '@/components/in-page-link';
 
-type CustomLinkProps = LinkProps & {
+type CustomLinkProps = React.ComponentPropsWithoutRef<'a'> & {
   href: string;
-  children: React.ReactNode;
 };
 
 const CustomLink: React.FC<CustomLinkProps> = ({
@@ -14,8 +14,13 @@ const CustomLink: React.FC<CustomLinkProps> = ({
   children,
   ...props
 }) => {
+  // A heading's own link, a footnote, or its way back to the text
   if (href.startsWith('#')) {
-    return <Link {...props} href={href} />;
+    return (
+      <InPageLink {...props} href={href}>
+        {children}
+      </InPageLink>
+    );
   }
 
   return (
