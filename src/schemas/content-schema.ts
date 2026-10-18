@@ -4,18 +4,13 @@ import { platformNames } from '@/data/platforms';
 import { techStackNames } from '@/data/tech-stack';
 
 /**
- * A calendar date written `YYYY-MM-DD`.
- *
- * YAML reads an unquoted `2023-03-20` as a timestamp, which gray-matter hands
- * over as a Date at UTC midnight. Both spellings are accepted and normalized to
- * the string, so quoting stays a matter of style rather than a way to break the
- * build. `z.iso.date()` rejects unpadded (`2023-3-20`) and impossible
- * (`2023-02-30`) dates.
+ * A calendar date written `YYYY-MM-DD`, quoted or not: frontmatter is YAML 1.2,
+ * which reads an unquoted date as a string. `z.iso.date()` rejects unpadded
+ * (`2023-3-20`) and impossible (`2023-02-30`) dates.
  */
-const ContentDate = z.preprocess(
-  (value) => (value instanceof Date ? value.toISOString().slice(0, 10) : value),
-  z.iso.date({ message: 'Expected a zero-padded date, e.g. 2023-03-20' }),
-);
+const ContentDate = z.iso.date({
+  message: 'Expected a zero-padded date, e.g. 2023-03-20',
+});
 
 const NonEmpty = z.string().trim().min(1, { message: 'Required' });
 

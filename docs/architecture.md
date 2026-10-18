@@ -28,10 +28,11 @@ Unit tests sit next to the code they cover as `*.test.ts`; see [Tests](#tests) f
 
 ## Content
 
-Projects and posts are MDX files with gray-matter frontmatter in `src/content/`, read by `src/lib/content.ts`.
+Projects and posts are MDX files with YAML frontmatter in `src/content/`, read by `src/lib/content.ts`.
 
 - **Frontmatter is parsed, not cast.** `src/schemas/content-schema.ts` validates every file against strict Zod schemas, so a missing field, a misspelled key, an unpadded date, or a tech stack slug with no icon fails the build, naming the file and the field.
   The post and project types in `src/models` are derived from those schemas.
+- **Frontmatter is YAML 1.2.** `parseFrontmatter` (`src/lib/frontmatter.ts`) splits it off with the `yaml` package, so an unquoted `2023-03-20` stays a string rather than becoming a UTC Date, and quoting a date is a matter of style.
 - **Unknown slugs return null** rather than throwing, and the `[slug]` pages turn that into a 404.
   Wrapping the readers in a try/catch that returns null would make a malformed file build as a 404 instead of failing.
 - **Readers are memoized per request** with React's `cache()`, so `generateMetadata` and the page share one file read.
@@ -53,7 +54,9 @@ Reading time is derived, never authored.
 The [admin portal](#admin-portal) writes these same files, through GitHub.
 `src/lib/collections.ts` names the two directories for it; `src/lib/content.ts` spells them out again, because the bundler only scopes file tracing to paths it can read statically, and otherwise ships the whole project with every server function.
 
-Posts are compiled with `compileMdx` (`src/components/mdx/mdx-components.tsx`), which also returns the post's `h2`s for the table of contents.
+Posts are compiled with `compileMdx` (`src/components/mdx/mdx-components.tsx`), which runs `@mdx-js/mdx`'s `evaluate` and also returns the post's `h2`s for the table of contents.
+Compiled MDX runs as code on the server, and the admin portal compiles drafts to preview them, so a remark plugin refuses any JavaScript first: imports, exports, `{expressions}`, and expression or spread attributes, naming where.
+Components take literal attributes only, such as `<Callout type="warning">`; a literal brace in prose is written `\{`.
 A rehype plugin placed directly after rehype-slug collects them, so the ids are the rendered ones; do not re-derive them from the Markdown.
 The table of contents shows beside posts from `xl` up; the reading progress bar is a CSS scroll-driven animation in `globals.css` with no JavaScript.
 Project pages compile the same way, and show the table of contents in the left-hand gutter once a case study has more than one `h2`.
@@ -184,6 +187,7 @@ Older Prisma recipes do not apply:
 
 The database is only ever an enhancement: the site builds and runs with no database reachable.
 `.env.example` documents every variable.
+Next loads `.env` for the app; `prisma.config.ts` loads it for the Prisma CLI with Node's `process.loadEnvFile`, and only when the file exists, since CI and Vercel set their variables directly.
 
 ## Post views
 
