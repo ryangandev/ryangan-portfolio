@@ -1,10 +1,10 @@
 import fs from 'fs';
 import path from 'path';
 import { cache } from 'react';
-import matter from 'gray-matter';
 import { z } from 'zod';
 
 import { parseContentDate } from '@/lib/date';
+import { parseFrontmatter } from '@/lib/frontmatter';
 import { getReadingTime } from '@/lib/reading-time';
 import { toTopicSlug } from '@/lib/topics';
 import { PostData, PostMetadata, Topic } from '@/models/post';
@@ -58,7 +58,7 @@ const readContentFile = async <Schema extends z.ZodType>(
   schema: Schema,
 ): Promise<{ frontmatter: z.output<Schema>; content: string }> => {
   const filePath = path.join(directory, `${slug}.mdx`);
-  const { data, content } = matter(
+  const { data, content } = parseFrontmatter(
     await fs.promises.readFile(filePath, 'utf8'),
   );
   const result = schema.safeParse(data);

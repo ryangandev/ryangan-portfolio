@@ -1,5 +1,11 @@
-import 'dotenv/config';
+import fs from 'node:fs';
 import { defineConfig, env } from 'prisma/config';
+
+// Next loads `.env` for the app; the Prisma CLI does not. CI and Vercel set
+// their variables directly and have no file, and a variable already set wins.
+if (fs.existsSync('.env')) {
+  process.loadEnvFile('.env');
+}
 
 /**
  * Prisma 7 moved the connection URL out of `schema.prisma` and into this file.

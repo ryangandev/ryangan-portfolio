@@ -1,8 +1,8 @@
 import { createHash } from 'crypto';
-import matter from 'gray-matter';
 import { z } from 'zod';
 
 import { Collection, collections } from '@/lib/collections';
+import { parseFrontmatter } from '@/lib/frontmatter';
 import type {
   ContentFormValues,
   PostFormValues,
@@ -79,7 +79,7 @@ export const parseContentFile = <C extends Collection>(
   collection: C,
   source: string,
 ): { frontmatter: ContentFrontmatter[C]; body: string } => {
-  const { data, content } = matter(source);
+  const { data, content } = parseFrontmatter(source);
   const result = collections[collection].schema.safeParse(data);
 
   if (!result.success) {

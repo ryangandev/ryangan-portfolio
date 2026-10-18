@@ -35,15 +35,6 @@ describe('PostFrontmatterSchema', () => {
     });
   });
 
-  it('accepts an unquoted YAML date, which gray-matter hands over as a Date', () => {
-    const parsed = PostFrontmatterSchema.parse({
-      ...post,
-      publishedDate: new Date(Date.UTC(2024, 8, 20)),
-    });
-
-    expect(parsed.publishedDate).toBe('2024-09-20');
-  });
-
   it.each(['2024-9-20', '2024-02-30', 'September 20, 2024'])(
     'rejects the date %j',
     (publishedDate) => {

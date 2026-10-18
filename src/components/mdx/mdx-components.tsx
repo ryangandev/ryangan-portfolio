@@ -1,5 +1,7 @@
 import React from 'react';
-import { compileMDX, MDXRemote, MDXRemoteProps } from 'next-mdx-remote/rsc';
+import * as runtime from 'react/jsx-runtime';
+import { evaluate, type EvaluateOptions } from '@mdx-js/mdx';
+import type { MDXComponents } from 'mdx/types';
 import rehypeAutolinkHeadings from 'rehype-autolink-headings';
 import rehypePrettyCode from 'rehype-pretty-code';
 import rehypeSlug from 'rehype-slug';
@@ -11,17 +13,13 @@ import CustomImage from '@/components/mdx/custom-image';
 import CustomLink from '@/components/mdx/custom-link';
 import CustomPre from '@/components/mdx/custom-pre';
 
-type MdxProps = {
-  source: MDXRemoteProps['source'];
-};
-
-const components = {
+const components: MDXComponents = {
   a: CustomLink,
   code: CustomCode,
   img: CustomImage,
   pre: CustomPre,
   Callout,
-} as MDXRemoteProps['components'];
+};
 
 /** A section heading, as rehype-slug left it */
 export type MdxHeading = {
@@ -62,6 +60,55 @@ const collectHeadings = (headings: MdxHeading[]) => () => (tree: HastNode) => {
   visit(tree);
 };
 
+type Point = { line: number; column: number };
+
+type MdastNode = {
+  type: string;
+  attributes?: { type: string; value?: unknown }[];
+  children?: MdastNode[];
+  position?: { start: Point; end: Point };
+};
+
+/** Nodes that only exist to carry JavaScript */
+const scriptNodeTypes = new Set([
+  'mdxjsEsm',
+  'mdxFlowExpression',
+  'mdxTextExpression',
+]);
+
+/**
+ * A remark plugin that refuses any JavaScript in the source: an import or
+ * export, a `{expression}`, or an expression or spread attribute on a
+ * component. Literal attributes, such as `<Callout type="warning">`, are fine.
+ *
+ * Compiled MDX runs as code on the server, and the admin portal compiles drafts
+ * to preview them, so a body that could reach `process` or `require` would run
+ * there. Content never needs it, so it fails loudly instead, naming where the
+ * way the compiler's own errors do, rather than being quietly dropped.
+ */
+const refuseJavaScript = () => (tree: MdastNode) => {
+  const check = (node: MdastNode) => {
+    const attribute = node.attributes?.find(
+      ({ type, value }) =>
+        type !== 'mdxJsxAttribute' ||
+        (value !== null && value !== undefined && typeof value !== 'string'),
+    );
+
+    if (scriptNodeTypes.has(node.type) || attribute) {
+      const { start, end } = node.position!;
+
+      throw new Error(
+        'JavaScript is not allowed in content; escape a literal brace as `\\{` ' +
+          `(${start.line}:${start.column}-${end.line}:${end.column})`,
+      );
+    }
+
+    node.children?.forEach(check);
+  };
+
+  check(tree);
+};
+
 const prettyCode = [
   rehypePrettyCode,
   {
@@ -83,45 +130,24 @@ const autolinkHeadings = [
   },
 ];
 
-const buildOptions = (headings?: MdxHeading[]) =>
-  ({
-    mdxOptions: {
-      remarkPlugins: [remarkGfm],
-      rehypePlugins: [
-        rehypeSlug,
-        ...(headings ? [collectHeadings(headings)] : []),
-        prettyCode,
-        autolinkHeadings,
-      ],
-    },
-  }) as MDXRemoteProps['options'];
-
 /**
- * Compile MDX once, returning the rendered content along with its section
- * headings, for pages that show a table of contents
+ * Compile MDX, returning the rendered content along with its section headings
+ * @throws when the source is not valid MDX or contains JavaScript, naming where
  */
 export const compileMdx = async (
   source: string,
 ): Promise<{ content: React.ReactElement; headings: MdxHeading[] }> => {
   const headings: MdxHeading[] = [];
-  const { content } = await compileMDX({
-    source,
-    components,
-    options: buildOptions(headings),
-  });
+  const { default: MdxContent } = await evaluate(source, {
+    ...runtime,
+    remarkPlugins: [refuseJavaScript, remarkGfm],
+    rehypePlugins: [
+      rehypeSlug,
+      collectHeadings(headings),
+      prettyCode,
+      autolinkHeadings,
+    ],
+  } as EvaluateOptions);
 
-  return { content, headings };
+  return { content: <MdxContent components={components} />, headings };
 };
-
-const Mdx: React.FC<MdxProps> = ({ source, ...props }) => {
-  return (
-    <MDXRemote
-      {...props}
-      source={source}
-      components={components}
-      options={buildOptions()}
-    />
-  );
-};
-
-export default Mdx;
