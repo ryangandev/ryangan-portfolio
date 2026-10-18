@@ -62,7 +62,7 @@ Project pages compile the same way, and show the table of contents under the pro
 
 The portfolio has two list layouts and two ways to show a project's tech stack, and `src/data/portfolio-layout.json` picks one of each:
 
-- `list`: `thumbnails`, a timeline grouped by year with a small thumbnail on each row, or `timeline`, text rows whose hovered project shows its thumbnail in the right-hand gutter.
+- `list`: `thumbnails`, a timeline grouped by year with a small thumbnail on each row, or `timeline`, text rows whose hovered project shows its thumbnail in the right-hand gutter, in one fixed spot level with the top of the list, so it never runs past the list onto the footer.
   Both have the platform filter above them.
 - `stack`: `icons`, each technology with its brand icon, or `badges`, outlined text pills.
 

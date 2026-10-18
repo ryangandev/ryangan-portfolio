@@ -26,7 +26,10 @@ type Filter = PlatformName | 'all';
  *
  * `thumbnails` gives every row a small thumbnail. `timeline` keeps the rows to
  * text and, from xl up, shows the hovered row's thumbnail in the right-hand
- * gutter, the first row's while nothing is hovered.
+ * gutter, the first row's while nothing is hovered. The thumbnail stays in one
+ * place, level with the top of the list, and cross-fades between projects:
+ * hung from each row instead, it jumped as the pointer moved down the list,
+ * and from the last rows it ran past the list onto the footer.
  */
 const ProjectIndex = ({
   projects,
@@ -34,6 +37,7 @@ const ProjectIndex = ({
   layout,
 }: ProjectIndexProps) => {
   const [filter, setFilter] = useState<Filter>('all');
+  const [hovered, setHovered] = useState<string | null>(null);
   const shown =
     filter === 'all'
       ? projects
@@ -56,6 +60,11 @@ const ProjectIndex = ({
         : [];
     }),
   ];
+
+  // A filter can hide the hovered project, so fall back to the first shown.
+  const previewed =
+    shown.find((project) => project.slug === hovered) ?? shown[0];
+
   const yearColumn =
     layout === 'thumbnails' ? 'w-14 md:w-24' : 'w-[70px] md:w-40';
 
@@ -86,7 +95,38 @@ const ProjectIndex = ({
         ))}
       </div>
 
-      <div className="group/list">
+      <div
+        className="group/list relative"
+        onMouseLeave={() => setHovered(null)}
+      >
+        {layout === 'timeline' && (
+          // The gutter only exists from xl up. Decorative: the row already
+          // names the project. Sticky, so it stays in view down a long list.
+          <div className="pointer-events-none absolute inset-y-0 left-full ml-10 hidden xl:block">
+            {/* Level with the first row's title */}
+            <div className="sticky top-32 mt-[15px] h-[146px] w-60 overflow-hidden rounded-lg border border-border/80">
+              {shown.map((project) => (
+                <FadeInImage
+                  key={project.slug}
+                  src={project.thumbnailUrl}
+                  placeholderSrc={thumbnailPlaceholders[project.slug]}
+                  alt=""
+                  width={240}
+                  height={146}
+                  sizes="240px"
+                  loading="lazy"
+                  wrapperClassName={cn(
+                    'absolute inset-0 transition-opacity',
+                    project === previewed ? 'opacity-100' : 'opacity-0',
+                  )}
+                  className="h-full w-full object-cover"
+                  quality={95}
+                />
+              ))}
+            </div>
+          </div>
+        )}
+
         {years.map((year) => (
           <ul key={year} className="group/section border-t">
             {shown
@@ -95,11 +135,10 @@ const ProjectIndex = ({
                   parseContentDate(project.date).getFullYear() === year,
               )
               .map((project, index) => {
-                const isFirstRow = year === years[0] && index === 0;
-
                 return (
                   <li
                     key={project.slug}
+                    onMouseEnter={() => setHovered(project.slug)}
                     className={cn(
                       'group/item relative transition-opacity',
                       'group-hover/list:opacity-50 hover:!opacity-100',
@@ -165,27 +204,6 @@ const ProjectIndex = ({
                         </span>
                       </span>
                     </Link>
-
-                    {layout === 'timeline' && (
-                      // The gutter only exists from xl up. Decorative: the row
-                      // already names the project.
-                      <FadeInImage
-                        src={project.thumbnailUrl}
-                        placeholderSrc={thumbnailPlaceholders[project.slug]}
-                        alt=""
-                        width={240}
-                        height={146}
-                        sizes="240px"
-                        loading="lazy"
-                        wrapperClassName={cn(
-                          'pointer-events-none absolute top-3.5 left-full ml-10 hidden h-[146px] w-60 overflow-hidden rounded-lg border border-border/80 opacity-0 transition-opacity xl:block',
-                          'group-hover/item:opacity-100',
-                          isFirstRow && 'not-group-hover/list:opacity-100',
-                        )}
-                        className="h-full w-full object-cover"
-                        quality={95}
-                      />
-                    )}
                   </li>
                 );
               })}
