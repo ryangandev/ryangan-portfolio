@@ -49,19 +49,6 @@ const findPackage = (
   }
 };
 
-/** The `overrides` block of pnpm-workspace.yaml, as name to range. */
-const readOverrides = (): Record<string, string> => {
-  const yaml = readFileSync(path.join(root, 'pnpm-workspace.yaml'), 'utf8');
-  const block = yaml.split(/^overrides:\n/m)[1]?.split(/\n\S/)[0] ?? '';
-
-  return Object.fromEntries(
-    [...block.matchAll(/^ {2}'?([^':\s]+)'?: (\S+)$/gm)].map(([, n, r]) => [
-      n,
-      r,
-    ]),
-  );
-};
-
 const nextConfig = findPackage('eslint-config-next').dir;
 
 describe('ESLint 10 workarounds', () => {
@@ -81,33 +68,6 @@ describe('ESLint 10 workarounds', () => {
       `${plugin} ${version} now accepts ESLint 10: remove its peerDependencyRules entry in pnpm-workspace.yaml${extra}`,
     ).toBe(false);
   });
-});
-
-describe('Prisma CLI overrides', () => {
-  const prisma = findPackage('prisma');
-  const declaredBy: Record<string, PackageJson> = {
-    // Where each overridden package is declared inside Prisma's CLI.
-    'deepmerge-ts': findPackage('@prisma/config', prisma.dir).pkg,
-    mysql2: prisma.pkg,
-  };
-
-  it.each(Object.entries(readOverrides()))(
-    '%s is still pinned below %s',
-    (name, override) => {
-      const declarer = declaredBy[name];
-
-      expect(declarer, `no known declarer for override ${name}`).toBeDefined();
-
-      const declared = declarer.dependencies?.[name];
-      const fixed = semver.minVersion(override)!;
-
-      expect(
-        declared !== undefined &&
-          semver.gte(semver.minVersion(declared)!, fixed),
-        `Prisma now declares ${name}@${declared}, at or past the fix: remove its override in pnpm-workspace.yaml`,
-      ).toBe(false);
-    },
-  );
 });
 
 describe('TypeScript pin', () => {

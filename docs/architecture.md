@@ -309,8 +309,6 @@ pnpm is pinned by `packageManager` in `package.json`, and pnpm 10 and later swit
 pnpm 11 and later no longer read the `pnpm` field in `package.json`; the settings live in `pnpm-workspace.yaml`:
 
 - `allowBuilds` (and `onlyBuiltDependencies`, the pnpm 10 spelling) lets only Prisma run install scripts.
-- `overrides` lifts two exact pins inside Prisma's CLI (`mysql2`, `deepmerge-ts`) past their advisories.
-  Drop each once `prisma` depends on a fixed version itself.
 - `peerDependencyRules` accepts ESLint 10 for three plugins that have not declared it yet; see below.
 
 ### Pinned versions
@@ -326,7 +324,7 @@ pnpm 11 and later no longer read the `pnpm` field in `package.json`; the setting
   It is the maintained line for Next 16 and the one whose adapter matches the `users` and `accounts` tables.
 - **Runtime dependencies that look like dev tools.** `prettier` and the rehype and remark plugins are `dependencies`: the admin portal formats and compiles MDX at request time, not only in the build.
 
-`tests/upstream-pins.test.ts` reads the installed packages and fails, naming what to remove, once a dependency update makes the ESLint, Prisma override, or TypeScript workaround unnecessary.
+`tests/upstream-pins.test.ts` reads the installed packages and fails, naming what to remove, once a dependency update makes the ESLint or TypeScript workaround unnecessary.
 Dependabot's updates are what trip it.
 
 ### Tests
