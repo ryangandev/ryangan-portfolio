@@ -18,7 +18,7 @@ Last reviewed: 2026-10-17.
 | Admin portal                              | `src/app/admin`, `src/components/admin`, `src/actions/admin-actions.ts`, `src/lib/admin`, `src/schemas/admin-content-schema.ts`, `src/lib/collections.ts`        |
 | Sign-in                                   | `src/auth.ts`, `src/app/api/auth/[...nextauth]/route.ts`, `src/types/next-auth.d.ts`                                                                             |
 | Database                                  | `prisma/schema.prisma`, `prisma.config.ts`, `src/lib/db.ts`; the generated client is in `src/generated/prisma`, gitignored and excluded from ESLint and Prettier |
-| Footer and back to top                    | `src/components/site-footer.tsx`, `src/components/back-to-top.tsx`                                                                                               |
+| Footer, back link, and back to top        | `src/components/site-footer.tsx`, `src/components/navigation/back-button.tsx`, `src/components/back-to-top.tsx`                                                  |
 | Theme, fonts, and global styles           | `src/styles/globals.css`, `src/assets/fonts.ts`, `src/components/theme-toggle.tsx`                                                                               |
 | Logo, icons, and OpenGraph images         | `src/components/logo.tsx`, `src/app/{icon.svg,favicon.ico,apple-icon.png,opengraph-image.png}`, `src/app/blog/[slug]/opengraph-image.tsx`, `public/icon-*.png`   |
 | Shared UI primitives                      | `src/components/ui` (shadcn/ui)                                                                                                                                  |
@@ -114,20 +114,28 @@ A code block (`src/components/mdx/custom-pre.tsx`) is padded `px-4`, the same as
 At `px-5` such a line overflows by 4px and its last character is clipped.
 
 From `xl` up, the right-hand gutter holds a post's table of contents, a project's facts (role, year, platforms, links, stack), the `timeline` list's hovered thumbnail, and, on every page, the back-to-top link.
-A project's table of contents goes in the left-hand gutter instead, under the back button and 192px wide so its left edge lines up with the button's `lg:-left-48`; the facts and the table of contents together are taller than a laptop screen.
-It starts below the button rather than spanning the page, since a gutter laid over the button takes its clicks.
-Both stick at `top-32` while the article scrolls, the facts only in a window at least 800px tall (the `tall` variant in `globals.css`): the tallest facts are 564px, and in a shorter window they would run under the back-to-top link, so there they scroll away with the header.
+The left-hand gutter holds the back link (`navigation/back-button.tsx`), 192px wide at `right-full mr-10`, and on a project the table of contents under it, passed in as the back link's children; the facts and the table of contents together are taller than a laptop screen.
+The back link and what follows it are one rail that sticks at `top-32`, so the way up stays in reach down a long case study.
+The gutter spans the page's height and lets clicks through, and only the rail takes them, since a gutter laid over the link takes its clicks.
+The facts stick at `top-32` too, but only in a window at least 800px tall (the `tall` variant in `globals.css`): the tallest facts are 564px, and in a shorter window they would run under the back-to-top link, so there they scroll away with the header.
 `e2e/portfolio.spec.ts` checks every project's facts clear the link at that height, so a project with more facts fails the test rather than overlapping.
 Below `xl` a project's facts sit under its title instead; the admin preview, which has no gutter, always shows them there.
 Everything in the right-hand gutter sits at `left-full ml-10` of the content column; `back-to-top.tsx` is fixed-position, so it repeats that offset as `calc(50% + 362px)`, and both change together if the column's width does.
-Below `xl` there are no gutters, and back to top is a round button in the corner, above the footer.
+Below `xl` there are no gutters: the back link sits above the page's title, with its tap area grown to 44px, and back to top is a round button in the corner, above the footer.
 
 ## Routing and SEO
 
 Use `AnimatedLink` with `isExternal` for anything that is not a page of this site, including same-origin files.
 It renders a plain anchor, because next/link prefetches any same-origin href in view and would download the resume PDF for every visitor.
 
-Pages cross-fade with `next-view-transitions`.
+Pages cross-fade through React's `<ViewTransition>`, which wraps the page in the root layout; links are plain `next/link`.
+Next renders a back or forward at once, without a cross-fade, so the browser puts the reader back where they were.
+Do not bring back `next-view-transitions`: it holds the page back after the browser's Back button until it has snapshotted the old one, so the browser restores the scroll position against the page being left and every back or forward lands at the top.
+
+The back link at the top of each page is a link up to its parent, such as Portfolio from a project.
+When the parent is the page the reader just came from, it goes back in history instead, so the parent returns as it was left and the browser's Back button does not then lead into the child again.
+It asks the Navigation API (`navigation.entries()`) what the previous page was; without that API it is always a plain link up.
+`e2e/navigation.spec.ts` covers both ways and the scroll position.
 
 ### No loading.tsx, on purpose
 
