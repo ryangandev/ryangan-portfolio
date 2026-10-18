@@ -106,9 +106,10 @@ export default async function Page({
       </aside>
       {headings.length > 1 && (
         // 192px wide, so its left edge lines up with the back button's at
-        // `lg:-left-48`.
-        <aside className="absolute top-0 right-full hidden h-full xl:block">
-          <div className="sticky top-32 mt-16 mr-10 w-38">
+        // `lg:-left-48`. It starts below the button rather than spanning the
+        // whole height: on top of the button, it took the button's clicks.
+        <aside className="absolute top-16 right-full bottom-0 hidden xl:block">
+          <div className="sticky top-32 mr-10 w-38">
             <TableOfContents headings={headings} />
           </div>
         </aside>

@@ -112,6 +112,7 @@ At `px-5` such a line overflows by 4px and its last character is clipped.
 
 From `xl` up, the right-hand gutter holds a post's table of contents, a project's facts (role, year, platforms, links, stack), the `timeline` list's hovered thumbnail, and, on every page, the back-to-top link.
 A project's table of contents goes in the left-hand gutter instead, under the back button and 192px wide so its left edge lines up with the button's `lg:-left-48`; the facts and the table of contents together are taller than a laptop screen.
+It starts below the button rather than spanning the page, since a gutter laid over the button takes its clicks.
 Below `xl` a project's facts sit under its title instead; the admin preview, which has no gutter, always shows them there.
 Everything in the right-hand gutter sits at `left-full ml-10` of the content column; `back-to-top.tsx` is fixed-position, so it repeats that offset as `calc(50% + 362px)`, and both change together if the column's width does.
 Below `xl` there are no gutters, and back to top is a round button in the corner, above the footer.
