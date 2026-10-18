@@ -34,6 +34,48 @@ test('filters the portfolio by platform', async ({ page }) => {
   await expect(projects).toHaveCount(total);
 });
 
+test("keeps every project's facts in view, clear of back to top", async ({
+  page,
+}) => {
+  await page.goto('/portfolio');
+
+  const hrefs = await page
+    .locator('main li a[href^="/portfolio/"]')
+    .evaluateAll((links) => links.map((link) => link.getAttribute('href')!));
+
+  for (const href of hrefs) {
+    // The shortest window the facts stick in, the `tall` variant
+    await page.setViewportSize({ width: 1280, height: 800 });
+    await page.goto(href);
+
+    const facts = page.locator('main aside dl');
+    const backToTop = page.getByRole('button', { name: 'Back to top' });
+
+    // A screen and a half down, where back to top shows, inside the article
+    await page.evaluate(() =>
+      window.scrollTo({ top: innerHeight * 1.5, behavior: 'instant' }),
+    );
+    await expect(backToTop).toBeVisible();
+
+    const [factsBox, buttonBox] = await Promise.all([
+      facts.boundingBox(),
+      backToTop.boundingBox(),
+    ]);
+
+    expect(factsBox!.y, `${href}: the facts scrolled away`).toBe(128);
+    expect(
+      factsBox!.y + factsBox!.height,
+      `${href}: the facts run under back to top`,
+    ).toBeLessThan(buttonBox!.y);
+
+    // One pixel shorter, they scroll away with the header.
+    await page.setViewportSize({ width: 1280, height: 799 });
+    await expect
+      .poll(async () => (await facts.boundingBox())!.y)
+      .toBeLessThan(0);
+  }
+});
+
 test('shows a project with its facts and the projects either side', async ({
   page,
 }) => {

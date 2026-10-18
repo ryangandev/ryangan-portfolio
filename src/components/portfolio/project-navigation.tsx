@@ -1,4 +1,5 @@
 import { Link } from 'next-view-transitions';
+import { GoArrowLeft, GoArrowRight } from 'react-icons/go';
 
 import FadeInImage from '@/components/fade-in-image';
 import { getImagePlaceholder } from '@/lib/image-placeholder';
@@ -77,8 +78,19 @@ const ProjectLink = async ({
         quality={95}
       />
       <span className="flex min-w-0 flex-col">
-        <span className="text-sm color-level-5">
+        <span
+          className={cn(
+            'flex items-center gap-1.5 text-sm color-level-5',
+            isNext && 'sm:justify-end',
+          )}
+        >
+          {!isNext && (
+            <GoArrowLeft className="transition-transform group-hover:-translate-x-0.5" />
+          )}
           {isNext ? 'Next' : 'Previous'}
+          {isNext && (
+            <GoArrowRight className="transition-transform group-hover:translate-x-0.5" />
+          )}
         </span>
         <span className="font-medium color-level-1">{project.title}</span>
       </span>
