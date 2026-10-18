@@ -1,23 +1,22 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 const { account } = vi.hoisted(() => ({
-  account: { findFirst: vi.fn(), findUnique: vi.fn(), updateMany: vi.fn() },
+  account: { findFirst: vi.fn(), findUnique: vi.fn(), update: vi.fn() },
 }));
 
 vi.mock('@/lib/db', () => ({ db: { account } }));
 
-const { getGitHubToken, storeGitHubTokens } =
-  await import('@/lib/admin/github-token');
+const { getGitHubToken } = await import('@/lib/admin/github-token');
 
 const NOW = new Date('2026-09-28T12:00:00Z');
-const nowSeconds = NOW.getTime() / 1000;
+const inSeconds = (seconds: number) => new Date(NOW.getTime() + seconds * 1000);
 const fetchMock = vi.fn();
 
 const row = (overrides: object = {}) => ({
   id: 'account-1',
-  access_token: 'old-access',
-  refresh_token: 'old-refresh',
-  expires_at: nowSeconds + 3600,
+  accessToken: 'old-access',
+  refreshToken: 'old-refresh',
+  accessTokenExpiresAt: inSeconds(3600),
   ...overrides,
 });
 
@@ -47,26 +46,29 @@ describe('getGitHubToken', () => {
 
     await expect(getGitHubToken('user-1')).resolves.toBe('old-access');
     expect(account.findFirst).toHaveBeenCalledWith({
-      where: { userId: 'user-1', provider: 'github' },
+      where: { userId: 'user-1', providerId: 'github' },
     });
     expect(fetchMock).not.toHaveBeenCalled();
   });
 
   it('treats a token without an expiry, as an OAuth App issues, as fresh', async () => {
     account.findFirst.mockResolvedValue(
-      row({ expires_at: null, refresh_token: null }),
+      row({ accessTokenExpiresAt: null, refreshToken: null }),
     );
 
     await expect(getGitHubToken('user-1')).resolves.toBe('old-access');
   });
 
   it('refreshes a token within a minute of expiring, and stores the new pair', async () => {
-    account.findFirst.mockResolvedValue(row({ expires_at: nowSeconds + 30 }));
+    account.findFirst.mockResolvedValue(
+      row({ accessTokenExpiresAt: inSeconds(30) }),
+    );
     fetchMock.mockResolvedValue(
       refreshResponse({
         access_token: 'new-access',
         refresh_token: 'new-refresh',
         expires_in: 28800,
+        refresh_token_expires_in: 15897600,
       }),
     );
 
@@ -80,19 +82,24 @@ describe('getGitHubToken', () => {
       grant_type: 'refresh_token',
       refresh_token: 'old-refresh',
     });
-    expect(account.updateMany).toHaveBeenCalledWith({
-      where: { userId: 'user-1', provider: 'github' },
+    expect(account.update).toHaveBeenCalledWith({
+      where: { id: 'account-1' },
       data: {
-        access_token: 'new-access',
-        refresh_token: 'new-refresh',
-        expires_at: nowSeconds + 28800,
+        accessToken: 'new-access',
+        refreshToken: 'new-refresh',
+        accessTokenExpiresAt: inSeconds(28800),
+        refreshTokenExpiresAt: inSeconds(15897600),
       },
     });
   });
 
   it('asks for a new sign-in when GitHub refuses the refresh', async () => {
-    account.findFirst.mockResolvedValue(row({ expires_at: nowSeconds - 1 }));
-    account.findUnique.mockResolvedValue(row({ expires_at: nowSeconds - 1 }));
+    account.findFirst.mockResolvedValue(
+      row({ accessTokenExpiresAt: inSeconds(-1) }),
+    );
+    account.findUnique.mockResolvedValue(
+      row({ accessTokenExpiresAt: inSeconds(-1) }),
+    );
     // GitHub answers a refused refresh with a 200 and an error field.
     fetchMock.mockResolvedValue(
       refreshResponse({ error: 'bad_refresh_token' }),
@@ -101,13 +108,18 @@ describe('getGitHubToken', () => {
     await expect(getGitHubToken('user-1')).rejects.toMatchObject({
       kind: 'reauthorize',
     });
-    expect(account.updateMany).not.toHaveBeenCalled();
+    expect(account.update).not.toHaveBeenCalled();
   });
 
   it('uses the token a concurrent request refreshed first', async () => {
-    account.findFirst.mockResolvedValue(row({ expires_at: nowSeconds - 1 }));
+    account.findFirst.mockResolvedValue(
+      row({ accessTokenExpiresAt: inSeconds(-1) }),
+    );
     account.findUnique.mockResolvedValue(
-      row({ access_token: 'raced-access', expires_at: nowSeconds + 28800 }),
+      row({
+        accessToken: 'raced-access',
+        accessTokenExpiresAt: inSeconds(28800),
+      }),
     );
     fetchMock.mockResolvedValue(
       refreshResponse({ error: 'bad_refresh_token' }),
@@ -123,26 +135,11 @@ describe('getGitHubToken', () => {
     });
 
     account.findFirst.mockResolvedValueOnce(
-      row({ expires_at: nowSeconds - 1, refresh_token: null }),
+      row({ accessTokenExpiresAt: inSeconds(-1), refreshToken: null }),
     );
     await expect(getGitHubToken('user-1')).rejects.toMatchObject({
       kind: 'reauthorize',
     });
     expect(fetchMock).not.toHaveBeenCalled();
-  });
-});
-
-describe('storeGitHubTokens', () => {
-  it('clears the refresh token and expiry a new token does not come with', async () => {
-    await storeGitHubTokens('user-1', { access_token: 'oauth-app-token' });
-
-    expect(account.updateMany).toHaveBeenCalledWith({
-      where: { userId: 'user-1', provider: 'github' },
-      data: {
-        access_token: 'oauth-app-token',
-        refresh_token: null,
-        expires_at: null,
-      },
-    });
   });
 });

@@ -14,12 +14,13 @@ export const metadata: Metadata = {
 
 const repository = `${contentRepository.owner}/${contentRepository.name}`;
 
-/** The `error` values Auth.js redirects here with */
+/** The `error` values a failed sign-in comes back with */
 const errors: Record<string, string> = {
-  AccessDenied: `That GitHub account cannot push to ${repository}, so it cannot use the admin.`,
-  Configuration:
-    'Sign-in is not set up on this deployment. It needs AUTH_SECRET, AUTH_GITHUB_ID, and AUTH_GITHUB_SECRET.',
-  OAuthAccountNotLinked:
+  // Better Auth reports the GitHub gate in `src/auth.ts` refusing an account
+  // the same way as GitHub failing to answer.
+  unable_to_get_user_info: `Either that GitHub account cannot push to ${repository}, or GitHub could not be reached. Try again, or sign in with an account that can push.`,
+  access_denied: 'Sign-in was cancelled on GitHub.',
+  account_not_linked:
     'Another sign-in already uses the email address of that GitHub account.',
 };
 

@@ -64,7 +64,7 @@ test('starts the GitHub sign-in, coming back to the page it was sent from', asyn
 });
 
 test('explains a refused sign-in', async ({ page }) => {
-  await page.goto('/admin/sign-in?error=AccessDenied');
+  await page.goto('/admin/sign-in?error=unable_to_get_user_info');
 
   await expect(page.getByText(/cannot push to/)).toBeVisible();
 });

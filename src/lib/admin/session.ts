@@ -1,9 +1,9 @@
+import { headers } from 'next/headers';
 import { redirect } from 'next/navigation';
-import type { Session } from 'next-auth';
 
-import { auth } from '@/auth';
+import { type Auth, getAuth } from '@/auth';
 
-export type Admin = Session['user'];
+export type Admin = Auth['$Infer']['Session']['user'];
 
 /**
  * The signed-in admin, or null.
@@ -13,11 +13,11 @@ export type Admin = Session['user'];
  * rendering it.
  */
 export const getAdmin = async (): Promise<Admin | null> => {
-  const session = await auth();
+  // Headers first: prerendering stops at them, before Better Auth is created.
+  const requestHeaders = await headers();
+  const session = await getAuth().api.getSession({ headers: requestHeaders });
 
-  return session?.user.role === 'ADMIN' && session.user.id
-    ? session.user
-    : null;
+  return session?.user.role === 'ADMIN' ? session.user : null;
 };
 
 /**

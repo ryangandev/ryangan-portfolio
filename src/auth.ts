@@ -1,10 +1,19 @@
-import NextAuth from 'next-auth';
-import GitHub from 'next-auth/providers/github';
-import { PrismaAdapter } from '@auth/prisma-adapter';
+import { betterAuth } from 'better-auth';
+import { prismaAdapter } from 'better-auth/adapters/prisma';
+import { nextCookies } from 'better-auth/next-js';
+import { github } from 'better-auth/social-providers';
 
-import { storeGitHubTokens } from '@/lib/admin/github-token';
+import { siteUrl } from '@/data/site';
 import { canWriteToRepository } from '@/lib/admin/repository';
 import { db } from '@/lib/db';
+
+const gitHubApp = {
+  clientId: process.env.AUTH_GITHUB_ID ?? '',
+  clientSecret: process.env.AUTH_GITHUB_SECRET ?? '',
+};
+
+/** The stock provider, whose profile lookup the gated one below reuses */
+const gitHubProfile = github(gitHubApp);
 
 /**
  * Sign-in for the admin portal, with GitHub as the only provider.
@@ -14,63 +23,101 @@ import { db } from '@/lib/db';
  * reach that one repository and nothing else of the account's. The portal
  * commits with it, as the signed-in user.
  *
- * Users and their GitHub accounts, tokens included, are kept in the `users` and
- * `accounts` tables through the Prisma adapter. Sessions are JWTs in a cookie,
- * which is why there is no session table.
+ * Users, their GitHub accounts (tokens included), and sessions are kept in the
+ * `users`, `accounts`, and `sessions` tables. Sessions live in the database
+ * rather than in a signed cookie, so one can be revoked by deleting its row.
+ *
+ * The server calls this through `getAuth().api`; over HTTP, the route handler
+ * only serves GitHub's callback.
  */
-export const { handlers, auth, signIn, signOut } = NextAuth({
-  adapter: PrismaAdapter(db),
-  providers: [GitHub],
-  session: {
-    strategy: 'jwt',
-    // A week rather than the default month: the session can publish to the
-    // live site.
-    maxAge: 60 * 60 * 24 * 7,
-  },
-  pages: {
-    signIn: '/admin/sign-in',
-    error: '/admin/sign-in',
-  },
-  callbacks: {
-    /**
-     * Only someone who can push to the content repository gets in. This runs
-     * before Auth.js writes anything, so a refused sign-in leaves no user
-     * behind.
-     */
-    async signIn({ account }) {
-      return (
-        account?.provider === 'github' &&
-        typeof account.access_token === 'string' &&
-        (await canWriteToRepository(account.access_token))
-      );
-    },
-    async jwt({ token, user, account, profile }) {
-      // Present only on the request that completes a sign-in.
-      if (account?.access_token && user?.id) {
-        await storeGitHubTokens(user.id, {
-          access_token: account.access_token,
-          refresh_token: account.refresh_token,
-          expires_at: account.expires_at,
-        });
-        // The sign-in callback only lets repository writers through, and they
-        // are the admins. Stored so the role column tells the truth too.
-        await db.user.update({
-          where: { id: user.id },
-          data: { role: 'ADMIN' },
-        });
-        token.role = 'ADMIN';
-        token.login = typeof profile?.login === 'string' ? profile.login : '';
-      }
+const createAuth = () =>
+  betterAuth({
+    // GitHub only redirects back to the callback URLs registered on the app:
+    // the live site's and port 3000's. Previews cannot complete a sign-in.
+    baseURL:
+      process.env.BETTER_AUTH_URL ??
+      (process.env.NODE_ENV === 'production'
+        ? siteUrl
+        : 'http://localhost:3000'),
+    secret: process.env.AUTH_SECRET,
+    database: prismaAdapter(db, { provider: 'postgresql' }),
+    socialProviders: {
+      github: {
+        ...gitHubApp,
+        /**
+         * Only someone who can push to the content repository gets in. Better
+         * Auth asks for the profile before it writes anything, so a refused
+         * sign-in leaves no user behind.
+         */
+        async getUserInfo(tokens) {
+          if (
+            !tokens.accessToken ||
+            !(await canWriteToRepository(tokens.accessToken))
+          ) {
+            return null;
+          }
 
-      return token;
-    },
-    session({ session, token }) {
-      session.user.id = token.sub ?? '';
-      session.user.role = token.role === 'ADMIN' ? 'ADMIN' : undefined;
-      session.user.login =
-        typeof token.login === 'string' ? token.login : undefined;
+          const info = await gitHubProfile.getUserInfo(tokens);
 
-      return session;
+          return (
+            info && { ...info, user: { ...info.user, login: info.data.login } }
+          );
+        },
+        // Keeps the name, avatar, and login current with GitHub.
+        overrideUserInfoOnSignIn: true,
+      },
     },
-  },
-});
+    user: {
+      additionalFields: {
+        role: {
+          type: ['USER', 'ADMIN'],
+          defaultValue: 'USER',
+          input: false,
+        },
+        login: { type: 'string', required: false },
+      },
+    },
+    databaseHooks: {
+      session: {
+        create: {
+          // A session is only ever made for someone the GitHub gate let
+          // through, and they are the admins. Stored so the role column tells
+          // the truth too.
+          async before(session) {
+            await db.user.update({
+              where: { id: session.userId },
+              data: { role: 'ADMIN' },
+            });
+          },
+        },
+      },
+    },
+    session: {
+      // A week rather than the default month: the session can publish to the
+      // live site.
+      expiresIn: 60 * 60 * 24 * 7,
+    },
+    account: {
+      // Each sign-in's OAuth state rides in an encrypted cookie, so starting one
+      // needs no database.
+      storeStateStrategy: 'cookie',
+    },
+    advanced: {
+      // Like post views, sign-in keeps no IP addresses.
+      ipAddress: { disableIpTracking: true },
+    },
+    telemetry: { enabled: false },
+    // Lets server actions set the session cookie. It has to come last.
+    plugins: [nextCookies()],
+  });
+
+let instance: ReturnType<typeof createAuth> | undefined;
+
+/**
+ * Better Auth sets itself up, secret check included, as soon as it is created.
+ * Created on first use, then, so the build, which imports this from every
+ * admin route but never signs anyone in, needs no secret.
+ */
+export const getAuth = () => (instance ??= createAuth());
+
+export type Auth = ReturnType<typeof createAuth>;
