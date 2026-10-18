@@ -4,6 +4,8 @@ import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { GoArrowLeft } from 'react-icons/go';
 
+import { isPlainClick } from '@/lib/utils';
+
 type BackButtonProps = {
   name: string;
   href: string;
@@ -45,14 +47,7 @@ export default function BackButton({ name, href, children }: BackButtonProps) {
   const router = useRouter();
 
   const goBackIfParent = (event: React.MouseEvent<HTMLAnchorElement>) => {
-    const isPlainClick =
-      event.button === 0 &&
-      !event.metaKey &&
-      !event.ctrlKey &&
-      !event.shiftKey &&
-      !event.altKey;
-
-    if (isPlainClick && getPreviousPathname() === href) {
+    if (isPlainClick(event) && getPreviousPathname() === href) {
       event.preventDefault();
       router.back();
     }

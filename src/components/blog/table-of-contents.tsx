@@ -2,6 +2,7 @@
 
 import { useSyncExternalStore } from 'react';
 
+import InPageLink from '@/components/in-page-link';
 import { MdxHeading } from '@/components/mdx/mdx-components';
 import { cn } from '@/lib/utils';
 
@@ -68,7 +69,7 @@ const TableOfContents = ({ headings }: TableOfContentsProps) => {
 
           return (
             <li key={heading.id}>
-              <a
+              <InPageLink
                 href={`#${heading.id}`}
                 aria-current={isActive ? 'location' : undefined}
                 className={cn(
@@ -79,7 +80,7 @@ const TableOfContents = ({ headings }: TableOfContentsProps) => {
                 )}
               >
                 {heading.text}
-              </a>
+              </InPageLink>
             </li>
           );
         })}
