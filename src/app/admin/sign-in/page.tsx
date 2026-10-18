@@ -20,6 +20,10 @@ const errors: Record<string, string> = {
   // the same way as GitHub failing to answer.
   unable_to_get_user_info: `Either that GitHub account cannot push to ${repository}, or GitHub could not be reached. Try again, or sign in with an account that can push.`,
   access_denied: 'Sign-in was cancelled on GitHub.',
+  // GitHub came back without the sign-in this browser started: it took too
+  // long, or began in another browser.
+  state_not_found: 'That sign-in expired. Try again.',
+  state_mismatch: 'That sign-in expired. Try again.',
   account_not_linked:
     'Another sign-in already uses the email address of that GitHub account.',
 };

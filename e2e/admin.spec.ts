@@ -69,6 +69,17 @@ test('explains a refused sign-in', async ({ page }) => {
   await expect(page.getByText(/cannot push to/)).toBeVisible();
 });
 
+test('brings a callback with no sign-in to finish back to the sign-in page', async ({
+  page,
+}) => {
+  await page.goto('/api/auth/callback/github?code=stale');
+
+  await expect(page).toHaveURL('/admin/sign-in?error=state_not_found');
+  await expect(
+    page.getByText('That sign-in expired. Try again.'),
+  ).toBeVisible();
+});
+
 test('shows an unknown collection or a malformed slug as not found, not a sign-in', async ({
   page,
 }) => {

@@ -275,6 +275,7 @@ The server calls it through `getAuth().api`, which creates it on first use: Bett
   It needs `AUTH_GITHUB_ID` and `AUTH_GITHUB_SECRET`, and `AUTH_SECRET` signs the session cookie and encrypts the OAuth state cookie.
 - **Only someone who can push to the repository gets in.** The provider's `getUserInfo` asks GitHub before Better Auth writes anything, and returning nothing refuses the sign-in, so it leaves no row behind.
   A refused sign-in comes back to the sign-in page with `error=unable_to_get_user_info`.
+  Every other failed callback lands there too, through `onAPIError.errorURL`, since Better Auth's own error page is not served.
 - **Admins get the `ADMIN` role** from a `session.create.before` hook, since only someone the gate let through ever gets a session.
   `getUserInfo` cannot set it: Better Auth drops fields marked `input: false` from what a provider returns, which is what keeps a visitor from setting their own role.
   Every admin page and server action checks the role itself with `requireAdmin` or `getAdmin`: a layout does not protect server actions, which are public endpoints.

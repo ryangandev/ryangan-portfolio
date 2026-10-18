@@ -102,6 +102,12 @@ const createAuth = () =>
       // needs no database.
       storeStateStrategy: 'cookie',
     },
+    onAPIError: {
+      // A callback that fails before it knows where the sign-in started, such
+      // as one whose state cookie has expired, would otherwise go to Better
+      // Auth's own error page, which is not served here.
+      errorURL: '/admin/sign-in',
+    },
     advanced: {
       // Like post views, sign-in keeps no IP addresses.
       ipAddress: { disableIpTracking: true },
