@@ -75,12 +75,14 @@ const sampleScroll = async (page: Page) => {
     });
 };
 
-type TransitionProbe = { viewTransitions?: { moved: string[] }[] };
+type TransitionProbe = {
+  viewTransitions?: { moved: string[]; finished: boolean }[];
+};
 
 /**
  * Record every view transition the page starts from its next load on, with
- * the boxes it slides or resizes rather than only fades. Read them with
- * `viewTransitions`.
+ * the boxes it slides or resizes rather than only fades, and whether it has
+ * finished. Read them with `viewTransitions`.
  *
  * Neither shows up in the scroll position: a cross-fade of the whole page on
  * a link within it, or a box sliding from where the old page was scrolled to,
@@ -93,7 +95,7 @@ const recordViewTransitions = (page: Page) =>
 
     probe.viewTransitions = [];
     document.startViewTransition = ((...args: Parameters<typeof start>) => {
-      const record = { moved: [] as string[] };
+      const record = { moved: [] as string[], finished: false };
       const transition = start(...args);
 
       probe.viewTransitions!.push(record);
@@ -116,6 +118,9 @@ const recordViewTransitions = (page: Page) =>
             .map((effect) => effect.pseudoElement!);
         })
         .catch(() => {});
+      transition.finished.finally(() => {
+        record.finished = true;
+      });
 
       return transition;
     }) as typeof start;
@@ -197,6 +202,14 @@ test('goes back up to where the reader left the page', async ({ page }) => {
   expect((await viewTransitions(page))[0].moved, 'boxes that moved').toEqual(
     [],
   );
+
+  // A click lands on the transition, not the page, until it ends. Playwright
+  // then scrolls the link into view another way and retries, and on a page
+  // that scrolls at all that leaves it a little down, which the history entry
+  // keeps for Forward.
+  await expect
+    .poll(async () => (await viewTransitions(page))[0].finished)
+    .toBe(true);
 
   // The way back puts the reader where they were at once, rather than
   // scrolling them there from the top: every frame is either the page being

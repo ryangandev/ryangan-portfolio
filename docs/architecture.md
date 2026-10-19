@@ -219,6 +219,7 @@ Views live in the same Postgres database as everything else (`src/lib/views.ts`)
 
 - **Fails soft.** Any database error resolves to `null`, and `ViewCounter` renders nothing, separator dot included.
   That is also the state before the tables exist.
+- **Hidden while small.** `ViewCounter` shows the count only from 100 views (`MIN_VIEWS_SHOWN`), since a small number reads as nobody reading; every view is still recorded.
 - **Counted client-side.** Posts are static, so `ViewCounter` calls `recordPostViewAction` on mount, guarded by a ref so Strict Mode does not double-count.
   The action validates the slug against `getAllPostSlugs()` because a server action is a public endpoint.
 - **Deduped by session, not IP.** An IP is personal data, is shared behind a NAT, and follows people between networks.

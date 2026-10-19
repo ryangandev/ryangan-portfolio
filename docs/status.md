@@ -16,11 +16,9 @@ The site is live and feature-complete for now; what remains is mostly outside th
 
 These need an account or a judgment only Ryan has.
 
-1. Enable Speed Insights for the project in the Vercel dashboard.
-   Until then its script is a 404 on every page.
-2. Verify a domain in Resend and set `CONTACT_FROM_EMAIL` to an address on it.
-   The default sender only delivers to the Resend account owner.
-3. Submit the sitemap to Google Search Console.
+1. Verify a domain in Resend and set `CONTACT_FROM_EMAIL` to an address on it.
+   The default sender only delivers to the Resend account owner, and as of 2026-10-19 the Vercel project has no `CONTACT_FROM_EMAIL`.
+2. Submit the sitemap to Google Search Console.
 
 ## Open decisions
 
@@ -35,7 +33,7 @@ The dependency workarounds come out when [their tripwire](architecture.md#pinned
 
 ## Deliberately not done
 
-- **Blog search.** With two posts it would search a list that fits on one screen, and topics already cover browsing.
+- **Blog search.** With five posts it would search a list that fits on one screen, and topics already cover browsing.
   Worth adding past a dozen posts.
 - **A `/craft` route.** The craft collection is a separate codebase at `craft.ryangan.me`.
 - **A uses or now page.** It needs Ryan's content, not code.
