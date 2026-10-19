@@ -206,8 +206,7 @@ Older Prisma recipes do not apply:
 - `User`, `Account`, `Session`, and `Verification` are Better Auth's tables behind the [admin portal](#admin-portal)'s sign-in.
   Their columns keep the snake_case names they had under Auth.js, through `@map`.
   Nothing writes to `verifications`, since OAuth state rides in a cookie, but Better Auth's Prisma adapter refuses to start without it.
-  The empty `GuestbookNote` stays in the schema although nothing reads it: it is a live table, and `prisma db push` would drop it.
-  Whether to build on it or drop it is an [open decision](status.md#open-decisions).
+  There is no guestbook: its never-built `guestbook_notes` table, always empty, was dropped from both Neon branches on 2026-10-19, since a portfolio's visitors rarely sign one and an empty one reads as nobody visiting.
 
 The database is only ever an enhancement: the site builds and runs with no database reachable.
 `.env.example` documents every variable.

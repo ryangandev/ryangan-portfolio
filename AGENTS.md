@@ -35,7 +35,6 @@ CI needs no secrets: every public route is static, and the tests mock the databa
 - Link anything that is not a page of this site, same-origin files included, with `AnimatedLink isExternal`. See [Routing and SEO](docs/architecture.md#routing-and-seo).
 - Do not add a root `loading.tsx`. See [Routing and SEO](docs/architecture.md#routing-and-seo).
 - Keep `prisma generate` in the `build` script. See [Database](docs/architecture.md#database).
-- Do not remove the unused `GuestbookNote` model from the schema; it is a live table. See [Database](docs/architecture.md#database).
 - `pnpm dev` writes view counts and admin sign-ins to whatever database `DATABASE_URL` points at. See [Post views](docs/architecture.md#post-views).
 - Every admin page and admin server action checks the session itself with `requireAdmin` or `getAdmin`; the admin layout protects nothing. See [Admin portal](docs/architecture.md#admin-portal).
 - Keep Tailwind class sorting out of MDX in `prettier.config.js`: the admin portal formats MDX without it, and a mismatch fails `format:check` on published content. See [Admin portal](docs/architecture.md#admin-portal).
