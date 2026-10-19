@@ -75,6 +75,57 @@ const sampleScroll = async (page: Page) => {
     });
 };
 
+type TransitionProbe = { viewTransitions?: { moved: string[] }[] };
+
+/**
+ * Record every view transition the page starts from its next load on, with
+ * the boxes it slides or resizes rather than only fades. Read them with
+ * `viewTransitions`.
+ *
+ * Neither shows up in the scroll position: a cross-fade of the whole page on
+ * a link within it, or a box sliding from where the old page was scrolled to,
+ * which looks like the page scrolling.
+ */
+const recordViewTransitions = (page: Page) =>
+  page.addInitScript(() => {
+    const probe = window as unknown as TransitionProbe;
+    const start = document.startViewTransition.bind(document);
+
+    probe.viewTransitions = [];
+    document.startViewTransition = ((...args: Parameters<typeof start>) => {
+      const record = { moved: [] as string[] };
+      const transition = start(...args);
+
+      probe.viewTransitions!.push(record);
+      transition.ready
+        .then(() => {
+          record.moved = document
+            .getAnimations()
+            .map(({ effect }) => effect as KeyframeEffect)
+            .filter(
+              (effect) =>
+                effect.pseudoElement?.startsWith('::view-transition-group') &&
+                new Set(
+                  effect
+                    .getKeyframes()
+                    .map(({ transform, width, height }) =>
+                      [transform, width, height].join(),
+                    ),
+                ).size > 1,
+            )
+            .map((effect) => effect.pseudoElement!);
+        })
+        .catch(() => {});
+
+      return transition;
+    }) as typeof start;
+  });
+
+const viewTransitions = (page: Page) =>
+  page.evaluate(
+    () => (window as unknown as TransitionProbe).viewTransitions ?? [],
+  );
+
 test('moves through the portfolio without reloading, and back', async ({
   page,
 }) => {
@@ -123,6 +174,7 @@ test('goes up from a project the list did not open', async ({ page }) => {
 });
 
 test('goes back up to where the reader left the page', async ({ page }) => {
+  await recordViewTransitions(page);
   await page.goto('/');
   const check = await watchNavigation(page);
 
@@ -138,6 +190,13 @@ test('goes back up to where the reader left the page', async ({ page }) => {
   await expect(page).toHaveURL('/blog');
   // A new page starts at the top.
   await expect.poll(() => page.evaluate(() => window.scrollY)).toBe(0);
+
+  // And cross-fades in place, rather than sliding up from where the home page
+  // was scrolled to.
+  await expect.poll(async () => (await viewTransitions(page)).length).toBe(1);
+  expect((await viewTransitions(page))[0].moved, 'boxes that moved').toEqual(
+    [],
+  );
 
   // The way back puts the reader where they were at once, rather than
   // scrolling them there from the top: every frame is either the page being
@@ -203,11 +262,16 @@ test.describe('the table of contents', () => {
   };
 
   test('scrolls to a section, and back', async ({ page }) => {
+    await recordViewTransitions(page);
     await page.goto(post);
     const check = await watchNavigation(page);
 
     const samples = await jumpToSection(page);
     const landedAt = samples.at(-1)!;
+
+    // Only the page scrolls: nothing cross-fades, so the columns either side
+    // stay still.
+    expect(await viewTransitions(page), 'view transitions').toEqual([]);
 
     // Smoothly: the jump passes through positions between the top and the
     // section.

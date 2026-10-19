@@ -134,7 +134,10 @@ Below `xl` there are no gutters: the back link sits above the page's title, with
 Use `AnimatedLink` with `isExternal` for anything that is not a page of this site, including same-origin files.
 It renders a plain anchor, because next/link prefetches any same-origin href in view and would download the resume PDF for every visitor.
 
-Pages cross-fade through React's `<ViewTransition>`, which wraps the page in the root layout; links are plain `next/link`.
+Pages cross-fade through React's `<ViewTransition>`, which `PageTransition` (`src/components/page-transition.tsx`) wraps around the page in the root layout; links are plain `next/link`.
+It is keyed by the path, so a new page is an exit and an enter, each a fade in place.
+Unkeyed, a new page was an update, which also slides and resizes the page's box from the old page to the new one: leaving a page far down looked like the new page scrolling up from below.
+Everything else that runs in a transition is an update, and `default="none"` keeps it still: `InPageLink` pushing a hash went through Next's router and cross-faded the whole page, so the columns either side flickered on every table of contents click.
 Next renders a back or forward at once, without a cross-fade, so the browser puts the reader back where they were.
 Do not bring back `next-view-transitions`: it holds the page back after the browser's Back button until it has snapshotted the old one, so the browser restores the scroll position against the page being left and every back or forward lands at the top.
 
@@ -148,6 +151,7 @@ Links within a page scroll smoothly by themselves through `InPageLink` (`src/com
 It does what Next does for a hash link, a history entry pushed with `history.pushState`, then `scrollIntoView`, then focus on the section, but smoothly; for a reader who asks for reduced motion it leaves the click to the browser, which jumps.
 Link to a part of the same page with `InPageLink`, not a plain anchor or `next/link`, or the jump is instant.
 `e2e/navigation.spec.ts` samples the scroll position on every frame to check both: Back lands at once, and the table of contents scrolls smoothly unless motion is reduced.
+It also records the view transitions, which the scroll position does not show: none on a table of contents click, and on a new page, no box that moves.
 
 ### No loading.tsx, on purpose
 
@@ -158,7 +162,7 @@ It also fought the view transitions: animating into a loading screen and back ou
 
 If a genuinely slow route is ever added, give it a scoped `loading.tsx` in that segment, and prefer a top progress bar over a layout-replacing spinner.
 The admin pages are the one case: they wait on GitHub, so `src/app/admin/loading.tsx` shows a bar across the top.
-The bar is fixed to the window but sits inside an empty block in the content column, because the page cross-fade measures whatever the loading state renders: measuring the bar itself, a 2px strip across the top, made each admin page shrink into the corner and grow back out.
+The bar is fixed to the window but sits inside an empty block in the content column, where every page starts.
 Because they stream, an admin URL that does not exist answers 200 with the not-found page, the status having gone out before the page decides; behind sign-in and `noindex`, that costs nothing.
 
 ### Not found

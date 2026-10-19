@@ -5,9 +5,7 @@
  * layout.
  *
  * The bar is fixed to the window, but it sits inside an empty block in the
- * content column. The cross-fade between pages measures that block, which is
- * where every page starts, so the page fades in place. Measuring the bar
- * itself, a 2px strip across the top, made the page grow out of the corner.
+ * content column, where every page starts.
  */
 export default function Loading() {
   return (
