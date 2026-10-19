@@ -133,6 +133,7 @@ Below `xl` there are no gutters: the back link sits above the page's title, with
 
 Use `AnimatedLink` with `isExternal` for anything that is not a page of this site, including same-origin files.
 It renders a plain anchor, because next/link prefetches any same-origin href in view and would download the resume PDF for every visitor.
+Links in MDX follow the same rule by themselves through `mdx/custom-link.tsx`: a page of this site, written as `/portfolio/...` or in full as `https://ryangan.me/...`, opens in place through next/link, and anything else, a path with a file extension included, opens in a new tab as a plain anchor with the arrow.
 
 Pages cross-fade through React's `<ViewTransition>`, which wraps the page in the root layout; links are plain `next/link`.
 Next renders a back or forward at once, without a cross-fade, so the browser puts the reader back where they were.
