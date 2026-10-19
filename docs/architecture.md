@@ -145,6 +145,10 @@ It asks the Navigation API (`navigation.entries()`) what the previous page was; 
 `e2e/navigation.spec.ts` covers both ways and the scroll position.
 
 The page does not scroll smoothly as a whole: there is no `scroll-smooth` on `<html>`, so Back and Forward put the reader where they were on the first frame instead of scrolling there from the top, and a new page starts at the top at once.
+A new page starts at the top because of `NewPageAtTop` (`src/components/new-page-at-top.tsx`) in the root layout, not Next alone.
+Next scrolls to the top only when it cannot see the new page's top, and the layout's padding sits above every page, so a page that scrolls by less than that padding, reached from far down another, kept the scroll the browser clamped it to.
+The component skips Back and Forward, which Next renders in a transition after `popstate`, and links with a hash, which Next scrolls to.
+`e2e/navigation.spec.ts` sizes the window just under the blog list's height to check it.
 Links within a page scroll smoothly by themselves through `InPageLink` (`src/components/in-page-link.tsx`): the table of contents, and every `#` link in MDX by way of `mdx/custom-link.tsx`, such as heading anchors and footnotes.
 It does what Next does for a hash link, a history entry pushed with `history.pushState`, then `scrollIntoView`, then focus on the section, but smoothly; for a reader who asks for reduced motion it leaves the click to the browser, which jumps.
 Link to a part of the same page with `InPageLink`, not a plain anchor or `next/link`, or the jump is instant.
