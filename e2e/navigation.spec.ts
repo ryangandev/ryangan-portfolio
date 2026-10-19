@@ -172,6 +172,33 @@ test('goes back up to where the reader left the page', async ({ page }) => {
   await check();
 });
 
+test('starts a page at the top when its top would still be in view', async ({
+  page,
+}) => {
+  // Make the blog list scroll by a little, less than the space above the page
+  // in the layout. Arriving from far down the home page, the browser clamps
+  // the scroll to that little, which leaves the page's top in view, and Next
+  // keeps the scroll position whenever it can see the page's top.
+  await page.goto('/blog');
+  const height = await page.evaluate(
+    () => document.documentElement.scrollHeight,
+  );
+  await page.setViewportSize({ width: 1280, height: height - 40 });
+
+  await page.goto('/');
+  const check = await watchNavigation(page);
+  const blog = page.locator('main a[href="/blog"]');
+
+  await blog.scrollIntoViewIfNeeded();
+  expect(await page.evaluate(() => window.scrollY)).toBeGreaterThan(40);
+
+  await blog.click();
+  await expect(page).toHaveURL('/blog');
+  await expect.poll(() => page.evaluate(() => window.scrollY)).toBe(0);
+
+  await check();
+});
+
 test.describe('the table of contents', () => {
   // The table of contents is in the right-hand gutter, which exists from xl up.
   test.use({ viewport: { width: 1280, height: 800 } });
