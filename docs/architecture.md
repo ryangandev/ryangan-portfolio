@@ -251,7 +251,7 @@ The profiles listed under the form come from `authorProfiles` in `src/data/site.
 `/admin` is where Ryan writes posts and adds projects without editing MDX by hand.
 Content stays in the repository: the portal is a form over the same files, and GitHub is its only store.
 
-- **A draft is a pull request.** Saving commits the item's file to the branch `content/<collection>/<slug>` and opens a pull request into `main` the first time, so every draft gets CI and a Vercel preview.
+- **A draft is a pull request.** Saving commits the item's file to the branch `content/<collection>/<slug>` and opens a pull request into `main` the first time, so every draft gets CI; Vercel builds no preview for it (see [Tooling and deploy](#tooling-and-deploy)).
   Publishing saves, then squash-merges it and deletes the branch, and Vercel deploys `main`.
   Discarding closes the pull request unmerged.
   A branch whose pull request is no longer open is a leftover, and the next save resets it to `main`.
@@ -323,7 +323,10 @@ Traps when regenerating:
 
 ## Tooling and deploy
 
-Vercel deploys `main` and builds a preview for every pull request.
+Vercel deploys `main` and builds nothing else: pull requests get no preview deployment.
+The project's Ignored Build Step, set in the Vercel dashboard under Settings > Git rather than in a `vercel.json`, is `if [ "$VERCEL_ENV" == "production" ]; then exit 1; else exit 0; fi`, which cancels every build that is not production.
+This is deliberate: CI already builds the site and runs the browser tests against that build on every pull request, so a preview build would only spend build minutes.
+A pull request's Vercel check reads "Canceled by Ignored Build Step" and still passes; that is expected, not a fault to fix.
 CI (`.github/workflows/ci.yml`) runs format check, lint, typecheck, unit tests, build, and browser tests on every pull request and push to `main`, from a clean install with no secrets.
 `pnpm typecheck` runs `next typegen` first: `next-env.d.ts` and the route types are generated and gitignored, and CI type-checks before it builds, so without them a clean checkout cannot resolve imports such as `*.svg`.
 Dependabot opens dependency updates.
