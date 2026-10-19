@@ -1,4 +1,3 @@
-import { ViewTransition } from 'react';
 import type { Metadata } from 'next';
 
 import { ThemeProvider } from 'next-themes';
@@ -8,6 +7,7 @@ import { SpeedInsights } from '@vercel/speed-insights/next';
 import { geistSans } from '@/assets/fonts';
 import BackToTop from '@/components/back-to-top';
 import NewPageAtTop from '@/components/new-page-at-top';
+import PageTransition from '@/components/page-transition';
 import SiteFooter from '@/components/site-footer';
 import { Toaster } from '@/components/ui/sonner';
 import { experience } from '@/data/experience';
@@ -65,7 +65,7 @@ export default function RootLayout({
           disableTransitionOnChange
         >
           <div className="relative mx-auto w-full max-w-[692px] grow px-6 py-16 md:pt-32">
-            <ViewTransition>{children}</ViewTransition>
+            <PageTransition>{children}</PageTransition>
           </div>
           <SiteFooter />
           <NewPageAtTop />
