@@ -80,3 +80,17 @@ pre[data-theme*=' '] span {
 .prose h6 {
   @apply relative scroll-mt-20;
 }
+
+/*
+ * Inline code, as a tinted pill rather than between the literal backticks
+ * the typography plugin adds. Code blocks are left alone: theirs is the
+ * `code` inside a `pre`.
+ */
+.prose :not(pre) > code {
+  @apply rounded-sm bg-neutral-100 px-[0.35em] py-[0.15em] dark:bg-neutral-800;
+}
+
+.prose :not(pre) > code::before,
+.prose :not(pre) > code::after {
+  content: none;
+}
