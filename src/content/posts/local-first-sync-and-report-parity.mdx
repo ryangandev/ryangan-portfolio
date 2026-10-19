@@ -1,0 +1,201 @@
+---
+title: 'Local-First Sync with a Write Queue, and One Fixture for Two Languages'
+author: 'Ryan Gan'
+publishedDate: '2026-10-19'
+featured: false
+summary: 'How the Penny Diary iPhone app keeps working offline and syncs without losing an entry, and how one shared test fixture keeps its Swift and TypeScript reports adding up to the same numbers.'
+topics: ['Offline First', 'Sync', 'Swift', 'TypeScript', 'Testing']
+---
+
+[Penny Diary](/portfolio/penny-diary) is a personal finance tracker with two clients: a SwiftUI iPhone app and a Next.js web app that share one ledger in Supabase.
+The iPhone app is local-first.
+It works with no account and no connection, and once someone subscribes to Pro, it syncs the same ledger to the web.
+
+That leaves two problems that are easy to get almost right:
+
+1. Getting changes made offline to the server without ever losing one.
+2. Making two codebases in two languages agree on every number they show.
+
+This post is about how I solved each one, and what went wrong along the way.
+
+## A replica plus a queue
+
+The rule the whole design starts from: when the iPhone has an account, Supabase is the source of truth, and the iPhone holds a **replica plus a queue**, never a second authority.
+The web app talks to the database directly and knows nothing about any of this.
+
+On the device, one JSON file holds the ledger's rows, the queue of changes waiting to go out, and the marks that say how far the last sync got.
+It is one file on purpose.
+With the rows and the queue in separate files, a crash between the two writes can leave a queue that points at rows that were never saved.
+One file means one atomic write, so the two can never disagree.
+
+## The outbox is a set of ids, not a log
+
+The obvious way to queue offline changes is a log of operations: insert this, update that, delete the other, replayed in order.
+Penny Diary does not do that.
+Its outbox is a set of dirty row ids per table:
+
+```swift
+struct Outbox: Codable, Equatable, Sendable {
+    var categories: Set<UUID> = []
+    var recurringRules: Set<UUID> = []
+    var transactions: Set<UUID> = []
+    var deletedCategories: Set<UUID> = []
+    var deletedRecurringRules: Set<UUID> = []
+    var deletedTransactions: Set<UUID> = []
+    /// Transactions the user undeleted, which need their tombstone cleared
+    var restoredTransactions: Set<UUID> = []
+    // ...
+}
+```
+
+This works because every write in the app is an upsert keyed by an id the device generated.
+To sync a row, the app pushes the row as it is now, and there is never an earlier version the server needs first.
+Two useful properties fall out of that for free:
+
+- **Edits coalesce.** Changing an amount five times on a plane is one push, not five.
+- **Replays are harmless.** If a push lands but its answer is lost, sending it again changes nothing.
+
+Order still matters in one place.
+Transactions and recurring rules both reference their category with a foreign key, so the queue pushes categories before rules before transactions, and deletes in the reverse order.
+Before that ordering existed, a category and a transaction created in the same offline session went out in whatever order the set iterated, and the server rejected about half of them.
+
+## Deletes are facts, not absences
+
+A hard delete is the absence of a row, and an absence cannot survive a replay.
+If the web app deletes a transaction while an edit to it waits in the iPhone's queue, replaying that edit would simply create the row again.
+
+So every delete is a soft delete: it sets `deleted_at`, and every read filters those rows out.
+The trick that makes it hold is what the upsert leaves out.
+The payload the iPhone sends never includes `deleted_at`, and PostgREST only writes the columns it is given, so a queued edit updates the amount and leaves the tombstone standing.
+Adding `deleted_at` to the payload would quietly undo the whole mechanism.
+
+Undo is the one place where bringing a row back is exactly what was asked for.
+That is why the outbox tracks restores separately: "push this row" and "push this row and undelete it" are the same request with opposite requirements.
+
+## What a failure means
+
+The most important function in the sync code decides what a failed write means.
+It started with two cases: the request never reached the server, or it did and failed.
+The first kept the change queued, and the second rolled it back or dropped it.
+
+That was right for a constraint violation and wrong for a server that was merely busy.
+A `503` during the first sync after someone signed in deleted the only copy of a row they had made before having an account.
+
+Now there are four cases, decided from the error's type and code, never from its message:
+
+```swift
+enum WriteFailure: Equatable {
+    /// The request never reached the server. The change waits.
+    case transport
+    /// The server answered but could not take the change right now:
+    /// a gateway error, a restarting database, a rate limit. The change waits.
+    case unavailable
+    /// The session could not be used. The change waits for the account
+    /// to sign back in.
+    case unauthenticated
+    /// The server refused this change for what it is. Retrying the same
+    /// bytes cannot help, and only the user can fix or discard it.
+    case rejected
+}
+```
+
+The principle behind the split is one I now apply everywhere: the cost of retrying a refusal is a wasted round trip, and the cost of dropping a retryable change is the change.
+So anything that is not a definite refusal of this specific change is retryable.
+
+Even a real refusal is not thrown away while the queue drains.
+It is held on the device under "Kept on this iPhone" in Settings, with the server's reason, a Send again button for after the problem is fixed, and a Discard button.
+A change that keeps failing as "unavailable" for five drains over at least a day is held the same way, so it stops reading as "waiting" forever.
+
+## Never trust the device's clock
+
+Syncing only what changed means asking each table for rows updated after a mark.
+Where that mark comes from matters more than it looks.
+
+- **`updated_at` is set by a database trigger**, not by whichever client wrote the row.
+  With two clients stamping their own clocks, a phone running ninety seconds slow could file a row behind a mark the web app had already passed, and that row would never be fetched again.
+- **The mark is the newest `updated_at` actually received**, never the device's clock.
+  A mark from a fast clock would step over everything in between, while a mark that is too old only costs a re-read.
+- **Every fetch re-asks a few minutes behind its mark**, because Postgres stamps `updated_at` when a transaction starts, but the row only becomes visible when it commits.
+  A slow write can appear behind a mark that has already moved past it.
+
+Fetches are paged by a cursor on `(updated_at, id)` rather than an offset.
+PostgREST caps a response at 1,000 rows without saying so, and an offset counts rows that another device may insert or delete between two pages.
+With a cursor, a write can only move a row ahead of the reader, so every row that exists for the whole read is returned.
+
+## The same arithmetic, twice
+
+Penny Diary's reports are computed on each client: totals, category shares, trends against the previous period, and daily averages.
+They have to be.
+The iPhone works offline and with no account, so it cannot ask a server, and the web app computes its reports in the browser so moving around the ledger never waits on one.
+
+That means the report arithmetic exists twice, in Swift and in TypeScript, and neither can call the other.
+Duplicated arithmetic drifts, and the drift is silent: a total that is quietly 7% off still looks like a total.
+It had already happened inside a single app: Home and Reports on the iPhone once disagreed about what 51.9% rounds to, because each had its own copy of the arithmetic.
+
+## One fixture, asserted in both languages
+
+The fix is a parity test on each side, built on the same fixture: the same category ids, the same transactions, the same period, and the same expected numbers.
+
+```typescript
+const transactions = [
+  // March, the period under test
+  tx(100, 'expense', GROCERIES, '2026-03-04'),
+  tx(60, 'expense', GROCERIES, '2026-03-10'),
+  tx(40, 'expense', DINING, '2026-03-12'),
+  tx(800, 'expense', RENT, '2026-03-01'),
+  tx(3000, 'income', SALARY, '2026-03-01'),
+  // February, the baseline the trends compare against
+  tx(80, 'expense', GROCERIES, '2026-02-04'),
+  tx(200, 'expense', DINING, '2026-02-14'),
+  tx(800, 'expense', RENT, '2026-02-01'),
+  tx(3000, 'income', SALARY, '2026-02-01'),
+  // Midnight starting April, which is March's exclusive end
+  tx(25, 'expense', DINING, '2026-04-01', '00:00:00'),
+];
+```
+
+```swift
+private var transactions: [Transaction] {
+    [
+        // March - the period under test.
+        transaction(100, .expense, groceries, "2026-03-04"),
+        transaction(60, .expense, groceries, "2026-03-10"),
+        transaction(40, .expense, dining, "2026-03-12"),
+        transaction(800, .expense, rent, "2026-03-01"),
+        transaction(3000, .income, salary, "2026-03-01"),
+        // February - the baseline the trends compare against.
+        transaction(80, .expense, groceries, "2026-02-04"),
+        transaction(200, .expense, dining, "2026-02-14"),
+        transaction(800, .expense, rent, "2026-02-01"),
+        transaction(3000, .income, salary, "2026-02-01"),
+        // Midnight starting April, which is March's exclusive end.
+        transaction(25, .expense, dining, "2026-04-01", "00:00"),
+    ]
+}
+```
+
+The fixture is small on purpose.
+It is not meant to look like a real ledger; each row is there to pin down one rule both apps have to share:
+
+- **A period's end is exclusive.** The entry at midnight starting April belongs to April only.
+  An inclusive end would count it in both months, and its amount in both totals.
+- **A day is a calendar day, not 24 hours.** Around a daylight saving change a day is 23 or 25 hours long, so dividing elapsed time by 24 hours runs a day short or long.
+  Those cases pin their own time zone, so the result does not depend on the machine running the test.
+- **Shares re-base on what the filter kept.** Take rent out of March, and groceries goes from 16% of all spending to 80% of what was chosen.
+- **The biggest move comes from the trend, not the slices.** Dining falling from 200 to 40 is a bigger change than groceries rising by 80.
+
+The rule that goes with the tests: a change that changes a number lands in both clients in the same pull request.
+If I change the rounding in Swift, the Swift parity test fails, because its expected numbers are the contract.
+Updating that expected number is exactly when the rule applies: the same number changes in the TypeScript test, which then fails until the TypeScript arithmetic matches.
+
+The fixture itself is written twice, once per language.
+That is duplication too, but it is a short list of literals rather than logic, and keeping the two copies identical is something a reviewer can check at a glance.
+
+## What I would tell someone starting
+
+- Make every write an idempotent upsert keyed by a client id, and the queue can be a set instead of a log.
+- Treat "I could not send this" and "the server said no" as different things, and when unsure, keep the change.
+- Let the database own every timestamp that decides what to fetch next.
+- If you must duplicate logic across languages, duplicate the test fixture with it, and make the numbers a contract.
+
+**Thanks for reading!**
