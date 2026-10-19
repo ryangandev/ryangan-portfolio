@@ -112,3 +112,45 @@ test('shows a project with its facts and the projects either side', async ({
   await expect(more.locator('a[rel="prev"]')).toHaveCount(0);
   await expect(more.locator('a[rel="next"]')).toHaveAttribute('href', second!);
 });
+
+test('opens a screenshot full size, browses the others, and closes back onto the one it ended on', async ({
+  page,
+}) => {
+  await page.setViewportSize({ width: 1280, height: 800 });
+  await page.goto('/portfolio/penny-diary');
+
+  const screenshots = page.getByRole('button', { name: /^View full size/ });
+  const total = await screenshots.count();
+  const viewer = page.getByRole('dialog', { name: 'Screenshots' });
+  const counter = viewer.getByText(/^\d+ \/ \d+$/).filter({ visible: true });
+
+  expect(total).toBeGreaterThan(1);
+  await screenshots.first().click();
+  await expect(viewer).toBeVisible();
+  await expect(counter).toHaveText(`1 / ${total}`);
+
+  await page.keyboard.press('ArrowRight');
+  await expect(counter).toHaveText(`2 / ${total}`);
+  // Back from the first image is the last.
+  await viewer.getByRole('button', { name: 'Previous image' }).click();
+  await viewer.getByRole('button', { name: 'Previous image' }).click();
+  await expect(counter).toHaveText(`${total} / ${total}`);
+  await viewer
+    .getByRole('button', { name: /^Show / })
+    .nth(2)
+    .click();
+  await expect(counter).toHaveText(`3 / ${total}`);
+
+  const frame = viewer.locator('[data-viewer-frame]');
+
+  await viewer.getByRole('button', { name: 'Zoom in' }).click();
+  await expect(frame).toHaveAttribute('style', /scale\(1\.5\)/);
+  await page.keyboard.press('0');
+  await expect(frame).toHaveAttribute('style', /scale\(1\)/);
+
+  await page.keyboard.press('Escape');
+  await expect(viewer).toBeHidden();
+  await expect(screenshots.nth(2)).toBeFocused();
+  // The page scrolls again once the viewer is gone.
+  await expect(page.locator('html')).not.toHaveCSS('overflow', 'hidden');
+});

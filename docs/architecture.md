@@ -9,7 +9,7 @@ Last reviewed: 2026-10-17.
 | Home page and experience timeline         | `src/app/(home)/page.tsx`, `src/components/experience-list.tsx`, `src/components/expandable.tsx`, `src/data/experience.ts`, `src/lib/experience.ts`, `src/assets/logos` |
 | Portfolio list, project pages, and layout | `src/app/portfolio`, `src/components/portfolio`, `src/data/platforms.ts`, `src/data/portfolio-layout.json`, `src/lib/portfolio-layout.ts`                               |
 | Blog, topics, and post-only UI            | `src/app/blog`, `src/components/blog`                                                                                                                                   |
-| MDX source and rendering                  | `src/content/{projects,posts}`, `src/components/mdx`, `src/styles/mdx.css`                                                                                              |
+| MDX source and rendering                  | `src/content/{projects,posts}`, `src/components/mdx`, `src/components/image-viewer`, `src/styles/mdx.css`                                                               |
 | Content reading and validation            | `src/lib/content.ts`, `src/schemas/content-schema.ts`, `src/models`, `src/lib/{date,topics,reading-time}.ts`                                                            |
 | Tech stack icons and labels               | `src/data/tech-stack.ts`, `src/components/icons/tech-stack-icon.tsx`                                                                                                    |
 | Site constants, metadata, feeds, and SEO  | `src/data/site.ts`, `src/app/layout.tsx`, `src/app/{sitemap,robots,manifest}.ts`, `src/app/feed.xml/route.ts`, `src/components/json-ld.tsx`                             |
@@ -115,6 +115,15 @@ The wrapper is a block, as Tailwind's preflight makes every `<img>`, so it takes
 An image with no known size holds a shape while it loads: a project's hero is declared 1536 by 936, the size of every thumbnail, and an MDX image holds 8:5, the shape of most screenshots, so a 16:9 one shifts slightly once it arrives.
 Do not use next/image's own `placeholder="blur"`: it paints the blur as the image's background, which the fade hides along with the image, and given a path instead of a data URL, as `/blur.svg` once was, it renders nothing at all.
 `images.qualities` is set explicitly in `next.config.mjs`, because Next 16 defaults to `[75]` and project and post images render at `quality={95}`.
+
+An MDX image opens full size in the image viewer (`src/components/image-viewer`) when clicked.
+`ArticleBody` provides it, so it works the same in posts, projects, and the admin preview; outside a provider an image is only an image.
+The viewer browses every image in the same `data-image-gallery` element, reading each from its button's `data-viewer-src`, so a gallery layout only needs to keep that attribute.
+It is a native `<dialog>` opened with `showModal()`, which gives the top layer, focus containment, and Escape for free, and it closes back onto the image the reader ended on.
+It has one look in both themes, a dark translucent overlay over the blurred page, chosen over a light variant so a screenshot always sits on the same ground.
+Its zoom maths lives in `geometry.ts`, unit tested apart from the component; zoom counts device pixels, so on a Retina screen "actual size" is one image pixel to one screen pixel, not two.
+The full image is the ImageKit original, not a next/image variant, so the zoom has real detail; it loads over the page's own copy, which shows at once.
+On a touch screen a swipe moves between images, a pull down closes, and a double tap or a pinch zooms; a mouse drag only moves a zoomed image.
 
 A code block (`src/components/mdx/custom-pre.tsx`) is padded `px-4`, the same as its header, so the code lines up under the language icon and an 80-column line, the longest Prettier writes, fits the 644px column without scrolling.
 At `px-5` such a line overflows by 4px and its last character is clipped.
@@ -365,7 +374,7 @@ Dependabot's updates are what trip it.
 - **Unit tests** (Vitest, `pnpm test`) sit beside their code in `src/` and mock the database.
   `tests/` holds checks on the repository itself.
   One is `tests/agent-docs.test.ts`: `AGENTS.md` sends agents to the docs bundled with the installed Next.js, and `agentRules: false` in `next.config.mjs` stops `next dev` from writing its own copy of that pointer into `AGENTS.md` whenever an agent runs it, so the test fails the Next update that moves the docs instead.
-- **Browser tests** (Playwright, `pnpm test:e2e`) live in `e2e/` and cover the flows that have broken before: the contact form's states, the theme toggle, client-side navigation, and the 404 page, plus the home page's expandable timeline and back to top.
+- **Browser tests** (Playwright, `pnpm test:e2e`) live in `e2e/` and cover the flows that have broken before: the contact form's states, the theme toggle, client-side navigation, and the 404 page, plus the home page's expandable timeline and back to top, and the image viewer's browsing, zoom, and close.
   For the admin portal they cover what a visitor who is not signed in meets, up to GitHub's authorize URL, which they intercept.
   Past sign-in the portal acts on GitHub as the signed-in user, so its repository calls are unit tested against a fake Octokit instead.
 
