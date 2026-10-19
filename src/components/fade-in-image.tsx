@@ -42,6 +42,11 @@ type FadeInImageProps = ImageProps & {
  * script the image simply shows over the blur as it loads. An image that
  * finished loading before hydration is still caught: next/image checks
  * `complete` when it mounts and calls `onLoad` then.
+ *
+ * A `preload` image, the one a page leads with, does not fade: it shows over
+ * the blur as soon as it arrives. Hidden, it would not count as painted until
+ * hydration ended the fade, holding the page's Largest Contentful Paint back
+ * by however long the scripts took.
  */
 const FadeInImage = ({
   alt,
@@ -82,7 +87,8 @@ const FadeInImage = ({
         alt={alt}
         className={cn(
           'relative transition-opacity duration-300',
-          !isLoaded && cn('scripting:opacity-0', loadingClassName),
+          !isLoaded &&
+            cn(!props.preload && 'scripting:opacity-0', loadingClassName),
           className,
         )}
         onLoad={(event) => {

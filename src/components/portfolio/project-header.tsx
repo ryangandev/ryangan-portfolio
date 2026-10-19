@@ -57,7 +57,7 @@ const ProjectHeader = async ({
           wrapperClassName="w-full rounded-lg"
           className="h-auto w-full rounded-lg border border-border/80 shadow-md"
           quality={95}
-          priority
+          preload
         />
       )}
     </>
