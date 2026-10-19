@@ -3,12 +3,12 @@ import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 
 import ArticleBody from '@/components/article-body';
-import TableOfContents from '@/components/blog/table-of-contents';
 import { compileMdx } from '@/components/mdx/mdx-components';
 import BackButton from '@/components/navigation/back-button';
 import ProjectFacts from '@/components/portfolio/project-facts';
 import ProjectHeader from '@/components/portfolio/project-header';
 import ProjectNavigation from '@/components/portfolio/project-navigation';
+import TableOfContents from '@/components/table-of-contents';
 import { siteName } from '@/data/site';
 import {
   getAdjacentProjects,

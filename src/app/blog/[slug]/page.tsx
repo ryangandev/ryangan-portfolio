@@ -5,12 +5,12 @@ import { notFound } from 'next/navigation';
 import ArticleBody from '@/components/article-body';
 import PostHeader from '@/components/blog/post-header';
 import PostNavigation from '@/components/blog/post-navigation';
-import TableOfContents from '@/components/blog/table-of-contents';
 import TopicList from '@/components/blog/topic-list';
 import ViewCounter from '@/components/blog/view-counter';
 import JsonLd from '@/components/json-ld';
 import { compileMdx } from '@/components/mdx/mdx-components';
 import BackButton from '@/components/navigation/back-button';
+import TableOfContents from '@/components/table-of-contents';
 import { feedAlternates, siteName, siteUrl } from '@/data/site';
 import {
   getAdjacentPosts,
