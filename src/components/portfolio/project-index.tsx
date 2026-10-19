@@ -26,7 +26,9 @@ type Filter = PlatformName | 'all';
  *
  * `thumbnails` gives every row a small thumbnail. `timeline` keeps the rows to
  * text and, from xl up, shows the hovered row's thumbnail in the right-hand
- * gutter, the first row's while nothing is hovered. The thumbnail stays in one
+ * gutter, the first row's while nothing is hovered. Below xl there is no
+ * gutter, and a touch screen has no hover, so there it falls back to
+ * `thumbnails` rather than show no pictures at all. The thumbnail stays in one
  * place, level with the top of the list, and cross-fades between projects:
  * hung from each row instead, it jumped as the pointer moved down the list,
  * and from the last rows it ran past the list onto the footer.
@@ -66,7 +68,7 @@ const ProjectIndex = ({
     shown.find((project) => project.slug === hovered) ?? shown[0];
 
   const yearColumn =
-    layout === 'thumbnails' ? 'w-14 md:w-24' : 'w-[70px] md:w-40';
+    layout === 'thumbnails' ? 'w-14 md:w-24' : 'w-14 md:w-24 xl:w-40';
 
   return (
     <section>
@@ -129,6 +131,9 @@ const ProjectIndex = ({
 
         {years.map((year) => (
           <ul key={year} className="group/section border-t">
+            {/* On a phone the year takes its own line, so the rows get the
+                width the year column would take. */}
+            <li className="pt-3.5 color-level-5 sm:hidden">{year}</li>
             {shown
               .filter(
                 (project) =>
@@ -148,12 +153,12 @@ const ProjectIndex = ({
                       href={`/portfolio/${project.slug}`}
                       className={cn(
                         'flex items-center',
-                        layout === 'thumbnails' ? 'py-3.5' : 'py-3',
+                        layout === 'thumbnails' ? 'py-3.5' : 'py-3.5 xl:py-3',
                       )}
                     >
                       <span
                         className={cn(
-                          'shrink-0 self-start color-level-5 transition-colors',
+                          'hidden shrink-0 self-start color-level-5 transition-colors sm:block',
                           'group-hover/section:text-neutral-900 dark:group-hover/section:text-neutral-100',
                           yearColumn,
                         )}
@@ -171,35 +176,32 @@ const ProjectIndex = ({
                             "before:absolute before:inset-x-0 before:h-px before:bg-border before:content-['']",
                             layout === 'thumbnails'
                               ? 'before:-top-3.5'
-                              : 'before:-top-3',
+                              : 'before:-top-3.5 xl:before:-top-3',
                           ],
                         )}
                       >
-                        {layout === 'thumbnails' && (
-                          <FadeInImage
-                            src={project.thumbnailUrl}
-                            placeholderSrc={thumbnailPlaceholders[project.slug]}
-                            alt=""
-                            width={104}
-                            height={64}
-                            sizes="104px"
-                            wrapperClassName="h-16 w-26 shrink-0 overflow-hidden rounded-md border border-border/80"
-                            className="h-full w-full object-cover transition-transform duration-300 group-hover/item:scale-105"
-                            quality={95}
-                          />
-                        )}
+                        {/* In `timeline`, only where the gutter is not */}
+                        <FadeInImage
+                          src={project.thumbnailUrl}
+                          placeholderSrc={thumbnailPlaceholders[project.slug]}
+                          alt=""
+                          width={104}
+                          height={64}
+                          sizes="104px"
+                          wrapperClassName={cn(
+                            'h-16 w-26 shrink-0 overflow-hidden rounded-md border border-border/80',
+                            layout === 'timeline' && 'xl:hidden',
+                          )}
+                          className="h-full w-full object-cover transition-transform duration-300 group-hover/item:scale-105"
+                          quality={95}
+                        />
                         <span className="flex min-w-0 flex-1 flex-col">
                           <span className="color-level-1">{project.title}</span>
                           <span className="text-sm leading-[22px] color-level-4">
                             {project.summary}
                           </span>
                         </span>
-                        <span
-                          className={cn(
-                            'shrink-0 text-sm whitespace-nowrap color-level-5',
-                            layout === 'thumbnails' && 'hidden sm:block',
-                          )}
-                        >
+                        <span className="hidden shrink-0 text-sm whitespace-nowrap color-level-5 sm:block">
                           {platformLabels(project.platforms).join(', ')}
                         </span>
                       </span>
