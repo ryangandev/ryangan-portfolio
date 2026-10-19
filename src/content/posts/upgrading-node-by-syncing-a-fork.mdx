@@ -1,0 +1,80 @@
+---
+title: 'Upgrading Node 12 to 22 by Syncing a Three-Year-Old Fork'
+author: 'Ryan Gan'
+publishedDate: '2026-10-19'
+featured: false
+summary: 'At Walmart, a maps service stuck on Node 12 could not patch its vulnerable packages. Instead of upgrading it in place, I synced three years of upstream changes in one sprint, and map generation got 30 to 90% faster.'
+topics: ['Nodejs', 'Migration', 'Git']
+---
+
+At Walmart I worked on the service that generates the in-store maps for about 9,000 stores.
+It takes a store's raw floor plan, drawn as a CAD-based SVG, and its map data, such as aisle coordinates, department labels, and point-of-interest icons, and turns them into interactive HTML maps.
+The iOS and Android apps show those maps in a web view and talk to them through a native bridge for things like dropping a pin, drawing a route, and rotating the map.
+
+That service was still on Node.js 12, which reached end of life in April 2022.
+This post is about how we got it to Node 22, and why the path we took was not the obvious one.
+
+Details specific to Walmart's internal systems are left out; what remains is the approach.
+
+## Stuck on both ends
+
+The pressure came from security.
+Our dashboard listed critical and major vulnerabilities in the service's npm packages, and the fixes were in newer versions of those packages.
+But the newer versions needed a newer Node, and moving to a newer Node needed newer packages.
+
+That is the usual dead end of an old Node service: you cannot upgrade the dependencies without the runtime, or the runtime without the dependencies.
+The longer a service sits there, the more both sides move away from it.
+
+## The fork
+
+There was a second, quieter problem.
+Our service had started three years earlier as a fork of another team's project.
+Since then both sides had kept working.
+By the time I looked, we were hundreds of commits behind upstream and hundreds of commits ahead of it, with more than 300 files changed on their side alone.
+
+And upstream had already migrated to Node 22.
+
+That gave us two options:
+
+1. **Upgrade in place.** Bump Node on our fork, then fix whatever broke.
+   This repeats work upstream had already done and tested, and leaves our fork even further from it.
+2. **Sync upstream first.** Bring in three years of their changes, which include the migration, while keeping every feature we had built on our side.
+
+We chose the second.
+It was the bigger job up front, but it was the only option that ended with us closer to upstream instead of further away, and it reused a migration someone had already debugged.
+
+## How the sync went
+
+The rule was simple: nothing comes in unread, and nothing of ours goes away by accident.
+
+- **Merge everything, then review every file.** I merged all three years of upstream commits and went through each changed file by hand rather than trusting the merge to know which side was right.
+- **Keep a ledger of decisions.** For every change, I wrote down whether we took it or left it, and why.
+  With hundreds of conflicts, that record is what made the result reviewable.
+- **Ask the people who wrote it.** When upstream logic was unclear, I asked the upstream engineers instead of guessing.
+- **Take only what we needed.** Not every upstream change belonged in our product.
+  We took what the Node 22 migration needed, plus the performance and security changes, and left the rest.
+- **Protect our own features.** Our side had three years of work that upstream did not have, so every resolved conflict was checked against the map features our apps depend on.
+
+Then came verification.
+Map generation had to keep producing the same maps with every feature intact, because thousands of stores and several apps depended on its output.
+
+## What came out of it
+
+- **It fit in one sprint.**
+- **The dependencies could finally move.** Once we were on Node 22, we upgraded the packages and cleared every critical and major vulnerability on the dashboard.
+- **Map generation got 30 to 90% faster**, depending on the size of the store.
+
+The speedup was not the goal.
+It came with what the sync brought in: upstream's performance changes, on a runtime ten major versions newer.
+Upgrading Node alone on our fork would have fixed the security problem and left those changes behind.
+
+## What I took away
+
+- **A fork's debt compounds quietly.** Every month without a sync makes the next one more expensive, and nobody notices until something forces it.
+  A small regular sync is far cheaper than a three-year one.
+- **Look for the work that is already done.** The fastest way through a migration was someone else's finished migration.
+- **Write decisions down while you make them.** The ledger turned hundreds of judgment calls into something a reviewer could follow.
+- **Scope is part of the job.** Taking everything upstream had would have been easier to merge and harder to ship.
+  Taking only what we needed is what kept it to one sprint.
+
+**Thanks for reading!**
