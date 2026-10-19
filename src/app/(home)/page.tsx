@@ -10,12 +10,16 @@ import { experience } from '@/data/experience';
 import {
   authorAvatarUrl,
   authorProfiles,
-  siteDescription,
   siteName,
   siteUrl,
 } from '@/data/site';
 import { getFeaturedPosts, getFeaturedProjects } from '@/lib/content';
 import { parseContentDate } from '@/lib/date';
+import {
+  getCurrentRole,
+  getSiteDescription,
+  getYearsOfExperience,
+} from '@/lib/experience';
 import { cn } from '@/lib/utils';
 
 export default async function Home() {
@@ -23,6 +27,8 @@ export default async function Home() {
     getFeaturedProjects(),
     getFeaturedPosts(),
   ]);
+  const currentRole = getCurrentRole(experience);
+  const yearsOfExperience = getYearsOfExperience(experience, new Date());
 
   return (
     <main>
@@ -35,7 +41,11 @@ export default async function Home() {
           url: siteUrl,
           image: authorAvatarUrl,
           jobTitle: 'Software Engineer',
-          description: siteDescription,
+          worksFor: {
+            '@type': 'Organization',
+            name: currentRole.organization,
+          },
+          description: getSiteDescription(experience),
           sameAs: authorProfiles.map((profile) => profile.url),
         }}
       />
@@ -52,10 +62,11 @@ export default async function Home() {
 
       <h2>About Me</h2>
       <p className="mb-4">
-        I like to craft polished, user-centric software that brings satisfaction
-        through every little detail. As a software engineer specializing in
-        full-stack development with 4 years of experience, my tech stack
-        includes:
+        I&apos;m a software engineer at {currentRole.organization} in{' '}
+        {currentRole.location}. I like to craft polished, user-centric software
+        that brings satisfaction through every little detail. I specialize in
+        full-stack development and have {yearsOfExperience} years of experience.
+        My tech stack includes:
       </p>
       <ul className="mb-7 list-inside list-disc space-y-2 pl-5.5 -indent-5.5">
         <li>

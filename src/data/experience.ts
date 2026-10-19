@@ -10,6 +10,11 @@ import dynasty11 from '@/assets/logos/dynasty11.svg';
 import walmart from '@/assets/logos/walmart.svg';
 
 export type Experience = {
+  /**
+   * `work` is a job after or alongside the degree, and is what the home page
+   * counts as experience and takes the current role from
+   */
+  kind: 'work' | 'co-op' | 'education';
   role: string;
   organization: string;
   location: string;
@@ -32,6 +37,7 @@ export type Experience = {
  */
 export const experience: Experience[] = [
   {
+    kind: 'work',
     role: 'Software Development Engineer',
     organization: 'Adobe',
     location: 'San Jose, CA',
@@ -42,6 +48,7 @@ export const experience: Experience[] = [
     mark: adobe,
   },
   {
+    kind: 'work',
     role: 'Software Engineer',
     organization: 'Walmart (via BeaconFire)',
     location: 'Sunnyvale, CA',
@@ -52,6 +59,7 @@ export const experience: Experience[] = [
     mark: walmart,
   },
   {
+    kind: 'work',
     role: 'Full Stack Engineering Consultant',
     organization: 'BeaconFire Solution',
     location: 'East Windsor, NJ',
@@ -61,6 +69,7 @@ export const experience: Experience[] = [
     mark: beaconfire,
   },
   {
+    kind: 'work',
     role: 'Software Engineer',
     organization: 'Dynasty 11 Studios',
     location: 'Philadelphia, PA',
@@ -71,6 +80,7 @@ export const experience: Experience[] = [
     mark: dynasty11,
   },
   {
+    kind: 'education',
     role: 'Bachelor of Science in Computer Science',
     organization: 'Drexel University',
     location: 'Philadelphia, PA',
@@ -81,6 +91,7 @@ export const experience: Experience[] = [
     mark: drexel,
   },
   {
+    kind: 'co-op',
     role: 'CMDB Engineer Co-Op',
     organization: 'Berkley Technology Services',
     location: 'Wilmington, DE',
@@ -91,6 +102,7 @@ export const experience: Experience[] = [
     mark: berkley,
   },
   {
+    kind: 'co-op',
     role: 'Unity Developer Co-Op',
     organization: 'Epistemitek',
     location: 'Philadelphia, PA',

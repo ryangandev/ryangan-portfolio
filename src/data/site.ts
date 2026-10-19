@@ -13,9 +13,6 @@ export const siteName = 'Ryan Gan';
 
 export const siteTitle = 'Ryan Gan | Software Engineer';
 
-export const siteDescription =
-  'My name is Ryan Gan and I am a Software Engineer.';
-
 export const authorAvatarUrl =
   'https://ik.imagekit.io/ryangan/profile-icon.jpeg?updatedAt=1718985313938';
 

@@ -4,25 +4,25 @@ Last reviewed: 2026-10-17.
 
 ## Code map
 
-| Area                                      | Where                                                                                                                                                            |
-| ----------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Home page and experience timeline         | `src/app/(home)/page.tsx`, `src/components/experience-list.tsx`, `src/components/expandable.tsx`, `src/data/experience.ts`, `src/assets/logos`                   |
-| Portfolio list, project pages, and layout | `src/app/portfolio`, `src/components/portfolio`, `src/data/platforms.ts`, `src/data/portfolio-layout.json`, `src/lib/portfolio-layout.ts`                        |
-| Blog, topics, and post-only UI            | `src/app/blog`, `src/components/blog`                                                                                                                            |
-| MDX source and rendering                  | `src/content/{projects,posts}`, `src/components/mdx`, `src/styles/mdx.css`                                                                                       |
-| Content reading and validation            | `src/lib/content.ts`, `src/schemas/content-schema.ts`, `src/models`, `src/lib/{date,topics,reading-time}.ts`                                                     |
-| Tech stack icons and labels               | `src/data/tech-stack.ts`, `src/components/icons/tech-stack-icon.tsx`                                                                                             |
-| Site constants, metadata, feeds, and SEO  | `src/data/site.ts`, `src/app/layout.tsx`, `src/app/{sitemap,robots,manifest}.ts`, `src/app/feed.xml/route.ts`, `src/components/json-ld.tsx`                      |
-| Post view counter                         | `src/lib/views.ts`, `src/actions/post-actions.ts`, `src/components/blog/view-counter.tsx`                                                                        |
-| Contact form                              | `src/app/contact`, `src/components/contact`, `src/actions/contact-actions.ts`, `src/schemas/contact-schema.ts`, `src/lib/rate-limit.ts`, `src/email`             |
-| Admin portal                              | `src/app/admin`, `src/components/admin`, `src/actions/admin-actions.ts`, `src/lib/admin`, `src/schemas/admin-content-schema.ts`, `src/lib/collections.ts`        |
-| Sign-in                                   | `src/auth.ts`, `src/app/api/auth/callback/github/route.ts`, `src/lib/admin/session.ts`                                                                           |
-| Database                                  | `prisma/schema.prisma`, `prisma.config.ts`, `src/lib/db.ts`; the generated client is in `src/generated/prisma`, gitignored and excluded from ESLint and Prettier |
-| Footer, back link, and back to top        | `src/components/site-footer.tsx`, `src/components/navigation/back-button.tsx`, `src/components/back-to-top.tsx`                                                  |
-| Theme, fonts, and global styles           | `src/styles/globals.css`, `src/assets/fonts.ts`, `src/components/theme-toggle.tsx`                                                                               |
-| Logo, icons, and OpenGraph images         | `src/components/logo.tsx`, `src/app/{icon.svg,favicon.ico,apple-icon.png,opengraph-image.png}`, `src/app/blog/[slug]/opengraph-image.tsx`, `public/icon-*.png`   |
-| Shared UI primitives                      | `src/components/ui` (shadcn/ui)                                                                                                                                  |
-| Headers, build, CI, and dependencies      | `next.config.mjs`, `package.json`, `pnpm-workspace.yaml`, `.github/`                                                                                             |
+| Area                                      | Where                                                                                                                                                                   |
+| ----------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Home page and experience timeline         | `src/app/(home)/page.tsx`, `src/components/experience-list.tsx`, `src/components/expandable.tsx`, `src/data/experience.ts`, `src/lib/experience.ts`, `src/assets/logos` |
+| Portfolio list, project pages, and layout | `src/app/portfolio`, `src/components/portfolio`, `src/data/platforms.ts`, `src/data/portfolio-layout.json`, `src/lib/portfolio-layout.ts`                               |
+| Blog, topics, and post-only UI            | `src/app/blog`, `src/components/blog`                                                                                                                                   |
+| MDX source and rendering                  | `src/content/{projects,posts}`, `src/components/mdx`, `src/styles/mdx.css`                                                                                              |
+| Content reading and validation            | `src/lib/content.ts`, `src/schemas/content-schema.ts`, `src/models`, `src/lib/{date,topics,reading-time}.ts`                                                            |
+| Tech stack icons and labels               | `src/data/tech-stack.ts`, `src/components/icons/tech-stack-icon.tsx`                                                                                                    |
+| Site constants, metadata, feeds, and SEO  | `src/data/site.ts`, `src/app/layout.tsx`, `src/app/{sitemap,robots,manifest}.ts`, `src/app/feed.xml/route.ts`, `src/components/json-ld.tsx`                             |
+| Post view counter                         | `src/lib/views.ts`, `src/actions/post-actions.ts`, `src/components/blog/view-counter.tsx`                                                                               |
+| Contact form                              | `src/app/contact`, `src/components/contact`, `src/actions/contact-actions.ts`, `src/schemas/contact-schema.ts`, `src/lib/rate-limit.ts`, `src/email`                    |
+| Admin portal                              | `src/app/admin`, `src/components/admin`, `src/actions/admin-actions.ts`, `src/lib/admin`, `src/schemas/admin-content-schema.ts`, `src/lib/collections.ts`               |
+| Sign-in                                   | `src/auth.ts`, `src/app/api/auth/callback/github/route.ts`, `src/lib/admin/session.ts`                                                                                  |
+| Database                                  | `prisma/schema.prisma`, `prisma.config.ts`, `src/lib/db.ts`; the generated client is in `src/generated/prisma`, gitignored and excluded from ESLint and Prettier        |
+| Footer, back link, and back to top        | `src/components/site-footer.tsx`, `src/components/navigation/back-button.tsx`, `src/components/back-to-top.tsx`                                                         |
+| Theme, fonts, and global styles           | `src/styles/globals.css`, `src/assets/fonts.ts`, `src/components/theme-toggle.tsx`                                                                                      |
+| Logo, icons, and OpenGraph images         | `src/components/logo.tsx`, `src/app/{icon.svg,favicon.ico,apple-icon.png,opengraph-image.png}`, `src/app/blog/[slug]/opengraph-image.tsx`, `public/icon-*.png`          |
+| Shared UI primitives                      | `src/components/ui` (shadcn/ui)                                                                                                                                         |
+| Headers, build, CI, and dependencies      | `next.config.mjs`, `package.json`, `pnpm-workspace.yaml`, `.github/`                                                                                                    |
 
 Unit tests sit next to the code they cover as `*.test.ts`; see [Tests](#tests) for the rest.
 
@@ -74,6 +74,9 @@ It is a file rather than a database setting so that every public page stays stat
 The [admin portal](#admin-portal) changes it by committing to `main`, so a switch shows once that deploy has finished.
 
 The experience timeline is data, not MDX: `src/data/experience.ts`, kept in order by hand.
+Each entry has a `kind`, `work`, `co-op`, or `education`, and `src/lib/experience.ts` reads the `work` entries for what the rest of the site says about the job.
+The ongoing one is the current role the home page's About Me, its JSON-LD `worksFor`, and the site's meta description name, and the first one's start is where the home page's years of experience count from.
+So a new job is one entry here; the build fails if no `work` entry is ongoing.
 Each entry's `mark` is the organization's logo from `src/assets/logos`, cropped to a circle.
 Every logo is a 64x64 tile: the organization's own mark, taken from its website and centered on its brand color, so it reads in both themes.
 Marks are centered optically, not by bounding box: each sits three quarters of the way from its box's center toward its center of mass, which is what keeps a bottom-heavy mark like Adobe's "A" from looking low.
