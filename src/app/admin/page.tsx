@@ -203,9 +203,8 @@ export default async function Page() {
         </form>
       </div>
       <PageSummary>
-        Drafts are pull requests on GitHub, with a Vercel preview each.
-        Publishing merges one into main, and the site redeploys a minute or two
-        later.
+        Drafts are pull requests on GitHub, each checked by CI. Publishing
+        merges one into main, and the site redeploys a minute or two later.
       </PageSummary>
 
       <div className="grid gap-4 sm:grid-cols-2">
