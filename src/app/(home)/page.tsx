@@ -119,8 +119,8 @@ export default async function Home() {
         ))}
       </ul>
       <p>
-        Above are some of my featured projects. View all my projects{' '}
-        <AnimatedLink href="/portfolio">here</AnimatedLink>.
+        Above are some of my featured projects. See the rest in my{' '}
+        <AnimatedLink href="/portfolio">portfolio</AnimatedLink>.
       </p>
 
       <h2>Writing</h2>
@@ -165,7 +165,8 @@ export default async function Home() {
         <AnimatedLink href="mailto:ryangan.dev@gmail.com" isExternal>
           ryangan.dev@gmail.com
         </AnimatedLink>
-        , or my contact form <AnimatedLink href="/contact">here</AnimatedLink>.
+        , or through my{' '}
+        <AnimatedLink href="/contact">contact form</AnimatedLink>.
       </p>
     </main>
   );
