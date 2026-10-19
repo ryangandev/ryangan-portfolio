@@ -1,0 +1,189 @@
+---
+title: 'Using GitHub Pull Requests as a CMS'
+author: 'Ryan Gan'
+publishedDate: '2026-10-19'
+featured: false
+summary: 'How the admin portal on this site turns every draft into a pull request, uses blob ids so a save never overwrites newer work, and signs in through a GitHub App that can reach exactly one repository.'
+topics: ['Nextjs', 'GitHub', 'CMS']
+---
+
+Every post and project on this site is an MDX file in its [repository](https://github.com/ryangandev/ryangan-portfolio).
+For a long time, writing one meant opening an editor, typing the frontmatter by hand, running Prettier, and pushing a branch.
+I wanted a form at `/admin` instead, but I did not want a second place for the content to live.
+
+A headless CMS or a database table would have given me a nicer editor and two sources of truth.
+The build would depend on a service being up, and the files in the repository would stop being the real content.
+
+So the portal is a form over the same files, and GitHub is its only store.
+This post walks through the four decisions that make that work: drafts as pull requests, blob ids for concurrency, retrying around GitHub's own lag, and a token that can reach one repository.
+
+## A draft is a pull request
+
+Saving a draft commits the file to a branch named after the item, `content/posts/my-post` for example, and opens a pull request into `main` the first time.
+Publishing squash-merges that pull request and deletes the branch, and Vercel deploys `main`.
+Discarding closes it unmerged.
+
+```text
+Save     ->  commit to content/posts/my-post, open a PR the first time
+Publish  ->  squash-merge the PR, delete the branch, Vercel deploys main
+Discard  ->  close the PR, delete the branch
+```
+
+That one decision buys a lot for free:
+
+- **CI runs on every draft.** Frontmatter is validated with Zod at build time, so a missing field or an unknown tech stack fails the pull request, not the live site.
+- **The preview is the real page.** The editor renders a draft with the same header, body, and MDX pipeline as the live post, so there is no separate preview template to keep in step.
+- **History and diffs** are GitHub's, so there is no revision table to build.
+- **One draft per item**, because the branch name is derived from the item.
+  A branch whose pull request was merged or closed somewhere else is a leftover, and the next save resets it to `main`.
+
+The dashboard lists drafts by asking GitHub for open pull requests whose branch matches `content/<collection>/<slug>`.
+There is no drafts table, so nothing can fall out of sync with GitHub.
+
+## Never overwrite newer work
+
+The classic failure of a form over shared data is the silent overwrite.
+I open a post on my laptop, fix a typo from my phone, and then save the laptop tab.
+The laptop's copy wins, and the typo fix is gone without a word.
+
+GitHub already solves this.
+Updating a file through the contents API requires the `sha` of the file you are replacing, its blob id.
+If the file has changed since, the blob id no longer matches and GitHub answers `409 Conflict`.
+That is optimistic concurrency, and all the portal has to do is keep the blob id it loaded and send it back.
+
+```typescript
+const { data } = await octokit.repos.createOrUpdateFileContents({
+  owner,
+  repo,
+  path,
+  branch,
+  message: `Revise the "${title}" post`,
+  content: Buffer.from(content, 'utf8').toString('base64'),
+  // The blob id the editor loaded, or undefined for a new file
+  sha: baseSha ?? undefined,
+});
+```
+
+A `409` becomes a message that says the post changed on GitHub after I opened it, and to copy anything I want to keep before reloading.
+Creating a file without a `sha` fails with `422` when the path is taken, which is how the portal refuses a duplicate slug.
+
+The portal also computes blob ids itself.
+A Git blob id is the SHA-1 of a short header and the file's bytes, so it can be worked out without asking GitHub:
+
+```typescript
+import { createHash } from 'node:crypto';
+
+export const gitBlobSha = (content: string): string =>
+  createHash('sha1')
+    .update(`blob ${Buffer.byteLength(content)}\0`)
+    .update(content)
+    .digest('hex');
+```
+
+Comparing it with the loaded blob id tells the portal whether a save would change anything, before any request goes out.
+Note `Buffer.byteLength`, not `content.length`: the header counts bytes, and a post with an emoji or a curly quote in it would otherwise hash to the wrong id.
+
+Publishing has the same guard.
+The merge API accepts the commit the pull request's head must be at, and the portal passes the commit it saved last.
+If the branch has moved since, GitHub refuses to merge, so what goes live is exactly what I last saved.
+
+## GitHub needs a moment
+
+The first version of Publish failed almost every time it ran right after a save.
+For a few seconds after a push, the pull request still reports its previous head, so the merge answers `409`.
+Or GitHub has not yet worked out whether the pull request can merge, and it answers `405`.
+
+Both codes also mean a real conflict, so the portal cannot just retry them blindly, and it cannot trust them either.
+Instead it looks at the state that tells the two apart:
+
+```typescript
+for (let attempt = 1; ; attempt++) {
+  try {
+    await octokit.pulls.merge({
+      owner,
+      repo,
+      pull_number: draft.number,
+      merge_method: 'squash',
+      sha: headSha,
+    });
+    break;
+  } catch (error) {
+    const status = statusOf(error);
+
+    if (status !== 405 && status !== 409) {
+      throw error;
+    }
+
+    const [{ data: ref }, { data: pull }] = await Promise.all([
+      octokit.git.getRef({ owner, repo, ref: `heads/${branch}` }),
+      octokit.pulls.get({ owner, repo, pull_number: draft.number }),
+    ]);
+
+    // Final: the pull request was closed, the branch really moved on,
+    // or GitHub has decided it cannot merge.
+    if (pull.state !== 'open') throw closedOnGitHub();
+    if (ref.object.sha !== headSha) throw changedSinceSave();
+    if (pull.head.sha === headSha && pull.mergeable === false) {
+      throw conflictWithMain();
+    }
+
+    // Otherwise GitHub is still catching up with the push.
+    if (attempt === MERGE_ATTEMPTS) throw stillProcessing();
+    await sleep(1000 * attempt);
+  }
+}
+```
+
+While the branch still holds the saved commit and nothing says the merge is impossible, it waits a little longer each time, about fifteen seconds in all.
+Only a moved branch, a closed pull request, or a real conflict with `main` is reported as one.
+
+The general lesson I took from this: an error code from an eventually consistent API can mean "no" or "not yet".
+When it can mean both, read the state that tells them apart before deciding.
+
+## A token that can reach one repository
+
+The portal commits as me, with my own GitHub token, so GitHub checks my access on every write and the history shows who wrote what.
+The question is what that token can reach.
+
+A classic OAuth App can only ask for broad scopes.
+To write to one public repository it needs `public_repo`, which is write access to every public repository the account can write to.
+If the session were ever stolen, so would be all of them.
+
+So sign-in goes through a GitHub App instead, installed on this repository alone, with read and write access to contents and pull requests and nothing else.
+A token a GitHub App gets for a user can only do what both the app and the user are allowed to, and only on repositories the app is installed on.
+Here that is one repository.
+
+Those tokens expire after eight hours, so the portal stores the refresh token and swaps the pair a minute before it runs out.
+Once the refresh token is spent, it asks me to sign in again instead of failing in the middle of a save.
+
+Two more checks sit around the token:
+
+- **Only someone who can push to the repository gets in.**
+  During sign-in, before any user row is written, the portal asks GitHub for the repository and reads `permissions.push`.
+  Anyone else is refused and leaves nothing behind in the database.
+- **Every admin page and server action checks the session itself.**
+  A layout only wraps rendering, and a server action is a public endpoint that can be called without ever loading the page, so the check lives in each one.
+
+## Files that look written by hand
+
+A saved draft has to pass the same `prettier --check` that CI runs on everything else, or every draft would fail its own pull request.
+So the portal runs Prettier's standalone build on the server, with every built-in language loaded, which also formats the code blocks inside a post.
+Frontmatter is written in the schema's field order and the same flow style I use by hand.
+
+There was one trap.
+The Tailwind plugin for Prettier sorts class names, and it cannot run in the standalone build, because it reads the stylesheet from disk.
+If the CLI sorted classes in MDX and the portal did not, a file saved from the portal could fail `format:check`.
+So the Prettier config leaves class sorting out of MDX for the CLI as well, and a test writes every existing content file back through the portal's formatter and checks that it comes out byte for byte the same.
+
+## What it costs
+
+- **Publishing is a deploy.** A post goes live when Vercel finishes building `main`, about a minute later.
+  For a personal blog that is fine; for a news site it would not be.
+- **GitHub is in the loop.** If GitHub is down I cannot save or publish, but the site keeps serving, because every public page is static.
+- **It is built for one author.** There are no roles, no review workflow, and no scheduled publishing, because I do not need them.
+  A team would outgrow it quickly.
+
+In exchange, the repository is still the content, every draft is tested like code, and the portal has no data of its own to back up or migrate.
+The whole thing is a few hundred lines on top of the GitHub API, and you can read it in [`src/lib/admin/repository.ts`](https://github.com/ryangandev/ryangan-portfolio/blob/main/src/lib/admin/repository.ts).
+
+**Thanks for reading!**
