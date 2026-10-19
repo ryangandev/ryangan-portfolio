@@ -22,9 +22,7 @@ These need an account or a judgment only Ryan has.
 
 ## Open decisions
 
-- **Guestbook table.** Build the guestbook, or drop `GuestbookNote` in a migration.
-  Until then it stays in the schema; see [Database](architecture.md#database).
-  `User`, `Account`, `Session`, and `Verification` back the admin portal's sign-in.
+None.
 
 ## Next work
 

@@ -144,14 +144,3 @@ model Verification {
   @@index([identifier])
   @@map("verifications")
 }
-
-/// Never-built guestbook feature. Empty, but kept so `db push` does not drop
-/// the table out from under you; safe to delete once you have decided against
-/// reviving it.
-model GuestbookNote {
-  id        String   @id @default(cuid())
-  text      String   @db.Text
-  createdAt DateTime @default(now()) @map("created_at")
-
-  @@map("guestbook_notes")
-}
