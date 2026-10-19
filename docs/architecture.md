@@ -107,8 +107,10 @@ Do not "modernize" `rounded-sm` to `rounded-xs`: the theme overrides `--radius-s
 
 Image `sizes` must describe the rendered width, or next/image serves its largest variant.
 Content-width images use `contentImageSizes` from `src/data/site.ts`; `%` is not a valid `sizes` length.
-Only a project's hero image is `priority`.
+Only a project's hero image is `preload`, which replaced next/image's deprecated `priority`.
 Every image a reader waits for, from the portfolio thumbnails to MDX screenshots and the byline avatar, renders through `FadeInImage` (`src/components/fade-in-image.tsx`): a blurred copy of itself until it loads, then a 300ms fade in.
+A `preload` image does not fade; it shows over the blur as it arrives.
+The fade holds an image at `opacity-0` until hydration, and a hidden image does not count as painted, so the hero, a project page's Largest Contentful Paint, waited on the scripts: about two seconds after the image itself had arrived, with a slow phone's CPU and network emulated, and a desktop Real Experience Score of 55 against 97 to 100 for the other public pages.
 The copy is a 16px-wide version ImageKit makes on request, fetched by `getImagePlaceholder` (`src/lib/image-placeholder.ts`) while the page builds and inlined as a data URL of about 100 bytes; it needs a server component, so the portfolio page passes the list's thumbnails theirs as props.
 If that fetch fails, the build warns and the image falls back to a grey pulsing `skeleton`.
 The wrapper is a block, as Tailwind's preflight makes every `<img>`, so it takes the image's margins and lays out exactly as the bare image did.
