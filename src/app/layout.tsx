@@ -7,6 +7,7 @@ import { SpeedInsights } from '@vercel/speed-insights/next';
 
 import { geistSans } from '@/assets/fonts';
 import BackToTop from '@/components/back-to-top';
+import NewPageAtTop from '@/components/new-page-at-top';
 import SiteFooter from '@/components/site-footer';
 import { Toaster } from '@/components/ui/sonner';
 import { experience } from '@/data/experience';
@@ -67,6 +68,7 @@ export default function RootLayout({
             <ViewTransition>{children}</ViewTransition>
           </div>
           <SiteFooter />
+          <NewPageAtTop />
           <BackToTop />
           <Analytics />
           <SpeedInsights />
