@@ -6,7 +6,7 @@
 
 ## 🚀 About
 
-This is my portfolio and blog site that showcases my work and projects, built with modern technologies and frameworks. Feel free to visit it [here](https://ryangan.me/). This is a rework of my previous site [here](https://old.ryangan.me/).
+This is my portfolio and blog site that showcases my work and projects, built with modern technologies and frameworks. Feel free to visit it [here](https://ryangan.me/).
 
 ### ⚡ Tech Stack
 

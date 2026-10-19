@@ -9,15 +9,13 @@ import { geistSans } from '@/assets/fonts';
 import BackToTop from '@/components/back-to-top';
 import SiteFooter from '@/components/site-footer';
 import { Toaster } from '@/components/ui/sonner';
-import {
-  feedAlternates,
-  siteDescription,
-  siteName,
-  siteTitle,
-  siteUrl,
-} from '@/data/site';
+import { experience } from '@/data/experience';
+import { feedAlternates, siteName, siteTitle, siteUrl } from '@/data/site';
+import { getSiteDescription } from '@/lib/experience';
 import { cn } from '@/lib/utils';
 import '@/styles/globals.css';
+
+const siteDescription = getSiteDescription(experience);
 
 export const metadata: Metadata = {
   // Required for `opengraph-image.png` and every relative `openGraph.url` on a

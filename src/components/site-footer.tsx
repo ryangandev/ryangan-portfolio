@@ -10,10 +10,15 @@ export default function SiteFooter() {
       <div className="mx-auto flex h-12 w-full max-w-[644px] items-center justify-between text-muted-foreground/80">
         <span className="mr-2 flex items-center gap-2.5">
           <Logo variant="tile" size={16} className="shrink-0" />
-          Embrace Minimalism.
+          <span className="whitespace-nowrap">Embrace Minimalism.</span>
         </span>
         <div className="flex items-center space-x-4">
-          <span className="text-nowrap">{getYear(new Date())} Ryan Gan.</span>
+          {/* The name gives way on a phone, where with the theme toggle it
+              left the tagline too little room and wrapped it. */}
+          <span className="text-nowrap">
+            {getYear(new Date())}
+            <span className="hidden sm:inline"> Ryan Gan.</span>
+          </span>
           <ThemeToggle />
         </div>
       </div>
