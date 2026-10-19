@@ -4,12 +4,19 @@ import React, { useEffect, useRef, useState } from 'react';
 
 import { recordPostViewAction } from '@/actions/post-actions';
 
+/**
+ * A small count reads as nobody reading, so it stays hidden until it is worth
+ * showing. Views are still recorded from the first one.
+ */
+const MIN_VIEWS_SHOWN = 100;
+
 type ViewCounterProps = {
   slug: string;
 };
 
 /**
- * Records a view on mount and renders the running total.
+ * Records a view on mount and renders the running total, once it reaches
+ * `MIN_VIEWS_SHOWN`.
  *
  * Posts are statically generated, so the count has to be fetched from the
  * client. Nothing is rendered until a number comes back - and nothing at all
@@ -33,7 +40,7 @@ const ViewCounter: React.FC<ViewCounterProps> = ({ slug }) => {
       .catch(() => setViews(null));
   }, [slug]);
 
-  if (views === null) {
+  if (views === null || views < MIN_VIEWS_SHOWN) {
     return null;
   }
 
