@@ -32,7 +32,7 @@ Discard  ->  close the PR, delete the branch
 That one decision buys a lot for free:
 
 - **CI runs on every draft.** Frontmatter is validated with Zod at build time, so a missing field or an unknown tech stack fails the pull request, not the live site.
-- **Every draft gets a Vercel preview**, a real deployment I can open on my phone before publishing.
+- **The preview is the real page.** The editor renders a draft with the same header, body, and MDX pipeline as the live post, so there is no separate preview template to keep in step.
 - **History and diffs** are GitHub's, so there is no revision table to build.
 - **One draft per item**, because the branch name is derived from the item.
   A branch whose pull request was merged or closed somewhere else is a leftover, and the next save resets it to `main`.
@@ -85,7 +85,7 @@ Note `Buffer.byteLength`, not `content.length`: the header counts bytes, and a p
 
 Publishing has the same guard.
 The merge API accepts the commit the pull request's head must be at, and the portal passes the commit it saved last.
-If the branch has moved since, GitHub refuses to merge, so what goes live is exactly what I last saw in the preview.
+If the branch has moved since, GitHub refuses to merge, so what goes live is exactly what I last saved.
 
 ## GitHub needs a moment
 
@@ -183,7 +183,7 @@ So the Prettier config leaves class sorting out of MDX for the CLI as well, and 
 - **It is built for one author.** There are no roles, no review workflow, and no scheduled publishing, because I do not need them.
   A team would outgrow it quickly.
 
-In exchange, the repository is still the content, every draft is tested and previewed like code, and the portal has no data of its own to back up or migrate.
+In exchange, the repository is still the content, every draft is tested like code, and the portal has no data of its own to back up or migrate.
 The whole thing is a few hundred lines on top of the GitHub API, and you can read it in [`src/lib/admin/repository.ts`](https://github.com/ryangandev/ryangan-portfolio/blob/main/src/lib/admin/repository.ts).
 
 **Thanks for reading!**
