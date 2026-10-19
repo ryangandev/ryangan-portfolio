@@ -230,7 +230,10 @@ Sessions are kept for 30 days.
 Each newly counted view deletes older ones, through the `viewed_at` index, so the table stops growing without a cron; a session that returns after a month counts once more.
 
 Loading a post in `pnpm dev` records a view in whatever database `DATABASE_URL` points at, and signing in to the admin portal writes to `users` and `accounts` there.
-The local `.env` points at the Neon `dev` branch; production is the `main` branch, whose URLs are kept apart in `.env.prod.local`.
+The local `.env` points at the Neon `dev` branch (`ep-misty-dawn`); production is the `main` branch (`ep-bold-field`).
+Its direct URL lives in the main checkout's gitignored `.env.prod.local` as `DATABASE_URL_UNPOOLED`, readable only by its owner.
+Keep that file after a production change: Vercel holds the production `DATABASE_URL` as a sensitive variable, which `vercel env pull` cannot read, so the file is the only local way to reach production.
+Check the host is `ep-bold-field` before writing through it, since the two branches' URLs differ only there.
 To test pages without writing, run the dev server with `DATABASE_URL` pointed at an unreachable host; the counter fails soft.
 
 ## Contact form
