@@ -13,7 +13,7 @@ Last reviewed: 2026-10-17.
 | Content reading and validation            | `src/lib/content.ts`, `src/schemas/content-schema.ts`, `src/models`, `src/lib/{date,topics,reading-time}.ts`                                                            |
 | Tech stack icons and labels               | `src/data/tech-stack.ts`, `src/components/icons/tech-stack-icon.tsx`                                                                                                    |
 | Site constants, metadata, feeds, and SEO  | `src/data/site.ts`, `src/app/layout.tsx`, `src/app/{sitemap,robots,manifest}.ts`, `src/app/feed.xml/route.ts`, `src/components/json-ld.tsx`                             |
-| Post view counter                         | `src/lib/views.ts`, `src/actions/post-actions.ts`, `src/components/blog/view-counter.tsx`                                                                               |
+| Post view counter                         | `src/lib/views.ts`, `src/actions/post-actions.ts`, `src/components/blog/post-views.tsx`                                                                                 |
 | Contact form                              | `src/app/contact`, `src/components/contact`, `src/actions/contact-actions.ts`, `src/schemas/contact-schema.ts`, `src/lib/rate-limit.ts`, `src/email`                    |
 | Admin portal                              | `src/app/admin`, `src/components/admin`, `src/actions/admin-actions.ts`, `src/lib/admin`, `src/schemas/admin-content-schema.ts`, `src/lib/collections.ts`               |
 | Sign-in                                   | `src/auth.ts`, `src/app/api/auth/callback/github/route.ts`, `src/lib/admin/session.ts`                                                                                  |
@@ -140,13 +140,17 @@ A tile's `sizes` is its 314px, not the column's 644px.
 A code block (`src/components/mdx/custom-pre.tsx`) is padded `px-4`, the same as its header, so the code lines up under the language icon and an 80-column line, the longest Prettier writes, fits the 644px column without scrolling.
 At `px-5` such a line overflows by 4px and its last character is clipped.
 
-From `xl` up, the right-hand gutter holds a post's table of contents, a project's facts (role and team when it has them, year, platforms, links, stack), the `timeline` list's hovered thumbnail, and, on every page, the back-to-top link.
-The left-hand gutter holds the back link (`navigation/back-button.tsx`), 192px wide at `right-full mr-10`, and on a project the table of contents under it, passed in as the back link's children; the facts and the table of contents together are taller than a laptop screen.
-The back link and what follows it are one rail that sticks at `top-32`, so the way up stays in reach down a long case study.
+From `xl` up, posts and projects share one layout.
+The right-hand gutter holds the page's facts: a post's publish date, reading time, views, and topics (`blog/post-facts.tsx`), or a project's role and team when it has them, year, platforms, links, and stack.
+It also holds the `timeline` list's hovered thumbnail and, on every page, the back-to-top link.
+The left-hand gutter holds the back link (`navigation/back-button.tsx`), 152px wide at `right-full mr-10`, and the table of contents under it, passed in as the back link's children; the facts and the table of contents together are taller than a laptop screen.
+The back link and what follows it are one rail that sticks at `top-32`, so the way up stays in reach down a long page.
+A table of contents taller than the window scrolls on its own, so its last entries stay in reach; at 800px tall every post's fits whole, which `e2e/blog.spec.ts` checks.
 The gutter spans the page's height and lets clicks through, and only the rail takes them, since a gutter laid over the link takes its clicks.
 The facts stick at `top-32` too, but only in a window at least 800px tall (the `tall` variant in `globals.css`): the tallest facts are 564px, and in a shorter window they would run under the back-to-top link, so there they scroll away with the header.
 `e2e/portfolio.spec.ts` checks every project's facts clear the link at that height, so a project with more facts fails the test rather than overlapping.
-Below `xl` a project's facts sit under its title instead; the admin preview, which has no gutter, always shows them there.
+Below `xl` a project's facts sit under its title instead, and a post's byline carries its date, reading time, and views; the admin preview, which has no gutter, always shows them there.
+A post's topics stay at its end as well, where a reader who finished it looks for more.
 In the gutter a project's links show their address, from `lib/display-url.ts`: a GitHub repository as `owner/repo`, an itch.io game as `itch.io/game` without the uploader's subdomain, and an address too long for the 224px gutter wraps only after a `/`, never at a hyphen.
 Everything in the right-hand gutter sits at `left-full ml-10` of the content column; `back-to-top.tsx` is fixed-position, so it repeats that offset as `calc(50% + 362px)`, and both change together if the column's width does.
 Below `xl` there are no gutters: the back link sits above the page's title, with its tap area grown to 44px, and back to top is a round button in the corner, above the footer.
@@ -238,10 +242,11 @@ Next loads `.env` for the app; `prisma.config.ts` loads it for the Prisma CLI wi
 
 Views live in the same Postgres database as everything else (`src/lib/views.ts`); a second datastore would buy nothing once comments are also read per page.
 
-- **Fails soft.** Any database error resolves to `null`, and `ViewCounter` renders nothing, separator dot included.
+- **Fails soft.** Any database error resolves to `null`, and `PostViewCount` renders nothing, separator dot or gutter row included.
   That is also the state before the tables exist.
-- **Hidden while small.** `ViewCounter` shows the count only from 100 views (`MIN_VIEWS_SHOWN`), since a small number reads as nobody reading; every view is still recorded.
-- **Counted client-side.** Posts are static, so `ViewCounter` calls `recordPostViewAction` on mount, guarded by a ref so Strict Mode does not double-count.
+- **Hidden while small.** `PostViewCount` shows the count only from 100 views (`MIN_VIEWS_SHOWN`), since a small number reads as nobody reading; every view is still recorded.
+- **Counted client-side, once.** Posts are static, so `PostViews` calls `recordPostViewAction` on mount, guarded by a ref so Strict Mode does not double-count, and shares the total with the count under the title and the one in the gutter.
+  Each recording its own view would count a first visit twice, since the two requests would race and each mint a session cookie.
   The action validates the slug against `getAllPostSlugs()` because a server action is a public endpoint.
 - **Deduped by session, not IP.** An IP is personal data, is shared behind a NAT, and follows people between networks.
   The action mints an opaque id into an httpOnly `pv_session` cookie with no `maxAge`, so it dies with the browser.
