@@ -24,6 +24,12 @@ describe('compileMdx', () => {
     ]);
   });
 
+  it('compiles images on consecutive lines into a gallery', async () => {
+    await expect(
+      compileMdx('![One](a.png)\n![Two](b.png)\n\n![Alone](c.png)\n'),
+    ).resolves.toBeDefined();
+  });
+
   it('accepts a component with literal attributes', async () => {
     await expect(
       compileMdx('<Callout type="warning">Careful</Callout>\n'),

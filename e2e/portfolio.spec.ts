@@ -154,3 +154,30 @@ test('opens a screenshot full size, browses the others, and closes back onto the
   // The page scrolls again once the viewer is gone.
   await expect(page.locator('html')).not.toHaveCSS('overflow', 'hidden');
 });
+
+test('lays screenshots out as a lead and two to a row, one per row on a phone', async ({
+  page,
+}) => {
+  const widths = async () => {
+    const screenshots = page.getByRole('button', { name: /^View full size/ });
+
+    await expect(screenshots.first()).toBeVisible();
+
+    return screenshots.evaluateAll((buttons) =>
+      buttons.map((button) => Math.round(button.getBoundingClientRect().width)),
+    );
+  };
+
+  await page.setViewportSize({ width: 1280, height: 800 });
+  // Seven: the lead, then three full rows
+  await page.goto('/portfolio/penny-diary');
+  expect(await widths()).toEqual([644, 314, 314, 314, 314, 314, 314]);
+
+  // Four: the one left over after the rows spans the column too
+  await page.goto('/portfolio/iconio');
+  expect(await widths()).toEqual([644, 314, 314, 644]);
+
+  await page.setViewportSize({ width: 390, height: 844 });
+  // Every image as wide as the lead, the width of the column
+  expect(new Set(await widths()).size).toBe(1);
+});
