@@ -1,0 +1,65 @@
+---
+title: 'Ryan Gan Portfolio'
+date: '2026-10-19'
+featured: false
+role: 'Solo Developer'
+platforms: ['web']
+summary: 'This site: a portfolio, project case studies, and a blog'
+thumbnailUrl: 'https://ik.imagekit.io/ryangan/Projects/ryangan-portfolio/ryangan-portfolio-thumbnail.png?updatedAt=1792475528000'
+techStack:
+  [
+    'nextjs',
+    'react',
+    'typescript',
+    'tailwindcss',
+    'prisma',
+    'postgresql',
+    'vercel',
+  ]
+link:
+  {
+    github: 'https://github.com/ryangandev/ryangan-portfolio',
+    live: 'https://ryangan.me',
+  }
+---
+
+## Overview
+
+_Ryan Gan Portfolio_ is the site you are reading: a home page, case studies of the projects I have built, and a blog.
+It started in 2023 as a Next.js app and has been rebuilt piece by piece since, toward a quiet, text-first design where every detail is deliberate.
+Every public page is static, and the content lives in the repository as MDX, written through an admin portal that saves to GitHub.
+
+## Features
+
+- **Case Studies** - A portfolio grouped by year with a platform filter and thumbnail previews on hover, and a page per project with its facts, stack, and a table of contents beside it
+
+- **A Blog** - MDX posts with code highlighting, topic pages, a reading time, a reading progress bar, a table of contents, an RSS feed, and a view counter that counts each session once
+
+- **An Admin Portal** - A signed-in editor where every draft is a GitHub pull request and publishing merges it, with a live preview that renders the real page, described in [Using GitHub Pull Requests as a CMS](/blog/github-pull-requests-as-a-cms)
+
+- **A Contact Form** - Sent through Resend, with a honeypot and a rate limit kept in the database so it holds across serverless instances
+
+- **Light and Dark** - A neutral design in both themes, following the system unless the visitor picks one, with page transitions that cross-fade in place
+
+## Responsibilities
+
+- Designed and built the whole site alone, from the design system and the brand mark to the content model, the admin portal, and the deployment
+
+- Built it with **Next.js** App Router, **React**, **TypeScript**, and **Tailwind CSS**, deployed on **Vercel**, with every public route rendered statically and content validated by strict schemas so a malformed file fails the build
+
+- Stored view counts, the contact rate limit, and admin sessions in **PostgreSQL** on Neon through **Prisma**, failing soft so a database outage never breaks a page
+
+- Built the admin portal on GitHub: a GitHub App scoped to this one repository for sign-in, blob ids so a save never overwrites newer work, and files written exactly as Prettier formats them by hand
+
+- Kept the site fast and accessible, with image placeholders inlined at build time, contrast checked in both themes, and Speed Insights watching real visits
+
+- Covered the flows that have broken before with Vitest unit tests and Playwright browser tests against the production build, run by CI on every pull request with no secrets
+
+## Screenshots
+
+![Home](https://ik.imagekit.io/ryangan/Projects/ryangan-portfolio/ryangan-portfolio-home.png)
+![Portfolio with a thumbnail preview on hover](https://ik.imagekit.io/ryangan/Projects/ryangan-portfolio/ryangan-portfolio-portfolio.png?updatedAt=1792475528000)
+![A project case study](https://ik.imagekit.io/ryangan/Projects/ryangan-portfolio/ryangan-portfolio-project.png?updatedAt=1792475528000)
+![Blog in the dark theme](https://ik.imagekit.io/ryangan/Projects/ryangan-portfolio/ryangan-portfolio-blog.png)
+![A post with its table of contents](https://ik.imagekit.io/ryangan/Projects/ryangan-portfolio/ryangan-portfolio-post.png)
+![Contact](https://ik.imagekit.io/ryangan/Projects/ryangan-portfolio/ryangan-portfolio-contact.png)
