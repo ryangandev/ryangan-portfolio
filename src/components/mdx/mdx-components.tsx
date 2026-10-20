@@ -12,6 +12,8 @@ import CustomCode from '@/components/mdx/custom-code';
 import CustomImage from '@/components/mdx/custom-image';
 import CustomLink from '@/components/mdx/custom-link';
 import CustomPre from '@/components/mdx/custom-pre';
+import { groupImages } from '@/components/mdx/group-images';
+import ImageGallery from '@/components/mdx/image-gallery';
 
 const components: MDXComponents = {
   a: CustomLink,
@@ -19,6 +21,7 @@ const components: MDXComponents = {
   img: CustomImage,
   pre: CustomPre,
   Callout,
+  ImageGallery,
 };
 
 /** A section heading, as rehype-slug left it */
@@ -140,7 +143,7 @@ export const compileMdx = async (
   const headings: MdxHeading[] = [];
   const { default: MdxContent } = await evaluate(source, {
     ...runtime,
-    remarkPlugins: [refuseJavaScript, remarkGfm],
+    remarkPlugins: [refuseJavaScript, remarkGfm, groupImages],
     rehypePlugins: [
       rehypeSlug,
       collectHeadings(headings),

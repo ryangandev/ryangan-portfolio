@@ -127,6 +127,12 @@ Its zoom maths lives in `geometry.ts`, unit tested apart from the component; zoo
 The full image is the ImageKit original, not a next/image variant, so the zoom has real detail; it loads over the page's own copy, which shows at once.
 On a touch screen a swipe moves between images, a pull down closes, and a double tap or a pinch zooms; a mouse drag only moves a zoomed image.
 
+Images written on consecutive lines, with no blank line between them, are one Markdown paragraph, and `groupImages` (`src/components/mdx/group-images.ts`) turns such a paragraph of two or more images into an `ImageGallery`.
+So a project's screenshots form a gallery with nothing new in the content, and an image on its own stays a full-width image.
+On a phone a gallery stays one image per row; from `md` up the first image spans the column and the rest sit two to a row, cropped to 8:5 from the top, and when an odd number follow the first, the last spans the column too.
+Each image in a gallery is captioned with its alt text, so alt text there has to name what the screenshot shows, not "Screenshot 1".
+A tile's `sizes` is its 314px, not the column's 644px.
+
 A code block (`src/components/mdx/custom-pre.tsx`) is padded `px-4`, the same as its header, so the code lines up under the language icon and an 80-column line, the longest Prettier writes, fits the 644px column without scrolling.
 At `px-5` such a line overflows by 4px and its last character is clipped.
 
@@ -379,7 +385,7 @@ Dependabot's updates are what trip it.
 - **Unit tests** (Vitest, `pnpm test`) sit beside their code in `src/` and mock the database.
   `tests/` holds checks on the repository itself.
   One is `tests/agent-docs.test.ts`: `AGENTS.md` sends agents to the docs bundled with the installed Next.js, and `agentRules: false` in `next.config.mjs` stops `next dev` from writing its own copy of that pointer into `AGENTS.md` whenever an agent runs it, so the test fails the Next update that moves the docs instead.
-- **Browser tests** (Playwright, `pnpm test:e2e`) live in `e2e/` and cover the flows that have broken before: the contact form's states, the theme toggle, client-side navigation, and the 404 page, plus the home page's expandable timeline and back to top, and the image viewer's browsing, zoom, and close.
+- **Browser tests** (Playwright, `pnpm test:e2e`) live in `e2e/` and cover the flows that have broken before: the contact form's states, the theme toggle, client-side navigation, and the 404 page, plus the home page's expandable timeline and back to top, the screenshot gallery's layout, and the image viewer's browsing, zoom, and close.
   For the admin portal they cover what a visitor who is not signed in meets, up to GitHub's authorize URL, which they intercept.
   Past sign-in the portal acts on GitHub as the signed-in user, so its repository calls are unit tested against a fake Octokit instead.
 
