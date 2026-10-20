@@ -322,6 +322,7 @@ Content stays in the repository: the portal is a form over the same files, and G
 - **Design history is a record kept by hand.** `/admin/history` shows each layout, structure, or visual overhaul big enough to remember, with what it was built with and screenshots in light and dark, from `src/data/design-history.ts`.
   The screenshots come from running that version's commit in `next dev`, at 1440x900 and 2x (a whole page at 1.5x, since ImageKit serves no original over 25 megapixels), and live on ImageKit under `/Design-History/<version>` with the dot as a dash, since ImageKit refuses a dot in a folder name.
   A new version is a new entry at the end; most changes are not one.
+  It is laid out like a post: the versions are its table of contents, and the left-hand gutter shows the facts of the version in view, which `DesignFacts` reads through the table of contents' own `useActiveHeadingId`.
 
 ### Sign-in
 
