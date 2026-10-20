@@ -139,6 +139,10 @@ A tile's `sizes` is its 314px, not the column's 644px.
 
 A code block (`src/components/mdx/custom-pre.tsx`) is padded `px-4`, the same as its header, so the code lines up under the language icon and an 80-column line, the longest Prettier writes, fits the 644px column without scrolling.
 At `px-5` such a line overflows by 4px and its last character is clipped.
+Code is highlighted by rehype-pretty-code with shiki's `min-light` and `min-dark`, on the page's own background (`keepBackground: false`).
+Their comments, #c2c3c5 and #6b737c, hold only 1.8:1 and 3.6:1 there, so `src/components/mdx/code-themes.ts` recolors them to `color-level-5`'s greys, 4.7:1 and 5.0:1, and leaves every other token alone.
+Shiki colors tokens with inline styles and no class names, so a comment cannot be targeted from CSS; the fix has to be in the theme.
+`shiki` is a direct dependency for the theme files, and must stay within rehype-pretty-code's peer range.
 
 From `xl` up, the right-hand gutter holds a post's table of contents, a project's facts (role and team when it has them, year, platforms, links, stack), the `timeline` list's hovered thumbnail, and, on every page, the back-to-top link.
 The left-hand gutter holds the back link (`navigation/back-button.tsx`), 192px wide at `right-full mr-10`, and on a project the table of contents under it, passed in as the back link's children; the facts and the table of contents together are taller than a laptop screen.

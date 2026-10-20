@@ -8,6 +8,7 @@ import rehypeSlug from 'rehype-slug';
 import remarkGfm from 'remark-gfm';
 
 import Callout from '@/components/callout';
+import { codeThemes } from '@/components/mdx/code-themes';
 import CustomCode from '@/components/mdx/custom-code';
 import CustomImage from '@/components/mdx/custom-image';
 import CustomLink from '@/components/mdx/custom-link';
@@ -115,10 +116,7 @@ const refuseJavaScript = () => (tree: MdastNode) => {
 const prettyCode = [
   rehypePrettyCode,
   {
-    theme: {
-      light: 'min-light',
-      dark: 'min-dark',
-    },
+    theme: codeThemes,
     keepBackground: false,
   },
 ];
