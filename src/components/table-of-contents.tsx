@@ -47,18 +47,25 @@ const getActiveId = (headings: MdxHeading[]): string | null => {
   return activeId;
 };
 
+/**
+ * The id of the heading whose section the reader is in, or null above the
+ * first, and on the server
+ */
+export const useActiveHeadingId = (headings: MdxHeading[]) =>
+  // The scroll position is state owned by the browser, so it is read through
+  // useSyncExternalStore rather than mirrored into React state by an effect.
+  useSyncExternalStore(
+    subscribe,
+    () => getActiveId(headings),
+    () => null,
+  );
+
 type TableOfContentsProps = {
   headings: MdxHeading[];
 };
 
 const TableOfContents = ({ headings }: TableOfContentsProps) => {
-  // The scroll position is state owned by the browser, so it is read through
-  // useSyncExternalStore rather than mirrored into React state by an effect.
-  const activeId = useSyncExternalStore(
-    subscribe,
-    () => getActiveId(headings),
-    () => null,
-  );
+  const activeId = useActiveHeadingId(headings);
 
   return (
     <nav aria-label="On this page" className="text-sm">
