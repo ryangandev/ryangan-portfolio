@@ -159,9 +159,9 @@ A post's topics stay at its end as well, where a reader who finished it looks fo
 In the gutter a project's links show their address, from `lib/display-url.ts`: a GitHub repository as `owner/repo`, an itch.io game as `itch.io/game` without the uploader's subdomain, and an address too long for the 192px gutter wraps only after a `/`, never at a hyphen.
 Everything in the right-hand gutter sits at `left-full ml-10` of the content column; `back-to-top.tsx` is fixed-position, so it repeats that offset as `calc(50% + 362px)`, and both change together if the column's width does.
 Below `xl` there are no gutters: the back link sits above the page's title, with its tap area grown to 44px, and back to top is a round button in the corner, above the footer.
-From the custom `toc` breakpoint, 1008px (`--breakpoint-toc` in `globals.css`), up to `xl`, a page keeps its table of contents in the right-hand gutter while its facts go under the title.
+From `lg` up to `xl`, a page keeps its table of contents in the right-hand gutter while its facts go under the title.
 The left-hand gutter is too narrow for the facts there, so the column and the contents, 876px together, are centred as a pair: `globals.css` moves the column and the footer 116px left on any page with a `data-contents-gutter`.
-At 1008px that leaves 66px either side, room enough that the text never runs close to the window's edge; narrower than that there are no gutters at all.
+At 1024px that leaves 74px either side, room enough that the text never runs close to the window's edge; narrower than that there are no gutters at all.
 Pages without a table of contents stay centred, so moving between a list and a post in that range moves the column sideways, under the page cross-fade.
 
 ## Routing and SEO

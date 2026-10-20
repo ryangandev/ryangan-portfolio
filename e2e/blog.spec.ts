@@ -82,7 +82,7 @@ test('scrolls a long table of contents in a short window, clear of back to top',
   await expect(last).toBeInViewport();
 });
 
-test('shows the contents without the facts from 1008px to xl, centred with the column', async ({
+test('shows the contents without the facts from lg to xl, centred with the column', async ({
   page,
 }) => {
   /**
@@ -120,7 +120,7 @@ test('shows the contents without the facts from 1008px to xl, centred with the c
     // The narrowest window with the contents. The column and the contents,
     // 876px together, are centred as a pair, and the footer lines up with the
     // column.
-    await page.setViewportSize({ width: 1008, height: 800 });
+    await page.setViewportSize({ width: 1024, height: 800 });
     await page.goto(href);
     await expect(contents).toBeVisible();
     await expect(facts).toBeHidden();
@@ -132,7 +132,7 @@ test('shows the contents without the facts from 1008px to xl, centred with the c
     expect(pair.footer, href).toBe(pair.column);
 
     // One pixel narrower, the contents go and the column centres alone.
-    await page.setViewportSize({ width: 1007, height: 800 });
+    await page.setViewportSize({ width: 1023, height: 800 });
     await expect(contents).toBeHidden();
 
     const alone = await measure();
