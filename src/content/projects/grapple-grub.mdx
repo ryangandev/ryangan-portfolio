@@ -2,7 +2,8 @@
 title: 'Grapple Grub'
 date: '2023-03-20'
 featured: false
-role: 'Gameplay Developer'
+role: 'Gameplay Programmer and Level Designer'
+team: { name: 'Grubby Games', url: 'https://sites.google.com/view/hpfishingco' }
 platforms: ['game']
 summary: 'A 3D multiplayer action-adventure platformer'
 thumbnailUrl: 'https://ik.imagekit.io/ryangan/Project%20Screenshots/grapple-grub/grapplegrub-thumbnail.png?updatedAt=1723239351853'
@@ -10,470 +11,56 @@ techStack: ['unity', 'csharp', 'photon', 'maya', 'adobeps', 'adobeai', 'trello']
 link: { live: 'https://michael-anderson.itch.io/grapple-grub' }
 ---
 
-## Game Overview
+_Grapple Grub_ is a 3D multiplayer platformer set in a flooded, neon-lit future city, where the players are delivery robots for the food delivery giant _Foober Uoods_.
+They run, jump, and grapple between buildings to deliver orders before they go cold, and spend their tips on new abilities and harder levels.
 
-_Grapple Grub_ is a fast-paced 3D multiplayer action-adventure platformer set in a flooded futuristic neon city. Players take on the role of a delivery robot working for the food delivery mega-corp, Foober Uoods.
+We made it as Grubby Games, a team of twelve students at Drexel University, over the 20 weeks of our junior game workshop.
+I was one of its gameplay programmers, and designed levels for the single-player mode.
 
-Navigate the urban landscape by running, jumping, and grappling between buildings to deliver orders before they get cold. Earn tips from successful deliveries to unlock new abilities and access challenging levels, competing for the fastest completion times.
+## A Traffic System Tool
 
-## Contributions
+The city needed traffic: hovering cars streaming along the streets between the players' rooftops, and obstacles to dodge.
+I built it as a Unity tool, so the level designers could lay out a traffic path, choose its vehicles and obstacles such as traffic lights, and set how busy it runs, all from the editor.
 
-We are Grubby Games, a small team from Drexel University. We made Grapple Grub over the course of 20 weeks for our Junior Workshop class. As a **Gameplay Developer** and **Level Designer**, my key contributions include:
+Cars spawn at random points around each loop, but never closer together than a safe distance, including across the seam where the loop closes:
 
-- **Traffic System** - Developed a custom Unity tool for creating a dynamic traffic simulation with hovering vehicles and obstacles around the city
-
-- **Player Mechanics** - Implemented a smooth mantling movement to enhance the player's core movement abilities
-
-- **Multiplayer Infrastructure** - Engineered lobby management and in-game synchronization using Photon with support for both private and public multiplayer rooms
-
-- **Level Design** - Designed multiple levels for the single-player mode
-
-## Our Website
-
-- [Grubby Games](https://sites.google.com/view/hpfishingco)
-
-## Code Snippets
-
-- [Traffic System Simulation Builder](https://gist.github.com/ryangandev/13a04c9ffb2872d905546d37ba5e03e9) - Create a traffic system simulation in Unity. You can customize traffic paths, spawning vehicles, obstacles (traffic lights and etc.) to create various traffic scenarios.
-
-```csharp showLineNumbers title="TrafficPathFormer.cs"
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-
-public class TrafficPathFormer : MonoBehaviour
+```csharp title="TrafficPathFormer.cs"
+// Place cars around the loop at random, but at least _minSafeDistance apart:
+// pick sorted random offsets within the length the safe distances leave over,
+// then push each car one safe distance further along than the car before it.
+// The gap from the last car back around to the first is at least
+// _minSafeDistance too.
+private float[] GetSpawnTimes(int count)
 {
-  [System.Serializable]
-  public class PathAction : ISerializationCallbackReceiver
+  float slack = _length - count * _minSafeDistance;
+  float[] times = new float[count];
+
+  for (int i = 0; i < count; i++)
   {
-    public Vector3 movement;
-    public float speedMultiplier = 1f;
-
-    public PathAction()
-    {
-      movement = Vector3.zero;
-      speedMultiplier = 1f;
-
-    }
-
-    public void OnBeforeSerialize()
-    {
-      if (Mathf.Approximately(speedMultiplier, 0f))
-      {
-        speedMultiplier = 1f;
-      }
-    }
-
-    public void OnAfterDeserialize()
-    {
-      if (Mathf.Approximately(speedMultiplier, 0f))
-      {
-        speedMultiplier = 1f;
-      }
-    }
+    times[i] = Random.Range(0f, slack);
   }
 
-  [SerializeField] private bool _randomCar = true;
-  [SerializeField] private Transform[] _car;
-  [SerializeField] private float _speed = 1f;
-  [SerializeField] private float _smoothing = 0.1f;
-  [SerializeField] private bool _alignRotation = true;
-  [SerializeField] private List<PathAction> _pathActions;
+  System.Array.Sort(times);
 
-  // added for Traffic System
-  [SerializeField] private int _numberOfCars = 40;
-  [SerializeField] private float _minSafeDistance = 25;
-
-  private float _length;
-  private bool _loopConnects;
-
-  // added for Traffic System
-  private int _maxNumberOfCars;
-  private List<CarMovement> _cars = new List<CarMovement>();
-
-  public float speed => _speed;
-
-  private void Awake()
+  for (int i = 0; i < count; i++)
   {
-    UpdateLength();
-    UpdateLoopConnects();
-    ConnectLoop();
-
-    _maxNumberOfCars = (int)Mathf.Floor(_length / _minSafeDistance);
-
-    Random.InitState(2023);
-
-    // a path shorter than 60 units is too short to hold any traffic
-    if (_length < 60f) return;
-
-    _numberOfCars = Mathf.Clamp(_numberOfCars, 0, _maxNumberOfCars);
-
-    float[] spawnTimes = GetSpawnTimes(_numberOfCars);
-
-    for (int i = 0; i < _numberOfCars; i++)
-    {
-      SpawnCar(i, spawnTimes[i]);
-    }
+    times[i] += i * _minSafeDistance;
   }
 
-  // Place cars around the loop at random, but at least _minSafeDistance apart:
-  // pick sorted random offsets within the length the safe distances leave over,
-  // then push each car one safe distance further along than the car before it.
-  // The gap from the last car back around to the first is at least
-  // _minSafeDistance too.
-  private float[] GetSpawnTimes(int count)
-  {
-    float slack = _length - count * _minSafeDistance;
-    float[] times = new float[count];
-
-    for (int i = 0; i < count; i++)
-    {
-      times[i] = Random.Range(0f, slack);
-    }
-
-    System.Array.Sort(times);
-
-    for (int i = 0; i < count; i++)
-    {
-      times[i] += i * _minSafeDistance;
-    }
-
-    return times;
-  }
-
-  private void SpawnCar(int index, float time)
-  {
-    Vector3 position = GetPositionAtTime(time);
-    Vector3 rotation = GetRotationAtTime(time);
-    Transform prefab = _randomCar ? _car[Random.Range(0, _car.Length)] : _car[0];
-
-    Transform car = Instantiate(prefab, position, Quaternion.Euler(rotation.x, rotation.y, 0));
-    car.name = "Car " + index;
-    car.parent = transform;
-
-    CarMovement carMovement = car.GetComponent<CarMovement>();
-    carMovement.setTimer(time);
-    // start smoothing from the rotation the car spawned with, not from zero
-    carMovement._currentRotation = rotation;
-    _cars.Add(carMovement);
-  }
-
-  private void Update()
-  {
-    UpdateLength();
-    UpdateLoopConnects();
-    UpdateTimer();
-    UpdateObjectPosition();
-
-    if (_alignRotation)
-    {
-      UpdateObjectRotation();
-    }
-  }
-
-  private Vector3 GetPositionAtTime(float time)
-  {
-    float currentTime = 0f;
-    Vector3 position = transform.position;
-
-    foreach (PathAction pathAction in _pathActions)
-    {
-      float newTime = currentTime + pathAction.movement.magnitude;
-
-      if (newTime >= time)
-      {
-        float normalizedTime = Map(time, currentTime, newTime, 0, 1);
-        Vector3 newPosition = position + transform.TransformDirection(pathAction.movement);
-        position = Vector3.Lerp(position, newPosition, normalizedTime);
-        break;
-      }
-      else
-      {
-        position += transform.TransformDirection(pathAction.movement);
-        currentTime = newTime;
-      }
-    }
-
-    return position;
-  }
-
-  public static float Map(float x, float inMin, float inMax, float outMin, float outMax)
-  {
-    return (x - inMin) * (outMax - outMin) / (inMax - inMin) + outMin;
-  }
-
-  private Vector3 GetRotationAtTime(float time)
-  {
-    float currentTime = 0f;
-
-    foreach (PathAction pathAction in _pathActions)
-    {
-      float newTime = currentTime + pathAction.movement.magnitude;
-
-      if (newTime >= time)
-      {
-        return Quaternion.LookRotation(transform.TransformDirection(pathAction.movement), Vector3.up).eulerAngles;
-      }
-      else
-      {
-        currentTime = newTime;
-      }
-    }
-
-    return transform.eulerAngles;
-  }
-
-  private float GetSpeedMultiplierAtTime(float time)
-  {
-    float currentTime = 0f;
-
-    foreach (PathAction pathAction in _pathActions)
-    {
-      float newTime = currentTime + pathAction.movement.magnitude;
-
-      if (newTime >= time)
-      {
-        return pathAction.speedMultiplier;
-      }
-      else
-      {
-        currentTime = newTime;
-      }
-    }
-
-    return 1f;
-  }
-
-  private void UpdateTimer()
-  {
-    foreach (CarMovement carMovement in _cars)
-    {
-      if (!carMovement._isMoving) continue;
-
-      float distance = Time.deltaTime * GetSpeedMultiplierAtTime(carMovement._timer) * _speed * carMovement._speedMultiplier;
-
-      // the path is always a closed loop, so wrap around to the start
-      carMovement._timer = Mathf.Repeat(carMovement._timer + distance, _length);
-    }
-  }
-
-  private void UpdateLength()
-  {
-    _length = 0f;
-
-    foreach (PathAction pathAction in _pathActions)
-    {
-      _length += pathAction.movement.magnitude;
-    }
-  }
-
-  private void UpdateLoopConnects()
-  {
-    if (Vector3.Distance(GetPositionAtTime(0f), GetPositionAtTime(_length)) < 0.01f)
-    {
-      _loopConnects = true;
-    }
-    else
-    {
-      _loopConnects = false;
-    }
-  }
-
-  private void ConnectLoop()
-  {
-    if (!_loopConnects)
-    {
-      // If path is not already in a loop, add a new PathAction to connect the end of the path to the start of the path
-      Vector3 endPosition = GetPositionAtTime(_length);
-      Vector3 startPosition = GetPositionAtTime(0f);
-      Vector3 loopMovement = startPosition - endPosition;
-
-      PathAction loopAction = new PathAction();
-      loopAction.movement = loopMovement;
-      _pathActions.Add(loopAction);
-
-      // Update path length
-      _length += loopMovement.magnitude;
-
-      // Check if the end of the path now connects to the start of the path
-      UpdateLoopConnects();
-    }
-  }
-
-  private void UpdateObjectPosition()
-  {
-    foreach (CarMovement carMovement in _cars)
-    {
-      Transform car = carMovement.transform;
-      carMovement._targetPosition = GetPositionAtTime(carMovement._timer);
-
-      bool useSmoothing = true;
-
-      if (_smoothing < 0.0001f)
-      {
-        useSmoothing = false;
-      }
-
-      if (useSmoothing)
-      {
-        car.position = Vector3.SmoothDamp(car.position, carMovement._targetPosition, ref carMovement._positionVelocity, _smoothing);
-      }
-      else
-      {
-        car.position = carMovement._targetPosition;
-        carMovement._positionVelocity = Vector3.zero;
-      }
-    }
-  }
-
-  private void UpdateObjectRotation()
-  {
-    foreach (CarMovement carMovement in _cars)
-    {
-      Transform car = carMovement.transform;
-      carMovement._targetRotation = GetRotationAtTime(carMovement._timer);
-
-      if (_smoothing >= 0.0001f)
-      {
-        Vector3 rot = new Vector3(
-            Mathf.SmoothDampAngle(carMovement._currentRotation.x, carMovement._targetRotation.x,
-                ref carMovement._rotationVelocityX, _smoothing),
-            Mathf.SmoothDampAngle(carMovement._currentRotation.y, carMovement._targetRotation.y,
-                ref carMovement._rotationVelocityY, _smoothing),
-            Mathf.SmoothDampAngle(carMovement._currentRotation.z, carMovement._targetRotation.z,
-                ref carMovement._rotationVelocityZ, _smoothing));
-
-        carMovement._currentRotation = rot;
-      }
-      else
-      {
-        carMovement._currentRotation = carMovement._targetRotation;
-        carMovement._rotationVelocityX = 0f;
-        carMovement._rotationVelocityY = 0f;
-        carMovement._rotationVelocityZ = 0f;
-      }
-
-      car.rotation = Quaternion.Euler(carMovement._currentRotation.x, carMovement._currentRotation.y, carMovement._currentRotation.z);
-    }
-  }
-
-  private void OnDrawGizmos()
-  {
-    Gizmos.color = Color.magenta;
-    Gizmos.DrawWireSphere(transform.position, 0.1f);
-
-    Vector3 position = transform.position;
-
-    if (_pathActions != null)
-    {
-      foreach (PathAction pathAction in _pathActions)
-      {
-        Vector3 newPosition = position + transform.TransformDirection(pathAction.movement);
-
-        Gizmos.DrawLine(position, newPosition);
-        Gizmos.DrawWireSphere(newPosition, 0.1f);
-
-        position = newPosition;
-      }
-    }
-  }
+  return times;
 }
 ```
 
-```csharp showLineNumbers title="CarMovement.cs"
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+The whole tool is in [this gist](https://gist.github.com/ryangandev/13a04c9ffb2872d905546d37ba5e03e9).
 
-public class CarMovement : MonoBehaviour
-{
-  public bool _isMoving;
-  public float _timer;
-  [HideInInspector] public Vector3 _targetPosition;
-  [HideInInspector] public Vector3 _positionVelocity;
-  [HideInInspector] public Vector3 _targetRotation;
-  [HideInInspector] public Vector3 _currentRotation;
-  [HideInInspector] public float _rotationVelocityX;
-  [HideInInspector] public float _rotationVelocityY;
-  [HideInInspector] public float _rotationVelocityZ;
-  [HideInInspector] public float _speedMultiplier = 1f;
-  public float _furthestRayCheck = 20f;
-  public float _closestRayCheck = 7.5f;
-  // how quickly _speedMultiplier moves between 0 and 1, per second
-  public float _acceleration = 1.8f;
-  public LayerMask _layerMask;
+## Online Multiplayer
 
-  void Start()
-  {
-    _isMoving = true;
-  }
+I built the multiplayer on **Photon**: the lobby, public and private rooms, and keeping every player's game in sync once a match starts.
 
-  void Update()
-  {
-    UpdateObstacleAhead();
-  }
+## Movement and Levels
 
-  public void setTimer(float timer)
-  {
-    this._timer = timer;
-  }
-
-  // Use a ray cast method to detect if there is a traffic light ahead of the current car
-  private void UpdateObstacleAhead()
-  {
-    RaycastHit hit;
-    if (Physics.Raycast(transform.position, transform.forward, out hit, _furthestRayCheck, _layerMask))
-    {
-      if (hit.collider.CompareTag("TrafficLight") && hit.collider.GetComponentInParent<TrafficLightController>()._isGreen)
-      {
-        SpeedUp();
-      }
-      else if (hit.collider.CompareTag("TrafficLight") || hit.collider.CompareTag("Car"))
-      {
-        if (hit.distance <= _closestRayCheck)
-        {
-          StopMovement();
-        }
-        else
-        {
-          SlowDown();
-        }
-      }
-    }
-    else
-    {
-      SpeedUp();
-    }
-  }
-
-  // Scaled by Time.deltaTime, so a car slows down and speeds up at the same
-  // rate whatever the frame rate
-  private void SlowDown()
-  {
-    _speedMultiplier = Mathf.MoveTowards(_speedMultiplier, 0f, _acceleration * Time.deltaTime);
-    _isMoving = _speedMultiplier > 0f;
-  }
-
-  private void SpeedUp()
-  {
-    _speedMultiplier = Mathf.MoveTowards(_speedMultiplier, 1f, _acceleration * Time.deltaTime);
-    _isMoving = true;
-  }
-
-  private void StopMovement()
-  {
-    _speedMultiplier = 0f;
-    _isMoving = false;
-  }
-
-  // OnDrawGizmos method to draw a ray cast in the scene view
-  private void OnDrawGizmos()
-  {
-    Gizmos.color = Color.blue;
-    Gizmos.DrawRay(transform.position, transform.forward * _furthestRayCheck);
-  }
-}
-```
+I added a smooth mantle that carries the player up and over a ledge they catch, so a near miss keeps the run going instead of ending it.
+I also designed several of the single-player levels.
 
 ## Screenshots
 

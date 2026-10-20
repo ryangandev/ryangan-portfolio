@@ -2,9 +2,9 @@
 title: 'Icon.io'
 date: '2023-10-28'
 featured: false
-role: 'Full-Stack Developer'
+role: 'Real-Time Developer and UI Designer'
 platforms: ['web', 'game']
-summary: 'A web-based multiplayer gaming platform'
+summary: 'Real-time party games in the browser'
 thumbnailUrl: 'https://ik.imagekit.io/ryangan/Project%20Screenshots/iconio/icon.io-thumbnail.png?updatedAt=1723238598008'
 techStack:
   [
@@ -21,23 +21,21 @@ techStack:
 link: { github: 'https://github.com/ryangandev/icon.io' }
 ---
 
-## Overview
+_Icon.io_ is a web platform for playing party games with friends, built around real-time updates: the lobby, rooms, chat, and play all happen live, broadcast to every player through sockets.
+Its one game is _Draw & Guess_, where one player draws a word and the others guess it.
 
-_Icon.io_ is a web-based multiplayer gaming platform that brings friends together through engaging puzzle games. Players can quickly set up a profile and jump into a game in just seconds. The platform is designed to offer a relaxing environment where players can enjoy solving creative challenges while having fun.
+Three of us built it in three weeks, as the final project of a web development course.
+I designed the interface in **Figma**, from the landing page where a player picks a name to the room list and the game, and built the real-time layer and the drawing board.
 
-## Features
+## Real Time, End to End
 
-- **Comprehensive Room Management** - Users can easily create, join, or leave rooms, with support for both private and public room settings
-- **Real-Time Updates** - Real-time features for live lobby updates, room info, chat messages and latest game activities
-- **Interactive Whiteboard** - Provides a whiteboard canvas with a color palette and brush options for players to create and broadcast drawings synchronously
-- **Complete Gameplay Mechanics** - Each game follows a well-structured loop with turn-taking logic and a scoring system.
+On the server, **Socket.io** broadcasts every change to the players it concerns: the lobby's room list, a room's players, chat messages, and each turn of the game.
+In the browser, **React** state takes those broadcasts in, so every player's screen stays in step without a refresh.
 
-## Technologies Used
+## A Shared Drawing Board
 
-- **Figma, React, Ant Design, CSS** - UI/UX design and frontend development
-- **Node.js, Express** - Backend development
-- **Socket.io** - Real-time communication
-- **AWS EC2, PM2** - Deployment
+The drawing board is a canvas with a color palette and brush settings.
+Each stroke is broadcast as it is drawn, so the guessers watch the drawing appear as it happens.
 
 ## Screenshots
 

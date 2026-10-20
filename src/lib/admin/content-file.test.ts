@@ -102,6 +102,7 @@ describe('content files', () => {
         date: '2026-09-28',
         featured: true,
         role: 'Developer',
+        team: { name: '', url: '' },
         platforms: ['web', 'ios'],
         summary: 'A demo',
         thumbnailUrl: 'https://ik.imagekit.io/ryangan/demo.png',
@@ -145,6 +146,40 @@ techStack: ['react', 'typescript']
     expect(toFrontmatter('projects', values).link).toEqual({
       github: undefined,
       live: 'https://michael-anderson.itch.io/grapple-grub',
+    });
+  });
+
+  it("keeps a team project's role and team, and drops a solo one's", () => {
+    const team = toFormValues(
+      'projects',
+      'grapple-grub',
+      parseContentFile(
+        'projects',
+        contentFiles.find(({ slug }) => slug === 'grapple-grub')!.source,
+      ).frontmatter,
+      '',
+    );
+    const solo = toFormValues(
+      'projects',
+      'penny-diary',
+      parseContentFile(
+        'projects',
+        contentFiles.find(({ slug }) => slug === 'penny-diary')!.source,
+      ).frontmatter,
+      '',
+    );
+
+    expect(toFrontmatter('projects', team)).toMatchObject({
+      role: 'Gameplay Programmer and Level Designer',
+      team: {
+        name: 'Grubby Games',
+        url: 'https://sites.google.com/view/hpfishingco',
+      },
+    });
+    expect(solo).toMatchObject({ role: '', team: { name: '', url: '' } });
+    expect(toFrontmatter('projects', solo)).toMatchObject({
+      role: undefined,
+      team: undefined,
     });
   });
 

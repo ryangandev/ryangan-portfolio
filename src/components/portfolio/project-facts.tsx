@@ -78,7 +78,8 @@ const DotLine = ({ facts }: { facts: React.ReactNode[] }) => (
 );
 
 /**
- * A project's role, year, platforms, links, and tech stack. The project page
+ * A project's role and team when it has them, its year, platforms, links, and
+ * tech stack. The project page
  * shows them in the right-hand gutter from xl up and under the title below
  * that; the admin preview, which has no gutter, always under the title.
  */
@@ -92,6 +93,11 @@ const ProjectFacts = ({ project, stack, placement }: ProjectFactsProps) => {
       href: project.link.github,
     },
   ].filter((link) => !!link);
+  const team = project.team && (
+    <AnimatedLink href={project.team.url} isExternal>
+      {project.team.name}
+    </AnimatedLink>
+  );
 
   if (placement === 'inline') {
     // The links get a line of their own, so a narrow screen never wraps one
@@ -99,14 +105,29 @@ const ProjectFacts = ({ project, stack, placement }: ProjectFactsProps) => {
     return (
       <div className="flex flex-col gap-3 text-sm leading-[22px]">
         <div className="flex flex-col gap-1">
-          <DotLine facts={[project.role, year, platforms]} />
-          {links.length > 0 && (
+          <DotLine
+            facts={[project.role, year, platforms].filter((fact) => !!fact)}
+          />
+          {(links.length > 0 || project.team) && (
             <DotLine
-              facts={links.map(({ label, href }) => (
-                <AnimatedLink key={href} href={href} isExternal>
-                  {label === 'Live' ? 'Live demo' : label}
-                </AnimatedLink>
-              ))}
+              facts={[
+                ...links.map(({ label, href }) => (
+                  <AnimatedLink key={href} href={href} isExternal>
+                    {label === 'Live' ? 'Live demo' : label}
+                  </AnimatedLink>
+                )),
+                // With no label beside it, the team's name alone would not
+                // say what the link opens.
+                project.team && (
+                  <AnimatedLink
+                    key={project.team.url}
+                    href={project.team.url}
+                    isExternal
+                  >
+                    Team site
+                  </AnimatedLink>
+                ),
+              ].filter((fact) => !!fact)}
             />
           )}
         </div>
@@ -116,7 +137,8 @@ const ProjectFacts = ({ project, stack, placement }: ProjectFactsProps) => {
   }
 
   const facts: { label: string; value: React.ReactNode }[] = [
-    { label: 'Role', value: project.role },
+    ...(project.role ? [{ label: 'Role', value: project.role }] : []),
+    ...(team ? [{ label: 'Team', value: team }] : []),
     { label: 'Year', value: year },
     { label: 'Platforms', value: platforms },
     ...links.map(({ label, href }) => ({

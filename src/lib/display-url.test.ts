@@ -22,9 +22,15 @@ describe('displayUrlParts', () => {
     ]);
   });
 
-  it('splits a path after each slash, never at a hyphen', () => {
+  it('reads an itch.io game without the uploader', () => {
     expect(
       displayUrlParts('https://michael-anderson.itch.io/grapple-grub'),
-    ).toEqual(['michael-anderson.itch.io/', 'grapple-grub']);
+    ).toEqual(['itch.io/', 'grapple-grub']);
+  });
+
+  it('splits a path after each slash, never at a hyphen', () => {
+    expect(
+      displayUrlParts('https://example-studio.com/games/grapple-grub'),
+    ).toEqual(['example-studio.com/', 'games/', 'grapple-grub']);
   });
 });

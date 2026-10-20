@@ -46,7 +46,7 @@ const ProjectFields = ({ control, imageFolder }: ProjectFieldsProps) => {
             <FormItem>
               <FormLabel>Role</FormLabel>
               <FormControl>
-                <Input placeholder="Full Stack Developer" {...field} />
+                <Input placeholder="Empty for a solo project" {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -208,6 +208,35 @@ const ProjectFields = ({ control, imageFolder }: ProjectFieldsProps) => {
           render={({ field }) => (
             <FormItem>
               <FormLabel>Live demo</FormLabel>
+              <FormControl>
+                <Input type="url" placeholder="https://..." {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+      </div>
+
+      <div className="grid gap-5 md:grid-cols-2">
+        <FormField
+          control={control}
+          name="team.name"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Team</FormLabel>
+              <FormControl>
+                <Input placeholder="Empty for a solo project" {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={control}
+          name="team.url"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Team site</FormLabel>
               <FormControl>
                 <Input type="url" placeholder="https://..." {...field} />
               </FormControl>

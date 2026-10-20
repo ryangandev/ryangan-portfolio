@@ -2,7 +2,6 @@
 title: 'Penny Diary'
 date: '2026-10-16'
 featured: true
-role: 'Solo Developer'
 platforms: ['web', 'ios']
 summary: 'A personal finance tracker for iPhone and the web'
 thumbnailUrl: 'https://ik.imagekit.io/ryangan/Projects/penny-diary/pennydiary-thumbnail.png?updatedAt=1792475528000'
@@ -20,45 +19,37 @@ techStack:
 link: { live: 'https://pennydiary.rystudio.app/' }
 ---
 
-## Overview
-
-_Penny Diary_ is a personal finance tracker: a SwiftUI iPhone app and a Next.js web app that share one ledger.
+_Penny Diary_ is a personal finance tracker I designed and built on my own: a SwiftUI iPhone app and a Next.js web app that share one ledger.
 Every entry is typed, spoken, or tapped in by the person who spent it, with no bank connection, and the app reads it back as a clear picture of where the money went.
 The iPhone app works on its own with no account, and _Penny Diary Pro_ syncs the ledger to the web and across devices.
 
-## Features
+## One Ledger, Two Apps
 
-- **Where It Went** - Home shows the period's spending as one large figure against the period before, twelve periods of history, and the categories that took the most, with their share and trend
+The iPhone app is local-first: the ledger lives on the device and works offline, and a write queue syncs it to **Supabase** once the person signs in, recovering from refusals, conflicts, and lost answers without losing an entry.
+The web app, in **Next.js** on **Vercel**, loads every tab on the client, so moving around the ledger never waits on the server.
 
-- **Fast Entry** - An Add sheet one tap away on every screen, fill-in by voice, title suggestions that bring their amount and category with them, and an Add Transaction action for Siri, Spotlight, and Shortcuts
+Both read the same **PostgreSQL** schema, with row level security on every table, decimal amounts the database adds up itself, and soft deletes behind a recently deleted list.
+The report logic is written twice, in Swift and in TypeScript, and both are held to one shared fixture, so every number matches on both clients.
+_Penny Diary Pro_ runs on **StoreKit 2**, and Supabase Edge Functions record each subscription from data Apple signed, so a purchase on the iPhone unlocks the web for the same account.
 
-- **Apple Pay Automation** - A Shortcuts automation records each Apple Pay purchase as it happens, cleans up the merchant name, and marks the entry as automatic
+## Logging in Seconds
 
-- **Reports** - Spending and income by category in a share ring, day-by-day bars, insights, and saved reports for the views that matter, such as food or fixed costs
+A ledger is only as good as what gets written into it, so adding an entry is never more than a tap away.
 
-- **Recurring Entries** - Weekly, monthly, and yearly rules for rent, pay, and subscriptions, which write each entry on its due date, with what the next 30 days will bring
+- **The Add sheet** opens from every screen, fills in by voice, and suggests titles that bring their amount and category with them, and the same action runs from Siri, Spotlight, and Shortcuts
+- **Apple Pay automation** records each Apple Pay purchase as it happens through a Shortcuts automation, with the merchant name cleaned up and the entry marked as automatic
+- **Recurring rules** write rent, pay, and subscriptions on their due dates, and show what the next 30 days will bring
 
-- **Refunds and Adjustments** - A return or cashback is recorded against the purchase it belongs to, so the original amount stays on record and reports count what was really spent
+## Where It Went
 
-- **A Desk-Sized Web App** - The same ledger in a wide layout with a sidebar, side panels, and keyboard shortcuts for every common action, plus CSV export
+Home shows the period's spending as one large figure against the period before, twelve periods of history, and the categories that took the most.
+Reports break spending and income down by category and by day, and saved reports keep the views that matter, such as food or fixed costs.
+A refund or cashback is recorded against the purchase it belongs to, so the original amount stays on record and reports count what was really spent.
 
-- **The Ledger Look** - A paper and ink design system in light Paper and dark Navy themes, built once and shared by both apps
+## Paper and Ink
 
-## Responsibilities
-
-- Designed and built the whole product alone, from the design system and both apps to the database, the subscription, and the App Store release plan
-
-- Built the iPhone app in **SwiftUI** as local-first: the ledger lives on the device and works offline, and a write queue syncs it to **Supabase** once the person signs in, recovering from refusals, conflicts, and lost answers without losing an entry
-
-- Built the web app with **Next.js**, **React**, **TypeScript**, and **Tailwind CSS**, deployed on **Vercel**, with every tab loading on the client so moving around the ledger never waits on the server
-
-- Designed the shared **PostgreSQL** schema in migrations, with row level security on every table, decimal amounts the database adds up itself, soft deletes with a recently deleted list, and SQL tests run against a fresh database
-
-- Kept every report number identical on both clients by mirroring the report logic in Swift and TypeScript and holding both to one shared parity fixture
-
-- Built _Penny Diary Pro_ with **StoreKit 2** and Supabase Edge Functions that record subscriptions from data Apple signed, so a purchase on the iPhone unlocks the web for the same account
-
-- Added Sign in with Apple and Google, a Face ID app lock, a daily logging reminder, a ledger currency chosen from the world's currencies, and a privacy policy that tests hold to every column the database stores
+Both apps share one design system, a paper ledger in a light Paper theme and a dark Navy one.
+On the web it spreads out to fit a desk, with a sidebar, side panels, keyboard shortcuts for every common action, and CSV export.
 
 ## Screenshots
 

@@ -40,7 +40,11 @@ export const ProjectFrontmatterSchema = z.strictObject({
   title: NonEmpty,
   date: ContentDate,
   featured: z.boolean().default(false),
-  role: NonEmpty,
+  // Only where it says something: a team project names the part Ryan played,
+  // and a solo project leaves it out rather than repeating "Solo Developer".
+  role: NonEmpty.optional(),
+  // The team behind a team project, linked to its own site.
+  team: z.strictObject({ name: NonEmpty, url: z.url() }).optional(),
   platforms: z
     .array(z.enum(platformNames))
     .min(1, { message: 'Pick at least one platform' }),

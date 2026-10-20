@@ -70,6 +70,8 @@ export const renderContentPreview = async (
 
   const project = toFrontmatter('projects', {
     ...(values as ProjectFormValues),
+    role: (values as Partial<ProjectFormValues>).role ?? '',
+    team: (values as Partial<ProjectFormValues>).team ?? { name: '', url: '' },
     link: (values as Partial<ProjectFormValues>).link ?? {
       github: '',
       live: '',
@@ -85,7 +87,6 @@ export const renderContentPreview = async (
         project={{
           ...project,
           title: previewText(project.title, 'Untitled project'),
-          role: previewText(project.role, 'Role'),
           summary: previewText(project.summary, 'Summary'),
           date: previewDate(project.date),
           platforms: project.platforms ?? [],

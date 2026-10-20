@@ -45,6 +45,10 @@ Projects and posts are MDX files with YAML frontmatter in `src/content/`, read b
   They drive the portfolio list's filter and are shown in the order that file declares them, whatever order the frontmatter lists them in.
 - **Thumbnails** must be `https://ik.imagekit.io` URLs, the one host `images.remotePatterns` in `next.config.mjs` allows; next/image refuses any other.
 - **Topics** become URL slugs through `toTopicSlug` (`src/lib/topics.ts`) and get statically generated pages at `/blog/topics/[topic]`.
+- **Role and team** are optional, for team projects: `role` names the part Ryan played, and `team` the team's name and its site.
+  A solo project leaves both out and says so in its first paragraph.
+- **A case study's sections are its own.** Each opens with what the project is, who it is for, and why it exists, then gives two to four `h2`s named for what sets it apart, then its screenshots.
+  A list of what Ryan did belongs only in a team project, where it separates his part from the team's.
 - **Featured:** projects flagged `featured` appear on the home page.
   For posts, the flagged ones do, or the two newest when none are flagged, so flagging one post replaces both.
 
@@ -136,14 +140,14 @@ A tile's `sizes` is its 314px, not the column's 644px.
 A code block (`src/components/mdx/custom-pre.tsx`) is padded `px-4`, the same as its header, so the code lines up under the language icon and an 80-column line, the longest Prettier writes, fits the 644px column without scrolling.
 At `px-5` such a line overflows by 4px and its last character is clipped.
 
-From `xl` up, the right-hand gutter holds a post's table of contents, a project's facts (role, year, platforms, links, stack), the `timeline` list's hovered thumbnail, and, on every page, the back-to-top link.
+From `xl` up, the right-hand gutter holds a post's table of contents, a project's facts (role and team when it has them, year, platforms, links, stack), the `timeline` list's hovered thumbnail, and, on every page, the back-to-top link.
 The left-hand gutter holds the back link (`navigation/back-button.tsx`), 192px wide at `right-full mr-10`, and on a project the table of contents under it, passed in as the back link's children; the facts and the table of contents together are taller than a laptop screen.
 The back link and what follows it are one rail that sticks at `top-32`, so the way up stays in reach down a long case study.
 The gutter spans the page's height and lets clicks through, and only the rail takes them, since a gutter laid over the link takes its clicks.
 The facts stick at `top-32` too, but only in a window at least 800px tall (the `tall` variant in `globals.css`): the tallest facts are 564px, and in a shorter window they would run under the back-to-top link, so there they scroll away with the header.
 `e2e/portfolio.spec.ts` checks every project's facts clear the link at that height, so a project with more facts fails the test rather than overlapping.
 Below `xl` a project's facts sit under its title instead; the admin preview, which has no gutter, always shows them there.
-In the gutter a project's links show their address, from `lib/display-url.ts`: a GitHub repository as `owner/repo`, and an address too long for the 224px gutter wraps only after a `/`, never at a hyphen.
+In the gutter a project's links show their address, from `lib/display-url.ts`: a GitHub repository as `owner/repo`, an itch.io game as `itch.io/game` without the uploader's subdomain, and an address too long for the 224px gutter wraps only after a `/`, never at a hyphen.
 Everything in the right-hand gutter sits at `left-full ml-10` of the content column; `back-to-top.tsx` is fixed-position, so it repeats that offset as `calc(50% + 362px)`, and both change together if the column's width does.
 Below `xl` there are no gutters: the back link sits above the page's title, with its tap area grown to 44px, and back to top is a round button in the corner, above the footer.
 

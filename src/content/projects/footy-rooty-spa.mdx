@@ -2,7 +2,6 @@
 title: 'Footy Rooty Spa'
 date: '2026-08-31'
 featured: true
-role: 'Freelance Web Developer'
 platforms: ['web']
 summary: 'A landing page and online booking site for a massage spa'
 thumbnailUrl: 'https://ik.imagekit.io/ryangan/Projects/footy-rooty-spa/footyrootyspa-thumbnail.png'
@@ -10,37 +9,31 @@ techStack: ['react', 'javascript', 'tailwindcss', 'vite', 'vercel']
 link: { live: 'https://www.footyrootyspa.com/' }
 ---
 
-## Overview
+_Footy Rooty Spa_ is a massage and foot reflexology spa with two stores, in Roseville and Citrus Heights, California.
+I designed and built its website on my own, as a freelance project for a friend who runs the business.
+Before it, every appointment was booked over the phone or at the front desk.
 
-_Footy Rooty Spa_ is a massage and foot reflexology spa with two locations, in Roseville and Citrus Heights, California.
-I built its website for a friend who runs the business.
-New clients come to it to see what the spa offers and what it costs, catch the current deals, and book a visit at either store without picking up the phone.
+## Booking Without a Phone Call
 
-## Features
+Clients choose a store and book through an embedded Mindbody window, the system both front desks already run on.
+The page explains how to pick a therapist, shows a loading state while the window opens, and offers a retry or the store's phone number if it fails to load.
+Since launch, the share of appointments booked online has grown from about 30% to about half.
 
-- **Promotion-Led Home Page** - A full-screen photo carousel puts the spa's current deals first, each slide with its own promo tags, price card, and call to action
+## Deals First
 
-- **Services and Pricing** - The full treatment menu, from deep tissue and Swedish massage to foot reflexology, facials, and scalp therapy, with prices and prepaid packages
+The home page opens with a full-screen carousel of the current deals, each with its own tags, price card, and call to action.
+Behind it are the full treatment menu with prices and prepaid packages, the membership plans and gift cards, and a page per store with photos, hours, and a map that opens in the visitor's maps app.
 
-- **Memberships and Gift Cards** - Membership plans and gift cards, with what each includes and how to buy one in store
+## One Source for Every Price
 
-- **Online Booking** - Clients choose a store and book an appointment through an embedded Mindbody booking window, with the store's address one click away and its phone number as a fallback
+The spa changes its prices and deals often, and each one appears on several pages.
+Every one of them lives in a single source, so a price change is a one-file edit that never leaves two pages disagreeing.
 
-- **Store Pages** - A photo gallery of each store, its hours and phone number, and an embedded map that opens in the visitor's maps app
+## Fast, Accessible, and Findable
 
-## Responsibilities
-
-- Built the whole site with **React**, **Tailwind CSS**, and **Vite**, from the page layouts to deployment on **Vercel**
-
-- Integrated **Mindbody** online booking for both stores, with guidance for choosing a store's therapist, a loading state, and a retry or call-the-store fallback when the booking window fails to load
-
-- Kept every price and promotion in a single source, so the frequent price and deal changes are one-file edits that never leave two pages disagreeing
-
-- Made the site fast on phones by generating responsive WebP versions of the photos, loading the hero photos on demand, and loading each page's code only when it is visited
-
-- Made the site accessible, with a carousel, photo galleries, and mobile menu that all work from the keyboard, and color contrast checked across buttons, badges, and price labels
-
-- Set up search and ads with per-page titles and descriptions, link previews, a not-found page, and a Google Ads conversion tag
+The photos come in responsive WebP sizes, the hero photos load on demand, and each page's code loads only when it is visited.
+The carousel, galleries, and menu all work from the keyboard, and contrast is checked across buttons, badges, and price labels.
+Every page has its own title, description, and link preview, and a Google Ads conversion tag measures what the ads bring in.
 
 ## Screenshots
 
