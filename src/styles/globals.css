@@ -290,6 +290,21 @@
 }
 
 /*
+  From lg to xl only the right-hand gutter shows, so a page with a table of
+  contents centres the column and the contents as a pair: the column moves
+  left by half the contents' 232px. The column, the 40px gap, and the 192px
+  rail come to 876px, so at lg's 1024px that leaves 74px either side, room
+  enough that the text never runs close to the window's edge. The footer
+  moves with the column, so their left edges stay in line.
+*/
+@media (width >= theme(--breakpoint-lg)) and (width < theme(--breakpoint-xl)) {
+  body:has([data-contents-gutter])
+    :is([data-page-column], [data-footer-column]) {
+    left: -116px;
+  }
+}
+
+/*
   A gutter rail too tall for the window, such as a long table of contents,
   scrolls on its own. Its scrollbar stays hidden: where the system shows
   classic scrollbars, one would draw a track and a border down the gutter and
