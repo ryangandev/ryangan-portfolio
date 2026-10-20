@@ -24,6 +24,17 @@
 }
 
 /*
+  The narrowest window that fits the content column with the table of contents
+  beside it: the 644px column, the contents' 40px gap and 192px rail, and 66px
+  either side, so the text never runs close to the edge of the window. From
+  here to xl the page shows the contents but not the facts, which need a
+  gutter on the left as well.
+*/
+@theme {
+  --breakpoint-toc: 63rem;
+}
+
+/*
   shadcn/ui's variables, on its neutral theme so they match the site's
   neutral greys: each light value is a Tailwind neutral step (3.9% is
   neutral-950, 45.1% neutral-500, 89.8% neutral-200 and so on). The dark
@@ -286,6 +297,19 @@
 
   .dark .reading-progress {
     background-color: var(--color-neutral-100);
+  }
+}
+
+/*
+  From the toc breakpoint to xl only the right-hand gutter shows, so a page
+  with a table of contents centres the column and the contents as a pair: the
+  column moves left by half the contents' 232px. The footer moves with it, so
+  its left edge stays in line with the column's.
+*/
+@media (width >= theme(--breakpoint-toc)) and (width < theme(--breakpoint-xl)) {
+  body:has([data-contents-gutter])
+    :is([data-page-column], [data-footer-column]) {
+    left: -116px;
   }
 }
 

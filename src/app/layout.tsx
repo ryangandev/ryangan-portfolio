@@ -64,7 +64,10 @@ export default function RootLayout({
           storageKey="rg-theme"
           disableTransitionOnChange
         >
-          <div className="relative mx-auto w-full max-w-[692px] grow px-6 py-16 md:pt-32">
+          <div
+            data-page-column
+            className="relative mx-auto w-full max-w-[692px] grow px-6 py-16 md:pt-32"
+          >
             <PageTransition>{children}</PageTransition>
           </div>
           <SiteFooter />

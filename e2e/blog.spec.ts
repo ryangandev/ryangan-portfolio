@@ -81,3 +81,71 @@ test('scrolls a long table of contents in a short window, clear of back to top',
   await last.scrollIntoViewIfNeeded();
   await expect(last).toBeInViewport();
 });
+
+test('shows the contents without the facts from 1008px to xl, centred with the column', async ({
+  page,
+}) => {
+  /**
+   * The room left of the column and right of the contents, the footer's left
+   * edge, and the page's width
+   */
+  const measure = () =>
+    page.evaluate(() => {
+      // `scrollbar-gutter: stable` keeps room for a scrollbar even where
+      // none shows, so the body, not the window, is the page's width.
+      const width = document.body.getBoundingClientRect().width;
+      const rail = document.querySelector('[data-contents-gutter] > div');
+
+      return {
+        width,
+        column: document.querySelector('main')!.getBoundingClientRect().left,
+        footer: document
+          .querySelector('[data-footer-column]')!
+          .getBoundingClientRect().left,
+        contents: rail?.checkVisibility()
+          ? width - rail.getBoundingClientRect().right
+          : null,
+      };
+    });
+
+  for (const [href, back] of [
+    ['/blog/local-first-sync-and-report-parity', 'Back to Blog'],
+    ['/portfolio/penny-diary', 'Back to Portfolio'],
+  ]) {
+    const contents = page.getByRole('navigation', { name: 'On this page' });
+    const facts = page
+      .getByRole('link', { name: back })
+      .locator('xpath=following-sibling::div');
+
+    // The narrowest window with the contents. The column and the contents,
+    // 876px together, are centred as a pair, and the footer lines up with the
+    // column.
+    await page.setViewportSize({ width: 1008, height: 800 });
+    await page.goto(href);
+    await expect(contents).toBeVisible();
+    await expect(facts).toBeHidden();
+
+    const pair = await measure();
+
+    expect(pair.column, href).toBe((pair.width - 876) / 2);
+    expect(pair.contents, href).toBe(pair.column);
+    expect(pair.footer, href).toBe(pair.column);
+
+    // One pixel narrower, the contents go and the column centres alone.
+    await page.setViewportSize({ width: 1007, height: 800 });
+    await expect(contents).toBeHidden();
+
+    const alone = await measure();
+
+    expect(alone.column, href).toBe((alone.width - 644) / 2);
+    expect(alone.footer, href).toBe(alone.column);
+  }
+
+  // A page without contents stays centred.
+  await page.setViewportSize({ width: 1100, height: 800 });
+  await page.goto('/blog');
+
+  const list = await measure();
+
+  expect(list.column).toBe((list.width - 644) / 2);
+});
