@@ -28,7 +28,7 @@ type PostViewsProps = {
  * every `PostViewCount` inside it.
  *
  * Posts are statically generated, so the count has to be fetched from the
- * client. The count shows in two places, under the title and in the right-hand
+ * client. The count shows in two places, under the title and in the left-hand
  * gutter, and recording it from each would count a first visit twice: the two
  * requests would race, each minting its own session cookie.
  */
@@ -55,7 +55,7 @@ export const PostViews = ({ slug, children }: PostViewsProps) => {
 type PostViewCountProps = {
   /**
    * `inline` follows the reading time under the title; `gutter` is a labelled
-   * row of the facts in the right-hand gutter.
+   * row of the facts in the left-hand gutter.
    */
   placement: 'inline' | 'gutter';
 };

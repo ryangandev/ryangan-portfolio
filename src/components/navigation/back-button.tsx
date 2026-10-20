@@ -11,7 +11,7 @@ type BackButtonProps = {
   href: string;
   /**
    * What follows the link down the left-hand gutter from xl up, such as a
-   * post's or a project's table of contents. Below xl it is not shown.
+   * post's or a project's facts. Below xl it is not shown.
    */
   children?: React.ReactNode;
 };
@@ -57,7 +57,7 @@ export default function BackButton({ name, href, children }: BackButtonProps) {
     // Spans the page's height from xl up, so the rail inside can stick. It
     // lets clicks through, and only the rail takes them.
     <div className="mb-8 xl:pointer-events-none xl:absolute xl:inset-y-0 xl:right-full xl:mb-0">
-      <div className="xl:pointer-events-auto xl:sticky xl:top-32 xl:mr-10 xl:w-38">
+      <div className="xl:pointer-events-auto xl:sticky xl:top-32 xl:mr-10 xl:w-48">
         <Link
           href={href}
           onClick={goBackIfParent}
@@ -71,8 +71,8 @@ export default function BackButton({ name, href, children }: BackButtonProps) {
           {name}
         </Link>
         {/* The rail sticks 128px down, and what follows the link starts 52px
-            below that. A long table of contents in a short window scrolls on
-            its own rather than running off the bottom, out of reach. */}
+            below that. Facts taller than a short window scroll on their own
+            rather than running off the bottom, out of reach. */}
         {children && (
           <div className="mt-6 hidden max-h-[calc(100dvh-13.25rem)] overflow-y-auto xl:block">
             {children}

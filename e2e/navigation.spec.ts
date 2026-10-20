@@ -272,7 +272,7 @@ test('starts a page at the top when its top would still be in view', async ({
 });
 
 test.describe('the table of contents', () => {
-  // The table of contents is in the left-hand gutter, which exists from xl up.
+  // The table of contents is in the right-hand gutter, which exists from xl up.
   test.use({ viewport: { width: 1280, height: 800 } });
 
   const post = '/blog/handle-form-loading-states';

@@ -63,7 +63,7 @@ Compiled MDX runs as code on the server, and the admin portal compiles drafts to
 Components take literal attributes only, such as `<Callout type="warning">`; a literal brace in prose is written `\{`.
 A rehype plugin placed directly after rehype-slug collects them, so the ids are the rendered ones; do not re-derive them from the Markdown.
 The table of contents shows beside posts from `xl` up; the reading progress bar is a CSS scroll-driven animation in `globals.css` with no JavaScript.
-Project pages compile the same way, and show the table of contents in the left-hand gutter once a case study has more than one `h2`.
+Project pages compile the same way, and show the table of contents in the right-hand gutter once a case study has more than one `h2`.
 
 ### Portfolio layout
 
@@ -144,18 +144,17 @@ Their comments, #c2c3c5 and #6b737c, hold only 1.8:1 and 3.6:1 there, so `src/co
 Shiki colors tokens with inline styles and no class names, so a comment cannot be targeted from CSS; the fix has to be in the theme.
 `shiki` is a direct dependency for the theme files, and must stay within rehype-pretty-code's peer range.
 
-From `xl` up, posts and projects share one layout.
-The right-hand gutter holds the page's facts: a post's publish date, reading time, views, and topics (`blog/post-facts.tsx`), or a project's role and team when it has them, year, platforms, links, and stack.
-It also holds the `timeline` list's hovered thumbnail and, on every page, the back-to-top link.
-The left-hand gutter holds the back link (`navigation/back-button.tsx`), 152px wide at `right-full mr-10`, and the table of contents under it, passed in as the back link's children; the facts and the table of contents together are taller than a laptop screen.
-The back link and what follows it are one rail that sticks at `top-32`, so the way up stays in reach down a long page.
-A table of contents taller than the window scrolls on its own, so its last entries stay in reach; at 800px tall every post's fits whole, which `e2e/blog.spec.ts` checks.
+From `xl` up, posts and projects share one layout, with both gutters 192px wide so the column sits centred between them.
+The left-hand gutter holds the back link (`navigation/back-button.tsx`) at `right-full mr-10`, and the page's facts under it, passed in as the back link's children: a post's publish date, reading time, views, and topics (`blog/post-facts.tsx`), or a project's role and team when it has them, year, platforms, links, and stack.
+The back link and the facts are one rail that sticks at `top-32`, so the way up stays in reach down a long page.
+Facts taller than the window scroll on their own; at 800px tall every post's and project's fit whole, which `e2e/blog.spec.ts` and `e2e/portfolio.spec.ts` check.
 The gutter spans the page's height and lets clicks through, and only the rail takes them, since a gutter laid over the link takes its clicks.
-The facts stick at `top-32` too, but only in a window at least 800px tall (the `tall` variant in `globals.css`): the tallest facts are 564px, and in a shorter window they would run under the back-to-top link, so there they scroll away with the header.
-`e2e/portfolio.spec.ts` checks every project's facts clear the link at that height, so a project with more facts fails the test rather than overlapping.
+The right-hand gutter holds the table of contents (`navigation/contents-gutter.tsx`), once a page has more than one `h2`, sticking at `top-32` level with the back link.
+It also holds the `timeline` list's hovered thumbnail and, on every page, the back-to-top link, which shows 64px above the bottom of the window.
+So the table of contents is at most the window's height less 240px and scrolls on its own past that, ending clear of the link; the tests check that too.
 Below `xl` a project's facts sit under its title instead, and a post's byline carries its date, reading time, and views; the admin preview, which has no gutter, always shows them there.
 A post's topics stay at its end as well, where a reader who finished it looks for more.
-In the gutter a project's links show their address, from `lib/display-url.ts`: a GitHub repository as `owner/repo`, an itch.io game as `itch.io/game` without the uploader's subdomain, and an address too long for the 224px gutter wraps only after a `/`, never at a hyphen.
+In the gutter a project's links show their address, from `lib/display-url.ts`: a GitHub repository as `owner/repo`, an itch.io game as `itch.io/game` without the uploader's subdomain, and an address too long for the 192px gutter wraps only after a `/`, never at a hyphen.
 Everything in the right-hand gutter sits at `left-full ml-10` of the content column; `back-to-top.tsx` is fixed-position, so it repeats that offset as `calc(50% + 362px)`, and both change together if the column's width does.
 Below `xl` there are no gutters: the back link sits above the page's title, with its tap area grown to 44px, and back to top is a round button in the corner, above the footer.
 

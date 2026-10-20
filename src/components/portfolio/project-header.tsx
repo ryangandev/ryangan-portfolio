@@ -12,7 +12,7 @@ type ProjectHeaderProps = {
   project: ProjectFrontmatter;
   stack: PortfolioLayout['stack'];
   /**
-   * The page shows the facts in the right-hand gutter from xl up, so here
+   * The page shows the facts in the left-hand gutter from xl up, so here
    * they stop at xl. The admin preview has no gutter and keeps them.
    */
   factsInGutter: boolean;

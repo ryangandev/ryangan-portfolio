@@ -14,7 +14,7 @@ type PostHeaderProps = {
   readingTime: number;
   summary: string;
   /**
-   * The page shows the date, reading time, and views in the right-hand gutter
+   * The page shows the date, reading time, and views in the left-hand gutter
    * from xl up, so here the byline stops at xl. The admin preview has no
    * gutter and keeps it.
    */
