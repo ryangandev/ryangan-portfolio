@@ -290,6 +290,60 @@
 }
 
 /*
+  A gutter rail too tall for the window, such as a long table of contents,
+  scrolls on its own. Its scrollbar stays hidden: where the system shows
+  classic scrollbars, one would draw a track and a border down the gutter and
+  take 15px of its width. Instead the rail fades out at an edge it has more to
+  scroll to, following a scroll-driven animation. A rail that fits has an
+  inactive scroll timeline, so it does not fade at all, and neither does any
+  rail in a browser without scroll timelines.
+*/
+@property --scroll-fade-top {
+  syntax: '<length>';
+  inherits: false;
+  initial-value: 0px;
+}
+
+@property --scroll-fade-bottom {
+  syntax: '<length>';
+  inherits: false;
+  initial-value: 0px;
+}
+
+@keyframes scroll-fade {
+  from {
+    --scroll-fade-top: 0px;
+    --scroll-fade-bottom: 2rem;
+  }
+  10%,
+  90% {
+    --scroll-fade-top: 2rem;
+    --scroll-fade-bottom: 2rem;
+  }
+  to {
+    --scroll-fade-top: 2rem;
+    --scroll-fade-bottom: 0px;
+  }
+}
+
+@utility gutter-scroll {
+  overflow-y: auto;
+  scrollbar-width: none;
+
+  @supports (animation-timeline: scroll()) {
+    mask-image: linear-gradient(
+      to bottom,
+      transparent,
+      #000 var(--scroll-fade-top),
+      #000 calc(100% - var(--scroll-fade-bottom)),
+      transparent
+    );
+    animation: scroll-fade linear both;
+    animation-timeline: scroll(self);
+  }
+}
+
+/*
   The admin pages' loading state (src/app/admin/loading.tsx): a bar sliding
   across the top of the viewport, the same weight as the reading progress bar.
 */
