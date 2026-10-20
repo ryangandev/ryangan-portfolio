@@ -9,7 +9,12 @@ import { PORT } from './ports';
 test('sends a visitor who is not signed in to the sign-in page', async ({
   page,
 }) => {
-  for (const path of ['/admin', '/admin/posts/new', '/admin/projects/demo']) {
+  for (const path of [
+    '/admin',
+    '/admin/posts/new',
+    '/admin/projects/demo',
+    '/admin/history',
+  ]) {
     await page.goto(path);
     await expect(page).toHaveURL(
       `/admin/sign-in?callbackUrl=${encodeURIComponent(path)}`,
