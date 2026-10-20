@@ -143,6 +143,7 @@ The gutter spans the page's height and lets clicks through, and only the rail ta
 The facts stick at `top-32` too, but only in a window at least 800px tall (the `tall` variant in `globals.css`): the tallest facts are 564px, and in a shorter window they would run under the back-to-top link, so there they scroll away with the header.
 `e2e/portfolio.spec.ts` checks every project's facts clear the link at that height, so a project with more facts fails the test rather than overlapping.
 Below `xl` a project's facts sit under its title instead; the admin preview, which has no gutter, always shows them there.
+In the gutter a project's links show their address, from `lib/display-url.ts`: a GitHub repository as `owner/repo`, and an address too long for the 224px gutter wraps only after a `/`, never at a hyphen.
 Everything in the right-hand gutter sits at `left-full ml-10` of the content column; `back-to-top.tsx` is fixed-position, so it repeats that offset as `calc(50% + 362px)`, and both change together if the column's width does.
 Below `xl` there are no gutters: the back link sits above the page's title, with its tap area grown to 44px, and back to top is a round button in the corner, above the footer.
 
