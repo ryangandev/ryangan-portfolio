@@ -24,6 +24,18 @@ const OptionalUrl = z.union([
   z.url({ message: 'Expected a full URL, or leave it empty' }),
 ]);
 
+/** A team is its name and its site together, or neither. */
+const FormTeam = z
+  .strictObject({ name: z.string().trim(), url: OptionalUrl })
+  .superRefine(({ name, url }, context) => {
+    if (name && !url) {
+      context.addIssue({ code: 'custom', path: ['url'], message: 'Required' });
+    }
+    if (url && !name) {
+      context.addIssue({ code: 'custom', path: ['name'], message: 'Required' });
+    }
+  });
+
 // Far beyond any real post (the longest is about 16 KB). Server actions take at
 // most 1 MB, and at up to three bytes a character this stays under it.
 const Body = z.string().max(300_000, { message: 'The body is too long' });
@@ -40,6 +52,9 @@ export const ProjectFormSchema = ProjectFrontmatterSchema.extend({
   slug: SlugSchema,
   date: FormDate,
   featured: z.boolean(),
+  // Empty means "no role", for a solo project.
+  role: z.string().trim(),
+  team: FormTeam,
   link: z.strictObject({ github: OptionalUrl, live: OptionalUrl }),
   body: Body,
 });

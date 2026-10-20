@@ -104,6 +104,8 @@ export const toFormValues = <C extends Collection>(
     const values: ProjectFormValues = {
       ...project,
       slug,
+      role: project.role ?? '',
+      team: project.team ?? { name: '', url: '' },
       link: {
         github: project.link?.github ?? '',
         live: project.link?.live ?? '',
@@ -123,18 +125,24 @@ export const toFormValues = <C extends Collection>(
   return values as ContentFormValues[C];
 };
 
-/** The frontmatter a form describes. Empty link fields mean no link. */
+/**
+ * The frontmatter a form describes. An empty role, team, or link field means
+ * the project has none.
+ */
 export const toFrontmatter = <C extends Collection>(
   collection: C,
   values: ContentFormValues[C],
 ): ContentFrontmatter[C] => {
   if (collection === 'projects') {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const { slug, body, link, ...project } = values as ProjectFormValues;
+    const { slug, body, role, team, link, ...project } =
+      values as ProjectFormValues;
     const github = link.github || undefined;
     const live = link.live || undefined;
     const frontmatter: ProjectFrontmatter = {
       ...project,
+      role: role || undefined,
+      team: team.name && team.url ? team : undefined,
       link: github || live ? { github, live } : undefined,
     };
 

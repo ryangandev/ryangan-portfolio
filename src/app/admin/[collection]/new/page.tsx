@@ -46,6 +46,7 @@ const blank: ContentFormValues = {
     date: '',
     featured: false,
     role: '',
+    team: { name: '', url: '' },
     platforms: [],
     summary: '',
     thumbnailUrl: '',

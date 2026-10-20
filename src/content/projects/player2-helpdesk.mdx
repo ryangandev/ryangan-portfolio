@@ -2,9 +2,9 @@
 title: 'Player 2 Helpdesk'
 date: '2023-05-24'
 featured: false
-role: 'Frontend Developer'
+role: 'Frontend Lead'
 platforms: ['web']
-summary: 'A custom helpdesk application'
+summary: 'The support desk for the Player 2 gaming community'
 thumbnailUrl: 'https://ik.imagekit.io/ryangan/Project%20Screenshots/player2-helpdesk/player2-thumbnail.png?updatedAt=1723238543464'
 techStack:
   [
@@ -21,23 +21,26 @@ techStack:
   ]
 ---
 
-## Overview
+_Player 2 Helpdesk_ is the support desk for [_Player 2_](https://player2app.com/), a social community for gamers.
+A player reports a problem in the _Player 2_ app, the report arrives in the helpdesk as a ticket, and the technical operations staff at _Player 2_ work it there until it is resolved.
 
-_Player 2 Helpdesk_ is a custom web application tailored to support the [_Player 2_](https://player2app.com/) social networking community by facilitating the communication between _Player 2_ users and the support staff.
+Three of us built the frontend, and I built most of it, from the first designs in **Figma** to the finished app.
 
-## Responsibilities
+## From Report to Resolution
 
-- Led the frontend team from UI conceptualization in **Figma** to functional implementation using **React** and **TypeScript**
+I worked with the backend lead and their team to connect the helpdesk to the main _Player 2_ app, so a report filed there shows up as a ticket here.
+Tickets update live: **server-sent events** carry each new ticket, chat message, and notification to the staff as it happens.
 
-- Implemented **authentication** and **authorization**, including magic link registration, login, password reset, and role-based access control
+## The Dashboard
 
-- Designed and developed a user-friendly **dashboard** with advanced filtering and sorting capabilities
+The dashboard lists every ticket, filtered and sorted by status, agent, and date.
+Each ticket opens to its details and a live chat with the player, where staff work it through to resolved.
+A reports page charts how the desk is doing with **Recharts**, such as tickets per day, over any date range and filter.
 
-- Created a visualized **reporting system** with customizable date range and filter options using **Recharts** to provide insights into helpdesk performance
+## Under the Hood
 
-- Collaborated closely with the backend team to integrate **server-sent events** for real-time chat and notification functionality
-
-- Configured and managed global states using **Redux** to ensure state consistency across the entire application
+Staff register and sign in by magic link, reset their passwords, and see only what their role allows.
+Global state lives in **Redux**, so a change made in one view shows in every other.
 
 ## Screenshots
 

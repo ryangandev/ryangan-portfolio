@@ -69,6 +69,24 @@ describe('PostFrontmatterSchema', () => {
 });
 
 describe('ProjectFrontmatterSchema', () => {
+  it('accepts a solo project with no role or team', () => {
+    const { role, ...solo } = project;
+    const parsed = ProjectFrontmatterSchema.parse(solo);
+
+    expect(role).toBeTruthy();
+    expect(parsed.role).toBeUndefined();
+    expect(parsed.team).toBeUndefined();
+  });
+
+  it('rejects a team with no site', () => {
+    const result = ProjectFrontmatterSchema.safeParse({
+      ...project,
+      team: { name: 'Grubby Games' },
+    });
+
+    expect(issuePaths(result)).toEqual(['team.url']);
+  });
+
   it('accepts a project with no links at all', () => {
     expect(ProjectFrontmatterSchema.parse(project).link).toBeUndefined();
   });
