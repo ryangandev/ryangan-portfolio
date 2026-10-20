@@ -10,6 +10,7 @@ import AdminProblem from '@/components/admin/admin-problem';
 import PortfolioLayoutForm from '@/components/admin/portfolio-layout-form';
 import BackButton from '@/components/navigation/back-button';
 import PageSummary from '@/components/page-summary';
+import { designHistory } from '@/data/design-history';
 import { AdminError } from '@/lib/admin/errors';
 import { getGitHubToken } from '@/lib/admin/github-token';
 import {
@@ -244,6 +245,29 @@ export default async function Page() {
           <PortfolioLayoutForm file={layout} deployed={portfolioLayout} />
         </section>
       )}
+      <section>
+        <h2>Design history</h2>
+        <ul className="border-b">
+          <li>
+            <Link
+              href="/admin/history"
+              className="group flex items-center justify-between gap-4 border-t py-3"
+            >
+              <div className="min-w-0">
+                <p className="mb-0 truncate color-level-1 group-hover:underline group-hover:underline-offset-4">
+                  How the site has looked
+                </p>
+                <p className="mb-0 text-xs leading-5 text-muted-foreground">
+                  {designHistory.length} versions, from{' '}
+                  {formatDate(designHistory[0].date)} to{' '}
+                  {formatDate(designHistory[designHistory.length - 1].date)}
+                </p>
+              </div>
+              <ChevronRightIcon className="size-4 shrink-0 text-muted-foreground transition-transform group-hover:translate-x-0.5" />
+            </Link>
+          </li>
+        </ul>
+      </section>
     </main>
   );
 }
