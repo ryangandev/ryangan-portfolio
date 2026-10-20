@@ -62,6 +62,7 @@ export const renderContentPreview = async (
           publishedDate={previewDate(post.publishedDate)}
           readingTime={getReadingTime(body)}
           summary={previewText(post.summary, '')}
+          factsInGutter={false}
         />
         <ArticleBody>{content}</ArticleBody>
       </article>

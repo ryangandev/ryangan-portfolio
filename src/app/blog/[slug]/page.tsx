@@ -5,8 +5,9 @@ import { notFound } from 'next/navigation';
 import ArticleBody from '@/components/article-body';
 import PostHeader from '@/components/blog/post-header';
 import PostNavigation from '@/components/blog/post-navigation';
+import PostFacts from '@/components/blog/post-facts';
+import { PostViews } from '@/components/blog/post-views';
 import TopicList from '@/components/blog/topic-list';
-import ViewCounter from '@/components/blog/view-counter';
 import JsonLd from '@/components/json-ld';
 import { compileMdx } from '@/components/mdx/mdx-components';
 import BackButton from '@/components/navigation/back-button';
@@ -107,34 +108,43 @@ export default async function Page({
         }}
       />
       <div className="reading-progress" aria-hidden />
-      <BackButton name="Blog" href="/blog" />
-      {headings.length > 1 && (
-        // The right-hand gutter only exists from xl up. The aside spans the
-        // article's height so the list can stick while the article scrolls.
-        <aside className="absolute top-0 left-full hidden h-full xl:block">
+      {/* As on a project page: the gutters only exist from xl up, the table
+          of contents rides in the left-hand one under the back button, and
+          the facts stick in the right-hand one, which spans the article's
+          height so they can. Below xl the byline under the title carries the
+          facts, and there is no table of contents. */}
+      <PostViews slug={post.slug}>
+        <BackButton name="Blog" href="/blog">
+          {headings.length > 1 && <TableOfContents headings={headings} />}
+        </BackButton>
+        <aside className="absolute inset-y-0 left-full hidden xl:block">
           <div className="sticky top-32 ml-10 w-56">
-            <TableOfContents headings={headings} />
+            <PostFacts
+              publishedDate={post.publishedDate}
+              readingTime={post.readingTime}
+              topics={post.topics}
+            />
           </div>
         </aside>
-      )}
 
-      <article className="space-y-8">
-        <PostHeader
-          title={post.title}
-          author={post.author}
-          publishedDate={post.publishedDate}
-          readingTime={post.readingTime}
-          summary={post.summary}
-          viewCounter={<ViewCounter slug={post.slug} />}
-        />
+        <article className="space-y-8">
+          <PostHeader
+            title={post.title}
+            author={post.author}
+            publishedDate={post.publishedDate}
+            readingTime={post.readingTime}
+            summary={post.summary}
+            factsInGutter
+          />
 
-        <ArticleBody>{content}</ArticleBody>
+          <ArticleBody>{content}</ArticleBody>
 
-        <footer className="space-y-8 border-t pt-8">
-          <TopicList topics={post.topics} />
-          <PostNavigation {...adjacent} />
-        </footer>
-      </article>
+          <footer className="space-y-8 border-t pt-8">
+            <TopicList topics={post.topics} />
+            <PostNavigation {...adjacent} />
+          </footer>
+        </article>
+      </PostViews>
     </main>
   );
 }

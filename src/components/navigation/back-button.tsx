@@ -11,7 +11,7 @@ type BackButtonProps = {
   href: string;
   /**
    * What follows the link down the left-hand gutter from xl up, such as a
-   * project's table of contents. Below xl it is not shown.
+   * post's or a project's table of contents. Below xl it is not shown.
    */
   children?: React.ReactNode;
 };
@@ -70,7 +70,14 @@ export default function BackButton({ name, href, children }: BackButtonProps) {
           <span className="sr-only">Back to </span>
           {name}
         </Link>
-        {children && <div className="mt-6 hidden xl:block">{children}</div>}
+        {/* The rail sticks 128px down, and what follows the link starts 52px
+            below that. A long table of contents in a short window scrolls on
+            its own rather than running off the bottom, out of reach. */}
+        {children && (
+          <div className="mt-6 hidden max-h-[calc(100dvh-13.25rem)] overflow-y-auto xl:block">
+            {children}
+          </div>
+        )}
       </div>
     </div>
   );

@@ -10,7 +10,7 @@ Load only the document and section a request needs.
 | What is done, what is open, and what is waiting on Ryan?                                  | [status.md](status.md)                                                   |
 | Which files does a change touch?                                                          | [architecture.md#code-map](architecture.md#code-map)                     |
 | MDX content, frontmatter, dates, topics, the portfolio layout, or the experience timeline | [architecture.md#content](architecture.md#content)                       |
-| Tailwind 4, theming, images, or the right-hand gutter (table of contents, back to top)    | [architecture.md#styling](architecture.md#styling)                       |
+| Tailwind 4, theming, images, or the gutters (table of contents, facts, back to top)       | [architecture.md#styling](architecture.md#styling)                       |
 | Links, navigation, loading states, metadata, feeds, or SEO                                | [architecture.md#routing-and-seo](architecture.md#routing-and-seo)       |
 | Prisma 7, the database, or environment variables                                          | [architecture.md#database](architecture.md#database)                     |
 | The post view counter                                                                     | [architecture.md#post-views](architecture.md#post-views)                 |
