@@ -74,7 +74,7 @@ export default function BackButton({ name, href, children }: BackButtonProps) {
             below that. Facts taller than a short window scroll on their own
             rather than running off the bottom, out of reach. */}
         {children && (
-          <div className="mt-6 hidden max-h-[calc(100dvh-13.25rem)] overflow-y-auto xl:block">
+          <div className="mt-6 hidden max-h-[calc(100dvh-13.25rem)] gutter-scroll xl:block">
             {children}
           </div>
         )}

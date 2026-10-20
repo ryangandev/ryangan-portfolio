@@ -152,6 +152,8 @@ The gutter spans the page's height and lets clicks through, and only the rail ta
 The right-hand gutter holds the table of contents (`navigation/contents-gutter.tsx`), once a page has more than one `h2`, sticking at `top-32` level with the back link.
 It also holds the `timeline` list's hovered thumbnail and, on every page, the back-to-top link, which shows 64px above the bottom of the window.
 So the table of contents is at most the window's height less 240px and scrolls on its own past that, ending clear of the link; the tests check that too.
+A rail that scrolls hides its scrollbar, which on classic-scrollbar systems would draw a track down the gutter and take 15px of its width, and fades out at the edge it has more to scroll to instead (`gutter-scroll` in `globals.css`).
+Chrome keeps that fade after the window grows tall enough for the rail to fit, until the page reloads.
 Below `xl` a project's facts sit under its title instead, and a post's byline carries its date, reading time, and views; the admin preview, which has no gutter, always shows them there.
 A post's topics stay at its end as well, where a reader who finished it looks for more.
 In the gutter a project's links show their address, from `lib/display-url.ts`: a GitHub repository as `owner/repo`, an itch.io game as `itch.io/game` without the uploader's subdomain, and an address too long for the 192px gutter wraps only after a `/`, never at a hyphen.

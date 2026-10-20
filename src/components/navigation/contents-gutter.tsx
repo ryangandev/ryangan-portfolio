@@ -16,7 +16,7 @@ import TableOfContents from '@/components/table-of-contents';
  */
 const ContentsGutter = ({ headings }: { headings: MdxHeading[] }) => (
   <aside className="absolute inset-y-0 left-full hidden xl:block">
-    <div className="sticky top-32 ml-10 max-h-[calc(100dvh-15rem)] w-48 overflow-y-auto">
+    <div className="sticky top-32 ml-10 max-h-[calc(100dvh-15rem)] w-48 gutter-scroll">
       <TableOfContents headings={headings} />
     </div>
   </aside>
