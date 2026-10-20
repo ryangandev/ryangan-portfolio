@@ -6,6 +6,7 @@ import TechStackIcon from '@/components/icons/tech-stack-icon';
 import { platformLabels } from '@/data/platforms';
 import { techStack } from '@/data/tech-stack';
 import { parseContentDate } from '@/lib/date';
+import { displayUrlParts } from '@/lib/display-url';
 import { cn } from '@/lib/utils';
 import type { ProjectFrontmatter } from '@/schemas/content-schema';
 import type { PortfolioLayout } from '@/schemas/portfolio-layout-schema';
@@ -18,13 +19,6 @@ type ProjectFactsProps = {
    * from xl up; `inline` runs them into two lines under the title.
    */
   placement: 'gutter' | 'inline';
-};
-
-/** A link's address as a reader would type it: no scheme, no `www.` */
-const displayUrl = (url: string) => {
-  const { host, pathname } = new URL(url);
-
-  return `${host.replace(/^www\./, '')}${pathname.replace(/\/$/, '')}`;
 };
 
 const badgeClassName =
@@ -128,8 +122,15 @@ const ProjectFacts = ({ project, stack, placement }: ProjectFactsProps) => {
     ...links.map(({ label, href }) => ({
       label,
       value: (
-        <AnimatedLink href={href} isExternal className="break-all">
-          {displayUrl(href)}
+        // Each piece stays whole, so an address too long for the 224px
+        // gutter wraps after a slash, never at a hyphen.
+        <AnimatedLink href={href} isExternal>
+          {displayUrlParts(href).map((part, index) => (
+            <React.Fragment key={index}>
+              {index > 0 && <wbr />}
+              <span className="whitespace-nowrap">{part}</span>
+            </React.Fragment>
+          ))}
         </AnimatedLink>
       ),
     })),
