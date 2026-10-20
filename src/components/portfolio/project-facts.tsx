@@ -15,7 +15,7 @@ type ProjectFactsProps = {
   project: ProjectFrontmatter;
   stack: PortfolioLayout['stack'];
   /**
-   * `gutter` stacks every fact under its label, for the right-hand gutter
+   * `gutter` stacks every fact under its label, for the left-hand gutter
    * from xl up; `inline` runs them into two lines under the title.
    */
   placement: 'gutter' | 'inline';
@@ -80,7 +80,7 @@ const DotLine = ({ facts }: { facts: React.ReactNode[] }) => (
 /**
  * A project's role and team when it has them, its year, platforms, links, and
  * tech stack. The project page
- * shows them in the right-hand gutter from xl up and under the title below
+ * shows them in the left-hand gutter from xl up and under the title below
  * that; the admin preview, which has no gutter, always under the title.
  */
 const ProjectFacts = ({ project, stack, placement }: ProjectFactsProps) => {
@@ -144,7 +144,7 @@ const ProjectFacts = ({ project, stack, placement }: ProjectFactsProps) => {
     ...links.map(({ label, href }) => ({
       label,
       value: (
-        // Each piece stays whole, so an address too long for the 224px
+        // Each piece stays whole, so an address too long for the 192px
         // gutter wraps after a slash, never at a hyphen.
         <AnimatedLink href={href} isExternal>
           {displayUrlParts(href).map((part, index) => (

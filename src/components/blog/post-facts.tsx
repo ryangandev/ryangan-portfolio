@@ -12,8 +12,8 @@ type PostFactsProps = {
 };
 
 /**
- * A post's publish date, reading time, views, and topics, for the right-hand
- * gutter from xl up. Below xl the post header's byline carries the first three
+ * A post's publish date, reading time, views, and topics, for the left-hand
+ * gutter from xl up, under the back link. Below xl the post header's byline carries the first three
  * instead, and the topics follow the post.
  */
 const PostFacts = ({ publishedDate, readingTime, topics }: PostFactsProps) => (

@@ -5,10 +5,10 @@ import { notFound } from 'next/navigation';
 import ArticleBody from '@/components/article-body';
 import { compileMdx } from '@/components/mdx/mdx-components';
 import BackButton from '@/components/navigation/back-button';
+import ContentsGutter from '@/components/navigation/contents-gutter';
 import ProjectFacts from '@/components/portfolio/project-facts';
 import ProjectHeader from '@/components/portfolio/project-header';
 import ProjectNavigation from '@/components/portfolio/project-navigation';
-import TableOfContents from '@/components/table-of-contents';
 import { siteName } from '@/data/site';
 import {
   getAdjacentProjects,
@@ -88,25 +88,18 @@ export default async function Page({
 
   return (
     <main className="relative">
-      {/* The gutters only exist from xl up. Below that the facts sit under
-          the title, and there is no table of contents. The table of contents
-          rides in the left-hand gutter under the back button, which sticks
-          with it. The facts take the right-hand gutter and stick too, so it
-          spans the article's height, but only in a `tall` window: in a
-          shorter one they would run under the back-to-top link, so they
-          scroll away with the header instead. */}
+      {/* The gutters only exist from xl up. The facts ride in the left-hand
+          one under the back button, and the table of contents sticks in the
+          right-hand one. Below xl the facts sit under the title, and there is
+          no table of contents. */}
       <BackButton name="Portfolio" href="/portfolio">
-        {headings.length > 1 && <TableOfContents headings={headings} />}
+        <ProjectFacts
+          project={project}
+          stack={portfolioLayout.stack}
+          placement="gutter"
+        />
       </BackButton>
-      <aside className="absolute inset-y-0 left-full hidden xl:block">
-        <div className="ml-10 w-56 tall:sticky tall:top-32">
-          <ProjectFacts
-            project={project}
-            stack={portfolioLayout.stack}
-            placement="gutter"
-          />
-        </div>
-      </aside>
+      {headings.length > 1 && <ContentsGutter headings={headings} />}
 
       <article className="space-y-8">
         <ProjectHeader

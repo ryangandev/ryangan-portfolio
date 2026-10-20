@@ -11,7 +11,7 @@ import TopicList from '@/components/blog/topic-list';
 import JsonLd from '@/components/json-ld';
 import { compileMdx } from '@/components/mdx/mdx-components';
 import BackButton from '@/components/navigation/back-button';
-import TableOfContents from '@/components/table-of-contents';
+import ContentsGutter from '@/components/navigation/contents-gutter';
 import { feedAlternates, siteName, siteUrl } from '@/data/site';
 import {
   getAdjacentPosts,
@@ -108,24 +108,19 @@ export default async function Page({
         }}
       />
       <div className="reading-progress" aria-hidden />
-      {/* As on a project page: the gutters only exist from xl up, the table
-          of contents rides in the left-hand one under the back button, and
-          the facts stick in the right-hand one, which spans the article's
-          height so they can. Below xl the byline under the title carries the
-          facts, and there is no table of contents. */}
+      {/* As on a project page: the gutters only exist from xl up, the facts
+          ride in the left-hand one under the back button, and the table of
+          contents sticks in the right-hand one. Below xl the byline under
+          the title carries the facts, and there is no table of contents. */}
       <PostViews slug={post.slug}>
         <BackButton name="Blog" href="/blog">
-          {headings.length > 1 && <TableOfContents headings={headings} />}
+          <PostFacts
+            publishedDate={post.publishedDate}
+            readingTime={post.readingTime}
+            topics={post.topics}
+          />
         </BackButton>
-        <aside className="absolute inset-y-0 left-full hidden xl:block">
-          <div className="sticky top-32 ml-10 w-56">
-            <PostFacts
-              publishedDate={post.publishedDate}
-              readingTime={post.readingTime}
-              topics={post.topics}
-            />
-          </div>
-        </aside>
+        {headings.length > 1 && <ContentsGutter headings={headings} />}
 
         <article className="space-y-8">
           <PostHeader

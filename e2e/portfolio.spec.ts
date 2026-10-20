@@ -34,7 +34,7 @@ test('filters the portfolio by platform', async ({ page }) => {
   await expect(projects).toHaveCount(total);
 });
 
-test("keeps every project's facts in view, clear of back to top", async ({
+test("keeps every project's facts and contents in view, clear of back to top", async ({
   page,
 }) => {
   await page.goto('/portfolio');
@@ -44,11 +44,13 @@ test("keeps every project's facts in view, clear of back to top", async ({
     .evaluateAll((links) => links.map((link) => link.getAttribute('href')!));
 
   for (const href of hrefs) {
-    // The shortest window the facts stick in, the `tall` variant
     await page.setViewportSize({ width: 1280, height: 800 });
     await page.goto(href);
 
-    const facts = page.locator('main aside dl');
+    const back = page.getByRole('link', { name: 'Back to Portfolio' });
+    // The facts follow the back link down the left-hand gutter.
+    const facts = back.locator('xpath=following-sibling::div');
+    const contents = page.getByRole('navigation', { name: 'On this page' });
     const backToTop = page.getByRole('button', { name: 'Back to top' });
 
     // A screen and a half down, where back to top shows, inside the article
@@ -57,22 +59,28 @@ test("keeps every project's facts in view, clear of back to top", async ({
     );
     await expect(backToTop).toBeVisible();
 
-    const [factsBox, buttonBox] = await Promise.all([
-      facts.boundingBox(),
-      backToTop.boundingBox(),
-    ]);
-
-    expect(factsBox!.y, `${href}: the facts scrolled away`).toBe(128);
+    // The back link and the facts under it stick, and the facts fit whole.
+    expect((await back.boundingBox())!.y, `${href}: the back link`).toBe(128);
+    await expect(facts.locator('dl')).toBeVisible();
     expect(
-      factsBox!.y + factsBox!.height,
-      `${href}: the facts run under back to top`,
-    ).toBeLessThan(buttonBox!.y);
+      await facts.evaluate((el) => el.scrollHeight <= el.clientHeight),
+      `${href}: the facts scroll at 800px`,
+    ).toBe(true);
 
-    // One pixel shorter, they scroll away with the header.
-    await page.setViewportSize({ width: 1280, height: 799 });
-    await expect
-      .poll(async () => (await facts.boundingBox())!.y)
-      .toBeLessThan(0);
+    // The table of contents sticks across the column, and ends above back
+    // to top.
+    if ((await contents.count()) > 0) {
+      const [box, buttonBox] = await Promise.all([
+        contents.locator('..').boundingBox(),
+        backToTop.boundingBox(),
+      ]);
+
+      expect(box!.y, `${href}: the table of contents`).toBe(128);
+      expect(
+        box!.y + box!.height,
+        `${href}: the table of contents runs under back to top`,
+      ).toBeLessThan(buttonBox!.y);
+    }
   }
 });
 
