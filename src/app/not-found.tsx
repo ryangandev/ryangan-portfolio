@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
-import Link from 'next/link';
 
+import LinkRows from '@/components/link-rows';
 import PageSummary from '@/components/page-summary';
 
 export const metadata: Metadata = {
@@ -41,25 +41,12 @@ const NotFound = () => {
         This page doesn&apos;t exist, or it has moved. Here are a few places to
         pick up from instead.
       </PageSummary>
-      <ul className="group mb-7 text-[15px]">
-        {destinations.map((destination) => (
-          <li
-            key={destination.href}
-            className="py-2 transition-opacity group-hover:opacity-60 hover:!opacity-100"
-          >
-            <Link href={destination.href} className="flex space-x-2.5">
-              <span className="font-medium color-level-2">
-                {destination.title}
-              </span>
-              <span className="hidden color-level-4 md:block">
-                {destination.summary}
-              </span>
-              <div className="mt-3.5 h-px min-w-4 flex-1 bg-border/80"></div>
-              <span className="color-level-5">{destination.href}</span>
-            </Link>
-          </li>
-        ))}
-      </ul>
+      <LinkRows
+        rows={destinations.map((destination) => ({
+          ...destination,
+          end: destination.href,
+        }))}
+      />
     </main>
   );
 };

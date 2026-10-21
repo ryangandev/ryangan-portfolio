@@ -22,12 +22,12 @@ test('expands the experience timeline, and collapses it where it was clicked', a
 
   expect(total).toBeGreaterThan(2);
   await expect(visibleEntries(page)).toHaveCount(2);
-  await expect(toggle).toHaveAccessibleName('Expand to view all');
+  await expect(toggle).toHaveAccessibleName(`Show ${total - 2} more`);
 
   await toggle.click();
 
   await expect(toggle).toHaveAttribute('aria-expanded', 'true');
-  await expect(toggle).toHaveAccessibleName('Collapse');
+  await expect(toggle).toHaveAccessibleName('Show less');
   await expect(visibleEntries(page)).toHaveCount(total);
   await expect.poll(() => hiddenHeight(timeline(page))).toBe(0);
 
@@ -59,9 +59,7 @@ test.describe('without JavaScript', () => {
 
     await expect(visibleEntries(page)).toHaveCount(await entries(page).count());
     expect(await hiddenHeight(timeline(page))).toBe(0);
-    await expect(
-      page.getByRole('button', { name: 'Expand to view all' }),
-    ).toBeHidden();
+    await expect(page.locator('main button[aria-expanded]')).toBeHidden();
   });
 });
 
@@ -83,4 +81,55 @@ test('offers a way back to the top once the top is out of reach', async ({
   await expect(backToTop).toBeHidden();
   // The button hides at the top, so focus moves to the page itself.
   await expect(page.locator('main')).toBeFocused();
+});
+
+test('a title that wraps keeps its rule and year on its last line', async ({
+  page,
+}) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto('/');
+
+  const row = page.locator('main a[href^="/blog/"]').first();
+
+  // Long enough to wrap at any phone width, whatever the posts are called.
+  const { lastLine, year, rule } = await row.evaluate((link) => {
+    const walker = document.createTreeWalker(link, NodeFilter.SHOW_TEXT);
+    const title = walker.nextNode() as Text;
+
+    title.data =
+      'A title long enough to wrap onto a second line and then a third';
+
+    // Where the text itself sits; a flex item's box spans the whole row.
+    const textBottom = (node: Node) => {
+      const range = document.createRange();
+
+      range.selectNodeContents(node);
+
+      return [...range.getClientRects()].at(-1)!.bottom;
+    };
+
+    const rule = [...link.querySelectorAll('[data-rule]')]
+      .find((element) => element.checkVisibility())!
+      .getBoundingClientRect();
+    const clip = rule.left + 10;
+
+    return {
+      lastLine: textBottom(title),
+      year: textBottom(link.lastElementChild!),
+      rule: {
+        middle: rule.top,
+        // What shows of it, past the gap after the word and before the end
+        width:
+          Math.min(
+            rule.right,
+            link.lastElementChild!.getBoundingClientRect().left - 10,
+          ) - clip,
+      },
+    };
+  });
+
+  expect(Math.abs(year - lastLine)).toBeLessThanOrEqual(1);
+  expect(lastLine - rule.middle).toBeGreaterThan(0);
+  expect(lastLine - rule.middle).toBeLessThan(20);
+  expect(rule.width).toBeGreaterThanOrEqual(16);
 });
