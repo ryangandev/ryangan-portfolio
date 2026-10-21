@@ -93,7 +93,7 @@ export default async function Home() {
         Currently, I&apos;m exploring building software with AI coding agents.
       </p>
 
-      <h2>Work & Education</h2>
+      <h2>Timeline</h2>
       <Expandable
         collapsedClassName="scripting:[&>ol>li:nth-child(n+3)]:hidden"
         label={`Show ${experience.length - COLLAPSED_ENTRIES} more`}
