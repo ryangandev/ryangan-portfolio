@@ -133,3 +133,20 @@ test('a title that wraps keeps its rule and year on its last line', async ({
   expect(lastLine - rule.middle).toBeLessThan(20);
   expect(rule.width).toBeGreaterThanOrEqual(16);
 });
+
+test('fits the narrowest phones without scrolling sideways', async ({
+  page,
+}) => {
+  await page.setViewportSize({ width: 320, height: 640 });
+  await page.goto('/');
+
+  // The footer's row was the widest thing on the page, its theme toggle
+  // pushed past the column's edge.
+  expect(
+    await page.evaluate(
+      () =>
+        document.documentElement.scrollWidth <=
+        document.documentElement.clientWidth,
+    ),
+  ).toBe(true);
+});

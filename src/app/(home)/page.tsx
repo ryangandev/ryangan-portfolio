@@ -56,16 +56,19 @@ export default async function Home() {
           sameAs: authorProfiles.map((profile) => profile.url),
         }}
       />
-      <h1>Zhiheng (Ryan) Gan</h1>
-
-      <p
-        className={cn(
-          newsreader.className,
-          'text-[17.5px] font-medium color-level-2 italic',
-        )}
-      >
-        I am a user before a developer.
-      </p>
+      {/* The name and the line under it read as one block, as on the
+          site's share image, set apart from the sections below. */}
+      <hgroup className="mb-14">
+        <h1 className="mb-0.5">Zhiheng (Ryan) Gan</h1>
+        <p
+          className={cn(
+            newsreader.className,
+            'mb-0 text-[17.5px] font-medium color-level-2 italic',
+          )}
+        >
+          I am a user before a developer.
+        </p>
+      </hgroup>
 
       <h2>About Me</h2>
       <p className="mb-4">

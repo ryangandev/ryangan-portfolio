@@ -175,6 +175,19 @@
     outline: none;
   }
 
+  /*
+    A link's keyboard focus, in the 2px ring color the buttons and fields
+    draw theirs in. Those have padding or a border between the ring and their
+    text; a link's box ends at its glyphs, so its outline stands off them.
+    Without this, links showed the browser's own blue outline, flush against
+    the text.
+  */
+  a:focus-visible {
+    outline: 2px solid var(--color-ring);
+    outline-offset: 3px;
+    border-radius: 0.25rem;
+  }
+
   h1 {
     @apply mb-7 font-medium color-level-0;
   }
