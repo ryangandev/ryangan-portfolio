@@ -140,7 +140,7 @@ const Expandable = ({
           onClick={toggle}
           className="flex items-center gap-1.5 rounded-full border bg-background px-3.5 py-1 text-sm color-level-4 transition-colors hover:color-level-2 focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-hidden"
         >
-          {isExpanded ? 'Collapse' : label}
+          {isExpanded ? 'Show less' : label}
           <GoChevronDown
             aria-hidden
             className={cn(

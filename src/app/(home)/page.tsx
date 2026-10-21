@@ -1,11 +1,11 @@
 import { format } from 'date-fns';
-import Link from 'next/link';
 
 import { newsreader } from '@/assets/fonts';
 import AnimatedLink from '@/components/animated-link';
 import Expandable from '@/components/expandable';
 import ExperienceList from '@/components/experience-list';
 import JsonLd from '@/components/json-ld';
+import LinkRows from '@/components/link-rows';
 import { experience } from '@/data/experience';
 import {
   authorAvatarUrl,
@@ -21,6 +21,12 @@ import {
   getYearsOfExperience,
 } from '@/lib/experience';
 import { cn } from '@/lib/utils';
+
+/**
+ * The entries the timeline shows until it is expanded; `nth-child(n+3)` in its
+ * collapsed classes below hides the rest
+ */
+const COLLAPSED_ENTRIES = 2;
 
 export default async function Home() {
   const [featuredProjects, featuredPosts] = await Promise.all([
@@ -87,77 +93,34 @@ export default async function Home() {
         Currently, I&apos;m exploring building software with AI coding agents.
       </p>
 
-      <h2>Experience</h2>
+      <h2>Timeline</h2>
       <Expandable
         collapsedClassName="scripting:[&>ol>li:nth-child(n+3)]:hidden"
-        label="Expand to view all"
+        label={`Show ${experience.length - COLLAPSED_ENTRIES} more`}
       >
         <ExperienceList items={experience} />
       </Expandable>
 
       <h2>Featured Projects</h2>
-      <ul className="group mb-7 text-[15px]">
-        {featuredProjects.map((project) => (
-          <li
-            key={project.slug}
-            className="py-2 transition-opacity group-hover:opacity-60 hover:!opacity-100"
-          >
-            <Link
-              href={`/portfolio/${project.slug}`}
-              className="flex space-x-2.5"
-            >
-              <span className="font-medium color-level-2">{project.title}</span>
-              <span className="hidden color-level-4 md:block">
-                {project.summary}
-              </span>
-              <div className="mt-3.5 h-px min-w-4 flex-1 bg-border/80"></div>
-              <span className="color-level-5">
-                {format(parseContentDate(project.date), 'yyyy')}
-              </span>
-            </Link>
-          </li>
-        ))}
-      </ul>
-      <p>
-        Above are some of my featured projects. See the rest in my{' '}
-        <AnimatedLink href="/portfolio">portfolio</AnimatedLink>.
-      </p>
+      <LinkRows
+        rows={featuredProjects.map((project) => ({
+          href: `/portfolio/${project.slug}`,
+          title: project.title,
+          summary: project.summary,
+          end: format(parseContentDate(project.date), 'yyyy'),
+        }))}
+        more={{ href: '/portfolio', label: 'All projects' }}
+      />
 
       <h2>Writing</h2>
-      <ul className="group mb-7 text-[15px]">
-        {featuredPosts.map((post) => (
-          <li
-            key={post.slug}
-            className="py-2 transition-opacity group-hover:opacity-60 hover:!opacity-100"
-          >
-            <Link href={`/blog/${post.slug}`} className="flex space-x-2.5">
-              <span className="font-medium color-level-2">{post.title}</span>
-              <div className="mt-3.5 h-px min-w-4 flex-1 bg-border/80"></div>
-              <span className="color-level-5">
-                {format(parseContentDate(post.publishedDate), 'yyyy')}
-              </span>
-            </Link>
-          </li>
-        ))}
-      </ul>
-
-      <h2>More</h2>
-      <p>
-        You can view my{' '}
-        <AnimatedLink href="/RyanGan_Resume.pdf" isExternal>
-          resume
-        </AnimatedLink>
-        , read my <AnimatedLink href="/blog">blogs</AnimatedLink>, explore my
-        source code on{' '}
-        <AnimatedLink href="https://github.com/ryangandev" isExternal>
-          GitHub
-        </AnimatedLink>
-        , or check out cool components from my previous work in my{' '}
-        <AnimatedLink href="https://craft.ryangan.me" isExternal>
-          craft collection
-        </AnimatedLink>
-        .
-      </p>
+      <LinkRows
+        rows={featuredPosts.map((post) => ({
+          href: `/blog/${post.slug}`,
+          title: post.title,
+          end: format(parseContentDate(post.publishedDate), 'yyyy'),
+        }))}
+        more={{ href: '/blog', label: 'All posts' }}
+      />
 
       <h2>Connect</h2>
       <p>
@@ -166,7 +129,20 @@ export default async function Home() {
           ryangan.dev@gmail.com
         </AnimatedLink>
         , or through my{' '}
-        <AnimatedLink href="/contact">contact form</AnimatedLink>.
+        <AnimatedLink href="/contact">contact form</AnimatedLink>. You can also
+        view my{' '}
+        <AnimatedLink href="/RyanGan_Resume.pdf" isExternal>
+          resume
+        </AnimatedLink>
+        , explore my source code on{' '}
+        <AnimatedLink href="https://github.com/ryangandev" isExternal>
+          GitHub
+        </AnimatedLink>
+        , or check out cool components from my previous work in my{' '}
+        <AnimatedLink href="https://craft.ryangan.me" isExternal>
+          craft collection
+        </AnimatedLink>
+        .
       </p>
     </main>
   );
