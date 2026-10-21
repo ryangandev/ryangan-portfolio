@@ -12,7 +12,7 @@ import JsonLd from '@/components/json-ld';
 import { compileMdx } from '@/components/mdx/mdx-components';
 import BackButton from '@/components/navigation/back-button';
 import ContentsGutter from '@/components/navigation/contents-gutter';
-import { feedAlternates, siteName, siteUrl } from '@/data/site';
+import { feedAlternates, pageTitle, siteName, siteUrl } from '@/data/site';
 import {
   getAdjacentPosts,
   getAllPostSlugs,
@@ -38,14 +38,14 @@ export const generateMetadata = async ({
 
   if (!post) {
     return {
-      title: '404 Post Not Found - Blog',
+      title: pageTitle('Post not found'),
     };
   }
 
   const url = `/blog/${post.slug}`;
 
   return {
-    title: post.title + ' - Blog',
+    title: pageTitle(post.title),
     description: post.summary,
     alternates: {
       canonical: url,

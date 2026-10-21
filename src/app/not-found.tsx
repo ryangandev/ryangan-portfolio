@@ -2,9 +2,10 @@ import type { Metadata } from 'next';
 
 import LinkRows from '@/components/link-rows';
 import PageSummary from '@/components/page-summary';
+import { pageTitle } from '@/data/site';
 
 export const metadata: Metadata = {
-  title: 'Page not found - Ryan Gan',
+  title: pageTitle('Page not found'),
 };
 
 const destinations = [

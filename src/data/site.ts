@@ -11,7 +11,10 @@ export const siteUrl = 'https://ryangan.me';
 
 export const siteName = 'Ryan Gan';
 
-export const siteTitle = 'Ryan Gan | Software Engineer';
+export const siteTitle = 'Ryan Gan - Software Engineer';
+
+/** Every page's title but the home page's: "Blog - Ryan Gan" */
+export const pageTitle = (name: string): string => `${name} - ${siteName}`;
 
 export const authorAvatarUrl =
   'https://ik.imagekit.io/ryangan/profile-icon.jpeg?updatedAt=1718985313938';
@@ -26,7 +29,7 @@ export const authorAvatarUrl =
  */
 export const contentImageSizes = '(min-width: 692px) 644px, calc(100vw - 48px)';
 
-export const blogTitle = 'Blog - Ryan Gan';
+export const blogTitle = pageTitle('Blog');
 
 export const blogDescription =
   'Insights and lessons from my journey in software development.';

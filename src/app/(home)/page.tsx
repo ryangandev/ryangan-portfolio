@@ -70,7 +70,7 @@ export default async function Home() {
         </p>
       </hgroup>
 
-      <h2>About Me</h2>
+      <h2>About me</h2>
       <p>
         I&apos;m a software engineer at {currentRole.organization} in{' '}
         {currentRole.location}, with {yearsOfExperience} years of building
@@ -109,7 +109,7 @@ export default async function Home() {
       </Expandable>
 
       <SectionHeading more={{ href: '/portfolio', label: 'All projects' }}>
-        Featured Projects
+        Featured projects
       </SectionHeading>
       <LinkRows
         rows={featuredProjects.map((project) => ({

@@ -9,7 +9,7 @@ import ContentsGutter from '@/components/navigation/contents-gutter';
 import ProjectFacts from '@/components/portfolio/project-facts';
 import ProjectHeader from '@/components/portfolio/project-header';
 import ProjectNavigation from '@/components/portfolio/project-navigation';
-import { siteName } from '@/data/site';
+import { pageTitle, siteName } from '@/data/site';
 import {
   getAdjacentProjects,
   getAllProjectSlugs,
@@ -36,14 +36,14 @@ export const generateMetadata = async ({
 
   if (!project) {
     return {
-      title: '404 Project Not Found - Portfolio',
+      title: pageTitle('Project not found'),
     };
   }
 
   const url = `/portfolio/${project.slug}`;
 
   return {
-    title: project.title + ' - Portfolio',
+    title: pageTitle(project.title),
     description: project.summary,
     alternates: {
       canonical: url,

@@ -26,21 +26,21 @@ _Ryan Gan Portfolio_ is the site you are reading: a home page, case studies of t
 I designed and built it on my own.
 It started in 2023 as a Next.js app and has been rebuilt piece by piece since, toward a quiet, text-first design where every detail is deliberate.
 
-## Writing Through Pull Requests
+## Writing through pull requests
 
 The content lives in the repository as MDX, and I write it through an admin portal that saves to GitHub.
 Every draft is a pull request, publishing merges it, and the preview renders the real page as I type.
 A GitHub App scoped to this one repository signs me in, a save never overwrites newer work, and files are written exactly as Prettier formats them by hand.
 [Using GitHub Pull Requests as a CMS](/blog/github-pull-requests-as-a-cms) tells the whole story.
 
-## Static, and Strict About It
+## Static, and strict about it
 
 Every public page is rendered statically with **Next.js** on **Vercel**, and every content file is checked against a strict schema, so a malformed one fails the build instead of shipping.
 View counts, the contact form's rate limit, and admin sessions live in **PostgreSQL** through **Prisma**, and fail soft, so a database outage never breaks a page.
 
 Vitest and Playwright cover the flows that have broken before, and CI runs them on every pull request with no secrets.
 
-## The Details
+## The details
 
 - **Case studies** grouped by year, with a platform filter, a thumbnail preview on hover, and each project's facts and contents beside it
 - **A blog** with code highlighting, topic pages, a reading progress bar, an RSS feed, and a view counter that counts each session once

@@ -27,12 +27,12 @@ Its one game is _Draw & Guess_, where one player draws a word and the others gue
 Three of us built it in three weeks, as the final project of a web development course.
 I designed the interface in **Figma**, from the landing page where a player picks a name to the room list and the game, and built the real-time layer and the drawing board.
 
-## Real Time, End to End
+## Real time, end to end
 
 On the server, **Socket.io** broadcasts every change to the players it concerns: the lobby's room list, a room's players, chat messages, and each turn of the game.
 In the browser, **React** state takes those broadcasts in, so every player's screen stays in step without a refresh.
 
-## A Shared Drawing Board
+## A shared drawing board
 
 The drawing board is a canvas with a color palette and brush settings.
 Each stroke is broadcast as it is drawn, so the guessers watch the drawing appear as it happens.

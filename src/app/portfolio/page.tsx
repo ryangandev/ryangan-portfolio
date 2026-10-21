@@ -6,17 +6,17 @@ import { getSortedProjects } from '@/lib/content';
 import { getImagePlaceholder } from '@/lib/image-placeholder';
 import { portfolioLayout } from '@/lib/portfolio-layout';
 import BackButton from '@/components/navigation/back-button';
-import { siteName } from '@/data/site';
+import { pageTitle, siteName } from '@/data/site';
 
 const description =
   "A selection of the projects I've worked on, from full-stack web apps to games.";
 
 export const metadata: Metadata = {
-  title: 'Portfolio - Ryan Gan',
+  title: pageTitle('Portfolio'),
   description,
   alternates: { canonical: '/portfolio' },
   openGraph: {
-    title: 'Portfolio - Ryan Gan',
+    title: pageTitle('Portfolio'),
     description,
     url: '/portfolio',
     siteName,

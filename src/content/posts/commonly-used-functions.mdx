@@ -7,7 +7,7 @@ summary: 'In this post, I will introduce 9 JavaScript utility functions that are
 topics: ['JavaScript', 'Utility Functions']
 ---
 
-## 1. Copy Text to Clipboard
+## 1. Copy text to clipboard
 
 ```javascript
 const copyToClipboard = (text) => navigator.clipboard.writeText(text);
@@ -16,7 +16,7 @@ const copyToClipboard = (text) => navigator.clipboard.writeText(text);
 copyToClipboard('Hello, World!');
 ```
 
-## 2. Get nth Day of the Year
+## 2. Get the nth day of the year
 
 ```javascript
 const getDayOfYear = (date) => {
@@ -33,7 +33,7 @@ const getDayOfYear = (date) => {
 getDayOfYear(new Date(2024, 8, 20)); // 264 (months start at 0: 8 is September)
 ```
 
-## 3. Remove Duplicates from an Array
+## 3. Remove duplicates from an array
 
 ```javascript
 const removeDuplicates = (arr) =>
@@ -43,7 +43,7 @@ const removeDuplicates = (arr) =>
 removeDuplicates([1, 2, 2, 3, 4, 4, 5]); // [1, 2, 3, 4, 5]
 ```
 
-## 4. Select a Random Item from an Array
+## 4. Select a random item from an array
 
 ```javascript
 const selectRandomItem = (arr) => arr[Math.floor(Math.random() * arr.length)];
@@ -52,7 +52,7 @@ const selectRandomItem = (arr) => arr[Math.floor(Math.random() * arr.length)];
 selectRandomItem([1, 2, 3, 4, 5]); // A random number between 1 and 5
 ```
 
-## 5. Grayscale a RGB Color Value (Based on the luminance of the color)
+## 5. Grayscale an RGB color value (based on the luminance of the color)
 
 ```javascript
 const grayScale = (r, g, b) => 0.2126 * r + 0.7152 * g + 0.0722 * b;
@@ -61,7 +61,7 @@ const grayScale = (r, g, b) => 0.2126 * r + 0.7152 * g + 0.0722 * b;
 grayScale(255, 255, 255);
 ```
 
-## 6. Parse Query Parameters from a URL
+## 6. Parse query parameters from a URL
 
 ```javascript
 const parseQuery = (url) => Object.fromEntries(new URL(url).searchParams);
@@ -71,7 +71,7 @@ parseQuery('https://example.com?foo=bar&baz=qux');
 // {foo: 'bar', baz: 'qux'}
 ```
 
-## 7. Pick Keys from an Object
+## 7. Pick keys from an object
 
 ```javascript
 const pick = (obj, ...keys) =>
@@ -81,7 +81,7 @@ const pick = (obj, ...keys) =>
 pick({ a: 1, b: 2, c: 3 }, 'a', 'c'); // {a: 1, c: 3}
 ```
 
-## 8. Get a Random Hex Color
+## 8. Get a random hex color
 
 ```javascript
 const getRandomHexColor = () => {
@@ -93,7 +93,7 @@ const getRandomHexColor = () => {
 getRandomHexColor();
 ```
 
-## 9. Remove Tag from HTML
+## 9. Remove tags from HTML
 
 ```javascript
 const removeTag = (fragment) =>

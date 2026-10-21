@@ -45,10 +45,13 @@ Projects and posts are MDX files with YAML frontmatter in `src/content/`, read b
   They drive the portfolio list's filter and are shown in the order that file declares them, whatever order the frontmatter lists them in.
 - **Thumbnails** must be `https://ik.imagekit.io` URLs, the one host `images.remotePatterns` in `next.config.mjs` allows; next/image refuses any other.
 - **Topics** become URL slugs through `toTopicSlug` (`src/lib/topics.ts`) and get statically generated pages at `/blog/topics/[topic]`.
+  Correcting a topic's name moves its page, so `next.config.mjs` redirects the old slug, as it does `nextjs` and `nodejs` since they became Next.js and Node.js.
 - **Role and team** are optional, for team projects: `role` names the part Ryan played, and `team` the team's name and its site.
   A solo project leaves both out and says so in its first paragraph.
 - **A case study's sections are its own.** Each opens with what the project is, who it is for, and why it exists, then gives two to four `h2`s named for what sets it apart, then its screenshots.
   A list of what Ryan did belongs only in a team project, where it separates his part from the team's.
+- **Headings are in sentence case**, in content and on the site alike: "One ledger, two apps", "Featured projects".
+  Post and project titles are names, and keep Title Case.
 - **Featured:** projects flagged `featured` appear on the home page.
   For posts, the flagged ones do, or the two newest when none are flagged, so flagging one post replaces both.
 
@@ -81,7 +84,7 @@ The [admin portal](#admin-portal) changes it by committing to `main`, so a switc
 
 The experience timeline is data, not MDX: `src/data/experience.ts`, kept in order by hand.
 Each entry has a `kind`, `work`, `co-op`, or `education`, and `src/lib/experience.ts` reads the `work` entries for what the rest of the site says about the job.
-The ongoing one is the current role the home page's About Me, its JSON-LD `worksFor`, and the site's meta description name, and the first one's start is where the home page's years of experience count from.
+The ongoing one is the current role the home page's About me, its JSON-LD `worksFor`, and the site's meta description name, and the first one's start is where the home page's years of experience count from.
 So a new job is one entry here; the build fails if no `work` entry is ongoing.
 Each entry's `mark` is the organization's logo from `src/assets/logos`, cropped to a circle.
 Every logo is a 64x64 tile: the organization's own mark, taken from its website and centered on its brand color, so it reads in both themes.
@@ -136,6 +139,7 @@ Images written on consecutive lines, with no blank line between them, are one Ma
 So a project's screenshots form a gallery with nothing new in the content, and an image on its own stays a full-width image.
 On a phone a gallery stays one image per row; from `md` up the first image spans the column and the rest sit two to a row, cropped to 8:5 from the top, and when an odd number follow the first, the last spans the column too.
 Each image in a gallery is captioned with its alt text, so alt text there has to name what the screenshot shows, not "Screenshot 1".
+A caption wraps rather than truncating.
 A tile's `sizes` is its 314px, not the column's 644px.
 
 A code block (`src/components/mdx/custom-pre.tsx`) is padded `px-4`, the same as its header, so the code lines up under the language icon and an 80-column line, the longest Prettier writes, fits the 644px column without scrolling.
@@ -222,6 +226,7 @@ The rule holds on to that word and never shows shorter than 16px; a line too ful
 
 `metadataBase` and the site constants come from `src/data/site.ts`.
 Every page sets a description, a canonical URL, and OpenGraph tags.
+Page titles come from `pageTitle`, the page's name and then "- Ryan Gan"; only the home page's, `siteTitle`, differs.
 The site also publishes `sitemap.xml` (including topic pages), `robots.txt`, a web manifest, an RSS feed at `/feed.xml`, and JSON-LD: a Person on the home page and a BlogPosting on each post.
 Vercel Analytics and Speed Insights load from the root layout.
 The admin pages are `noindex` and disallowed in `robots.txt`.
