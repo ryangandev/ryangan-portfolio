@@ -13,12 +13,12 @@ const destinations = [
   {
     href: '/portfolio',
     title: 'Portfolio',
-    summary: "A selection of projects I've worked on",
+    summary: "Projects I've built for myself, for clients, and with teams",
   },
   {
     href: '/blog',
     title: 'Blog',
-    summary: 'Insights and lessons from software development',
+    summary: "Notes on things I've built",
   },
   { href: '/contact', title: 'Connect', summary: 'Get in touch' },
 ];

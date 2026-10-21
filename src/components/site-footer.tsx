@@ -11,19 +11,15 @@ export default function SiteFooter() {
         data-footer-column
         className="relative mx-auto flex h-12 w-full max-w-[644px] items-center justify-between text-muted-foreground/80"
       >
+        {/* No tagline: the home page's is the site's one line, and leaving
+            this one out keeps the year in the row on a phone too. */}
         <span className="mr-2 flex items-center gap-2.5">
           <Logo variant="tile" size={16} className="shrink-0" />
-          <span className="whitespace-nowrap">Embrace Minimalism.</span>
-        </span>
-        <div className="flex items-center space-x-4">
-          {/* Only from sm up: on a phone the tagline, the year, and the theme
-              toggle were wider than the column, pushing the toggle off it,
-              and the year on its own said nothing. */}
-          <span className="hidden text-nowrap sm:inline">
+          <span className="whitespace-nowrap">
             © {getYear(new Date())} Ryan Gan.
           </span>
-          <ThemeToggle />
-        </div>
+        </span>
+        <ThemeToggle />
       </div>
     </footer>
   );

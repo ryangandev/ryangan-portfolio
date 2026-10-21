@@ -32,7 +32,7 @@ export const contentImageSizes = '(min-width: 692px) 644px, calc(100vw - 48px)';
 export const blogTitle = pageTitle('Blog');
 
 export const blogDescription =
-  'Insights and lessons from my journey in software development.';
+  "Notes on things I've built and what I learned building them.";
 
 /**
  * Advertises the RSS feed to browsers and feed readers.
