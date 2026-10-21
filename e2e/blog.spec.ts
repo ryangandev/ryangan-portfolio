@@ -149,3 +149,35 @@ test('shows the contents without the facts from lg to xl, centred with the colum
 
   expect(list.column).toBe((list.width - 644) / 2);
 });
+
+test('on a phone, puts the year on its own line and gives the titles the width', async ({
+  page,
+}) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto('/blog');
+
+  const first = page
+    .locator('main a[href^="/blog/"]:not([href^="/blog/topics/"])')
+    .first();
+  const title = first.locator('span').nth(2);
+
+  // The year column is hidden, so a title starts at the list's left edge.
+  const [list, start] = await Promise.all([
+    page.locator('main section').evaluate((el) => el.getBoundingClientRect()),
+    title.evaluate((el) => el.getBoundingClientRect().left),
+  ]);
+
+  expect(start).toBe(list.left);
+  await expect(
+    page.locator('main section li', { hasText: /^\d{4}$/ }).first(),
+  ).toBeVisible();
+});
+
+test('sends the old addresses of renamed topics to their new pages', async ({
+  page,
+}) => {
+  await page.goto('/blog/topics/nextjs');
+  await expect(page).toHaveURL('/blog/topics/next-js');
+  await expect(page.getByRole('heading', { level: 1 })).toHaveText('Next.js');
+  await expect(page).toHaveTitle('Posts about Next.js - Ryan Gan');
+});

@@ -26,18 +26,18 @@ A player reports a problem in the _Player 2_ app, the report arrives in the help
 
 Three of us built the frontend, and I built most of it, from the first designs in **Figma** to the finished app.
 
-## From Report to Resolution
+## From report to resolution
 
 I worked with the backend lead and their team to connect the helpdesk to the main _Player 2_ app, so a report filed there shows up as a ticket here.
 Tickets update live: **server-sent events** carry each new ticket, chat message, and notification to the staff as it happens.
 
-## The Dashboard
+## The dashboard
 
 The dashboard lists every ticket, filtered and sorted by status, agent, and date.
 Each ticket opens to its details and a live chat with the player, where staff work it through to resolved.
 A reports page charts how the desk is doing with **Recharts**, such as tickets per day, over any date range and filter.
 
-## Under the Hood
+## Under the hood
 
 Staff register and sign in by magic link, reset their passwords, and see only what their role allows.
 Global state lives in **Redux**, so a change made in one view shows in every other.

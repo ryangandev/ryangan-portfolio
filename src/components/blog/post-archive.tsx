@@ -12,7 +12,8 @@ type PostArchiveProps = {
 
 /**
  * Posts grouped under their year, the year shown once beside the first post of
- * each group
+ * each group. On a phone the year takes its own line instead, as in the
+ * portfolio list, so the titles get the width a year column would take.
  */
 const PostArchive = ({ posts }: PostArchiveProps) => {
   const years = [
@@ -25,6 +26,7 @@ const PostArchive = ({ posts }: PostArchiveProps) => {
     <section className="group">
       {years.map((year) => (
         <ul key={year} className="group/section border-t">
+          <li className="pt-3 color-level-5 sm:hidden">{year}</li>
           {posts
             .filter(
               (post) =>
@@ -34,31 +36,32 @@ const PostArchive = ({ posts }: PostArchiveProps) => {
               <li key={post.slug}>
                 <Link
                   href={'/blog/' + post.slug}
-                  className={cn(
-                    'group/item relative flex py-3',
-                    index !== 0 &&
-                      "after:absolute after:top-0 after:right-0 after:left-[70px] after:h-px after:bg-border after:content-[''] md:after:left-[160px]",
-                  )}
+                  className="group/item flex py-3"
                 >
                   <span
                     className={cn(
-                      'absolute color-level-5',
+                      'hidden w-[70px] shrink-0 color-level-5 sm:block md:w-40',
                       'transition-colors group-hover/section:text-neutral-900 dark:group-hover/section:text-neutral-100',
                     )}
                   >
                     {index === 0 ? year : null}
                   </span>
-                  <div
+                  <span
                     className={cn(
-                      'ml-[70px] flex w-full items-center justify-between transition-opacity md:ml-[160px]',
+                      'relative flex min-w-0 flex-1 items-baseline justify-between gap-2 transition-opacity',
                       'group-hover:opacity-50 group-hover/item:!opacity-100',
+                      // The rule between posts starts after the year.
+                      index !== 0 &&
+                        "before:absolute before:inset-x-0 before:-top-3 before:h-px before:bg-border before:content-['']",
                     )}
                   >
-                    <span className="color-level-1">{post.title}</span>
-                    <span className="mx-2 text-sm color-level-5">
+                    <span className="text-pretty color-level-1">
+                      {post.title}
+                    </span>
+                    <span className="shrink-0 text-sm color-level-5 tabular-nums">
                       {format(parseContentDate(post.publishedDate), 'MM/dd')}
                     </span>
-                  </div>
+                  </span>
                 </Link>
               </li>
             ))}

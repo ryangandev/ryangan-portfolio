@@ -4,7 +4,7 @@ import { notFound } from 'next/navigation';
 import PostArchive from '@/components/blog/post-archive';
 import BackButton from '@/components/navigation/back-button';
 import PageSummary from '@/components/page-summary';
-import { feedAlternates, siteName } from '@/data/site';
+import { feedAlternates, pageTitle, siteName } from '@/data/site';
 import { getTopicBySlug, getTopics } from '@/lib/content';
 
 type TopicPageProps = {
@@ -29,7 +29,7 @@ export const generateMetadata = async ({
     return {};
   }
 
-  const title = `${topic.name} - Blog - Ryan Gan`;
+  const title = pageTitle(`Posts about ${topic.name}`);
   const description = `Posts about ${topic.name}.`;
   const url = `/blog/topics/${topic.slug}`;
 

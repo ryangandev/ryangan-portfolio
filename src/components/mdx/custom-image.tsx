@@ -60,8 +60,10 @@ const CustomImage = async ({
     ? cn(gallery === 'wide' && 'md:col-span-2')
     : 'my-[2em]';
 
+  // A caption wraps rather than truncating: cut short, it hid what the
+  // screenshot shows, the reason it is there.
   const caption = gallery && alt && (
-    <span className="mt-2 block truncate text-[13px] leading-[18px] text-muted-foreground">
+    <span className="mt-2 block text-[13px] leading-[18px] text-pretty text-muted-foreground">
       {alt}
     </span>
   );

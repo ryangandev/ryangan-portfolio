@@ -3,17 +3,19 @@ import { Metadata } from 'next';
 import Contact from '@/components/contact/contact';
 import PageSummary from '@/components/page-summary';
 import BackButton from '@/components/navigation/back-button';
-import { siteName } from '@/data/site';
+import { pageTitle, siteName } from '@/data/site';
+
+const title = pageTitle('Connect');
 
 const description =
   'Get in touch with a question, a project idea, or just to say hello.';
 
 export const metadata: Metadata = {
-  title: 'Contact - Ryan Gan',
+  title,
   description,
   alternates: { canonical: '/contact' },
   openGraph: {
-    title: 'Contact - Ryan Gan',
+    title,
     description,
     url: '/contact',
     siteName,

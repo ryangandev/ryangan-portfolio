@@ -46,6 +46,22 @@ const nextConfig = {
   async headers() {
     return [{ source: '/:path*', headers: securityHeaders }];
   },
+  // Topic pages are slugged from the topic's name, so correcting a name moves
+  // its page. These keep the old addresses working.
+  async redirects() {
+    return [
+      {
+        source: '/blog/topics/nextjs',
+        destination: '/blog/topics/next-js',
+        permanent: true,
+      },
+      {
+        source: '/blog/topics/nodejs',
+        destination: '/blog/topics/node-js',
+        permanent: true,
+      },
+    ];
+  },
 };
 
 export default nextConfig;

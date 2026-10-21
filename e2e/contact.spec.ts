@@ -37,6 +37,11 @@ test.beforeEach(async ({ page }, testInfo) => {
   await page.goto('/contact');
 });
 
+test('is named Connect, as the home page names it', async ({ page }) => {
+  await expect(page).toHaveTitle('Connect - Ryan Gan');
+  await expect(page.getByRole('heading', { level: 1 })).toHaveText('Connect');
+});
+
 test('flags every empty field, and says which message belongs to which', async ({
   page,
 }) => {

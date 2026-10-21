@@ -3,8 +3,8 @@ title: 'Handling Form Loading States in Next.js/React'
 author: 'Ryan Gan'
 publishedDate: '2024-06-23'
 featured: false
-summary: '5 Ways to Handle Form Loading States in Your Next.js/React App: From Basic to Advanced'
-topics: ['Forms', 'Hooks', 'Nextjs', 'React Hook Form', 'Form Submit']
+summary: 'Five ways to handle form loading states in a Next.js/React app, from the simplest to the most capable.'
+topics: ['Forms', 'Hooks', 'Next.js', 'React Hook Form', 'Form Submit']
 ---
 
 When building forms in modern web applications, handling loading states effectively is crucial for providing a smooth user experience.
@@ -13,25 +13,25 @@ In this article, I will cover five different methods to manage form loading stat
 
 This includes leveraging hooks like `useTransition`, `useFormStatus`, and `useActionState` to enhance your forms for better performance and user experience.
 
-## Method 1: Local Component State
+## Method 1: Local component state
 
 The first method is using local component state with `useState`. It is straightforward and works well for simple forms to provide immediate feedback.
 
-### Pros:
+### Pros
 
 - Easy to implement
 - No additional dependencies
 
-### Cons:
+### Cons
 
 - Extra `loading` and `setLoading` variables can lead to repetitive code
 - Difficult to manage with multiple forms in larger application
 
-### Use cases:
+### Use cases
 
 - Ideal for applications with limited number of simple forms
 
-### Example:
+### Example
 
 ```typescript
 import { useState } from 'react';
@@ -75,23 +75,23 @@ export default function MyForm() {
 
 The second method is only available if you’re using [React Hook Form](https://react-hook-form.com/) for handling forms. I highly recommend using it for dealing with forms in React applications. It abstracts away the process of manually handling the state of each field, removes the unnecessary re-renders when there are changes in form values, and provides a comprehensive form state management solution out of the box.
 
-### Pros:
+### Pros
 
 - Reduces boilerplate code, simplifies state management
 - Form state management out of the box, including `isSubmitting`, `isDirty`, `isValid`
 - Optimizes performance using uncontrolled components to reduce unnecessary re-renders
 
-### Cons:
+### Cons
 
 - May be challenging when integrating with some advanced React hooks like `useActionState` and `useFormStatus` as they require using form submission through `action` attribute instead of the `onSubmit` handler
 
 - Controlled inputs, such as many UI library components, have to be wrapped in its `Controller` component (This isn’t a con regarding form state handling, just React Hook Form as a form solution in general)
 
-### Use cases:
+### Use cases
 
 - Suitable for almost any size of applications with any number of forms
 
-### Example:
+### Example
 
 ```typescript
 import { SubmitHandler, useForm } from 'react-hook-form';
@@ -128,26 +128,26 @@ export default function MyForm() {
 }
 ```
 
-## Method 3: useTransition Hook
+## Method 3: useTransition hook
 
 The [`useTransition`](https://react.dev/reference/react/useTransition) hook is not specifically designed for handling form loading state, but since React 19 it tracks async functions too, which makes it a great alternative when the form submission takes longer. It ensures the UI remains responsive during these operations by allowing lower-priority updates to be deferred until high-priority tasks are completed.
 
 The `useTransition` hook does not take any parameters and returns an array containing an `isPending` flag and a `startTransition` function. The `isPending` flag indicates whether the transition is in progress, while the `startTransition` function allows you to mark a state update as a low-priority operation.
 
-### Pros:
+### Pros
 
 - Tracks the pending state of the whole async submission, with no loading state to set and reset by hand
 - State updates made inside the transition render without blocking the UI
 
-### Cons:
+### Cons
 
 - Overkill for simple forms and adds a layer of complexity
 
-### Use cases:
+### Use cases
 
 - Ideal for forms where the submission might take a long time, such as file uploading, allowing users to interact with the UI while waiting
 
-### Example:
+### Example
 
 In the example, we wrap the API call within the `startTransition` function.
 Since React 19, `startTransition` accepts an async function and keeps `isPending` true until it finishes, so the flag covers the whole submission; in React 18, it only covers the part that runs before the first `await`.
@@ -203,7 +203,7 @@ export default function MyForm() {
   provided will be part of a Next.js app.
 </Callout>
 
-## Method 4: useFormStatus Hook
+## Method 4: useFormStatus hook
 
 The [`useFormStatus`](https://react.dev/reference/react-dom/hooks/useFormStatus) hook is designed to provide status information about the last form submission. It can be used to display the submission state of the form, the data being submitted, the HTTP method, and the action function. These details are returned in a status object by the `useFormStatus` hook, as shown in the example below:
 
@@ -219,19 +219,19 @@ const {
 
 One important thing to note is that the `useFormStatus` hook must be called from a child component of the `<form>` element. This child component can be nested within any form.
 
-### Pros:
+### Pros
 
 - Promotes reusability of form’s child components
 
-### Cons:
+### Cons
 
 - Limited scope as components that need to be at the same level as the parent `<form>` component won't have access to the state information
 
-### Use cases:
+### Use cases
 
 - Ideal for applications with multiple forms sharing the same components where only the pending states are of interest
 
-### Example:
+### Example
 
 ```typescript
 'use client';
@@ -264,7 +264,7 @@ function MyFormElements() {
 }
 ```
 
-## Method 5: useActionState Hook
+## Method 5: useActionState hook
 
 The [`useActionState`](https://react.dev/reference/react/useActionState) hook could be the most powerful tool for handling form submissions in a Next.js app. It allows you to attach state to an action, send it to the server, and receive a state with the action's response while having insight into the action's state.
 
@@ -290,22 +290,22 @@ export async function myFormAction(prevState: State, formData: FormData) {
 }
 ```
 
-### Pros:
+### Pros
 
 - Allows attaching state to an action
 - Keeps states at the top level, making them accessible by all components
 - Progressively enhanced, meaning form submission works even if JavaScript is disabled
 
-### Cons:
+### Cons
 
 - Might be harder to understand at first
 - Potential redundant setup, useActionState enforces an initialState parameter in the initiation and a prevState parameter in the server action function that might not be used
 
-### Use cases:
+### Use cases
 
 - Suitable for almost all scenarios if additional setup is not an issue.
 
-### Example:
+### Example
 
 In this example, we attach an initial state object containing an empty message value and send it with the action. The `isPending` state is used to track the form submission status. When the server action is completed, it returns a state with the response containing a success message.
 
@@ -361,8 +361,8 @@ export async function myFormAction(prevState: State, formData: FormData) {
 }
 ```
 
-## Lastly
+## Wrapping up
 
 I hope this article helps you better understand form submission in Next.js/React applications. These insights are based on my previous experience working with forms. If you have any questions or notice any inaccuracies, please feel free to email me at [ryangan.dev@gmail.com](mailto:ryangan.dev@gmail.com)!
 
-**Thanks for Reading and Happy Coding!**
+**Thanks for reading, and happy coding!**

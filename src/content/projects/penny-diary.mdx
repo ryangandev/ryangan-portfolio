@@ -23,7 +23,7 @@ _Penny Diary_ is a personal finance tracker I designed and built on my own: a Sw
 Every entry is typed, spoken, or tapped in by the person who spent it, with no bank connection, and the app reads it back as a clear picture of where the money went.
 The iPhone app works on its own with no account, and _Penny Diary Pro_ syncs the ledger to the web and across devices.
 
-## One Ledger, Two Apps
+## One ledger, two apps
 
 The iPhone app is local-first: the ledger lives on the device and works offline, and a write queue syncs it to **Supabase** once the person signs in, recovering from refusals, conflicts, and lost answers without losing an entry.
 The web app, in **Next.js** on **Vercel**, loads every tab on the client, so moving around the ledger never waits on the server.
@@ -32,7 +32,7 @@ Both read the same **PostgreSQL** schema, with row level security on every table
 The report logic is written twice, in Swift and in TypeScript, and both are held to one shared fixture, so every number matches on both clients.
 _Penny Diary Pro_ runs on **StoreKit 2**, and Supabase Edge Functions record each subscription from data Apple signed, so a purchase on the iPhone unlocks the web for the same account.
 
-## Logging in Seconds
+## Logging in seconds
 
 A ledger is only as good as what gets written into it, so adding an entry is never more than a tap away.
 
@@ -40,13 +40,13 @@ A ledger is only as good as what gets written into it, so adding an entry is nev
 - **Apple Pay automation** records each Apple Pay purchase as it happens through a Shortcuts automation, with the merchant name cleaned up and the entry marked as automatic
 - **Recurring rules** write rent, pay, and subscriptions on their due dates, and show what the next 30 days will bring
 
-## Where It Went
+## Where it went
 
 Home shows the period's spending as one large figure against the period before, twelve periods of history, and the categories that took the most.
 Reports break spending and income down by category and by day, and saved reports keep the views that matter, such as food or fixed costs.
 A refund or cashback is recorded against the purchase it belongs to, so the original amount stays on record and reports count what was really spent.
 
-## Paper and Ink
+## Paper and ink
 
 Both apps share one design system, a paper ledger in a light Paper theme and a dark Navy one.
 On the web it spreads out to fit a desk, with a sidebar, side panels, keyboard shortcuts for every common action, and CSV export.
