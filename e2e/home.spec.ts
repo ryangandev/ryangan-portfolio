@@ -89,7 +89,7 @@ test('a title that wraps keeps its rule and year on its last line', async ({
   await page.setViewportSize({ width: 390, height: 844 });
   await page.goto('/');
 
-  const row = page.locator('main a[href^="/blog/"]').first();
+  const row = page.locator('main li > a[href^="/blog/"]').first();
 
   // Long enough to wrap at any phone width, whatever the posts are called.
   const { lastLine, year, rule } = await row.evaluate((link) => {
