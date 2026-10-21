@@ -71,30 +71,33 @@ export default async function Home() {
       </hgroup>
 
       <h2>About Me</h2>
-      <p className="mb-4">
-        I&apos;m a software engineer at {currentRole.organization} in{' '}
-        {currentRole.location}. I like to craft polished, user-centric software
-        that brings satisfaction through every little detail. I specialize in
-        full-stack development and have {yearsOfExperience} years of experience.
-        My tech stack includes:
-      </p>
-      <ul className="mb-7 list-inside list-disc space-y-2 pl-5.5 -indent-5.5">
-        <li>
-          <span className="font-medium color-level-2">Frontend</span>: React,
-          Next.js, TypeScript, JavaScript, Redux
-        </li>
-        <li>
-          <span className="font-medium color-level-2">Backend</span>: Node.js,
-          Express, Fastify, Java, Spring Boot, PostgreSQL, MongoDB, Prisma
-        </li>
-        <li>
-          <span className="font-medium color-level-2">Tools & Others</span>:
-          AWS, CI/CD, Playwright, Jest, Splunk, Git, Docker, Vercel
-        </li>
-      </ul>
       <p>
-        I embrace continuous learning and am constantly picking up new skills.
-        Currently, I&apos;m exploring building software with AI coding agents.
+        I&apos;m a software engineer at {currentRole.organization} in{' '}
+        {currentRole.location}, with {yearsOfExperience} years of building
+        full-stack software. Being a user before a developer means I care most
+        about the parts people touch: how fast it feels, what happens when
+        something goes wrong, and the small details nobody asks for but everyone
+        notices.
+      </p>
+      {/* Inline, unlike the links' default inline-block, so a link of a few
+          words breaks across lines like the prose around it rather than
+          leaving a gap at the end of the line before. */}
+      <p>
+        Outside work I build things I want to use myself, like{' '}
+        <AnimatedLink href="/portfolio/penny-diary" className="inline">
+          Penny Diary
+        </AnimatedLink>
+        , a finance tracker for iPhone and the web, and this site, which I write
+        and publish through{' '}
+        <AnimatedLink
+          href="/blog/github-pull-requests-as-a-cms"
+          className="inline"
+        >
+          GitHub pull requests
+        </AnimatedLink>
+        . Lately I&apos;ve been learning how to work better alongside AI agents,
+        how to build AI into everyday apps, and how to create content with it,
+        writing down what holds up along the way.
       </p>
 
       <h2>Timeline</h2>
