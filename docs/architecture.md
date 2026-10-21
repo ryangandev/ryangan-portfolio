@@ -192,6 +192,9 @@ It does what Next does for a hash link, a history entry pushed with `history.pus
 Link to a part of the same page with `InPageLink`, not a plain anchor or `next/link`, or the jump is instant.
 `e2e/navigation.spec.ts` samples the scroll position on every frame to check both: Back lands at once, and the table of contents scrolls smoothly unless motion is reduced.
 It also records the view transitions, which the scroll position does not show: none on a table of contents click, and on a new page, no box that moves.
+A table of contents click marks its entry at once, and the facts that follow the section (the design history's) switch with it, rather than both stepping through every section the jump passes.
+The entry stays marked until the reader scrolls on their own, during the jump or after it comes to rest, since at rest the scroll alone may not name it: a short last section never reaches the line.
+One marker slides between entries instead of each entry's edge lighting up, and the same test watches `aria-current` to check that only the clicked entry is ever marked.
 
 ### No loading.tsx, on purpose
 

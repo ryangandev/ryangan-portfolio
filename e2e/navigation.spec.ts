@@ -335,6 +335,60 @@ test.describe('the table of contents', () => {
     await check();
   });
 
+  test('marks the section clicked at once, not each one on the way', async ({
+    page,
+  }) => {
+    await page.goto(post);
+
+    const contents = page.getByRole('navigation', { name: 'On this page' });
+
+    // Every entry that is marked current, in order, from here on
+    await contents.evaluate((nav) => {
+      const marked: string[] = [];
+
+      (window as unknown as { marked: string[] }).marked = marked;
+      new MutationObserver(() => {
+        const current = nav.querySelector('[aria-current="location"]');
+        const href = current?.getAttribute('href') ?? null;
+
+        if (href && marked.at(-1) !== href) {
+          marked.push(href);
+        }
+      }).observe(nav, { subtree: true, attributeFilter: ['aria-current'] });
+    });
+
+    const entry = contents.getByRole('link').nth(-2);
+    const href = (await entry.getAttribute('href'))!;
+
+    await jumpToSection(page);
+
+    expect(
+      await page.evaluate(
+        () => (window as unknown as { marked: string[] }).marked,
+      ),
+    ).toEqual([href]);
+
+    // The marker slides to the entry rather than lighting each one up.
+    const marker = contents.locator('[data-contents-marker]');
+
+    await expect
+      .poll(async () => {
+        const [markerBox, entryBox] = await Promise.all([
+          marker.boundingBox(),
+          entry.boundingBox(),
+        ]);
+
+        return markerBox!.y - entryBox!.y;
+      })
+      .toBeCloseTo(0, 0);
+
+    // Scrolling by hand gives the mark back to the scroll position.
+    await page.mouse.move(640, 400);
+    await page.mouse.wheel(0, -100000);
+    await expect.poll(() => page.evaluate(() => window.scrollY)).toBe(0);
+    await expect(entry).not.toHaveAttribute('aria-current');
+  });
+
   test('jumps to a section when the reader asks for less motion', async ({
     page,
   }) => {
