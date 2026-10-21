@@ -16,11 +16,11 @@ export default function SiteFooter() {
           <span className="whitespace-nowrap">Embrace Minimalism.</span>
         </span>
         <div className="flex items-center space-x-4">
-          {/* The name gives way on a phone, where with the theme toggle it
-              left the tagline too little room and wrapped it. */}
-          <span className="text-nowrap">
-            {getYear(new Date())}
-            <span className="hidden sm:inline"> Ryan Gan.</span>
+          {/* Only from sm up: on a phone the tagline, the year, and the theme
+              toggle were wider than the column, pushing the toggle off it,
+              and the year on its own said nothing. */}
+          <span className="hidden text-nowrap sm:inline">
+            © {getYear(new Date())} Ryan Gan.
           </span>
           <ThemeToggle />
         </div>

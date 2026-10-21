@@ -20,7 +20,7 @@ Last reviewed: 2026-10-17.
 | Database                                  | `prisma/schema.prisma`, `prisma.config.ts`, `src/lib/db.ts`; the generated client is in `src/generated/prisma`, gitignored and excluded from ESLint and Prettier                                        |
 | Footer, back link, and back to top        | `src/components/site-footer.tsx`, `src/components/navigation/back-button.tsx`, `src/components/back-to-top.tsx`                                                                                         |
 | Theme, fonts, and global styles           | `src/styles/globals.css`, `src/assets/fonts.ts`, `src/components/theme-toggle.tsx`                                                                                                                      |
-| Logo, icons, and OpenGraph images         | `src/components/logo.tsx`, `src/app/{icon.svg,favicon.ico,apple-icon.png,opengraph-image.png}`, `src/app/blog/[slug]/opengraph-image.tsx`, `public/icon-*.png`                                          |
+| Logo, icons, and OpenGraph images         | `src/components/logo.tsx`, `src/app/{icon.svg,favicon.ico,apple-icon.png}`, `src/app/opengraph-image.tsx`, `src/app/blog/[slug]/opengraph-image.tsx`, `public/icon-*.png`                               |
 | Shared UI primitives                      | `src/components/ui` (shadcn/ui)                                                                                                                                                                         |
 | Headers, build, CI, and dependencies      | `next.config.mjs`, `package.json`, `pnpm-workspace.yaml`, `.github/`                                                                                                                                    |
 
@@ -102,6 +102,7 @@ Tailwind 4 is configured entirely in CSS; there is no `tailwind.config.ts`.
 - `mdx.css` is `@import`ed there rather than from components, because v4 `@apply` needs a shared context.
 - The `color-level-*` helpers are `@utility` rules.
   Every step holds 4.5:1 on its background in both themes except `color-level-6`, which is only for disabled text; dark `color-level-5` is an arbitrary `oklch(63% 0 0)` for that reason.
+- Links draw keyboard focus as a 2px outline in the ring color, set off 2px from their text, within the space between words, in `globals.css`; buttons and fields draw the same color as a ring inside their own padding.
 - Greys come from the `neutral` scale, and nothing else: no `gray`, `zinc`, `slate` or `stone`, which are each tinted.
   `ArticleBody` sets `prose-neutral`, because the typography plugin's default `gray` is tinted blue.
   The shadcn/ui variables are on shadcn's neutral theme, except that the dark surfaces keep the site's own 10% background, with fills at 20% and borders at 25%.
@@ -365,12 +366,15 @@ Because of `frame-ancestors`, the site cannot be embedded in an iframe, includin
 The icon is the letter **R** from Geist SemiBold knocked out of a squircle, shipped as outlines so nothing depends on font loading.
 
 - The path lives in two places that must stay in sync: `src/app/icon.svg` and `R_PATH` in `src/components/logo.tsx`.
-- `logo.tsx` exports `R_PATH` and `TILE_PATH`, which the per-post OpenGraph cards (`src/app/blog/[slug]/opengraph-image.tsx`) also draw with.
+- `logo.tsx` exports `R_PATH` and `TILE_PATH`, which the OpenGraph cards also draw with: the site's (`src/app/opengraph-image.tsx`) and each post's (`src/app/blog/[slug]/opengraph-image.tsx`).
 - `Logo` renders `variant="tile"` and `variant="mark"`, both painting with `currentColor` so they invert with the theme.
 - Geometry is normalized to a `100x100` box: tile corner radius `24`, glyph ink box `56` tall, centered on `(50, 50)`.
 
+The site's OpenGraph card is drawn at build time like the posts', with the home page's tagline in Newsreader italic.
+Satori reads only TTF, OTF, or WOFF, and next/font ships woff2, so that face comes from `@fontsource/newsreader` and Geist from the `geist` package.
+
 Regenerate by extracting `R` from `node_modules/geist/dist/fonts/geist-sans/Geist-SemiBold.ttf` with `fontTools`.
-Derived assets: `icon.svg`, `favicon.ico`, `apple-icon.png` (180x180, square, no alpha), `opengraph-image.png` (1200x630, needs `metadataBase`), `public/icon-{192,512}.png`, and `public/icon-maskable-512.png` (glyph at `0.40` to survive Android's safe-zone crop).
+Derived assets: `icon.svg`, `favicon.ico`, `apple-icon.png` (180x180, square, no alpha), `public/icon-{192,512}.png`, and `public/icon-maskable-512.png` (glyph at `0.40` to survive Android's safe-zone crop).
 
 Traps when regenerating:
 
