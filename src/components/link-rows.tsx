@@ -1,5 +1,4 @@
 import Link from 'next/link';
-import { LuArrowRight } from 'react-icons/lu';
 
 import { cn } from '@/lib/utils';
 
@@ -14,8 +13,6 @@ export type LinkRow = {
 
 type LinkRowsProps = {
   rows: LinkRow[];
-  /** A last row leading to the rest, such as every post */
-  more?: { href: string; label: string };
 };
 
 /**
@@ -64,7 +61,7 @@ const WithRule = ({
  * first and last titles sit as far from the content around them as a
  * paragraph's text would.
  */
-const LinkRows = ({ rows, more }: LinkRowsProps) => (
+const LinkRows = ({ rows }: LinkRowsProps) => (
   <ul className="group -my-2 text-[15px]">
     {rows.map((row) => (
       <li
@@ -90,21 +87,6 @@ const LinkRows = ({ rows, more }: LinkRowsProps) => (
         </Link>
       </li>
     ))}
-    {more && (
-      <li className="py-2 transition-opacity group-hover:opacity-60 hover:!opacity-100">
-        <Link
-          href={more.href}
-          className="group/more inline-flex items-center gap-1.5 color-level-4 transition-colors hover:color-level-2"
-        >
-          {more.label}
-          <LuArrowRight
-            aria-hidden
-            size={14}
-            className="transition-transform group-hover/more:translate-x-0.5"
-          />
-        </Link>
-      </li>
-    )}
   </ul>
 );
 

@@ -6,6 +6,7 @@ import Expandable from '@/components/expandable';
 import ExperienceList from '@/components/experience-list';
 import JsonLd from '@/components/json-ld';
 import LinkRows from '@/components/link-rows';
+import SectionHeading from '@/components/section-heading';
 import { experience } from '@/data/experience';
 import {
   authorAvatarUrl,
@@ -101,7 +102,9 @@ export default async function Home() {
         <ExperienceList items={experience} />
       </Expandable>
 
-      <h2>Featured Projects</h2>
+      <SectionHeading more={{ href: '/portfolio', label: 'All projects' }}>
+        Featured Projects
+      </SectionHeading>
       <LinkRows
         rows={featuredProjects.map((project) => ({
           href: `/portfolio/${project.slug}`,
@@ -109,17 +112,17 @@ export default async function Home() {
           summary: project.summary,
           end: format(parseContentDate(project.date), 'yyyy'),
         }))}
-        more={{ href: '/portfolio', label: 'All projects' }}
       />
 
-      <h2>Writing</h2>
+      <SectionHeading more={{ href: '/blog', label: 'All posts' }}>
+        Writing
+      </SectionHeading>
       <LinkRows
         rows={featuredPosts.map((post) => ({
           href: `/blog/${post.slug}`,
           title: post.title,
           end: format(parseContentDate(post.publishedDate), 'yyyy'),
         }))}
-        more={{ href: '/blog', label: 'All posts' }}
       />
 
       <h2>Connect</h2>
