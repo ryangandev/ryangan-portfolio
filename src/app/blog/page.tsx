@@ -34,8 +34,8 @@ export default async function Page() {
       <BackButton name="Home" href="/" />
       <h1>Blog</h1>
       <PageSummary>
-        Here I share insights and lessons from my journey in software
-        development. Follow along with the{' '}
+        Notes on things I&apos;ve built and what I learned building them. Follow
+        along with the{' '}
         <AnimatedLink href="/feed.xml" isExternal>
           RSS feed
         </AnimatedLink>

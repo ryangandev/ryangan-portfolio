@@ -30,8 +30,8 @@ export default function Page() {
       <BackButton name="Home" href="/" />
       <h1>Connect</h1>
       <PageSummary>
-        I&apos;d love to hear from you! Whether you have a question, a project
-        idea, or just want to say hello, feel free to get in touch.
+        Questions about a post, a project idea, or just hello: write below, or
+        find me anywhere in the list.
       </PageSummary>
       <Contact />
     </main>

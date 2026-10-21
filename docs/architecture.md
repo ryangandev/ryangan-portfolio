@@ -377,6 +377,7 @@ The icon is the letter **R** from Geist SemiBold knocked out of a squircle, ship
 
 The site's OpenGraph card is drawn at build time like the posts', with the home page's tagline in Newsreader italic.
 Satori reads only TTF, OTF, or WOFF, and next/font ships woff2, so that face comes from `@fontsource/newsreader` and Geist from the `geist` package.
+The Ryan Gan Portfolio project's thumbnail, on ImageKit, is the same tile over the same tagline on white, so it needs redrawing when either changes.
 
 Regenerate by extracting `R` from `node_modules/geist/dist/fonts/geist-sans/Geist-SemiBold.ttf` with `fontTools`.
 Derived assets: `icon.svg`, `favicon.ico`, `apple-icon.png` (180x180, square, no alpha), `public/icon-{192,512}.png`, and `public/icon-maskable-512.png` (glyph at `0.40` to survive Android's safe-zone crop).

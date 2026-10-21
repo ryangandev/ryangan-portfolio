@@ -9,7 +9,7 @@ import BackButton from '@/components/navigation/back-button';
 import { pageTitle, siteName } from '@/data/site';
 
 const description =
-  "A selection of the projects I've worked on, from full-stack web apps to games.";
+  "Projects I've built for myself, for clients, and with teams.";
 
 export const metadata: Metadata = {
   title: pageTitle('Portfolio'),
@@ -44,9 +44,9 @@ export default async function Page() {
       <BackButton name="Home" href="/" />
       <h1>Portfolio</h1>
       <PageSummary>
-        Here is a selection of the projects I&apos;ve worked on, from full-stack
-        web apps to games. I&apos;m always open to feedback and opportunities to
-        collaborate.
+        Projects I&apos;ve built for myself, for clients, and with teams. Each
+        page covers what it is, who it&apos;s for, and the parts I&apos;d point
+        to.
       </PageSummary>
       <ProjectIndex
         projects={projects}
