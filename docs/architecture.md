@@ -102,7 +102,7 @@ Tailwind 4 is configured entirely in CSS; there is no `tailwind.config.ts`.
 - `mdx.css` is `@import`ed there rather than from components, because v4 `@apply` needs a shared context.
 - The `color-level-*` helpers are `@utility` rules.
   Every step holds 4.5:1 on its background in both themes except `color-level-6`, which is only for disabled text; dark `color-level-5` is an arbitrary `oklch(63% 0 0)` for that reason.
-- Links draw keyboard focus as a 2px outline in the ring color, set off 3px from their text, in `globals.css`; buttons and fields draw the same color as a ring inside their own padding.
+- Links draw keyboard focus as a 2px outline in the ring color, set off 2px from their text, within the space between words, in `globals.css`; buttons and fields draw the same color as a ring inside their own padding.
 - Greys come from the `neutral` scale, and nothing else: no `gray`, `zinc`, `slate` or `stone`, which are each tinted.
   `ArticleBody` sets `prose-neutral`, because the typography plugin's default `gray` is tinted blue.
   The shadcn/ui variables are on shadcn's neutral theme, except that the dark surfaces keep the site's own 10% background, with fills at 20% and borders at 25%.
