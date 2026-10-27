@@ -46,7 +46,7 @@ Projects and posts are MDX files with YAML frontmatter in `src/content/`, read b
 - **Thumbnails** must be `https://ik.imagekit.io` URLs, the one host `images.remotePatterns` in `next.config.mjs` allows; next/image refuses any other.
 - **Topics** become URL slugs through `toTopicSlug` (`src/lib/topics.ts`) and get statically generated pages at `/blog/topics/[topic]`.
   Correcting a topic's name moves its page, so `next.config.mjs` redirects the old slug, as it does `nextjs` and `nodejs` since they became Next.js and Node.js.
-- **A project that grows into another** takes over its case study rather than sitting beside it, and `next.config.mjs` redirects the old slug, as it does `iconio` since Icon.io became Zumpo.
+- **A project rebuilt as another** keeps its own case study, and the two link to each other: Icon.io, the 2023 team project, and Zumpo, its 2026 rebuild.
 - **Role and team** are optional, for team projects: `role` names the part Ryan played, and `team` the team's name and its site.
   A solo project leaves both out and says so in its first paragraph.
 - **A case study's sections are its own.** Each opens with what the project is, who it is for, and why it exists, then gives two to four `h2`s named for what sets it apart, then its screenshots.

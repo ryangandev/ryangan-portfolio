@@ -62,7 +62,8 @@ export const ProjectFrontmatterSchema = z.strictObject({
     .array(z.enum(techStackNames))
     .min(1, { message: 'List at least one technology' }),
   // Either link may be absent: Grapple Grub has a live build but no public
-  // repository, and Player 2 Helpdesk neither.
+  // repository, Icon.io a repository but no live site any more, and Player 2
+  // Helpdesk neither.
   link: z
     .strictObject({
       github: z.url().optional(),

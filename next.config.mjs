@@ -60,12 +60,6 @@ const nextConfig = {
         destination: '/blog/topics/node-js',
         permanent: true,
       },
-      // Icon.io grew into Zumpo, in the same repository
-      {
-        source: '/portfolio/iconio',
-        destination: '/portfolio/zumpo',
-        permanent: true,
-      },
     ];
   },
 };
