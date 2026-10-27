@@ -142,7 +142,12 @@ export default function ContactFormEmail({
               <Link href={`${siteUrl}/contact`} className="text-[#a3a3a3]">
                 {siteHost}
               </Link>
-              . Replying to this email goes straight to {senderEmail}.
+              . Replying to this email goes straight to{' '}
+              {/* Gmail links a bare address itself, in its own blue */}
+              <Link href={`mailto:${senderEmail}`} className="text-[#a3a3a3]">
+                {senderEmail}
+              </Link>
+              .
             </Text>
           </Container>
         </Body>

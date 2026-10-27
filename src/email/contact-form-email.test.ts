@@ -39,6 +39,14 @@ describe('ContactFormEmail', () => {
     );
   });
 
+  it('links every address itself, so no client restyles a bare one', async () => {
+    const html = await renderHtml();
+    const text = html.replace(/<a\b[^>]*>[^<]*<\/a>/g, '');
+
+    expect(text).not.toContain('ada@example.com<');
+    expect(text).not.toMatch(/>[^<]*ada@example\.com/);
+  });
+
   it('previews the start of the message, not a description of it', async () => {
     const html = await renderHtml({ message: 'word '.repeat(60) });
     const preview = html.match(/<div[^>]*display:none[^>]*>([^<]*)/)?.[1];

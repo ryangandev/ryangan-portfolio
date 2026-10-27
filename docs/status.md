@@ -16,6 +16,7 @@ The site is live and feature-complete for now; what remains is mostly outside th
 - The production database matches `prisma/schema.prisma`; `prisma migrate diff` reports no difference.
 - Vercel builds under pnpm 12, including from a restored build cache.
 - The contact form sends from `contact@ryangan.me`, verified in Resend under the job-journey team, whose API key production uses.
+  A real submission on 2026-10-27 landed in the Gmail inbox, not spam.
 - Google Search Console has the `ryangan.me` domain property, verified by a DNS record in Cloudflare, and has read the sitemap.
 
 ## Waiting on Ryan
