@@ -296,6 +296,11 @@ The action is a public endpoint that sends email, so it has three layers:
 Email goes through Resend.
 `CONTACT_FROM_EMAIL` and `CONTACT_TO_EMAIL` set the addresses.
 The default sender is Resend's shared sandbox, which only delivers to the account owner.
+In Vercel's dashboard, enter `CONTACT_FROM_EMAIL` without surrounding quotes: unlike a `.env` file, it keeps them, and Resend rejects the quoted address.
+
+The email (`src/email/contact-form-email.tsx`) is built with react-email and uses only what mail clients render: a system font stack, pixel units, and the logo as the PNG icon on the live site, since Gmail drops SVG.
+The message keeps its line breaks, the inbox preview is the start of the message, and the reply button and `replyTo` both reach the sender.
+Resend renders only HTML from `react`, so the action also sends `contactFormEmailText` as the plain-text part.
 
 On the page, each field is a row with its label in a left column, like the blog archive.
 The rule under a row sweeps in from the left while its field has focus, and stays drawn in red while the field is invalid.
