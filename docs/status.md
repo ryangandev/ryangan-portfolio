@@ -1,6 +1,6 @@
 # Status
 
-Last reviewed: 2026-10-26.
+Last reviewed: 2026-10-27.
 
 ## Current state
 
@@ -15,14 +15,12 @@ The site is live and feature-complete for now; what remains is mostly outside th
 - Every public route is Static or SSG; the admin portal's routes are dynamic.
 - The production database matches `prisma/schema.prisma`; `prisma migrate diff` reports no difference.
 - Vercel builds under pnpm 12, including from a restored build cache.
+- The contact form sends from `contact@ryangan.me`, verified in Resend under the job-journey team, whose API key production uses.
+- Google Search Console has the `ryangan.me` domain property, verified by a DNS record in Cloudflare, and has read the sitemap.
 
 ## Waiting on Ryan
 
-These need an account or a judgment only Ryan has.
-
-1. Verify a domain in Resend and set `CONTACT_FROM_EMAIL` to an address on it.
-   The default sender only delivers to the Resend account owner, and as of 2026-10-26 the Vercel project still has no `CONTACT_FROM_EMAIL`.
-2. Submit the sitemap to Google Search Console.
+None.
 
 ## Open decisions
 

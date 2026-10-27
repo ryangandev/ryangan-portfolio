@@ -5,7 +5,10 @@ import { Resend } from 'resend';
 import { z } from 'zod';
 
 import { serverError } from '@/data/errors';
-import ContactFormEmail from '@/email/contact-form-email';
+import ContactFormEmail, {
+  contactFormEmailText,
+  contactFormSubject,
+} from '@/email/contact-form-email';
 import { allowContactSubmission } from '@/lib/rate-limit';
 import { ContactSchema } from '@/schemas/contact-schema';
 
@@ -64,18 +67,17 @@ export const sendEmailAction = async (data: z.infer<typeof ContactSchema>) => {
     return silentlyAccepted;
   }
 
+  const email = { message, senderName, senderEmail };
+
   // Send email
   try {
     const result = await resend.emails.send({
       from: fromAddress,
       to: toAddress,
-      subject: senderName + ' left a message',
+      subject: contactFormSubject(senderName),
       replyTo: senderEmail,
-      react: React.createElement(ContactFormEmail, {
-        message: message,
-        senderName: senderName,
-        senderEmail: senderEmail,
-      }),
+      react: React.createElement(ContactFormEmail, email),
+      text: contactFormEmailText(email),
     });
 
     if (result.error) {
