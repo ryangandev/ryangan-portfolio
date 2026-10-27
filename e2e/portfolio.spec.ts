@@ -181,9 +181,9 @@ test('lays screenshots out as a lead and two to a row, one per row on a phone', 
   await page.goto('/portfolio/penny-diary');
   expect(await widths()).toEqual([644, 314, 314, 314, 314, 314, 314]);
 
-  // Four: the one left over after the rows spans the column too
-  await page.goto('/portfolio/iconio');
-  expect(await widths()).toEqual([644, 314, 314, 644]);
+  // Six: the one left over after the rows spans the column too
+  await page.goto('/portfolio/zumpo');
+  expect(await widths()).toEqual([644, 314, 314, 314, 314, 644]);
 
   await page.setViewportSize({ width: 390, height: 844 });
   // Every image as wide as the lead, the width of the column

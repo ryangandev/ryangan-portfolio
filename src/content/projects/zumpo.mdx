@@ -1,0 +1,60 @@
+---
+title: 'Zumpo'
+date: '2026-10-05'
+featured: true
+platforms: ['web', 'game']
+summary: 'Little browser games, on your own or in real-time rooms'
+thumbnailUrl: 'https://ik.imagekit.io/ryangan/Projects/zumpo/zumpo-thumbnail.png'
+techStack:
+  [
+    'react',
+    'typescript',
+    'vite',
+    'nodejs',
+    'express',
+    'socketio',
+    'figma',
+    'render',
+  ]
+link:
+  {
+    github: 'https://github.com/ryangandev/zumpo',
+    live: 'https://zumpo.ryangan.me',
+  }
+---
+
+_Zumpo_ is a home for little browser games, which I designed and built on my own.
+It hosts twelve of them, from _Draw & Guess_ and _Gomoku_ to _Make 24_ and _Daily Word_: play on your own straight away, or open a room and send your friends the link.
+It began as _Icon.io_, the final project of a web development course at Drexel, built by three of us in three weeks around a single game.
+I later rebuilt it from the ground up, with a new design, a new server, and eleven more games.
+
+## The server keeps the score
+
+Every room lives on one **Node.js** server, and the server decides everything a player could gain by lying about.
+It runs each room's clock and sends players the time remaining rather than a timestamp, so a browser whose clock disagrees still counts down correctly.
+Each player receives a snapshot of the room built for them alone, so the word being drawn reaches the drawer and never the guessers.
+Every message is validated and rate-limited before it touches the game, and the drawing itself is server state, so a player who joins mid-turn sees the board as it stands.
+
+A player's seat belongs to an identity the server issues, not to a connection, so a reload or a dropped network puts them back in their seat.
+The site runs on **Render** as a single long-lived process, since rooms and clocks live in its memory and a serverless host would drop the open sockets.
+
+## One set of rules, alone or together
+
+Each game is a module on a shared room layer, which owns seats, hosts, reconnection, and the lobby, so a new game brings only its rules.
+A game on your own runs entirely in the browser with no socket, and takes its rules from the same shared code the server plays in rooms.
+Every event between the two sides is declared once in a typed wire contract, so **TypeScript** catches a change on one side that the other has not made.
+
+## Paper Pop
+
+The design came first, as a **Figma** file of 261 screens, desktop and phone, in a style I called Paper Pop: cream paper, ink, and soft coral, lime, and blue.
+The colors, sizes, and type in the code are generated from that file, so the app and the design cannot drift apart.
+Every word on screen comes from a typed catalog, so the Chinese translation cannot fall behind the English, and the sounds play through a small engine on the Web Audio API that stays silent until the first tap.
+
+## Screenshots
+
+![Home - every game, with a filter by kind](https://ik.imagekit.io/ryangan/Projects/zumpo/zumpo-home.png)
+![Draw & Guess - the game page, with its open rooms updating live](https://ik.imagekit.io/ryangan/Projects/zumpo/zumpo-game-page.png)
+![Gomoku - a game on your own against the computer](https://ik.imagekit.io/ryangan/Projects/zumpo/zumpo-gomoku.png)
+![Draw & Guess - the drawer's view, with the word and the brushes](https://ik.imagekit.io/ryangan/Projects/zumpo/zumpo-draw-and-guess-drawer.png)
+![Draw & Guess - the same moment for a guesser, with the word hidden](https://ik.imagekit.io/ryangan/Projects/zumpo/zumpo-draw-and-guess-guesser.png)
+![Phone - home in Chinese, Make 24, and Daily Word](https://ik.imagekit.io/ryangan/Projects/zumpo/zumpo-phones.png)
