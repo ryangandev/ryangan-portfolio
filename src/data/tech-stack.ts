@@ -33,6 +33,7 @@ import {
   SiPython,
   SiRacket,
   SiRedux,
+  SiRender,
   SiSocketdotio,
   SiSpringboot,
   SiSqlite,
@@ -248,6 +249,11 @@ export const techStack = {
   vercel: {
     label: 'Vercel',
     icon: TbBrandVercel,
+    className: 'text-[#000000] dark:text-[#FFFFFF]',
+  },
+  render: {
+    label: 'Render',
+    icon: SiRender,
     className: 'text-[#000000] dark:text-[#FFFFFF]',
   },
   aws: {
