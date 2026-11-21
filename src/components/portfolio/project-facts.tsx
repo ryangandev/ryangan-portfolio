@@ -87,6 +87,10 @@ const ProjectFacts = ({ project, stack, placement }: ProjectFactsProps) => {
   const year = format(parseContentDate(project.date), 'yyyy');
   const platforms = platformLabels(project.platforms).join(', ');
   const links = [
+    project.link?.appStore && {
+      label: 'App Store',
+      href: project.link.appStore,
+    },
     project.link?.live && { label: 'Live', href: project.link.live },
     project.link?.github && {
       label: 'Repository',

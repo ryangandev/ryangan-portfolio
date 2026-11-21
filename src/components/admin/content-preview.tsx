@@ -76,6 +76,7 @@ export const renderContentPreview = async (
     link: (values as Partial<ProjectFormValues>).link ?? {
       github: '',
       live: '',
+      appStore: '',
     },
   });
   const hasThumbnail = ProjectFrontmatterSchema.shape.thumbnailUrl.safeParse(

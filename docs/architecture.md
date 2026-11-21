@@ -162,7 +162,7 @@ A rail that scrolls hides its scrollbar, which on classic-scrollbar systems woul
 Chrome keeps that fade after the window grows tall enough for the rail to fit, until the page reloads.
 Below `xl` a project's facts sit under its title instead, and a post's byline carries its date, reading time, and views; the admin preview, which has no gutter, always shows them there.
 A post's topics stay at its end as well, where a reader who finished it looks for more.
-In the gutter a project's links show their address, from `lib/display-url.ts`: a GitHub repository as `owner/repo`, an itch.io game as `itch.io/game` without the uploader's subdomain, and an address too long for the 192px gutter wraps only after a `/`, never at a hyphen.
+In the gutter a project's links show their address, from `lib/display-url.ts`: a GitHub repository as `owner/repo`, an itch.io game as `itch.io/game` without the uploader's subdomain, an App Store listing (`link.appStore`, an `apps.apple.com` address, never a stand-in for `link.live`) as is, and an address too long for the 192px gutter wraps only after a `/`, never at a hyphen.
 Everything in the right-hand gutter sits at `left-full ml-10` of the content column; `back-to-top.tsx` is fixed-position, so it repeats that offset as `calc(50% + 362px)`, and both change together if the column's width does.
 Below `xl` there are no gutters: the back link sits above the page's title, with its tap area grown to 44px, and back to top is a round button in the corner, above the footer.
 From `lg` up to `xl`, a page keeps its table of contents in the right-hand gutter while its facts go under the title.

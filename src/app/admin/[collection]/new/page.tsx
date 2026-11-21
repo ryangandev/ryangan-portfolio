@@ -51,7 +51,7 @@ const blank: ContentFormValues = {
     summary: '',
     thumbnailUrl: '',
     techStack: [],
-    link: { github: '', live: '' },
+    link: { github: '', live: '', appStore: '' },
     body: '',
   },
 };

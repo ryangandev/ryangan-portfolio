@@ -107,7 +107,7 @@ describe('content files', () => {
         summary: 'A demo',
         thumbnailUrl: 'https://ik.imagekit.io/ryangan/demo.png',
         techStack: ['react', 'typescript'],
-        link: { github: '', live: '' },
+        link: { github: '', live: '', appStore: '' },
         body: '\n## Hello\n\n',
       }),
       '\n## Hello\n\n',
@@ -142,6 +142,7 @@ techStack: ['react', 'typescript']
     expect(values.link).toEqual({
       github: '',
       live: 'https://michael-anderson.itch.io/grapple-grub',
+      appStore: '',
     });
     expect(toFrontmatter('projects', values).link).toEqual({
       github: undefined,
