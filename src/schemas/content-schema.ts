@@ -61,13 +61,21 @@ export const ProjectFrontmatterSchema = z.strictObject({
   techStack: z
     .array(z.enum(techStackNames))
     .min(1, { message: 'List at least one technology' }),
-  // Either link may be absent: Grapple Grub has a live build but no public
+  // Any link may be absent: Grapple Grub has a live build but no public
   // repository, Icon.io a repository but no live site any more, and Player 2
-  // Helpdesk neither.
+  // Helpdesk neither. `appStore` is the project's App Store listing, for an
+  // iPhone app, and never stands in for `live`.
   link: z
     .strictObject({
       github: z.url().optional(),
       live: z.url().optional(),
+      appStore: z
+        .url({
+          protocol: /^https$/,
+          hostname: /^apps\.apple\.com$/,
+          message: 'Expected an https://apps.apple.com URL',
+        })
+        .optional(),
     })
     .optional(),
 });
