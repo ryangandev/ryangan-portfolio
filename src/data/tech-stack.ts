@@ -37,6 +37,7 @@ import {
   SiSocketdotio,
   SiSpringboot,
   SiSqlite,
+  SiStripe,
   SiSupabase,
   SiSwift,
   SiTailwindcss,
@@ -307,6 +308,11 @@ export const techStack = {
     label: 'Firebase',
     icon: SiFirebase,
     className: 'text-[#FFCA28]',
+  },
+  stripe: {
+    label: 'Stripe',
+    icon: SiStripe,
+    className: 'text-[#635BFF] dark:text-[#7A73FF]',
   },
   trello: {
     label: 'Trello',
