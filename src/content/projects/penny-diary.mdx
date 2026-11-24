@@ -35,7 +35,7 @@ The web app, in **Next.js** on **Vercel**, loads every tab on the client, so mov
 
 Both read the same **PostgreSQL** schema, with row level security on every table, decimal amounts the database adds up itself, and soft deletes behind a recently deleted list.
 The report logic is written twice, in Swift and in TypeScript, and both are held to one shared fixture, so every number matches on both clients.
-_Penny Diary Pro_ runs on **StoreKit 2**, and Supabase Edge Functions record each subscription from data Apple signed, so a purchase on the iPhone unlocks the web for the same account.
+_Penny Diary Pro_ is sold through **StoreKit 2** on the iPhone and **Stripe** on the web, and Supabase Edge Functions record each subscription from what Apple signed or Stripe confirmed, so a purchase on either one unlocks both for the same account.
 
 ## Logging in seconds
 
