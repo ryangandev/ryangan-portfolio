@@ -55,7 +55,11 @@ export const ProjectFormSchema = ProjectFrontmatterSchema.extend({
   // Empty means "no role", for a solo project.
   role: z.string().trim(),
   team: FormTeam,
-  link: z.strictObject({ github: OptionalUrl, live: OptionalUrl }),
+  link: z.strictObject({
+    github: OptionalUrl,
+    live: OptionalUrl,
+    appStore: OptionalUrl,
+  }),
   body: Body,
 });
 

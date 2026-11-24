@@ -109,6 +109,7 @@ export const toFormValues = <C extends Collection>(
       link: {
         github: project.link?.github ?? '',
         live: project.link?.live ?? '',
+        appStore: project.link?.appStore ?? '',
       },
       body,
     };
@@ -139,11 +140,12 @@ export const toFrontmatter = <C extends Collection>(
       values as ProjectFormValues;
     const github = link.github || undefined;
     const live = link.live || undefined;
+    const appStore = link.appStore || undefined;
     const frontmatter: ProjectFrontmatter = {
       ...project,
       role: role || undefined,
       team: team.name && team.url ? team : undefined,
-      link: github || live ? { github, live } : undefined,
+      link: github || live || appStore ? { github, live, appStore } : undefined,
     };
 
     return frontmatter as ContentFrontmatter[C];

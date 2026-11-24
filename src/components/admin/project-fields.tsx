@@ -184,7 +184,7 @@ const ProjectFields = ({ control, imageFolder }: ProjectFieldsProps) => {
         />
       )}
 
-      <div className="grid gap-5 md:grid-cols-2">
+      <div className="grid gap-5 md:grid-cols-3">
         <FormField
           control={control}
           name="link.github"
@@ -210,6 +210,23 @@ const ProjectFields = ({ control, imageFolder }: ProjectFieldsProps) => {
               <FormLabel>Live demo</FormLabel>
               <FormControl>
                 <Input type="url" placeholder="https://..." {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={control}
+          name="link.appStore"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>App Store</FormLabel>
+              <FormControl>
+                <Input
+                  type="url"
+                  placeholder="https://apps.apple.com/..."
+                  {...field}
+                />
               </FormControl>
               <FormMessage />
             </FormItem>
